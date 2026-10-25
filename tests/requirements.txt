@@ -1,0 +1,2 @@
+# Development-only protocol validation; the Agent has no Python runtime dependency.
+jsonschema==4.23.0

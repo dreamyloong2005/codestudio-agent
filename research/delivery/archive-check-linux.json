@@ -1,0 +1,14 @@
+{
+  "format": 2,
+  "platform": "linux",
+  "archive": "/var/tmp/codestudio-agent-linux/build/packages/linux-x86_64/codestudio-agent-linux-x86_64.tar.gz",
+  "archive_sha256": "26c95b644d59c46827b349c52854e3d8fee2a28f04ba2f28038e5d3f4cfc3c3c",
+  "payload_files": 33,
+  "manifest_and_checksums": "verified",
+  "native_extraction_modes": "verified",
+  "tested_from_fresh_archive_extraction": true,
+  "extraction_cleaned": true,
+  "verification_receipt": "installed-linux/release-20261025T112211Z-7de4566a/verification.json",
+  "status": "succeeded",
+  "returncode": 0
+}

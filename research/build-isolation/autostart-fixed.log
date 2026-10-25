@@ -1,0 +1,9 @@
+test_enable_readback_idempotency_configuration_conflict_and_remove (__main__.AutostartTests.test_enable_readback_idempotency_configuration_conflict_and_remove) ... ok
+test_invalid_poll_cannot_register_or_create_workspace_state (__main__.AutostartTests.test_invalid_poll_cannot_register_or_create_workspace_state) ... ok
+test_state_and_workspace_scope_have_distinct_owned_names (__main__.AutostartTests.test_state_and_workspace_scope_have_distinct_owned_names) ... ok
+test_status_and_absent_disable_do_not_create_state_or_launch_work (__main__.AutostartTests.test_status_and_absent_disable_do_not_create_state_or_launch_work) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.943s
+
+OK

@@ -1,0 +1,30 @@
+[0m[32;1m[  9%]:[0m [36;1m<agent-tests>[0m cache compiling.debug tests\core_tests.cpp[0m
+[0m[32;1m[ 12%]:[0m [36;1m<agent-tests>[0m cache compiling.debug tests\checkpoint_store_tests.cpp[0m
+[0m[32;1m[ 13%]:[0m [36;1m<agent-tests>[0m cache compiling.debug tests\resume_kernel_tests.cpp[0m
+[0m[32;1m[ 14%]:[0m [36;1m<agent-tests>[0m cache compiling.debug tests\scheduler_store_tests.cpp[0m
+[0m[32;1m[ 16%]:[0m [36;1m<agent-tests>[0m cache compiling.debug tests\cron_store_tests.cpp[0m
+[0m[32;1m[ 18%]:[0m [36;1m<agent-tests>[0m cache compiling.debug tests\process_observation_tests.cpp[0m
+[0m[32;1m[ 20%]:[0m [36;1m<agent-tests>[0m cache compiling.debug tests\state_reader_tests.cpp[0m
+[0m[32;1m[ 21%]:[0m [36;1m<agent-tests>[0m cache compiling.debug tests\build_workspace_tests.cpp[0m
+[0m[32;1m[ 22%]:[0m [36;1m<agent-tests>[0m cache compiling.debug tests\workspace_execution_tests.cpp[0m
+[0m[32;1m[ 24%]:[0m [36;1m<agent-tests>[0m cache compiling.debug tests\build_proposal_tests.cpp[0m
+[0m[32;1m[ 25%]:[0m [36;1m<agent-tests>[0m cache compiling.debug tests\build_decision_tests.cpp[0m
+[0m[32;1m[ 29%]:[0m [36;1m<agent-core>[0m cache compiling.debug src\core\kernel.cpp[0m
+[0m[32;1m[ 30%]:[0m [36;1m<agent-core>[0m cache compiling.debug src\core\state_reader.cpp[0m
+[0m[32;1m[ 31%]:[0m [36;1m<agent-core>[0m cache compiling.debug src\core\store.cpp[0m
+[0m[32;1m[ 36%]:[0m [36;1m<agent-core>[0m cache compiling.debug src\tools\build_proposal.cpp[0m
+[0m[32;1m[ 38%]:[0m [36;1m<agent-core>[0m cache compiling.debug src\tools\workspace_build.cpp[0m
+[0m[32;1m[ 39%]:[0m [36;1m<agent-core>[0m cache compiling.debug src\platform\autostart.cpp[0m
+[0m[32;1m[ 42%]:[0m [36;1m<agent-core>[0m cache compiling.debug src\platform\build_workspace.cpp[0m
+[0m[32;1m[ 48%]:[0m [36;1m<agent-core>[0m cache compiling.debug src\platform\process_observation.cpp[0m
+[0m[32;1m[ 54%]:[0m [36;1m<agent-core>[0m cache compiling.debug src\application\application.cpp[0m
+[0m[32;1m[ 55%]:[0m [36;1m<agent-core>[0m cache compiling.debug src\application\build_approval.cpp[0m
+[0m[32;1m[ 56%]:[0m [36;1m<agent-core>[0m cache compiling.debug src\application\scheduler.cpp[0m
+[0m[32;1m[ 57%]:[0m [36;1m<agent-core>[0m cache compiling.debug src\application\service.cpp[0m
+[0m[32;1m[ 58%]:[0m [36;1m<agent-core>[0m cache compiling.debug src\application\supervisor_diagnostics.cpp[0m
+[0m[32;1m[ 61%]:[0m [36;1m<agent-core>[0m cache compiling.debug src\execution\workspace_execution.cpp[0m
+[0m[32;1m[ 86%]:[0m [36;1m<agent-core>[0m [36;1marchiving.debug agent-core.lib[0m
+[0m[32;1m[ 87%]:[0m [36;1m<agent-tests>[0m [36;1mlinking.debug agent-tests.exe[0m
+[0m[32;1m[ 87%]:[0m [36;1m<codestudio-agent>[0m [36;1mlinking.debug codestudio-agent.exe[0m
+[0m[32;1m[ 87%]:[0m [36;1m<provider-fixture>[0m [36;1mlinking.debug provider-fixture.exe[0m
+[0m[32;1m[100%]:[0m [32;1mbuild ok, spent 13.281s[0m

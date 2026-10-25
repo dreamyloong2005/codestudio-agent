@@ -1,0 +1,4 @@
+debug: cleaned demo workspace reports no database and creates no state files
+debug: client read-only and demo passed; new schema 4 database; doctor protocol 2, manifests [2]
+release: cleaned demo workspace reports no database and creates no state files
+release: client read-only and demo passed; new schema 4 database; doctor protocol 2, manifests [2]

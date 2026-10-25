@@ -1,0 +1,50 @@
+test_anonymous_remote_never_inherits_model_credential (__main__.RemoteMcpTests.test_anonymous_remote_never_inherits_model_credential) ... ok
+test_cancel_during_initialize_does_not_send_forbidden_cancellation (__main__.RemoteMcpTests.test_cancel_during_initialize_does_not_send_forbidden_cancellation) ... ok
+test_disconnect_without_cursor_blocks_resume_before_model_or_mcp_io (__main__.RemoteMcpTests.test_disconnect_without_cursor_blocks_resume_before_model_or_mcp_io) ... ok
+test_insecure_or_ambiguous_urls_fail_before_network (__main__.RemoteMcpTests.test_insecure_or_ambiguous_urls_fail_before_network) ... ok
+test_interrupted_sse_resumes_with_cursor_dedup_without_post_replay (__main__.RemoteMcpTests.test_interrupted_sse_resumes_with_cursor_dedup_without_post_replay) ... ok
+test_invalid_and_mixed_transport_fields_fail_before_network (__main__.RemoteMcpTests.test_invalid_and_mixed_transport_fields_fail_before_network) ... ok
+test_invalid_later_entry_prevents_earlier_network_and_stdio_launch (__main__.RemoteMcpTests.test_invalid_later_entry_prevents_earlier_network_and_stdio_launch) ... ok
+test_invalid_protocol_session_content_schema_and_oversized_discovery_are_rejected (__main__.RemoteMcpTests.test_invalid_protocol_session_content_schema_and_oversized_discovery_are_rejected) ... ok
+test_json_discovery_and_call_record_frozen_schema_and_receipt (__main__.RemoteMcpTests.test_json_discovery_and_call_record_frozen_schema_and_receipt) ... ok
+test_malformed_or_error_tool_responses_are_unknown_without_model_followup (__main__.RemoteMcpTests.test_malformed_or_error_tool_responses_are_unknown_without_model_followup) ... ok
+test_missing_selected_remote_credential_prevents_all_side_effects (__main__.RemoteMcpTests.test_missing_selected_remote_credential_prevents_all_side_effects) ... ok
+test_reconnect_count_is_bounded_and_uncertain_effect_stops_task (__main__.RemoteMcpTests.test_reconnect_count_is_bounded_and_uncertain_effect_stops_task) ... ok
+test_redirect_is_not_followed_and_credential_is_not_forwarded (__main__.RemoteMcpTests.test_redirect_is_not_followed_and_credential_is_not_forwarded) ... ok
+test_remote_execution_is_rejected_with_local_os_sandbox (__main__.RemoteMcpTests.test_remote_execution_is_rejected_with_local_os_sandbox) ... ok
+test_remote_token_in_tool_result_is_redacted_from_model_and_database (__main__.RemoteMcpTests.test_remote_token_in_tool_result_is_redacted_from_model_and_database) ... ok
+test_remote_token_reflected_in_tool_schema_is_rejected_before_model_request (__main__.RemoteMcpTests.test_remote_token_reflected_in_tool_schema_is_rejected_before_model_request) ... ok
+test_remote_token_split_across_model_stream_is_redacted_before_emission (__main__.RemoteMcpTests.test_remote_token_split_across_model_stream_is_redacted_before_emission) ... ok
+test_resume_manifest_endpoint_or_credential_change_rejected_before_io (__main__.RemoteMcpTests.test_resume_manifest_endpoint_or_credential_change_rejected_before_io) ... ok
+test_retry_delay_does_not_extend_original_tool_deadline (__main__.RemoteMcpTests.test_retry_delay_does_not_extend_original_tool_deadline) ... ok
+test_rotated_remote_credential_is_resolved_on_resume_without_tool_replay (__main__.RemoteMcpTests.test_rotated_remote_credential_is_resolved_on_resume_without_tool_replay) ... ok
+test_schema_and_ungranted_tool_denials_never_dispatch_remote_call (__main__.RemoteMcpTests.test_schema_and_ungranted_tool_denials_never_dispatch_remote_call) ... ok
+test_selected_remote_bearer_credential_is_separate_from_model_key (__main__.RemoteMcpTests.test_selected_remote_bearer_credential_is_separate_from_model_key) ... ok
+test_server_retry_delay_is_observed_before_resume (__main__.RemoteMcpTests.test_server_retry_delay_is_observed_before_resume) ... ok
+test_service_cancel_sends_remote_notification_and_never_replays_tool (__main__.RemoteMcpTests.test_service_cancel_sends_remote_notification_and_never_replays_tool) ... FAIL
+test_session_404_does_not_replay_and_fresh_load_initializes_new_session (__main__.RemoteMcpTests.test_session_404_does_not_replay_and_fresh_load_initializes_new_session) ... ok
+test_session_and_negotiated_protocol_headers_and_session_delete (__main__.RemoteMcpTests.test_session_and_negotiated_protocol_headers_and_session_delete) ... ok
+test_session_change_during_call_is_unknown_without_reinitialization (__main__.RemoteMcpTests.test_session_change_during_call_is_unknown_without_reinitialization) ... ok
+test_sse_fragmented_utf8_bom_multiline_data_and_newline_variants (__main__.RemoteMcpTests.test_sse_fragmented_utf8_bom_multiline_data_and_newline_variants) ... ok
+test_sse_server_ping_is_replied_to_in_a_separate_post (__main__.RemoteMcpTests.test_sse_server_ping_is_replied_to_in_a_separate_post) ... ok
+test_stateless_server_and_delete_refusal_are_supported (__main__.RemoteMcpTests.test_stateless_server_and_delete_refusal_are_supported) ... ok
+test_timeout_sends_cancellation_notification_and_retains_unknown_effect (__main__.RemoteMcpTests.test_timeout_sends_cancellation_notification_and_retains_unknown_effect) ... ok
+test_tool_call_401_is_unknown_and_never_retried (__main__.RemoteMcpTests.test_tool_call_401_is_unknown_and_never_retried) ... ok
+test_tools_list_changed_invalidates_frozen_schema_without_followup (__main__.RemoteMcpTests.test_tools_list_changed_invalidates_frozen_schema_without_followup) ... ok
+test_unauthorized_initialize_has_no_retry_model_or_tool_call (__main__.RemoteMcpTests.test_unauthorized_initialize_has_no_retry_model_or_tool_call) ... ok
+test_ungranted_remote_and_unknown_grant_never_open_network (__main__.RemoteMcpTests.test_ungranted_remote_and_unknown_grant_never_open_network) ... ok
+test_unicode_event_cursor_has_explicit_platform_behavior_without_replay (__main__.RemoteMcpTests.test_unicode_event_cursor_has_explicit_platform_behavior_without_replay) ... ok
+test_unsupported_server_request_gets_method_not_found_without_executing_it (__main__.RemoteMcpTests.test_unsupported_server_request_gets_method_not_found_without_executing_it) ... ok
+
+======================================================================
+FAIL: test_service_cancel_sends_remote_notification_and_never_replays_tool (__main__.RemoteMcpTests.test_service_cancel_sends_remote_notification_and_never_replays_tool)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 518, in test_service_cancel_sends_remote_notification_and_never_replays_tool
+    self.assertEqual(done["exit_code"], 130, done)
+AssertionError: 1 != 130 : {'exit_code': 1, 'operation_id': '0d10286c9669fb3a05a2dc4c1ebac609', 'result': {'product': 'CodeStudio-Agent', 'provider': 'openai-compatible/chat-completions', 'state_database': 'C:\\Users\\dreamyloong\\AppData\\Local\\Temp\\codestudio-resume-vwohb1z0\\workspace with spaces\\.codestudio\\state.sqlite3', 'status': 'needs_attention', 'summary': 'Tool effects require inspection; no automatic retry was made', 'task_id': 'ed0904e8ed7764a68b29e7fe57ff2d30', 'turns': 1, 'verification': 'Tool receipts recorded; final answer is not independent acceptance.'}, 'session_id': '024e4d029606a12379879a293f511b07'}
+
+----------------------------------------------------------------------
+Ran 37 tests in 11.064s
+
+FAILED (failures=1)

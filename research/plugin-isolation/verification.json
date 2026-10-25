@@ -1,0 +1,557 @@
+{
+  "date": "2026-10-25",
+  "format": 2,
+  "configurations": {
+    "windows-debug": {
+      "receipt": "windows\\debug-20261025T154313Z-c52398ad\\verification.json",
+      "source": {
+        "sha256": "ab2ee599462da176d56014637f1fe6a00911c66e4cf46153826f9c6d25c22e06",
+        "files": 190
+      },
+      "artifact": {
+        "path": "build/windows/x64/debug/codestudio-agent.exe",
+        "size": 6744576,
+        "sha256": "2daec7149a2ced8a49be507b666ad327b60b4dbdaef42e612170ceb97196e315"
+      },
+      "native_groups": 22,
+      "python_cases": 404,
+      "python_passed": 397,
+      "python_skipped": 7,
+      "suite_results": {
+        "native": {
+          "native_groups": 22
+        },
+        "schema": {
+          "cases": 13,
+          "skipped": 0,
+          "passed": 13
+        },
+        "provider": {
+          "cases": 15,
+          "skipped": 0,
+          "passed": 15
+        },
+        "streaming": {
+          "cases": 18,
+          "skipped": 0,
+          "passed": 18
+        },
+        "contract": {
+          "cases": 16,
+          "skipped": 0,
+          "passed": 16
+        },
+        "service": {
+          "cases": 28,
+          "skipped": 0,
+          "passed": 28
+        },
+        "credentials": {
+          "cases": 17,
+          "skipped": 2,
+          "passed": 15
+        },
+        "cli": {
+          "cases": 11,
+          "skipped": 0,
+          "passed": 11
+        },
+        "local_models": {
+          "cases": 15,
+          "skipped": 0,
+          "passed": 15
+        },
+        "mcp": {
+          "cases": 13,
+          "skipped": 0,
+          "passed": 13
+        },
+        "mcp_http": {
+          "cases": 39,
+          "skipped": 0,
+          "passed": 39
+        },
+        "mcp_oauth": {
+          "cases": 26,
+          "skipped": 0,
+          "passed": 26
+        },
+        "plugins": {
+          "cases": 23,
+          "skipped": 0,
+          "passed": 23
+        },
+        "plugin_sandbox": {
+          "cases": 17,
+          "skipped": 0,
+          "passed": 17
+        },
+        "resume": {
+          "cases": 18,
+          "skipped": 0,
+          "passed": 18
+        },
+        "sandbox": {
+          "cases": 5,
+          "skipped": 0,
+          "passed": 5
+        },
+        "scheduler": {
+          "cases": 19,
+          "skipped": 1,
+          "passed": 18
+        },
+        "supervisor": {
+          "cases": 16,
+          "skipped": 0,
+          "passed": 16
+        },
+        "cron": {
+          "cases": 12,
+          "skipped": 0,
+          "passed": 12
+        },
+        "autostart": {
+          "cases": 14,
+          "skipped": 4,
+          "passed": 10
+        },
+        "build": {
+          "cases": 19,
+          "skipped": 0,
+          "passed": 19
+        },
+        "build_proposals": {
+          "cases": 25,
+          "skipped": 0,
+          "passed": 25
+        },
+        "real_build": {
+          "native_groups": 2
+        },
+        "package": {
+          "cases": 11,
+          "skipped": 0,
+          "passed": 11
+        },
+        "verification": {
+          "cases": 14,
+          "skipped": 0,
+          "passed": 14
+        }
+      }
+    },
+    "windows-release": {
+      "receipt": "windows\\release-20261025T154822Z-2d967f34\\verification.json",
+      "source": {
+        "sha256": "ab2ee599462da176d56014637f1fe6a00911c66e4cf46153826f9c6d25c22e06",
+        "files": 190
+      },
+      "artifact": {
+        "path": "build/windows/x64/release/codestudio-agent.exe",
+        "size": 5114880,
+        "sha256": "6ccede30c09e8227637c162c5e409346af2be43fbacc41df98a673e54aa3c958"
+      },
+      "native_groups": 22,
+      "python_cases": 404,
+      "python_passed": 397,
+      "python_skipped": 7,
+      "suite_results": {
+        "native": {
+          "native_groups": 22
+        },
+        "schema": {
+          "cases": 13,
+          "skipped": 0,
+          "passed": 13
+        },
+        "provider": {
+          "cases": 15,
+          "skipped": 0,
+          "passed": 15
+        },
+        "streaming": {
+          "cases": 18,
+          "skipped": 0,
+          "passed": 18
+        },
+        "contract": {
+          "cases": 16,
+          "skipped": 0,
+          "passed": 16
+        },
+        "service": {
+          "cases": 28,
+          "skipped": 0,
+          "passed": 28
+        },
+        "credentials": {
+          "cases": 17,
+          "skipped": 2,
+          "passed": 15
+        },
+        "cli": {
+          "cases": 11,
+          "skipped": 0,
+          "passed": 11
+        },
+        "local_models": {
+          "cases": 15,
+          "skipped": 0,
+          "passed": 15
+        },
+        "mcp": {
+          "cases": 13,
+          "skipped": 0,
+          "passed": 13
+        },
+        "mcp_http": {
+          "cases": 39,
+          "skipped": 0,
+          "passed": 39
+        },
+        "mcp_oauth": {
+          "cases": 26,
+          "skipped": 0,
+          "passed": 26
+        },
+        "plugins": {
+          "cases": 23,
+          "skipped": 0,
+          "passed": 23
+        },
+        "plugin_sandbox": {
+          "cases": 17,
+          "skipped": 0,
+          "passed": 17
+        },
+        "resume": {
+          "cases": 18,
+          "skipped": 0,
+          "passed": 18
+        },
+        "sandbox": {
+          "cases": 5,
+          "skipped": 0,
+          "passed": 5
+        },
+        "scheduler": {
+          "cases": 19,
+          "skipped": 1,
+          "passed": 18
+        },
+        "supervisor": {
+          "cases": 16,
+          "skipped": 0,
+          "passed": 16
+        },
+        "cron": {
+          "cases": 12,
+          "skipped": 0,
+          "passed": 12
+        },
+        "autostart": {
+          "cases": 14,
+          "skipped": 4,
+          "passed": 10
+        },
+        "build": {
+          "cases": 19,
+          "skipped": 0,
+          "passed": 19
+        },
+        "build_proposals": {
+          "cases": 25,
+          "skipped": 0,
+          "passed": 25
+        },
+        "real_build": {
+          "native_groups": 2
+        },
+        "package": {
+          "cases": 11,
+          "skipped": 0,
+          "passed": 11
+        },
+        "verification": {
+          "cases": 14,
+          "skipped": 0,
+          "passed": 14
+        }
+      }
+    },
+    "linux-debug": {
+      "receipt": "linux\\debug-20261025T154344Z-dd6f58f0\\verification.json",
+      "source": {
+        "sha256": "ab2ee599462da176d56014637f1fe6a00911c66e4cf46153826f9c6d25c22e06",
+        "files": 190
+      },
+      "artifact": {
+        "path": "build/linux/x86_64/debug/codestudio-agent",
+        "size": 35339176,
+        "sha256": "cefcb8e924c3858c51fe55b227a171babfb312b394e7cd92c0288ebb5235a73c"
+      },
+      "native_groups": 22,
+      "python_cases": 370,
+      "python_passed": 369,
+      "python_skipped": 1,
+      "suite_results": {
+        "native": {
+          "native_groups": 22
+        },
+        "schema": {
+          "cases": 13,
+          "skipped": 0,
+          "passed": 13
+        },
+        "provider": {
+          "cases": 15,
+          "skipped": 0,
+          "passed": 15
+        },
+        "streaming": {
+          "cases": 18,
+          "skipped": 0,
+          "passed": 18
+        },
+        "contract": {
+          "cases": 16,
+          "skipped": 0,
+          "passed": 16
+        },
+        "service": {
+          "cases": 28,
+          "skipped": 0,
+          "passed": 28
+        },
+        "credentials": {
+          "cases": 17,
+          "skipped": 0,
+          "passed": 17
+        },
+        "cli": {
+          "cases": 11,
+          "skipped": 0,
+          "passed": 11
+        },
+        "local_models": {
+          "cases": 15,
+          "skipped": 0,
+          "passed": 15
+        },
+        "mcp": {
+          "cases": 13,
+          "skipped": 0,
+          "passed": 13
+        },
+        "mcp_http": {
+          "cases": 39,
+          "skipped": 0,
+          "passed": 39
+        },
+        "mcp_oauth": {
+          "cases": 26,
+          "skipped": 0,
+          "passed": 26
+        },
+        "plugins": {
+          "cases": 23,
+          "skipped": 0,
+          "passed": 23
+        },
+        "plugin_sandbox": {
+          "cases": 17,
+          "skipped": 0,
+          "passed": 17
+        },
+        "resume": {
+          "cases": 18,
+          "skipped": 0,
+          "passed": 18
+        },
+        "sandbox": {
+          "cases": 5,
+          "skipped": 0,
+          "passed": 5
+        },
+        "scheduler": {
+          "cases": 19,
+          "skipped": 0,
+          "passed": 19
+        },
+        "supervisor": {
+          "cases": 18,
+          "skipped": 0,
+          "passed": 18
+        },
+        "cron": {
+          "cases": 12,
+          "skipped": 0,
+          "passed": 12
+        },
+        "autostart": {
+          "cases": 14,
+          "skipped": 1,
+          "passed": 13
+        },
+        "real_build": {
+          "cases": 8,
+          "skipped": 0,
+          "passed": 8
+        },
+        "package": {
+          "cases": 11,
+          "skipped": 0,
+          "passed": 11
+        },
+        "verification": {
+          "cases": 14,
+          "skipped": 0,
+          "passed": 14
+        }
+      }
+    },
+    "linux-release": {
+      "receipt": "linux\\release-20261025T154700Z-9db24085\\verification.json",
+      "source": {
+        "sha256": "ab2ee599462da176d56014637f1fe6a00911c66e4cf46153826f9c6d25c22e06",
+        "files": 190
+      },
+      "artifact": {
+        "path": "build/linux/x86_64/release/codestudio-agent",
+        "size": 3360104,
+        "sha256": "38dba7a489ec7f27a72be2d0122fde614aa0662b3cbfa10a39ea426c8dd34ce2"
+      },
+      "native_groups": 22,
+      "python_cases": 370,
+      "python_passed": 369,
+      "python_skipped": 1,
+      "suite_results": {
+        "native": {
+          "native_groups": 22
+        },
+        "schema": {
+          "cases": 13,
+          "skipped": 0,
+          "passed": 13
+        },
+        "provider": {
+          "cases": 15,
+          "skipped": 0,
+          "passed": 15
+        },
+        "streaming": {
+          "cases": 18,
+          "skipped": 0,
+          "passed": 18
+        },
+        "contract": {
+          "cases": 16,
+          "skipped": 0,
+          "passed": 16
+        },
+        "service": {
+          "cases": 28,
+          "skipped": 0,
+          "passed": 28
+        },
+        "credentials": {
+          "cases": 17,
+          "skipped": 0,
+          "passed": 17
+        },
+        "cli": {
+          "cases": 11,
+          "skipped": 0,
+          "passed": 11
+        },
+        "local_models": {
+          "cases": 15,
+          "skipped": 0,
+          "passed": 15
+        },
+        "mcp": {
+          "cases": 13,
+          "skipped": 0,
+          "passed": 13
+        },
+        "mcp_http": {
+          "cases": 39,
+          "skipped": 0,
+          "passed": 39
+        },
+        "mcp_oauth": {
+          "cases": 26,
+          "skipped": 0,
+          "passed": 26
+        },
+        "plugins": {
+          "cases": 23,
+          "skipped": 0,
+          "passed": 23
+        },
+        "plugin_sandbox": {
+          "cases": 17,
+          "skipped": 0,
+          "passed": 17
+        },
+        "resume": {
+          "cases": 18,
+          "skipped": 0,
+          "passed": 18
+        },
+        "sandbox": {
+          "cases": 5,
+          "skipped": 0,
+          "passed": 5
+        },
+        "scheduler": {
+          "cases": 19,
+          "skipped": 0,
+          "passed": 19
+        },
+        "supervisor": {
+          "cases": 18,
+          "skipped": 0,
+          "passed": 18
+        },
+        "cron": {
+          "cases": 12,
+          "skipped": 0,
+          "passed": 12
+        },
+        "autostart": {
+          "cases": 14,
+          "skipped": 1,
+          "passed": 13
+        },
+        "real_build": {
+          "cases": 8,
+          "skipped": 0,
+          "passed": 8
+        },
+        "package": {
+          "cases": 11,
+          "skipped": 0,
+          "passed": 11
+        },
+        "verification": {
+          "cases": 14,
+          "skipped": 0,
+          "passed": 14
+        }
+      }
+    }
+  },
+  "boundaries": [
+    "Whole-package sandbox tests use owned native multi-file fixture packages; external plugin compatibility is not inferred.",
+    "Each native platform ran Debug then Release with the same unified entrypoint; all default suites selected.",
+    "Python totals include static schema, packaging and verification-tool tests; Windows real XMake builds count separately as two PASS groups.",
+    "Local model tests use only synthetic HTTP fixtures; live inference remains paused.",
+    "Linux tests use an existing WSL host plus temporary cgroup and private Secret Service wrappers, not a clean machine or login session.",
+    "Prepared-runner CI definition was locally checked but no hosted workflow, Git publication, real login/reboot or signing was performed.",
+    "Installation validation runs separately against actual release packages; unknown/changed files are preserved by refusal.",
+    "OAuth uses synthetic loopback authorization servers and owned native-store entries; no real provider login is claimed.",
+    "Plugin tests use owned fixture bundles, pinned content and temporary stores; no external plugin publication is claimed."
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "format": 2,
+  "path": ".github\\workflows\\native.yml",
+  "sha256": "a89c20aa617a08deb2618913d1be8a215db0f5e3977e21f9f1f329dc1f02d45f",
+  "yaml_parser": "PyYAML6.0.3 BaseLoader",
+  "syntax": "valid",
+  "jobs": [
+    "windows",
+    "linux"
+  ],
+  "hosted_run_performed": false,
+  "scope": "YAML and selected wiring assertions only; native commands executed separately on current Windows/WSL hosts"
+}

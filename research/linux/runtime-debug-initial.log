@@ -1,0 +1,190 @@
+...............
+----------------------------------------------------------------------
+Ran 15 tests in 0.482s
+
+OK
+.............
+----------------------------------------------------------------------
+Ran 13 tests in 1.865s
+
+OK
+..................
+----------------------------------------------------------------------
+Ran 18 tests in 0.831s
+
+OK
+test_active_task_remains_queryable_and_cancellation_does_not_authorize_other_work (__main__.ServiceTests.test_active_task_remains_queryable_and_cancellation_does_not_authorize_other_work) ... ok
+test_approval_continuation_uses_resume_option_validation_before_dispatch (__main__.ServiceTests.test_approval_continuation_uses_resume_option_validation_before_dispatch) ... ok
+test_client_notifications_cannot_start_tasks_or_shutdown_the_service (__main__.ServiceTests.test_client_notifications_cannot_start_tasks_or_shutdown_the_service) ... ok
+test_closed_output_cancels_active_task_and_releases_locks (__main__.ServiceTests.test_closed_output_cancels_active_task_and_releases_locks) ... ok
+test_crashed_process_requires_recover_and_unknown_effects_never_resume (__main__.ServiceTests.test_crashed_process_requires_recover_and_unknown_effects_never_resume) ... ok
+test_cron_and_autostart_validation_has_no_effects (__main__.ServiceTests.test_cron_and_autostart_validation_has_no_effects) ... ok
+test_cron_async_creation_survives_eof_and_controls_work_during_foreground_task (__main__.ServiceTests.test_cron_async_creation_survives_eof_and_controls_work_during_foreground_task) ... ok
+test_cron_preview_and_queries_are_read_only (__main__.ServiceTests.test_cron_preview_and_queries_are_read_only) ... ok
+test_demo_and_cli_share_receipts_and_summarized_task_detail (__main__.ServiceTests.test_demo_and_cli_share_receipts_and_summarized_task_detail) ... ok
+test_eof_cancels_active_task_and_releases_runner_locks (__main__.ServiceTests.test_eof_cancels_active_task_and_releases_runner_locks) ... ok
+test_eof_cancels_cron_mcp_discovery_before_enrollment (__main__.ServiceTests.test_eof_cancels_cron_mcp_discovery_before_enrollment) ... ok
+test_explicit_state_path_is_shared_with_the_cli (__main__.ServiceTests.test_explicit_state_path_is_shared_with_the_cli) ... ok
+test_external_cli_obeys_the_same_active_workspace_lock (__main__.ServiceTests.test_external_cli_obeys_the_same_active_workspace_lock) ... ok
+test_initialize_and_read_only_queries_do_not_create_state (__main__.ServiceTests.test_initialize_and_read_only_queries_do_not_create_state) ... ok
+test_malformed_requests_and_duplicate_keys_have_no_effects (__main__.ServiceTests.test_malformed_requests_and_duplicate_keys_have_no_effects) ... ok
+test_option_validation_pins_workspace_state_and_credentials (__main__.ServiceTests.test_option_validation_pins_workspace_state_and_credentials) ... ok
+test_oversized_input_frame_returns_error_and_exits_without_effects (__main__.ServiceTests.test_oversized_input_frame_returns_error_and_exits_without_effects) ... ok
+test_resume_requires_original_grants_and_reuses_completed_tool_receipt (__main__.ServiceTests.test_resume_requires_original_grants_and_reuses_completed_tool_receipt) ... ok
+test_schedule_survives_client_eof_and_can_be_cancelled_during_foreground_work (__main__.ServiceTests.test_schedule_survives_client_eof_and_can_be_cancelled_during_foreground_work) ... ok
+test_scheduler_parameters_are_rejected_without_creating_state (__main__.ServiceTests.test_scheduler_parameters_are_rejected_without_creating_state) ... ok
+test_shutdown_cancels_active_task_and_flushes_protocol_response (__main__.ServiceTests.test_shutdown_cancels_active_task_and_flushes_protocol_response) ... ok
+test_streaming_text_arrives_before_terminal_and_redacts_split_credentials (__main__.ServiceTests.test_streaming_text_arrives_before_terminal_and_redacts_split_credentials) ... ok
+test_subscription_delivers_committed_events_and_replays_after_cursor (__main__.ServiceTests.test_subscription_delivers_committed_events_and_replays_after_cursor) ... ok
+test_task_and_event_cursor_pages_do_not_skip_or_repeat_rows (__main__.ServiceTests.test_task_and_event_cursor_pages_do_not_skip_or_repeat_rows) ... ok
+test_unread_output_hits_write_deadline_without_waiting_for_input_eof (__main__.ServiceTests.test_unread_output_hits_write_deadline_without_waiting_for_input_eof) ... ok
+test_unsupported_state_schema_is_rejected_without_migration (__main__.ServiceTests.test_unsupported_state_schema_is_rejected_without_migration) ... ok
+
+----------------------------------------------------------------------
+Ran 26 tests in 15.694s
+
+OK
+test_custom_state_scheduler_lock_is_protected_from_write_file (__main__.SchedulerTests.test_custom_state_scheduler_lock_is_protected_from_write_file) ... ok
+test_delay_and_queued_cancellation_never_dispatch_early (__main__.SchedulerTests.test_delay_and_queued_cancellation_never_dispatch_early) ... ok
+test_dispatched_process_crash_blocks_scheduler_without_restarting_mcp (__main__.SchedulerTests.test_dispatched_process_crash_blocks_scheduler_without_restarting_mcp) ... ok
+test_duplicate_active_schedule_is_rejected_and_manual_resume_revokes_it (__main__.SchedulerTests.test_duplicate_active_schedule_is_rejected_and_manual_resume_revokes_it) ... ok
+test_expired_job_and_model_budget_never_gain_new_turns (__main__.SchedulerTests.test_expired_job_and_model_budget_never_gain_new_turns) ... FAIL
+test_foreground_worker_keeps_processing_after_stdin_eof (__main__.SchedulerTests.test_foreground_worker_keeps_processing_after_stdin_eof) ... FAIL
+test_grants_and_changed_mcp_configuration_block_before_launch (__main__.SchedulerTests.test_grants_and_changed_mcp_configuration_block_before_launch) ... ok
+test_hidden_worker_survives_control_process_eof_and_stops_by_owned_control (__main__.SchedulerTests.test_hidden_worker_survives_control_process_eof_and_stops_by_owned_control) ... FAIL
+test_idle_worker_stop_preserves_delayed_and_approval_waiting_jobs (__main__.SchedulerTests.test_idle_worker_stop_preserves_delayed_and_approval_waiting_jobs) ... FAIL
+test_invalid_schedule_parameters_have_no_persistent_or_model_effects (__main__.SchedulerTests.test_invalid_schedule_parameters_have_no_persistent_or_model_effects) ... ok
+test_model_failures_retry_with_backoff_and_bounded_attempts (__main__.SchedulerTests.test_model_failures_retry_with_backoff_and_bounded_attempts) ... ok
+test_model_pending_worker_crash_recovers_only_owned_task_without_replaying_tools (__main__.SchedulerTests.test_model_pending_worker_crash_recovers_only_owned_task_without_replaying_tools) ... ok
+test_new_proposal_waits_for_a_new_explicit_decision (__main__.SchedulerTests.test_new_proposal_waits_for_a_new_explicit_decision) ... FAIL
+test_running_job_cancel_is_persistent_and_does_not_retry (__main__.SchedulerTests.test_running_job_cancel_is_persistent_and_does_not_retry) ... ok
+test_scheduler_recovery_does_not_recover_unrelated_running_task (__main__.SchedulerTests.test_scheduler_recovery_does_not_recover_unrelated_running_task) ... ok
+test_three_protocols_queued_resume_survives_the_creating_process (__main__.SchedulerTests.test_three_protocols_queued_resume_survives_the_creating_process) ... ok
+test_two_workers_cannot_claim_the_same_job (__main__.SchedulerTests.test_two_workers_cannot_claim_the_same_job) ... ok
+test_worker_stop_cancels_active_job_and_preserves_other_queue (__main__.SchedulerTests.test_worker_stop_cancels_active_job_and_preserves_other_queue) ... ok
+test_worker_uses_current_secret_without_persisting_it_in_schedule (__main__.SchedulerTests.test_worker_uses_current_secret_without_persisting_it_in_schedule) ... ok
+
+======================================================================
+FAIL: test_expired_job_and_model_budget_never_gain_new_turns (__main__.SchedulerTests.test_expired_job_and_model_budget_never_gain_new_turns)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/tmp/codestudio-agent-linux/tests/scheduler_integration.py", line 241, in test_expired_job_and_model_budget_never_gain_new_turns
+    pending_budget, action = self.waiting_task(max_turns=1)
+                             ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/var/tmp/codestudio-agent-linux/tests/scheduler_integration.py", line 97, in waiting_task
+    result = self.invoke(*self.run_args("--allow-build-proposals", "--max-turns", str(max_turns), api=api), expected=3)
+  File "/var/tmp/codestudio-agent-linux/tests/resume_integration.py", line 127, in invoke
+    self.assertEqual(process.returncode, expected, process.stdout + process.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 3 : {
+  "product": "CodeStudio-Agent",
+  "provider": "openai-compatible/responses",
+  "state_database": "/tmp/codestudio-resume-jfulw7br/workspace with spaces/.codestudio/state.sqlite3",
+  "status": "exhausted",
+  "summary": "Model turn budget reached",
+  "task_id": "c06a8cf260cb5076b1f95a9039fee4eb",
+  "turns": 1,
+  "verification": "Tool receipts recorded; final answer is not independent acceptance."
+}
+
+
+======================================================================
+FAIL: test_foreground_worker_keeps_processing_after_stdin_eof (__main__.SchedulerTests.test_foreground_worker_keeps_processing_after_stdin_eof)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/tmp/codestudio-agent-linux/tests/scheduler_integration.py", line 344, in test_foreground_worker_keeps_processing_after_stdin_eof
+    task, action = self.waiting_task()
+                   ~~~~~~~~~~~~~~~~~^^
+  File "/var/tmp/codestudio-agent-linux/tests/scheduler_integration.py", line 97, in waiting_task
+    result = self.invoke(*self.run_args("--allow-build-proposals", "--max-turns", str(max_turns), api=api), expected=3)
+  File "/var/tmp/codestudio-agent-linux/tests/resume_integration.py", line 127, in invoke
+    self.assertEqual(process.returncode, expected, process.stdout + process.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 3 : {
+  "product": "CodeStudio-Agent",
+  "provider": "openai-compatible/responses",
+  "state_database": "/tmp/codestudio-resume-far74wny/workspace with spaces/.codestudio/state.sqlite3",
+  "status": "failed",
+  "summary": "Model provider: HTTP status 500 (response body omitted)",
+  "task_id": "ccd9afab704e09c6a8fcc782c87f6617",
+  "turns": 2,
+  "verification": "Tool receipts recorded; final answer is not independent acceptance."
+}
+
+
+======================================================================
+FAIL: test_hidden_worker_survives_control_process_eof_and_stops_by_owned_control (__main__.SchedulerTests.test_hidden_worker_survives_control_process_eof_and_stops_by_owned_control)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/tmp/codestudio-agent-linux/tests/scheduler_integration.py", line 449, in test_hidden_worker_survives_control_process_eof_and_stops_by_owned_control
+    task, action = self.waiting_task()
+                   ~~~~~~~~~~~~~~~~~^^
+  File "/var/tmp/codestudio-agent-linux/tests/scheduler_integration.py", line 97, in waiting_task
+    result = self.invoke(*self.run_args("--allow-build-proposals", "--max-turns", str(max_turns), api=api), expected=3)
+  File "/var/tmp/codestudio-agent-linux/tests/resume_integration.py", line 127, in invoke
+    self.assertEqual(process.returncode, expected, process.stdout + process.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 3 : {
+  "product": "CodeStudio-Agent",
+  "provider": "openai-compatible/responses",
+  "state_database": "/tmp/codestudio-resume-930pg3rr/workspace with spaces/.codestudio/state.sqlite3",
+  "status": "failed",
+  "summary": "Model provider: HTTP status 500 (response body omitted)",
+  "task_id": "98da02a3fda25c18ed3740191205f52b",
+  "turns": 2,
+  "verification": "Tool receipts recorded; final answer is not independent acceptance."
+}
+
+
+======================================================================
+FAIL: test_idle_worker_stop_preserves_delayed_and_approval_waiting_jobs (__main__.SchedulerTests.test_idle_worker_stop_preserves_delayed_and_approval_waiting_jobs)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/tmp/codestudio-agent-linux/tests/scheduler_integration.py", line 327, in test_idle_worker_stop_preserves_delayed_and_approval_waiting_jobs
+    waiting_task, _ = self.waiting_task()
+                      ~~~~~~~~~~~~~~~~~^^
+  File "/var/tmp/codestudio-agent-linux/tests/scheduler_integration.py", line 97, in waiting_task
+    result = self.invoke(*self.run_args("--allow-build-proposals", "--max-turns", str(max_turns), api=api), expected=3)
+  File "/var/tmp/codestudio-agent-linux/tests/resume_integration.py", line 127, in invoke
+    self.assertEqual(process.returncode, expected, process.stdout + process.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 3 : {
+  "product": "CodeStudio-Agent",
+  "provider": "openai-compatible/responses",
+  "state_database": "/tmp/codestudio-resume-8rp8hay6/workspace with spaces/.codestudio/state.sqlite3",
+  "status": "failed",
+  "summary": "Model provider: HTTP status 500 (response body omitted)",
+  "task_id": "7d56467cdd509297c08f87fcf9732e27",
+  "turns": 2,
+  "verification": "Tool receipts recorded; final answer is not independent acceptance."
+}
+
+
+======================================================================
+FAIL: test_new_proposal_waits_for_a_new_explicit_decision (__main__.SchedulerTests.test_new_proposal_waits_for_a_new_explicit_decision)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/tmp/codestudio-agent-linux/tests/scheduler_integration.py", line 182, in test_new_proposal_waits_for_a_new_explicit_decision
+    task, first_action = self.waiting_task()
+                         ~~~~~~~~~~~~~~~~~^^
+  File "/var/tmp/codestudio-agent-linux/tests/scheduler_integration.py", line 97, in waiting_task
+    result = self.invoke(*self.run_args("--allow-build-proposals", "--max-turns", str(max_turns), api=api), expected=3)
+  File "/var/tmp/codestudio-agent-linux/tests/resume_integration.py", line 127, in invoke
+    self.assertEqual(process.returncode, expected, process.stdout + process.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 3 : {
+  "product": "CodeStudio-Agent",
+  "provider": "openai-compatible/responses",
+  "state_database": "/tmp/codestudio-resume-_b7a_cbr/workspace with spaces/.codestudio/state.sqlite3",
+  "status": "failed",
+  "summary": "Model provider: HTTP status 500 (response body omitted)",
+  "task_id": "dc39f306dd203a930e1eafa577a18fb7",
+  "turns": 2,
+  "verification": "Tool receipts recorded; final answer is not independent acceptance."
+}
+
+
+----------------------------------------------------------------------
+Ran 19 tests in 11.641s
+
+FAILED (failures=5)

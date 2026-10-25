@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "servers": [{
+    "id": "helper",
+    "plugin_lock": "D:/Plugins/helper.lock.json",
+    "tools": ["inspect"],
+    "timeout_ms": 10000,
+    "sandbox_limits": {"processes": 1, "memory_mb": 512, "cpu_percent": 80}
+  }]
+}

@@ -1,0 +1,27 @@
+test_changed_missing_and_extra_installed_data_never_deleted (__main__.DeliveryTests.test_changed_missing_and_extra_installed_data_never_deleted) ... ok
+test_corrupt_checksum_inventory_rejected_without_destination (__main__.DeliveryTests.test_corrupt_checksum_inventory_rejected_without_destination) ... ok
+test_corrupt_package_payload_rejected_before_install_and_upgrade (__main__.DeliveryTests.test_corrupt_package_payload_rejected_before_install_and_upgrade) ... ok
+test_downgrade_refused_without_modifying_installed_files (__main__.DeliveryTests.test_downgrade_refused_without_modifying_installed_files) ... ok
+test_extra_package_file_cannot_bypass_manifest (__main__.DeliveryTests.test_extra_package_file_cannot_bypass_manifest) ... ok
+test_hardlinked_package_payload_is_rejected (__main__.DeliveryTests.test_hardlinked_package_payload_is_rejected) ... ok
+test_install_different_package_and_upgrade_absent_refused (__main__.DeliveryTests.test_install_different_package_and_upgrade_absent_refused) ... ok
+test_installed_background_worker_start_stop_or_verified_job_refusal (__main__.DeliveryTests.test_installed_background_worker_start_stop_or_verified_job_refusal) ... skipped 'Enclosing Windows Job prevents detached start; installed refusal preserved the database'
+test_installed_doctor_demo_service_and_environment_credential (__main__.DeliveryTests.test_installed_doctor_demo_service_and_environment_credential) ... ok
+test_interrupted_installer_lock_requires_inspection_without_mutation (__main__.DeliveryTests.test_interrupted_installer_lock_requires_inspection_without_mutation) ... ok
+test_linked_destination_is_rejected_without_following_it (__main__.DeliveryTests.test_linked_destination_is_rejected_without_following_it) ... ok
+test_manifest_paths_cannot_escape_or_use_aliases (__main__.DeliveryTests.test_manifest_paths_cannot_escape_or_use_aliases) ... ok
+test_modified_ownership_receipt_cannot_redirect_uninstall (__main__.DeliveryTests.test_modified_ownership_receipt_cannot_redirect_uninstall) ... ok
+test_native_installer_wrapper_forwards_arguments_and_exit_status (__main__.DeliveryTests.test_native_installer_wrapper_forwards_arguments_and_exit_status) ... ok
+test_occupied_unowned_prefix_never_overwritten_or_removed (__main__.DeliveryTests.test_occupied_unowned_prefix_never_overwritten_or_removed) ... ok
+test_package_inventory_hashes_and_native_identity_match (__main__.DeliveryTests.test_package_inventory_hashes_and_native_identity_match) ... ok
+test_running_installed_service_refuses_upgrade_and_uninstall (__main__.DeliveryTests.test_running_installed_service_refuses_upgrade_and_uninstall) ... ok
+test_status_absent_install_and_same_package_are_idempotent (__main__.DeliveryTests.test_status_absent_install_and_same_package_are_idempotent) ... ok
+test_symlinked_parent_cannot_redirect_new_installation (__main__.DeliveryTests.test_symlinked_parent_cannot_redirect_new_installation) ... ok
+test_uninstall_via_installed_script_preserves_user_state_and_environment (__main__.DeliveryTests.test_uninstall_via_installed_script_preserves_user_state_and_environment) ... ok
+test_unsupported_format_foreign_platform_and_duplicate_paths_rejected (__main__.DeliveryTests.test_unsupported_format_foreign_platform_and_duplicate_paths_rejected) ... ok
+test_upgrade_replaces_owned_files_and_preserves_sibling_workspace (__main__.DeliveryTests.test_upgrade_replaces_owned_files_and_preserves_sibling_workspace) ... ok
+
+----------------------------------------------------------------------
+Ran 22 tests in 24.794s
+
+OK (skipped=1)

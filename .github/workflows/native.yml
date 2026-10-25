@@ -1,0 +1,89 @@
+name: Native verification and packages
+
+# Full OS isolation needs prepared runners; do not run untrusted pull request
+# code on these machines. Publishing a package remains a separate operation.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: native-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  windows:
+    runs-on: [self-hosted, Windows, X64, codestudio-agent]
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Prepare test interpreter
+        shell: pwsh
+        run: |
+          python -m venv build/contract-python
+          & build/contract-python/Scripts/python.exe -m pip install -r tests/requirements.txt
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Verify both configurations
+        shell: pwsh
+        run: |
+          & build/contract-python/Scripts/python.exe scripts/verify.py --mode all
+          exit $LASTEXITCODE
+      - name: Package and verify installation
+        shell: pwsh
+        run: |
+          $receipt = Get-ChildItem build/verification/windows/release-*/verification.json | Sort-Object LastWriteTime | Select-Object -Last 1
+          & build/contract-python/Scripts/python.exe scripts/package.py --mode release --verification $receipt.FullName
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          & build/contract-python/Scripts/python.exe scripts/verify.py --mode release --skip-build --suite delivery --package build/packages/windows-x64/codestudio-agent-windows-x64
+          exit $LASTEXITCODE
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: codestudio-agent-windows-verification
+          path: build/verification/windows/
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: codestudio-agent-windows-x64
+          path: build/packages/windows-x64/
+          if-no-files-found: error
+
+  linux:
+    runs-on: [self-hosted, Linux, X64, codestudio-agent]
+    timeout-minutes: 60
+    # Runner owner supplies CODESTUDIO_CGROUP_ROOT delegation. No sudo, account
+    # creation, system controller mutation or keyring unlock belongs here.
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Prepare test interpreter
+        run: |
+          python3 -m venv build/contract-python
+          build/contract-python/bin/python -m pip install -r tests/requirements.txt
+      - name: Verify both configurations
+        run: build/contract-python/bin/python scripts/verify.py --mode all
+      - name: Package and verify installation
+        run: |
+          receipt=$(find build/verification/linux -path '*/release-*/verification.json' -print | sort | tail -n 1)
+          test -n "$receipt"
+          build/contract-python/bin/python scripts/package.py --mode release --verification "$receipt"
+          build/contract-python/bin/python scripts/verify.py --mode release --skip-build --suite delivery --package build/packages/linux-x86_64/codestudio-agent-linux-x86_64
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: codestudio-agent-linux-verification
+          path: build/verification/linux/
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: codestudio-agent-linux-x86_64
+          path: build/packages/linux-x86_64/
+          if-no-files-found: error

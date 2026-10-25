@@ -1,0 +1,12 @@
+[0m[32;1m[ 23%]:[0m [36;1m<agent-tests>[0m cache compiling.release tests\autostart_tests.cpp[0m
+[0m[32;1m[ 44%]:[0m [36;1m<agent-core>[0m cache compiling.release src\platform\autostart.cpp[0m
+[0m[32;1m[ 44%]:[0m [36;1m<agent-core>[0m cache compiling.release src\platform\autostart_linux.cpp[0m
+[0m[32;1m[ 44%]:[0m [36;1m<agent-core>[0m cache compiling.release src\platform\autostart_options.cpp[0m
+[0m[32;1m[ 55%]:[0m [36;1m<agent-core>[0m cache compiling.release src\application\application.cpp[0m
+[0m[32;1m[ 56%]:[0m [36;1m<agent-core>[0m cache compiling.release src\application\scheduler.cpp[0m
+[0m[32;1m[ 57%]:[0m [36;1m<agent-core>[0m cache compiling.release src\application\service.cpp[0m
+[0m[32;1m[ 85%]:[0m [36;1m<agent-core>[0m [36;1marchiving.release agent-core.lib[0m
+[0m[32;1m[ 87%]:[0m [36;1m<agent-tests>[0m [36;1mlinking.release agent-tests.exe[0m
+[0m[32;1m[ 87%]:[0m [36;1m<codestudio-agent>[0m [36;1mlinking.release codestudio-agent.exe[0m
+[0m[32;1m[ 87%]:[0m [36;1m<provider-fixture>[0m [36;1mlinking.release provider-fixture.exe[0m
+[0m[32;1m[100%]:[0m [32;1mbuild ok, spent 5.719s[0m

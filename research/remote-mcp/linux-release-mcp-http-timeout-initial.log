@@ -1,0 +1,14 @@
+................................F......
+======================================================================
+FAIL: test_timeout_sends_cancellation_notification_and_retains_unknown_effect (__main__.RemoteMcpTests.test_timeout_sends_cancellation_notification_and_retains_unknown_effect)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/tmp/codestudio-agent-linux/tests/mcp_http_integration.py", line 600, in test_timeout_sends_cancellation_notification_and_retains_unknown_effect
+    self.assertEqual(len(notifications), 1)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 1
+
+----------------------------------------------------------------------
+Ran 39 tests in 5.928s
+
+FAILED (failures=1)

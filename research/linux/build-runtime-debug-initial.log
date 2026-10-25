@@ -1,0 +1,73 @@
+[0m[38;5;2;1m[ 25%]:[0m [38;5;5;1m<agent-tests>[0m cache compiling.debug tests/sandbox_tests.cpp[0m
+[0m[38;5;2;1m[ 47%]:[0m [38;5;5;1m<agent-core>[0m cache compiling.debug src/platform/line_process.cpp[0m
+[0m[38;5;2;1m[ 47%]:[0m [38;5;5;1m<agent-core>[0m cache compiling.debug src/platform/process.cpp[0m
+[0m[38;5;2;1m[ 50%]:[0m [38;5;5;1m<agent-core>[0m cache compiling.debug src/platform/linux_sandbox.cpp[0m
+[0m[38;5;2;1m[ 84%]:[0m [38;5;5;1m<agent-core>[0m [38;5;5;1marchiving.debug libagent-core.a[0m
+[0m[38;5;2;1m[ 85%]:[0m [38;5;5;1m<codestudio-agent>[0m [38;5;5;1mlinking.debug codestudio-agent[0m
+[0m[38;5;2;1m[ 85%]:[0m [38;5;5;1m<provider-fixture>[0m [38;5;5;1mlinking.debug provider-fixture[0m
+[0m[38;5;2;1m[ 92%]:[0m [38;5;5;1m<agent-tests>[0m [38;5;5;1mlinking.debug agent-tests[0m
+[0m[38;5;2;1m[100%]:[0m [38;5;2;1mbuild ok, spent 4.359s[0m
+test_approval_executes_once_and_resume_consumes_receipt_once (__main__.LinuxBuildTests.test_approval_executes_once_and_resume_consumes_receipt_once) ... ok
+test_build_export_boundaries_and_distinct_bundles (__main__.LinuxBuildTests.test_build_export_boundaries_and_distinct_bundles) ... ok
+test_cancel_and_stdin_eof_stop_descendants_without_export (__main__.LinuxBuildTests.test_cancel_and_stdin_eof_stop_descendants_without_export) ... 
+  test_cancel_and_stdin_eof_stop_descendants_without_export (__main__.LinuxBuildTests.test_cancel_and_stdin_eof_stop_descendants_without_export) (mode='cancel') ... FAIL
+  test_cancel_and_stdin_eof_stop_descendants_without_export (__main__.LinuxBuildTests.test_cancel_and_stdin_eof_stop_descendants_without_export) (mode='eof') ... FAIL
+test_failed_steps_and_missing_outputs_publish_nothing (__main__.LinuxBuildTests.test_failed_steps_and_missing_outputs_publish_nothing) ... ok
+test_host_crash_kills_descendants_and_recovery_never_replays (__main__.LinuxBuildTests.test_host_crash_kills_descendants_and_recovery_never_replays) ... FAIL
+test_real_cpp26_compile_assemble_link_run_and_hash (__main__.LinuxBuildTests.test_real_cpp26_compile_assemble_link_run_and_hash) ... ok
+test_rejection_never_builds (__main__.LinuxBuildTests.test_rejection_never_builds) ... ok
+test_timeout_stops_live_descendants_without_export (__main__.LinuxBuildTests.test_timeout_stops_live_descendants_without_export) ... FAIL
+
+======================================================================
+FAIL: test_cancel_and_stdin_eof_stop_descendants_without_export (__main__.LinuxBuildTests.test_cancel_and_stdin_eof_stop_descendants_without_export) (mode='cancel')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/tmp/codestudio-agent-linux/tests/linux_build_integration.py", line 394, in test_cancel_and_stdin_eof_stop_descendants_without_export
+    evidence, group, stage = self.live_tree(service.process)
+                             ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/var/tmp/codestudio-agent-linux/tests/linux_build_integration.py", line 364, in live_tree
+    self.assertTrue(stage.name.startswith("codestudio-isolation-"), stage)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False is not true : /
+
+======================================================================
+FAIL: test_cancel_and_stdin_eof_stop_descendants_without_export (__main__.LinuxBuildTests.test_cancel_and_stdin_eof_stop_descendants_without_export) (mode='eof')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/tmp/codestudio-agent-linux/tests/linux_build_integration.py", line 394, in test_cancel_and_stdin_eof_stop_descendants_without_export
+    evidence, group, stage = self.live_tree(service.process)
+                             ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/var/tmp/codestudio-agent-linux/tests/linux_build_integration.py", line 371, in live_tree
+    self.fail("Expected three live fixture generations")
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Expected three live fixture generations
+
+======================================================================
+FAIL: test_host_crash_kills_descendants_and_recovery_never_replays (__main__.LinuxBuildTests.test_host_crash_kills_descendants_and_recovery_never_replays)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/tmp/codestudio-agent-linux/tests/linux_build_integration.py", line 426, in test_host_crash_kills_descendants_and_recovery_never_replays
+    evidence, group, stage = self.live_tree(process)
+                             ~~~~~~~~~~~~~~^^^^^^^^^
+  File "/var/tmp/codestudio-agent-linux/tests/linux_build_integration.py", line 364, in live_tree
+    self.assertTrue(stage.name.startswith("codestudio-isolation-"), stage)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False is not true : /
+
+======================================================================
+FAIL: test_timeout_stops_live_descendants_without_export (__main__.LinuxBuildTests.test_timeout_stops_live_descendants_without_export)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/tmp/codestudio-agent-linux/tests/linux_build_integration.py", line 412, in test_timeout_stops_live_descendants_without_export
+    evidence, group, stage = self.live_tree(service.process)
+                             ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/var/tmp/codestudio-agent-linux/tests/linux_build_integration.py", line 364, in live_tree
+    self.assertTrue(stage.name.startswith("codestudio-isolation-"), stage)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False is not true : /
+
+----------------------------------------------------------------------
+Ran 8 tests in 21.074s
+
+FAILED (failures=4)
+WARNING: test left cgroups: /sys/fs/cgroup/codestudio-test-586687fbe5f54a9da74fb359deed4acf/codestudio-isolation-382c35ca7374f830c723a7c7f4bd44a7

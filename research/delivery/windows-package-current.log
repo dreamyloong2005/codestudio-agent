@@ -1,0 +1,15 @@
+No verification report supplied; this package makes no test-pass claim.
+{
+  "format": 2,
+  "product": "CodeStudio-Agent",
+  "status": "packaged",
+  "platform": "windows",
+  "arch": "x64",
+  "package": "D:\\Dev\\Projects\\codestudio-agent\\build\\packages\\windows-smoke\\codestudio-agent-windows-x64",
+  "archive": "D:\\Dev\\Projects\\codestudio-agent\\build\\packages\\windows-smoke\\codestudio-agent-windows-x64.zip",
+  "sha256": "877d1bf4e92dd2beb0dd18473947aac27a8c1065c815246827a67f387151d850",
+  "bytes": 1894634,
+  "verification": {
+    "state": "not_supplied"
+  }
+}

@@ -1,0 +1,22 @@
+/.xmake/
+/build/
+/compile_commands.json
+/.codestudio/
+/.demo-workspace/
+/examples/isolated-build/.codestudio/
+/examples/isolated-build/artifacts/
+/task_plan.md
+/findings.md
+/progress.md
+/.planning/
+# Locally compiled research probes are not source artifacts.
+/research/**/*.exe
+/research/**/*.dll
+/research/**/*.lib
+/research/**/*.obj
+/research/**/*.pdb
+__pycache__/
+*.pyc
+.env
+.env.*
+!.env.example

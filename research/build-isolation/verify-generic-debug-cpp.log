@@ -1,0 +1,31 @@
+[0mchecking for LLVM Clang C/C++ Compiler (x64) ... [32;1mok[0m
+[0mchecking for Microsoft Visual Studio (x64) version ... [32;1m2022[0m
+[0m[32;1m[ 18%]:[0m [36;1m<agent-core>[0m cache compiling.debug src\platform\windows_sandbox.cpp[0m
+[0m[32;1m[ 21%]:[0m [36;1m<agent-core>[0m cache compiling.debug src\application\application.cpp[0m
+[0m[32;1m[ 22%]:[0m [36;1m<agent-core>[0m cache compiling.debug src\application\build_approval.cpp[0m
+[0m[32;1m[ 25%]:[0m [36;1m<agent-core>[0m cache compiling.debug src\execution\build_manifest.cpp[0m
+[0m[32;1m[ 26%]:[0m [36;1m<agent-core>[0m cache compiling.debug src\execution\workspace_execution.cpp[0m
+[0m[32;1m[ 57%]:[0m [36;1m<agent-tests>[0m cache compiling.debug tests\workspace_execution_tests.cpp[0m
+[0m[32;1m[ 72%]:[0m [36;1m<agent-core>[0m cache compiling.debug src\tools\build_proposal.cpp[0m
+[0m[32;1m[ 72%]:[0m [36;1m<agent-core>[0m cache compiling.debug src\tools\workspace_build.cpp[0m
+[0m[32;1m[ 84%]:[0m [36;1m<agent-core>[0m [36;1marchiving.debug agent-core.lib[0m
+[0m[32;1m[ 85%]:[0m [36;1m<agent-tests>[0m [36;1mlinking.debug agent-tests.exe[0m
+[0m[32;1m[ 85%]:[0m [36;1m<codestudio-agent>[0m [36;1mlinking.debug codestudio-agent.exe[0m
+[0m[32;1m[ 85%]:[0m [36;1m<provider-fixture>[0m [36;1mlinking.debug provider-fixture.exe[0m
+[0m[32;1m[100%]:[0m [32;1mbuild ok, spent 3.922s[0m
+PASS persistence/recovery/transitions/schema
+PASS task loop/policy/budgets/redaction
+PASS checkpoint migration/atomicity/resume guards
+PASS durable conversation resume/budgets/no replay
+PASS read-only state queries/pagination/commit visibility
+PASS Responses protocol and continuation
+PASS Messages protocol and continuation
+PASS workspace tool boundaries
+PASS isolated workspace import/export/hash/link boundaries
+PASS generic execution/manifest compatibility/frozen recipes
+PASS build proposals/digests/no execution/receipt validation
+PASS build decisions/atomic claims/no replay/read-only migration
+PASS process lifecycle/quoting/cancellation
+PASS persistent process transport/deadlines/environment
+PASS MCP grants/lifecycle/schemas/receipts
+PASS OS sandbox boundaries/stdio/descendants/cleanup

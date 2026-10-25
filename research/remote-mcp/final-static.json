@@ -1,0 +1,21 @@
+{
+  "date": "2026-10-25",
+  "linux_release_configured": true,
+  "python_ast_files": 30,
+  "relative_document_links": 214,
+  "missing_document_links": [],
+  "linux_verification_script_syntax": "valid",
+  "linux_project_processes": [],
+  "linux_temporary_cgroups": [],
+  "linux_isolation_directories": [],
+  "linux_autostart_entries": [],
+  "linux_private_keyring_directories": [],
+  "linux_private_keyring_processes": [],
+  "workspace_databases": [],
+  "windows": {
+    "ProjectProcesses": [],
+    "AutostartRegistrations": [],
+    "ReleaseConfigured": true,
+    "CredentialTestEntries": []
+  }
+}

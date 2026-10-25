@@ -1,0 +1,23 @@
+[  9%]: <agent-tests> cache compiling.release tests/mcp_tests.cpp
+[ 13%]: <agent-tests> cache compiling.release tests/credentials_tests.cpp
+[ 39%]: <agent-core> cache compiling.release src/platform/credentials.cpp
+[ 49%]: <agent-core> cache compiling.release src/mcp/mcp.cpp
+[ 50%]: <agent-core> cache compiling.release src/mcp/oauth_native.cpp
+[ 51%]: <agent-core> cache compiling.release src/mcp/http_transport.cpp
+[ 52%]: <agent-core> cache compiling.release src/mcp/oauth_http.cpp
+[ 54%]: <agent-core> cache compiling.release src/mcp/oauth.cpp
+[ 55%]: <agent-core> cache compiling.release src/application/scheduler.cpp
+[ 56%]: <agent-core> cache compiling.release src/application/service.cpp
+[ 57%]: <agent-core> cache compiling.release src/application/application.cpp
+[ 58%]: <agent-core> cache compiling.release src/application/build_approval.cpp
+[ 59%]: <agent-core> cache compiling.release src/application/supervisor_diagnostics.cpp
+[ 60%]: <agent-core> cache compiling.release src/application/extension_commands.cpp
+[ 63%]: <agent-core> cache compiling.release src/plugins/download.cpp
+[ 63%]: <agent-core> cache compiling.release src/plugins/plugins.cpp
+[ 69%]: <codestudio-agent> cache compiling.release src/cli/main.cpp
+[ 70%]: <codestudio-agent> cache compiling.release src/cli/credentials_cli.cpp
+[ 87%]: <agent-core> archiving.release libagent-core.a
+[ 88%]: <agent-tests> linking.release agent-tests
+[ 88%]: <codestudio-agent> linking.release codestudio-agent
+[ 88%]: <provider-fixture> linking.release provider-fixture
+[100%]: build ok, spent 19.95s

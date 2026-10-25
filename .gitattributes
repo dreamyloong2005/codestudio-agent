@@ -1,0 +1,3 @@
+# Verification and package receipts fingerprint exact file bytes across platforms.
+# Preserve the validated source snapshot; .editorconfig governs new edits.
+* -text

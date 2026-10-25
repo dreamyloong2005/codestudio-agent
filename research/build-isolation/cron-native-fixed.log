@@ -1,0 +1,3 @@
+PASS cron syntax/time zones/DST boundaries
+PASS cron atomic occurrences/overlap/recovery/controls
+PASS login autostart identity/ownership/argument boundaries

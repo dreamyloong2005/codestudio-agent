@@ -1,0 +1,205 @@
+[0m[38;5;2;1m[ 48%]:[0m [38;5;5;1m<agent-core>[0m cache compiling.release src/platform/linux_sandbox.cpp[0m
+[0m[38;5;2;1m[ 85%]:[0m [38;5;5;1m<agent-core>[0m [38;5;5;1marchiving.release libagent-core.a[0m
+[0m[38;5;2;1m[ 86%]:[0m [38;5;5;1m<agent-tests>[0m [38;5;5;1mlinking.release agent-tests[0m
+[0m[38;5;2;1m[ 86%]:[0m [38;5;5;1m<codestudio-agent>[0m [38;5;5;1mlinking.release codestudio-agent[0m
+[0m[38;5;2;1m[ 86%]:[0m [38;5;5;1m<provider-fixture>[0m [38;5;5;1mlinking.release provider-fixture[0m
+[0m[38;5;2;1m[100%]:[0m [38;5;2;1mbuild ok, spent 3.594s[0m
+PASS persistence/recovery/transitions/schema
+PASS task loop/policy/budgets/redaction
+PASS current checkpoint format/atomicity/resume guards
+PASS scheduler persistence/fencing/budgets/atomic recovery
+PASS cron syntax/time zones/DST boundaries
+PASS cron atomic occurrences/overlap/recovery/controls
+PASS login autostart identity/ownership/argument boundaries
+PASS durable conversation resume/budgets/no replay
+PASS read-only state queries/pagination/commit visibility
+PASS Responses protocol and continuation
+PASS Messages protocol and continuation
+PASS workspace tool boundaries
+PASS isolated workspace import/export/hash/link boundaries
+PASS generic execution/manifest compatibility/frozen recipes
+PASS build proposals/digests/no execution/receipt validation
+PASS build decisions/atomic claims/no replay/current schema
+PASS process lifecycle/quoting/cancellation
+PASS persistent process transport/deadlines/environment
+PASS MCP grants/lifecycle/schemas/receipts
+PASS OS sandbox boundaries/stdio/descendants/cleanup
+test_abnormal_finishes_and_empty_answers (__main__.ProviderTests.test_abnormal_finishes_and_empty_answers) ... ok
+test_complete_two_tool_rounds (__main__.ProviderTests.test_complete_two_tool_rounds) ... ok
+test_full_endpoint_and_normalized_response (__main__.ProviderTests.test_full_endpoint_and_normalized_response) ... ok
+test_http_errors_do_not_echo_credentials (__main__.ProviderTests.test_http_errors_do_not_echo_credentials) ... ok
+test_invalid_header_credential (__main__.ProviderTests.test_invalid_header_credential) ... ok
+test_invalid_json_and_top_level_shape (__main__.ProviderTests.test_invalid_json_and_top_level_shape) ... ok
+test_no_key_for_local_models (__main__.ProviderTests.test_no_key_for_local_models) ... ok
+test_offline_demo_and_readback_failure (__main__.ProviderTests.test_offline_demo_and_readback_failure) ... ok
+test_redirect_is_not_followed (__main__.ProviderTests.test_redirect_is_not_followed) ... ok
+test_response_size_limit (__main__.ProviderTests.test_response_size_limit) ... ok
+test_reused_tool_id_is_rejected (__main__.ProviderTests.test_reused_tool_id_is_rejected) ... ok
+test_timeout_and_cancellation (__main__.ProviderTests.test_timeout_and_cancellation) ... ok
+test_tool_arguments_must_be_complete_objects (__main__.ProviderTests.test_tool_arguments_must_be_complete_objects) ... ok
+test_tool_call_shape_and_finish_consistency (__main__.ProviderTests.test_tool_call_shape_and_finish_consistency) ... ok
+test_url_security (__main__.ProviderTests.test_url_security) ... ok
+
+----------------------------------------------------------------------
+Ran 15 tests in 1.300s
+
+OK
+...........
+----------------------------------------------------------------------
+Ran 11 tests in 0.648s
+
+OK
+test_all_apis_stream_text_and_usage (__main__.StreamingTests.test_all_apis_stream_text_and_usage) ... ok
+test_cancel_and_timeout_during_stream (__main__.StreamingTests.test_cancel_and_timeout_during_stream) ... ok
+test_chat_tool_deltas_accept_optional_null_fields (__main__.StreamingTests.test_chat_tool_deltas_accept_optional_null_fields) ... ok
+test_cli_incomplete_stream_never_executes_tool (__main__.StreamingTests.test_cli_incomplete_stream_never_executes_tool) ... ok
+test_cli_short_text_is_displayed_before_terminal (__main__.StreamingTests.test_cli_short_text_is_displayed_before_terminal) ... ok
+test_cli_stream_redacts_split_key_and_preserves_json_stdout (__main__.StreamingTests.test_cli_stream_redacts_split_key_and_preserves_json_stdout) ... ok
+test_cli_streaming_tools_are_persisted_and_replayed (__main__.StreamingTests.test_cli_streaming_tools_are_persisted_and_replayed) ... ok
+test_content_type_malformed_json_and_size_limit (__main__.StreamingTests.test_content_type_malformed_json_and_size_limit) ... ok
+test_http_chunked_transfer_and_transport_truncation (__main__.StreamingTests.test_http_chunked_transfer_and_transport_truncation) ... ok
+test_http_failure_body_is_never_streamed (__main__.StreamingTests.test_http_failure_body_is_never_streamed) ... ok
+test_in_stream_error_never_echoes_response_body (__main__.StreamingTests.test_in_stream_error_never_echoes_response_body) ... ok
+test_missing_terminal_rejects_complete_looking_tool (__main__.StreamingTests.test_missing_terminal_rejects_complete_looking_tool) ... ok
+test_multiline_sse_data_is_one_json_event (__main__.StreamingTests.test_multiline_sse_data_is_one_json_event) ... ok
+test_non_stream_responses_and_messages (__main__.StreamingTests.test_non_stream_responses_and_messages) ... ok
+test_post_terminal_and_duplicate_key_rejected (__main__.StreamingTests.test_post_terminal_and_duplicate_key_rejected) ... ok
+test_selected_full_endpoint_and_conflicting_endpoint (__main__.StreamingTests.test_selected_full_endpoint_and_conflicting_endpoint) ... ok
+test_text_arrives_before_server_releases_terminal (__main__.StreamingTests.test_text_arrives_before_server_releases_terminal) ... ok
+test_three_turn_tool_roundtrip_for_each_api (__main__.StreamingTests.test_three_turn_tool_roundtrip_for_each_api) ... ok
+
+----------------------------------------------------------------------
+Ran 18 tests in 3.641s
+
+OK
+...............
+----------------------------------------------------------------------
+Ran 15 tests in 0.290s
+
+OK
+.............
+----------------------------------------------------------------------
+Ran 13 tests in 1.767s
+
+OK
+..................
+----------------------------------------------------------------------
+Ran 18 tests in 0.691s
+
+OK
+.....
+----------------------------------------------------------------------
+Ran 5 tests in 0.385s
+
+OK
+test_active_task_remains_queryable_and_cancellation_does_not_authorize_other_work (__main__.ServiceTests.test_active_task_remains_queryable_and_cancellation_does_not_authorize_other_work) ... ok
+test_approval_continuation_uses_resume_option_validation_before_dispatch (__main__.ServiceTests.test_approval_continuation_uses_resume_option_validation_before_dispatch) ... ok
+test_client_notifications_cannot_start_tasks_or_shutdown_the_service (__main__.ServiceTests.test_client_notifications_cannot_start_tasks_or_shutdown_the_service) ... ok
+test_closed_output_cancels_active_task_and_releases_locks (__main__.ServiceTests.test_closed_output_cancels_active_task_and_releases_locks) ... ok
+test_crashed_process_requires_recover_and_unknown_effects_never_resume (__main__.ServiceTests.test_crashed_process_requires_recover_and_unknown_effects_never_resume) ... ok
+test_cron_and_autostart_validation_has_no_effects (__main__.ServiceTests.test_cron_and_autostart_validation_has_no_effects) ... ok
+test_cron_async_creation_survives_eof_and_controls_work_during_foreground_task (__main__.ServiceTests.test_cron_async_creation_survives_eof_and_controls_work_during_foreground_task) ... ok
+test_cron_preview_and_queries_are_read_only (__main__.ServiceTests.test_cron_preview_and_queries_are_read_only) ... ok
+test_demo_and_cli_share_receipts_and_summarized_task_detail (__main__.ServiceTests.test_demo_and_cli_share_receipts_and_summarized_task_detail) ... ok
+test_eof_cancels_active_task_and_releases_runner_locks (__main__.ServiceTests.test_eof_cancels_active_task_and_releases_runner_locks) ... ok
+test_eof_cancels_cron_mcp_discovery_before_enrollment (__main__.ServiceTests.test_eof_cancels_cron_mcp_discovery_before_enrollment) ... ok
+test_explicit_state_path_is_shared_with_the_cli (__main__.ServiceTests.test_explicit_state_path_is_shared_with_the_cli) ... ok
+test_external_cli_obeys_the_same_active_workspace_lock (__main__.ServiceTests.test_external_cli_obeys_the_same_active_workspace_lock) ... ok
+test_initialize_and_read_only_queries_do_not_create_state (__main__.ServiceTests.test_initialize_and_read_only_queries_do_not_create_state) ... ok
+test_malformed_requests_and_duplicate_keys_have_no_effects (__main__.ServiceTests.test_malformed_requests_and_duplicate_keys_have_no_effects) ... ok
+test_option_validation_pins_workspace_state_and_credentials (__main__.ServiceTests.test_option_validation_pins_workspace_state_and_credentials) ... ok
+test_oversized_input_frame_returns_error_and_exits_without_effects (__main__.ServiceTests.test_oversized_input_frame_returns_error_and_exits_without_effects) ... ok
+test_resume_requires_original_grants_and_reuses_completed_tool_receipt (__main__.ServiceTests.test_resume_requires_original_grants_and_reuses_completed_tool_receipt) ... ok
+test_schedule_survives_client_eof_and_can_be_cancelled_during_foreground_work (__main__.ServiceTests.test_schedule_survives_client_eof_and_can_be_cancelled_during_foreground_work) ... ok
+test_scheduler_parameters_are_rejected_without_creating_state (__main__.ServiceTests.test_scheduler_parameters_are_rejected_without_creating_state) ... ok
+test_shutdown_cancels_active_task_and_flushes_protocol_response (__main__.ServiceTests.test_shutdown_cancels_active_task_and_flushes_protocol_response) ... ok
+test_streaming_text_arrives_before_terminal_and_redacts_split_credentials (__main__.ServiceTests.test_streaming_text_arrives_before_terminal_and_redacts_split_credentials) ... ok
+test_subscription_delivers_committed_events_and_replays_after_cursor (__main__.ServiceTests.test_subscription_delivers_committed_events_and_replays_after_cursor) ... ok
+test_task_and_event_cursor_pages_do_not_skip_or_repeat_rows (__main__.ServiceTests.test_task_and_event_cursor_pages_do_not_skip_or_repeat_rows) ... ok
+test_unread_output_hits_write_deadline_without_waiting_for_input_eof (__main__.ServiceTests.test_unread_output_hits_write_deadline_without_waiting_for_input_eof) ... ok
+test_unsupported_state_schema_is_rejected_without_migration (__main__.ServiceTests.test_unsupported_state_schema_is_rejected_without_migration) ... ok
+
+----------------------------------------------------------------------
+Ran 26 tests in 15.498s
+
+OK
+test_custom_state_scheduler_lock_is_protected_from_write_file (__main__.SchedulerTests.test_custom_state_scheduler_lock_is_protected_from_write_file) ... ok
+test_delay_and_queued_cancellation_never_dispatch_early (__main__.SchedulerTests.test_delay_and_queued_cancellation_never_dispatch_early) ... ok
+test_dispatched_process_crash_blocks_scheduler_without_restarting_mcp (__main__.SchedulerTests.test_dispatched_process_crash_blocks_scheduler_without_restarting_mcp) ... ok
+test_duplicate_active_schedule_is_rejected_and_manual_resume_revokes_it (__main__.SchedulerTests.test_duplicate_active_schedule_is_rejected_and_manual_resume_revokes_it) ... ok
+test_expired_job_and_model_budget_never_gain_new_turns (__main__.SchedulerTests.test_expired_job_and_model_budget_never_gain_new_turns) ... ok
+test_foreground_worker_keeps_processing_after_stdin_eof (__main__.SchedulerTests.test_foreground_worker_keeps_processing_after_stdin_eof) ... ok
+test_grants_and_changed_mcp_configuration_block_before_launch (__main__.SchedulerTests.test_grants_and_changed_mcp_configuration_block_before_launch) ... ok
+test_hidden_worker_survives_control_process_eof_and_stops_by_owned_control (__main__.SchedulerTests.test_hidden_worker_survives_control_process_eof_and_stops_by_owned_control) ... ok
+test_idle_worker_stop_preserves_delayed_and_approval_waiting_jobs (__main__.SchedulerTests.test_idle_worker_stop_preserves_delayed_and_approval_waiting_jobs) ... ok
+test_invalid_schedule_parameters_have_no_persistent_or_model_effects (__main__.SchedulerTests.test_invalid_schedule_parameters_have_no_persistent_or_model_effects) ... ok
+test_model_failures_retry_with_backoff_and_bounded_attempts (__main__.SchedulerTests.test_model_failures_retry_with_backoff_and_bounded_attempts) ... ok
+test_model_pending_worker_crash_recovers_only_owned_task_without_replaying_tools (__main__.SchedulerTests.test_model_pending_worker_crash_recovers_only_owned_task_without_replaying_tools) ... ok
+test_new_proposal_waits_for_a_new_explicit_decision (__main__.SchedulerTests.test_new_proposal_waits_for_a_new_explicit_decision) ... ok
+test_running_job_cancel_is_persistent_and_does_not_retry (__main__.SchedulerTests.test_running_job_cancel_is_persistent_and_does_not_retry) ... ok
+test_scheduler_recovery_does_not_recover_unrelated_running_task (__main__.SchedulerTests.test_scheduler_recovery_does_not_recover_unrelated_running_task) ... ok
+test_three_protocols_queued_resume_survives_the_creating_process (__main__.SchedulerTests.test_three_protocols_queued_resume_survives_the_creating_process) ... ok
+test_two_workers_cannot_claim_the_same_job (__main__.SchedulerTests.test_two_workers_cannot_claim_the_same_job) ... ok
+test_worker_stop_cancels_active_job_and_preserves_other_queue (__main__.SchedulerTests.test_worker_stop_cancels_active_job_and_preserves_other_queue) ... ok
+test_worker_uses_current_secret_without_persisting_it_in_schedule (__main__.SchedulerTests.test_worker_uses_current_secret_without_persisting_it_in_schedule) ... ok
+
+----------------------------------------------------------------------
+Ran 19 tests in 12.693s
+
+OK
+............
+----------------------------------------------------------------------
+Ran 12 tests in 4.699s
+
+OK
+test_enable_readback_idempotency_configuration_conflict_and_remove (__main__.AutostartTests.test_enable_readback_idempotency_configuration_conflict_and_remove) ... ok
+test_invalid_poll_cannot_register_or_create_workspace_state (__main__.AutostartTests.test_invalid_poll_cannot_register_or_create_workspace_state) ... ok
+test_linux_modified_unit_and_foreign_enable_link_are_not_removed (__main__.AutostartTests.test_linux_modified_unit_and_foreign_enable_link_are_not_removed) ... ok
+test_linux_orphan_enable_link_and_symlink_unit_fail_closed (__main__.AutostartTests.test_linux_orphan_enable_link_and_symlink_unit_fail_closed) ... ok
+test_linux_unit_contract_and_systemd_syntax (__main__.AutostartTests.test_linux_unit_contract_and_systemd_syntax) ... ok
+test_state_and_workspace_scope_have_distinct_owned_names (__main__.AutostartTests.test_state_and_workspace_scope_have_distinct_owned_names) ... ok
+test_status_and_absent_disable_do_not_create_state_or_launch_work (__main__.AutostartTests.test_status_and_absent_disable_do_not_create_state_or_launch_work) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.164s
+
+OK
+test_approval_executes_once_and_resume_consumes_receipt_once (__main__.LinuxBuildTests.test_approval_executes_once_and_resume_consumes_receipt_once) ... ok
+test_build_export_boundaries_and_distinct_bundles (__main__.LinuxBuildTests.test_build_export_boundaries_and_distinct_bundles) ... ok
+test_cancel_and_stdin_eof_stop_descendants_without_export (__main__.LinuxBuildTests.test_cancel_and_stdin_eof_stop_descendants_without_export) ... ok
+test_failed_steps_and_missing_outputs_publish_nothing (__main__.LinuxBuildTests.test_failed_steps_and_missing_outputs_publish_nothing) ... ok
+test_host_crash_kills_descendants_and_recovery_never_replays (__main__.LinuxBuildTests.test_host_crash_kills_descendants_and_recovery_never_replays) ... ok
+test_real_cpp26_compile_assemble_link_run_and_hash (__main__.LinuxBuildTests.test_real_cpp26_compile_assemble_link_run_and_hash) ... ok
+test_rejection_never_builds (__main__.LinuxBuildTests.test_rejection_never_builds) ... ok
+test_timeout_stops_live_descendants_without_export (__main__.LinuxBuildTests.test_timeout_stops_live_descendants_without_export) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 6.809s
+
+OK
+PASS persistence/recovery/transitions/schema
+PASS task loop/policy/budgets/redaction
+PASS current checkpoint format/atomicity/resume guards
+PASS scheduler persistence/fencing/budgets/atomic recovery
+PASS cron syntax/time zones/DST boundaries
+PASS cron atomic occurrences/overlap/recovery/controls
+PASS login autostart identity/ownership/argument boundaries
+PASS durable conversation resume/budgets/no replay
+PASS read-only state queries/pagination/commit visibility
+PASS Responses protocol and continuation
+PASS Messages protocol and continuation
+PASS workspace tool boundaries
+PASS isolated workspace import/export/hash/link boundaries
+PASS generic execution/manifest compatibility/frozen recipes
+PASS build proposals/digests/no execution/receipt validation
+PASS build decisions/atomic claims/no replay/current schema
+PASS process lifecycle/quoting/cancellation
+PASS persistent process transport/deadlines/environment
+PASS MCP grants/lifecycle/schemas/receipts
+PASS OS sandbox boundaries/stdio/descendants/cleanup
+test_real_cpp26_compile_assemble_link_run_and_hash (__main__.LinuxBuildTests.test_real_cpp26_compile_assemble_link_run_and_hash) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.226s
+
+OK

@@ -1,0 +1,40 @@
+{
+    __meta__ = {
+        version = "1.0"
+    },
+    ["linux|x86_64"] = {
+        ["pkgconfig::libcurl#fd44226e"] = {
+            version = "latest"
+        },
+        ["pkgconfig::libsecret-1#fd44226e"] = {
+            version = "latest"
+        },
+        ["pkgconfig::nlohmann_json#fd44226e"] = {
+            version = "latest"
+        },
+        ["pkgconfig::openssl#fd44226e"] = {
+            version = "latest"
+        },
+        ["pkgconfig::sqlite3#fd44226e"] = {
+            version = "latest"
+        }
+    },
+    ["windows|x64"] = {
+        ["nlohmann_json 3.12.0#f56260b5"] = {
+            repo = {
+                branch = "master",
+                commit = "b9256335e0b6e70808e23dfe71627d8a4dcc0abf",
+                url = "https://gitcode.com/xmake-io/xmake-repo.git"
+            },
+            version = "v3.12.0"
+        },
+        ["sqlite3 3.50.0+400#a0c24696"] = {
+            repo = {
+                branch = "master",
+                commit = "b9256335e0b6e70808e23dfe71627d8a4dcc0abf",
+                url = "https://gitcode.com/xmake-io/xmake-repo.git"
+            },
+            version = "3.50.0+400"
+        }
+    }
+}

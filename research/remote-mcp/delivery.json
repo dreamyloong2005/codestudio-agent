@@ -1,0 +1,118 @@
+{
+  "date": "2026-10-25",
+  "source_tests_and_schema_match_tested_mirror": true,
+  "native_copy_and_archive_match": true,
+  "archive_checksums_verified": true,
+  "delivered_initialization": {
+    "capabilities": {
+      "approval_continuation": true,
+      "automatic_resume": true,
+      "background_scheduler": true,
+      "build_proposals": true,
+      "cron": true,
+      "event_replay": true,
+      "login_autostart": true,
+      "mcp_streamable_http": true,
+      "operation_lookup": true,
+      "structured_errors": true,
+      "supervised_autostart": true,
+      "supervisor_diagnostics": true,
+      "task_operations": true,
+      "text_deltas": true,
+      "worker_supervision": true
+    },
+    "limits": {
+      "active_operations": 1,
+      "input_bytes": 1048576,
+      "operation_history": 64,
+      "operation_result_bytes": 262144,
+      "output_bytes": 4194304,
+      "page_items": 100
+    },
+    "product": "CodeStudio-Agent",
+    "protocol_version": 2,
+    "session_id": "e73a3e428494bc45ce136fe7867fe6ff",
+    "state_database": "/tmp/codestudio-supervisor-delivery-xzteb3go/.codestudio/state.sqlite3",
+    "version": "0.1.0",
+    "workspace": "/tmp/codestudio-supervisor-delivery-xzteb3go"
+  },
+  "delivered_doctor": {
+    "approval_continuation": true,
+    "automatic_resume": true,
+    "background_scheduler": true,
+    "build_manifest_versions": [
+      2
+    ],
+    "build_proposals": true,
+    "build_system": "XMake",
+    "checkpoint_resume": true,
+    "compiler": "16.2.1 20260810",
+    "cplusplus": 202400,
+    "credentials": {
+      "references": [
+        "env",
+        "system"
+      ],
+      "resolution": "per-operation",
+      "runtime_probe": "not-run",
+      "system_backend": "linux-secret-service"
+    },
+    "cron": true,
+    "local_model_discovery": true,
+    "login_autostart": true,
+    "mcp_transports": [
+      "stdio",
+      "streamable-http"
+    ],
+    "os_sandbox": true,
+    "product": "CodeStudio-Agent",
+    "provider_apis": [
+      "chat-completions",
+      "responses",
+      "messages"
+    ],
+    "sandbox_backends": [
+      "linux-namespace"
+    ],
+    "sandbox_default": "none",
+    "sandbox_runtime_probe": "not-run",
+    "sandbox_scope": "process-and-mcp-children",
+    "sandbox_support": "compiled-backends",
+    "state_schema": 7,
+    "streaming": true,
+    "supervised_autostart": true,
+    "supervisor_diagnostics": true,
+    "task_service": {
+      "event_replay": true,
+      "protocol_version": 2,
+      "transport": "stdio"
+    },
+    "version": "0.1.0",
+    "worker_supervision": true,
+    "workspace_build": {
+      "available": true,
+      "backend": "linux-namespace",
+      "runtime_probe": "not-run"
+    }
+  },
+  "linux_release": {
+    "path": "build/linux/x86_64/release/codestudio-agent",
+    "bytes": 2901224,
+    "sha256": "90ea6b8a46b8eb702a3ec89f5360ef2f303485bb33041603b2203b157a5b3ea5"
+  },
+  "windows_release": {
+    "path": "build/windows/x64/release/codestudio-agent.exe",
+    "bytes": 4592640,
+    "sha256": "a89613de8940beba859a4a6d0b07cfac8b8c696c27555784b988790fb67d2fd8"
+  },
+  "archive": {
+    "path": "build/linux/x86_64/release/codestudio-agent-linux-x86_64.tar.gz",
+    "bytes": 1286566,
+    "sha256": "d74da0665a6c619c06e4cf0319ca6e85d224572a3e31154a7dabbb1ca6542822"
+  },
+  "schema": {
+    "path": "protocol/task-service.schema.json",
+    "bytes": 113691,
+    "sha256": "0127620cf83858a6772b088a86160e1e6bcbe9cd7c9f7076ab6d1c3744d84f64"
+  }
+}

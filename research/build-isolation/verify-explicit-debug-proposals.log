@@ -1,0 +1,23 @@
+test_approval_executes_once_without_model_and_persists_receipt (__main__.ProposalTests.test_approval_executes_once_without_model_and_persists_receipt) ... ok
+test_approval_retains_source_mcp_manifest_protection (__main__.ProposalTests.test_approval_retains_source_mcp_manifest_protection) ... ok
+test_crashed_approval_is_claimed_once_and_unknown_effect_never_replays (__main__.ProposalTests.test_crashed_approval_is_claimed_once_and_unknown_effect_never_replays) ... Retained approval crash staging evidence: C:\Users\dreamyloong\AppData\Local\Temp\codestudio-sandbox-8f4a77e08fcb79f6ad31da72ce3ec139
+ok
+test_current_approval_credential_conflict_is_rejected_before_claim (__main__.ProposalTests.test_current_approval_credential_conflict_is_rejected_before_claim) ... ok
+test_invalid_plan_or_sensitive_content_cannot_become_approvable (__main__.ProposalTests.test_invalid_plan_or_sensitive_content_cannot_become_approvable) ... ok
+test_models_cannot_enable_proposals_or_self_approve (__main__.ProposalTests.test_models_cannot_enable_proposals_or_self_approve) ... ok
+test_old_proposal_schema_blocks_resume_but_generic_receipt_can_be_approved (__main__.ProposalTests.test_old_proposal_schema_blocks_resume_but_generic_receipt_can_be_approved) ... ok
+test_proposal_resume_requires_same_grant_and_reuses_receipt (__main__.ProposalTests.test_proposal_resume_requires_same_grant_and_reuses_receipt) ... ok
+test_rejection_is_durable_idempotent_and_cannot_be_approved (__main__.ProposalTests.test_rejection_is_durable_idempotent_and_cannot_be_approved) ... ok
+test_removed_plugin_proposal_is_readable_but_cannot_be_approved (__main__.ProposalTests.test_removed_plugin_proposal_is_readable_but_cannot_be_approved) ... ok
+test_review_is_readonly_and_cross_workspace_approval_is_rejected (__main__.ProposalTests.test_review_is_readonly_and_cross_workspace_approval_is_rejected) ... ok
+test_service_approval_allows_review_rejects_busy_and_cancels_tree (__main__.ProposalTests.test_service_approval_allows_review_rejects_busy_and_cancels_tree) ... ok
+test_service_approval_stdin_eof_cancels_tree_without_replay (__main__.ProposalTests.test_service_approval_stdin_eof_cancels_tree_without_replay) ... ok
+test_service_proposes_reviews_and_approves_with_fixed_arguments (__main__.ProposalTests.test_service_proposes_reviews_and_approves_with_fixed_arguments) ... ok
+test_service_rejection_and_option_validation (__main__.ProposalTests.test_service_rejection_and_option_validation) ... ok
+test_three_protocols_propose_and_review_without_execution (__main__.ProposalTests.test_three_protocols_propose_and_review_without_execution) ... ok
+test_wrong_digest_or_modified_receipt_never_creates_execution (__main__.ProposalTests.test_wrong_digest_or_modified_receipt_never_creates_execution) ... ok
+
+----------------------------------------------------------------------
+Ran 17 tests in 8.539s
+
+OK

@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "servers": [{
+    "id": "remote",
+    "transport": "streamable-http",
+    "url": "https://tools.example.com/mcp",
+    "oauth": {
+      "issuer": "https://auth.example.com",
+      "client_id": "registered-public-client-id",
+      "credential": "system:remote-oauth",
+      "scopes": ["tools.read"]
+    },
+    "tools": ["echo"],
+    "timeout_ms": 10000
+  }]
+}

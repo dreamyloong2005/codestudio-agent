@@ -1,0 +1,59 @@
+{
+  "approval_continuation": true,
+  "automatic_resume": true,
+  "background_scheduler": true,
+  "build_manifest_versions": [
+    2
+  ],
+  "build_proposals": true,
+  "build_system": "XMake",
+  "checkpoint_resume": true,
+  "compiler": "16.2.1 20260810",
+  "cplusplus": 202400,
+  "credentials": {
+    "references": [
+      "env",
+      "system"
+    ],
+    "resolution": "per-operation",
+    "runtime_probe": "not-run",
+    "system_backend": "linux-secret-service"
+  },
+  "cron": true,
+  "local_model_discovery": true,
+  "login_autostart": true,
+  "mcp_transports": [
+    "stdio",
+    "streamable-http"
+  ],
+  "os_sandbox": true,
+  "product": "CodeStudio-Agent",
+  "provider_apis": [
+    "chat-completions",
+    "responses",
+    "messages"
+  ],
+  "sandbox_backends": [
+    "linux-namespace"
+  ],
+  "sandbox_default": "none",
+  "sandbox_runtime_probe": "not-run",
+  "sandbox_scope": "process-and-mcp-children",
+  "sandbox_support": "compiled-backends",
+  "state_schema": 7,
+  "streaming": true,
+  "supervised_autostart": true,
+  "supervisor_diagnostics": true,
+  "task_service": {
+    "event_replay": true,
+    "protocol_version": 2,
+    "transport": "stdio"
+  },
+  "version": "0.1.0",
+  "worker_supervision": true,
+  "workspace_build": {
+    "available": true,
+    "backend": "linux-namespace",
+    "runtime_probe": "not-run"
+  }
+}

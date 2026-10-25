@@ -1,0 +1,489 @@
+test_anonymous_remote_never_inherits_model_credential (__main__.RemoteMcpTests.test_anonymous_remote_never_inherits_model_credential) ... FAIL
+test_cancel_during_initialize_does_not_send_forbidden_cancellation (__main__.RemoteMcpTests.test_cancel_during_initialize_does_not_send_forbidden_cancellation) ... FAIL
+test_disconnect_without_cursor_blocks_resume_before_model_or_mcp_io (__main__.RemoteMcpTests.test_disconnect_without_cursor_blocks_resume_before_model_or_mcp_io) ... FAIL
+test_insecure_or_ambiguous_urls_fail_before_network (__main__.RemoteMcpTests.test_insecure_or_ambiguous_urls_fail_before_network) ... ok
+test_interrupted_sse_resumes_with_cursor_dedup_without_post_replay (__main__.RemoteMcpTests.test_interrupted_sse_resumes_with_cursor_dedup_without_post_replay) ... FAIL
+test_invalid_and_mixed_transport_fields_fail_before_network (__main__.RemoteMcpTests.test_invalid_and_mixed_transport_fields_fail_before_network) ... ok
+test_invalid_later_entry_prevents_earlier_network_and_stdio_launch (__main__.RemoteMcpTests.test_invalid_later_entry_prevents_earlier_network_and_stdio_launch) ... 
+  test_invalid_later_entry_prevents_earlier_network_and_stdio_launch (__main__.RemoteMcpTests.test_invalid_later_entry_prevents_earlier_network_and_stdio_launch) (first='local') ... FAIL
+  test_invalid_later_entry_prevents_earlier_network_and_stdio_launch (__main__.RemoteMcpTests.test_invalid_later_entry_prevents_earlier_network_and_stdio_launch) (first='remote') ... FAIL
+test_invalid_protocol_session_content_schema_and_oversized_discovery_are_rejected (__main__.RemoteMcpTests.test_invalid_protocol_session_content_schema_and_oversized_discovery_are_rejected) ... ok
+test_json_discovery_and_call_record_frozen_schema_and_receipt (__main__.RemoteMcpTests.test_json_discovery_and_call_record_frozen_schema_and_receipt) ... FAIL
+test_malformed_or_error_tool_responses_are_unknown_without_model_followup (__main__.RemoteMcpTests.test_malformed_or_error_tool_responses_are_unknown_without_model_followup) ... 
+  test_malformed_or_error_tool_responses_are_unknown_without_model_followup (__main__.RemoteMcpTests.test_malformed_or_error_tool_responses_are_unknown_without_model_followup) (mode='malformed-json') ... FAIL
+  test_malformed_or_error_tool_responses_are_unknown_without_model_followup (__main__.RemoteMcpTests.test_malformed_or_error_tool_responses_are_unknown_without_model_followup) (mode='wrong-id') ... FAIL
+  test_malformed_or_error_tool_responses_are_unknown_without_model_followup (__main__.RemoteMcpTests.test_malformed_or_error_tool_responses_are_unknown_without_model_followup) (mode='tool-error') ... FAIL
+  test_malformed_or_error_tool_responses_are_unknown_without_model_followup (__main__.RemoteMcpTests.test_malformed_or_error_tool_responses_are_unknown_without_model_followup) (mode='invalid-result') ... FAIL
+  test_malformed_or_error_tool_responses_are_unknown_without_model_followup (__main__.RemoteMcpTests.test_malformed_or_error_tool_responses_are_unknown_without_model_followup) (mode='rpc-error') ... FAIL
+test_missing_selected_remote_credential_prevents_all_side_effects (__main__.RemoteMcpTests.test_missing_selected_remote_credential_prevents_all_side_effects) ... FAIL
+test_reconnect_count_is_bounded_and_uncertain_effect_stops_task (__main__.RemoteMcpTests.test_reconnect_count_is_bounded_and_uncertain_effect_stops_task) ... FAIL
+test_redirect_is_not_followed_and_credential_is_not_forwarded (__main__.RemoteMcpTests.test_redirect_is_not_followed_and_credential_is_not_forwarded) ... ok
+test_remote_execution_is_rejected_with_local_os_sandbox (__main__.RemoteMcpTests.test_remote_execution_is_rejected_with_local_os_sandbox) ... ok
+test_remote_token_in_tool_result_is_redacted_from_model_and_database (__main__.RemoteMcpTests.test_remote_token_in_tool_result_is_redacted_from_model_and_database) ... FAIL
+test_remote_token_reflected_in_tool_schema_is_rejected_before_model_request (__main__.RemoteMcpTests.test_remote_token_reflected_in_tool_schema_is_rejected_before_model_request) ... FAIL
+test_remote_token_split_across_model_stream_is_redacted_before_emission (__main__.RemoteMcpTests.test_remote_token_split_across_model_stream_is_redacted_before_emission) ... ok
+test_resume_manifest_endpoint_or_credential_change_rejected_before_io (__main__.RemoteMcpTests.test_resume_manifest_endpoint_or_credential_change_rejected_before_io) ... ok
+test_retry_delay_does_not_extend_original_tool_deadline (__main__.RemoteMcpTests.test_retry_delay_does_not_extend_original_tool_deadline) ... FAIL
+test_rotated_remote_credential_is_resolved_on_resume_without_tool_replay (__main__.RemoteMcpTests.test_rotated_remote_credential_is_resolved_on_resume_without_tool_replay) ... FAIL
+test_schema_and_ungranted_tool_denials_never_dispatch_remote_call (__main__.RemoteMcpTests.test_schema_and_ungranted_tool_denials_never_dispatch_remote_call) ... ok
+test_selected_remote_bearer_credential_is_separate_from_model_key (__main__.RemoteMcpTests.test_selected_remote_bearer_credential_is_separate_from_model_key) ... FAIL
+test_server_retry_delay_is_observed_before_resume (__main__.RemoteMcpTests.test_server_retry_delay_is_observed_before_resume) ... FAIL
+test_service_cancel_sends_remote_notification_and_never_replays_tool (__main__.RemoteMcpTests.test_service_cancel_sends_remote_notification_and_never_replays_tool) ... FAIL
+test_session_404_does_not_replay_and_fresh_load_initializes_new_session (__main__.RemoteMcpTests.test_session_404_does_not_replay_and_fresh_load_initializes_new_session) ... FAIL
+test_session_and_negotiated_protocol_headers_and_session_delete (__main__.RemoteMcpTests.test_session_and_negotiated_protocol_headers_and_session_delete) ... ok
+test_session_change_during_call_is_unknown_without_reinitialization (__main__.RemoteMcpTests.test_session_change_during_call_is_unknown_without_reinitialization) ... FAIL
+test_sse_fragmented_utf8_bom_multiline_data_and_newline_variants (__main__.RemoteMcpTests.test_sse_fragmented_utf8_bom_multiline_data_and_newline_variants) ... FAIL
+test_sse_server_ping_is_replied_to_in_a_separate_post (__main__.RemoteMcpTests.test_sse_server_ping_is_replied_to_in_a_separate_post) ... FAIL
+test_stateless_server_and_delete_refusal_are_supported (__main__.RemoteMcpTests.test_stateless_server_and_delete_refusal_are_supported) ... FAIL
+test_timeout_sends_cancellation_notification_and_retains_unknown_effect (__main__.RemoteMcpTests.test_timeout_sends_cancellation_notification_and_retains_unknown_effect) ... FAIL
+test_tool_call_401_is_unknown_and_never_retried (__main__.RemoteMcpTests.test_tool_call_401_is_unknown_and_never_retried) ... FAIL
+test_tools_list_changed_invalidates_frozen_schema_without_followup (__main__.RemoteMcpTests.test_tools_list_changed_invalidates_frozen_schema_without_followup) ... FAIL
+test_unauthorized_initialize_has_no_retry_model_or_tool_call (__main__.RemoteMcpTests.test_unauthorized_initialize_has_no_retry_model_or_tool_call) ... FAIL
+test_ungranted_remote_and_unknown_grant_never_open_network (__main__.RemoteMcpTests.test_ungranted_remote_and_unknown_grant_never_open_network) ... ok
+test_unicode_event_cursor_has_explicit_platform_behavior_without_replay (__main__.RemoteMcpTests.test_unicode_event_cursor_has_explicit_platform_behavior_without_replay) ... FAIL
+test_unsupported_server_request_gets_method_not_found_without_executing_it (__main__.RemoteMcpTests.test_unsupported_server_request_gets_method_not_found_without_executing_it) ... FAIL
+
+======================================================================
+FAIL: test_anonymous_remote_never_inherits_model_credential (__main__.RemoteMcpTests.test_anonymous_remote_never_inherits_model_credential)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 209, in test_anonymous_remote_never_inherits_model_credential
+    self.run_call()
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 99, in run_call
+    return self.invoke(*self.run_args(*self.grants()), expected=expected)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 89, in invoke
+    self.assertEqual(process.returncode, expected, process.stdout + process.stderr)
+AssertionError: 1 != 0 : b'{\r\n  "product": "CodeStudio-Agent",\r\n  "provider": "openai-compatible/chat-completions",\r\n  "state_database": "C:\\\\Users\\\\dreamyloong\\\\AppData\\\\Local\\\\Temp\\\\codestudio-resume-ucb6giv5\\\\workspace with spaces\\\\.codestudio\\\\state.sqlite3",\r\n  "status": "needs_attention",\r\n  "summary": "Resume complete",\r\n  "task_id": "6b274e605176cfd8312a2240f1e2aeea",\r\n  "turns": 2,\r\n  "verification": "Tool receipts recorded; final answer is not independent acceptance."\r\n}\r\n'
+
+======================================================================
+FAIL: test_cancel_during_initialize_does_not_send_forbidden_cancellation (__main__.RemoteMcpTests.test_cancel_during_initialize_does_not_send_forbidden_cancellation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 527, in test_cancel_during_initialize_does_not_send_forbidden_cancellation
+    self.assertEqual(done["exit_code"], 130, done)
+AssertionError: 2 != 130 : {'error': {'code': -32000, 'data': {'kind': 'operation_failed', 'outcome': 'unknown', 'recovery': 'query_state', 'session_id': 'e84939a8201cc42e17fb578d480b636f'}, 'message': 'MCP protocol exchange failed.'}, 'exit_code': 2, 'operation_id': 'de1c0a462362b897cfaeab3987b277d4', 'session_id': 'e84939a8201cc42e17fb578d480b636f'}
+
+======================================================================
+FAIL: test_disconnect_without_cursor_blocks_resume_before_model_or_mcp_io (__main__.RemoteMcpTests.test_disconnect_without_cursor_blocks_resume_before_model_or_mcp_io)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 390, in test_disconnect_without_cursor_blocks_resume_before_model_or_mcp_io
+    self.assert_unknown(result)
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 107, in assert_unknown
+    self.assertEqual((action["status"], action["effect"]), ("unknown", "unknown"))
+AssertionError: Tuples differ: ('failed', 'none') != ('unknown', 'unknown')
+
+First differing element 0:
+'failed'
+'unknown'
+
+- ('failed', 'none')
++ ('unknown', 'unknown')
+
+======================================================================
+FAIL: test_interrupted_sse_resumes_with_cursor_dedup_without_post_replay (__main__.RemoteMcpTests.test_interrupted_sse_resumes_with_cursor_dedup_without_post_replay)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 297, in test_interrupted_sse_resumes_with_cursor_dedup_without_post_replay
+    self.run_call()
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 99, in run_call
+    return self.invoke(*self.run_args(*self.grants()), expected=expected)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 89, in invoke
+    self.assertEqual(process.returncode, expected, process.stdout + process.stderr)
+AssertionError: 1 != 0 : b'{\r\n  "product": "CodeStudio-Agent",\r\n  "provider": "openai-compatible/chat-completions",\r\n  "state_database": "C:\\\\Users\\\\dreamyloong\\\\AppData\\\\Local\\\\Temp\\\\codestudio-resume-2eu5gp5j\\\\workspace with spaces\\\\.codestudio\\\\state.sqlite3",\r\n  "status": "needs_attention",\r\n  "summary": "Resume complete",\r\n  "task_id": "74130ea0603af27c15d1ce68dcef2217",\r\n  "turns": 2,\r\n  "verification": "Tool receipts recorded; final answer is not independent acceptance."\r\n}\r\n'
+
+======================================================================
+FAIL: test_invalid_later_entry_prevents_earlier_network_and_stdio_launch (__main__.RemoteMcpTests.test_invalid_later_entry_prevents_earlier_network_and_stdio_launch) (first='local')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 251, in test_invalid_later_entry_prevents_earlier_network_and_stdio_launch
+    self.assertFalse(self.database.exists())
+AssertionError: True is not false
+
+======================================================================
+FAIL: test_invalid_later_entry_prevents_earlier_network_and_stdio_launch (__main__.RemoteMcpTests.test_invalid_later_entry_prevents_earlier_network_and_stdio_launch) (first='remote')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 251, in test_invalid_later_entry_prevents_earlier_network_and_stdio_launch
+    self.assertFalse(self.database.exists())
+AssertionError: True is not false
+
+======================================================================
+FAIL: test_json_discovery_and_call_record_frozen_schema_and_receipt (__main__.RemoteMcpTests.test_json_discovery_and_call_record_frozen_schema_and_receipt)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 136, in test_json_discovery_and_call_record_frozen_schema_and_receipt
+    result = self.run_call()
+             ^^^^^^^^^^^^^^^
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 99, in run_call
+    return self.invoke(*self.run_args(*self.grants()), expected=expected)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 89, in invoke
+    self.assertEqual(process.returncode, expected, process.stdout + process.stderr)
+AssertionError: 1 != 0 : b'{\r\n  "product": "CodeStudio-Agent",\r\n  "provider": "openai-compatible/chat-completions",\r\n  "state_database": "C:\\\\Users\\\\dreamyloong\\\\AppData\\\\Local\\\\Temp\\\\codestudio-resume-g0ucv5ua\\\\workspace with spaces\\\\.codestudio\\\\state.sqlite3",\r\n  "status": "needs_attention",\r\n  "summary": "Resume complete",\r\n  "task_id": "773e296fd0348c97ba48af6c5306c639",\r\n  "turns": 2,\r\n  "verification": "Tool receipts recorded; final answer is not independent acceptance."\r\n}\r\n'
+
+======================================================================
+FAIL: test_malformed_or_error_tool_responses_are_unknown_without_model_followup (__main__.RemoteMcpTests.test_malformed_or_error_tool_responses_are_unknown_without_model_followup) (mode='malformed-json')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 476, in test_malformed_or_error_tool_responses_are_unknown_without_model_followup
+    self.assert_unknown(result)
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 107, in assert_unknown
+    self.assertEqual((action["status"], action["effect"]), ("unknown", "unknown"))
+AssertionError: Tuples differ: ('failed', 'none') != ('unknown', 'unknown')
+
+First differing element 0:
+'failed'
+'unknown'
+
+- ('failed', 'none')
++ ('unknown', 'unknown')
+
+======================================================================
+FAIL: test_malformed_or_error_tool_responses_are_unknown_without_model_followup (__main__.RemoteMcpTests.test_malformed_or_error_tool_responses_are_unknown_without_model_followup) (mode='wrong-id')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 476, in test_malformed_or_error_tool_responses_are_unknown_without_model_followup
+    self.assert_unknown(result)
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 107, in assert_unknown
+    self.assertEqual((action["status"], action["effect"]), ("unknown", "unknown"))
+AssertionError: Tuples differ: ('failed', 'none') != ('unknown', 'unknown')
+
+First differing element 0:
+'failed'
+'unknown'
+
+- ('failed', 'none')
++ ('unknown', 'unknown')
+
+======================================================================
+FAIL: test_malformed_or_error_tool_responses_are_unknown_without_model_followup (__main__.RemoteMcpTests.test_malformed_or_error_tool_responses_are_unknown_without_model_followup) (mode='tool-error')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 476, in test_malformed_or_error_tool_responses_are_unknown_without_model_followup
+    self.assert_unknown(result)
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 107, in assert_unknown
+    self.assertEqual((action["status"], action["effect"]), ("unknown", "unknown"))
+AssertionError: Tuples differ: ('failed', 'none') != ('unknown', 'unknown')
+
+First differing element 0:
+'failed'
+'unknown'
+
+- ('failed', 'none')
++ ('unknown', 'unknown')
+
+======================================================================
+FAIL: test_malformed_or_error_tool_responses_are_unknown_without_model_followup (__main__.RemoteMcpTests.test_malformed_or_error_tool_responses_are_unknown_without_model_followup) (mode='invalid-result')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 476, in test_malformed_or_error_tool_responses_are_unknown_without_model_followup
+    self.assert_unknown(result)
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 107, in assert_unknown
+    self.assertEqual((action["status"], action["effect"]), ("unknown", "unknown"))
+AssertionError: Tuples differ: ('failed', 'none') != ('unknown', 'unknown')
+
+First differing element 0:
+'failed'
+'unknown'
+
+- ('failed', 'none')
++ ('unknown', 'unknown')
+
+======================================================================
+FAIL: test_malformed_or_error_tool_responses_are_unknown_without_model_followup (__main__.RemoteMcpTests.test_malformed_or_error_tool_responses_are_unknown_without_model_followup) (mode='rpc-error')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 476, in test_malformed_or_error_tool_responses_are_unknown_without_model_followup
+    self.assert_unknown(result)
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 107, in assert_unknown
+    self.assertEqual((action["status"], action["effect"]), ("unknown", "unknown"))
+AssertionError: Tuples differ: ('failed', 'none') != ('unknown', 'unknown')
+
+First differing element 0:
+'failed'
+'unknown'
+
+- ('failed', 'none')
++ ('unknown', 'unknown')
+
+======================================================================
+FAIL: test_missing_selected_remote_credential_prevents_all_side_effects (__main__.RemoteMcpTests.test_missing_selected_remote_credential_prevents_all_side_effects)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 264, in test_missing_selected_remote_credential_prevents_all_side_effects
+    self.assertFalse(self.database.exists())
+AssertionError: True is not false
+
+======================================================================
+FAIL: test_reconnect_count_is_bounded_and_uncertain_effect_stops_task (__main__.RemoteMcpTests.test_reconnect_count_is_bounded_and_uncertain_effect_stops_task)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 335, in test_reconnect_count_is_bounded_and_uncertain_effect_stops_task
+    self.assert_unknown(result)
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 107, in assert_unknown
+    self.assertEqual((action["status"], action["effect"]), ("unknown", "unknown"))
+AssertionError: Tuples differ: ('failed', 'none') != ('unknown', 'unknown')
+
+First differing element 0:
+'failed'
+'unknown'
+
+- ('failed', 'none')
++ ('unknown', 'unknown')
+
+======================================================================
+FAIL: test_remote_token_in_tool_result_is_redacted_from_model_and_database (__main__.RemoteMcpTests.test_remote_token_in_tool_result_is_redacted_from_model_and_database)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 399, in test_remote_token_in_tool_result_is_redacted_from_model_and_database
+    result = self.run_call()
+             ^^^^^^^^^^^^^^^
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 99, in run_call
+    return self.invoke(*self.run_args(*self.grants()), expected=expected)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 89, in invoke
+    self.assertEqual(process.returncode, expected, process.stdout + process.stderr)
+AssertionError: 1 != 0 : b'{\r\n  "product": "CodeStudio-Agent",\r\n  "provider": "openai-compatible/chat-completions",\r\n  "state_database": "C:\\\\Users\\\\dreamyloong\\\\AppData\\\\Local\\\\Temp\\\\codestudio-resume-2nkuds53\\\\workspace with spaces\\\\.codestudio\\\\state.sqlite3",\r\n  "status": "needs_attention",\r\n  "summary": "Resume complete",\r\n  "task_id": "c95b7e6374d17c3b5269d5c59b956207",\r\n  "turns": 2,\r\n  "verification": "Tool receipts recorded; final answer is not independent acceptance."\r\n}\r\n'
+
+======================================================================
+FAIL: test_remote_token_reflected_in_tool_schema_is_rejected_before_model_request (__main__.RemoteMcpTests.test_remote_token_reflected_in_tool_schema_is_rejected_before_model_request)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 411, in test_remote_token_reflected_in_tool_schema_is_rejected_before_model_request
+    self.assertFalse(self.database.exists())
+AssertionError: True is not false
+
+======================================================================
+FAIL: test_retry_delay_does_not_extend_original_tool_deadline (__main__.RemoteMcpTests.test_retry_delay_does_not_extend_original_tool_deadline)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 344, in test_retry_delay_does_not_extend_original_tool_deadline
+    self.assert_unknown(result)
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 107, in assert_unknown
+    self.assertEqual((action["status"], action["effect"]), ("unknown", "unknown"))
+AssertionError: Tuples differ: ('failed', 'none') != ('unknown', 'unknown')
+
+First differing element 0:
+'failed'
+'unknown'
+
+- ('failed', 'none')
++ ('unknown', 'unknown')
+
+======================================================================
+FAIL: test_rotated_remote_credential_is_resolved_on_resume_without_tool_replay (__main__.RemoteMcpTests.test_rotated_remote_credential_is_resolved_on_resume_without_tool_replay)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 430, in test_rotated_remote_credential_is_resolved_on_resume_without_tool_replay
+    self.assertEqual(self.detail(result)["actions"][0]["status"], "succeeded")
+AssertionError: 'failed' != 'succeeded'
+- failed
++ succeeded
+
+
+======================================================================
+FAIL: test_selected_remote_bearer_credential_is_separate_from_model_key (__main__.RemoteMcpTests.test_selected_remote_bearer_credential_is_separate_from_model_key)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 198, in test_selected_remote_bearer_credential_is_separate_from_model_key
+    self.run_call()
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 99, in run_call
+    return self.invoke(*self.run_args(*self.grants()), expected=expected)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 89, in invoke
+    self.assertEqual(process.returncode, expected, process.stdout + process.stderr)
+AssertionError: 1 != 0 : b'{\r\n  "product": "CodeStudio-Agent",\r\n  "provider": "openai-compatible/chat-completions",\r\n  "state_database": "C:\\\\Users\\\\dreamyloong\\\\AppData\\\\Local\\\\Temp\\\\codestudio-resume-r2rw3xud\\\\workspace with spaces\\\\.codestudio\\\\state.sqlite3",\r\n  "status": "needs_attention",\r\n  "summary": "Resume complete",\r\n  "task_id": "dd8bac5ae5c6da6e062b436ecf0af9c9",\r\n  "turns": 2,\r\n  "verification": "Tool receipts recorded; final answer is not independent acceptance."\r\n}\r\n'
+
+======================================================================
+FAIL: test_server_retry_delay_is_observed_before_resume (__main__.RemoteMcpTests.test_server_retry_delay_is_observed_before_resume)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 326, in test_server_retry_delay_is_observed_before_resume
+    self.run_call()
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 99, in run_call
+    return self.invoke(*self.run_args(*self.grants()), expected=expected)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 89, in invoke
+    self.assertEqual(process.returncode, expected, process.stdout + process.stderr)
+AssertionError: 1 != 0 : b'{\r\n  "product": "CodeStudio-Agent",\r\n  "provider": "openai-compatible/chat-completions",\r\n  "state_database": "C:\\\\Users\\\\dreamyloong\\\\AppData\\\\Local\\\\Temp\\\\codestudio-resume-5jj51ibl\\\\workspace with spaces\\\\.codestudio\\\\state.sqlite3",\r\n  "status": "needs_attention",\r\n  "summary": "Resume complete",\r\n  "task_id": "00d407c4b86ae0cfe9b829f66b1509e0",\r\n  "turns": 2,\r\n  "verification": "Tool receipts recorded; final answer is not independent acceptance."\r\n}\r\n'
+
+======================================================================
+FAIL: test_service_cancel_sends_remote_notification_and_never_replays_tool (__main__.RemoteMcpTests.test_service_cancel_sends_remote_notification_and_never_replays_tool)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 506, in test_service_cancel_sends_remote_notification_and_never_replays_tool
+    self.wait_for(lambda: self.remote.records("tools/call"))
+  File "D:\Dev\Projects\codestudio-agent\tests\resume_integration.py", line 167, in wait_for
+    self.fail("durable boundary was not reached before deadline")
+AssertionError: durable boundary was not reached before deadline
+
+======================================================================
+FAIL: test_session_404_does_not_replay_and_fresh_load_initializes_new_session (__main__.RemoteMcpTests.test_session_404_does_not_replay_and_fresh_load_initializes_new_session)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 352, in test_session_404_does_not_replay_and_fresh_load_initializes_new_session
+    self.assert_unknown(result)
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 107, in assert_unknown
+    self.assertEqual((action["status"], action["effect"]), ("unknown", "unknown"))
+AssertionError: Tuples differ: ('failed', 'none') != ('unknown', 'unknown')
+
+First differing element 0:
+'failed'
+'unknown'
+
+- ('failed', 'none')
++ ('unknown', 'unknown')
+
+======================================================================
+FAIL: test_session_change_during_call_is_unknown_without_reinitialization (__main__.RemoteMcpTests.test_session_change_during_call_is_unknown_without_reinitialization)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 365, in test_session_change_during_call_is_unknown_without_reinitialization
+    self.assert_unknown(result)
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 107, in assert_unknown
+    self.assertEqual((action["status"], action["effect"]), ("unknown", "unknown"))
+AssertionError: Tuples differ: ('failed', 'none') != ('unknown', 'unknown')
+
+First differing element 0:
+'failed'
+'unknown'
+
+- ('failed', 'none')
++ ('unknown', 'unknown')
+
+======================================================================
+FAIL: test_sse_fragmented_utf8_bom_multiline_data_and_newline_variants (__main__.RemoteMcpTests.test_sse_fragmented_utf8_bom_multiline_data_and_newline_variants)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 151, in test_sse_fragmented_utf8_bom_multiline_data_and_newline_variants
+    result = self.run_call(text="跨字节 UTF-8 🧪")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 99, in run_call
+    return self.invoke(*self.run_args(*self.grants()), expected=expected)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 89, in invoke
+    self.assertEqual(process.returncode, expected, process.stdout + process.stderr)
+AssertionError: 1 != 0 : b'{\r\n  "product": "CodeStudio-Agent",\r\n  "provider": "openai-compatible/chat-completions",\r\n  "state_database": "C:\\\\Users\\\\dreamyloong\\\\AppData\\\\Local\\\\Temp\\\\codestudio-resume-w_7i2n3k\\\\workspace with spaces\\\\.codestudio\\\\state.sqlite3",\r\n  "status": "needs_attention",\r\n  "summary": "Resume complete",\r\n  "task_id": "287018f06f8b3738f2a819bf412e8b30",\r\n  "turns": 2,\r\n  "verification": "Tool receipts recorded; final answer is not independent acceptance."\r\n}\r\n'
+
+======================================================================
+FAIL: test_sse_server_ping_is_replied_to_in_a_separate_post (__main__.RemoteMcpTests.test_sse_server_ping_is_replied_to_in_a_separate_post)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 158, in test_sse_server_ping_is_replied_to_in_a_separate_post
+    self.run_call()
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 99, in run_call
+    return self.invoke(*self.run_args(*self.grants()), expected=expected)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 89, in invoke
+    self.assertEqual(process.returncode, expected, process.stdout + process.stderr)
+AssertionError: 1 != 0 : b'{\r\n  "product": "CodeStudio-Agent",\r\n  "provider": "openai-compatible/chat-completions",\r\n  "state_database": "C:\\\\Users\\\\dreamyloong\\\\AppData\\\\Local\\\\Temp\\\\codestudio-resume-89ppfbr5\\\\workspace with spaces\\\\.codestudio\\\\state.sqlite3",\r\n  "status": "needs_attention",\r\n  "summary": "Resume complete",\r\n  "task_id": "bc088cc3eae626be9f21a498e2278f07",\r\n  "turns": 2,\r\n  "verification": "Tool receipts recorded; final answer is not independent acceptance."\r\n}\r\n'
+
+======================================================================
+FAIL: test_stateless_server_and_delete_refusal_are_supported (__main__.RemoteMcpTests.test_stateless_server_and_delete_refusal_are_supported)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 189, in test_stateless_server_and_delete_refusal_are_supported
+    self.run_call()
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 99, in run_call
+    return self.invoke(*self.run_args(*self.grants()), expected=expected)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 89, in invoke
+    self.assertEqual(process.returncode, expected, process.stdout + process.stderr)
+AssertionError: 1 != 0 : b'{\r\n  "product": "CodeStudio-Agent",\r\n  "provider": "openai-compatible/chat-completions",\r\n  "state_database": "C:\\\\Users\\\\dreamyloong\\\\AppData\\\\Local\\\\Temp\\\\codestudio-resume-9i988ly1\\\\workspace with spaces\\\\.codestudio\\\\state.sqlite3",\r\n  "status": "needs_attention",\r\n  "summary": "Resume complete",\r\n  "task_id": "1c7b337c341a3a5399c4aa90ea78ab39",\r\n  "turns": 2,\r\n  "verification": "Tool receipts recorded; final answer is not independent acceptance."\r\n}\r\n'
+
+======================================================================
+FAIL: test_timeout_sends_cancellation_notification_and_retains_unknown_effect (__main__.RemoteMcpTests.test_timeout_sends_cancellation_notification_and_retains_unknown_effect)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 493, in test_timeout_sends_cancellation_notification_and_retains_unknown_effect
+    self.assert_unknown(result)
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 107, in assert_unknown
+    self.assertEqual((action["status"], action["effect"]), ("unknown", "unknown"))
+AssertionError: Tuples differ: ('failed', 'none') != ('unknown', 'unknown')
+
+First differing element 0:
+'failed'
+'unknown'
+
+- ('failed', 'none')
++ ('unknown', 'unknown')
+
+======================================================================
+FAIL: test_tool_call_401_is_unknown_and_never_retried (__main__.RemoteMcpTests.test_tool_call_401_is_unknown_and_never_retried)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 381, in test_tool_call_401_is_unknown_and_never_retried
+    self.assert_unknown(result)
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 107, in assert_unknown
+    self.assertEqual((action["status"], action["effect"]), ("unknown", "unknown"))
+AssertionError: Tuples differ: ('failed', 'none') != ('unknown', 'unknown')
+
+First differing element 0:
+'failed'
+'unknown'
+
+- ('failed', 'none')
++ ('unknown', 'unknown')
+
+======================================================================
+FAIL: test_tools_list_changed_invalidates_frozen_schema_without_followup (__main__.RemoteMcpTests.test_tools_list_changed_invalidates_frozen_schema_without_followup)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 373, in test_tools_list_changed_invalidates_frozen_schema_without_followup
+    self.assert_unknown(result)
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 107, in assert_unknown
+    self.assertEqual((action["status"], action["effect"]), ("unknown", "unknown"))
+AssertionError: Tuples differ: ('failed', 'none') != ('unknown', 'unknown')
+
+First differing element 0:
+'failed'
+'unknown'
+
+- ('failed', 'none')
++ ('unknown', 'unknown')
+
+======================================================================
+FAIL: test_unauthorized_initialize_has_no_retry_model_or_tool_call (__main__.RemoteMcpTests.test_unauthorized_initialize_has_no_retry_model_or_tool_call)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 219, in test_unauthorized_initialize_has_no_retry_model_or_tool_call
+    self.assertFalse(self.database.exists())
+AssertionError: True is not false
+
+======================================================================
+FAIL: test_unicode_event_cursor_has_explicit_platform_behavior_without_replay (__main__.RemoteMcpTests.test_unicode_event_cursor_has_explicit_platform_behavior_without_replay)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 314, in test_unicode_event_cursor_has_explicit_platform_behavior_without_replay
+    self.assert_unknown(self.run_call(expected=1))
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 107, in assert_unknown
+    self.assertEqual((action["status"], action["effect"]), ("unknown", "unknown"))
+AssertionError: Tuples differ: ('failed', 'none') != ('unknown', 'unknown')
+
+First differing element 0:
+'failed'
+'unknown'
+
+- ('failed', 'none')
++ ('unknown', 'unknown')
+
+======================================================================
+FAIL: test_unsupported_server_request_gets_method_not_found_without_executing_it (__main__.RemoteMcpTests.test_unsupported_server_request_gets_method_not_found_without_executing_it)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 166, in test_unsupported_server_request_gets_method_not_found_without_executing_it
+    self.run_call()
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 99, in run_call
+    return self.invoke(*self.run_args(*self.grants()), expected=expected)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_http_integration.py", line 89, in invoke
+    self.assertEqual(process.returncode, expected, process.stdout + process.stderr)
+AssertionError: 1 != 0 : b'{\r\n  "product": "CodeStudio-Agent",\r\n  "provider": "openai-compatible/chat-completions",\r\n  "state_database": "C:\\\\Users\\\\dreamyloong\\\\AppData\\\\Local\\\\Temp\\\\codestudio-resume-4urf3yag\\\\workspace with spaces\\\\.codestudio\\\\state.sqlite3",\r\n  "status": "needs_attention",\r\n  "summary": "Resume complete",\r\n  "task_id": "f75c54806cebf22d6395f485e45cea4a",\r\n  "turns": 2,\r\n  "verification": "Tool receipts recorded; final answer is not independent acceptance."\r\n}\r\n'
+
+----------------------------------------------------------------------
+Ran 37 tests in 16.832s
+
+FAILED (failures=32)

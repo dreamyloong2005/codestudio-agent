@@ -1,0 +1,68 @@
+{
+  "format": 2,
+  "status": "implementation_and_delivery_verified_cleanup_incomplete",
+  "source": {
+    "sha256": "ab2ee599462da176d56014637f1fe6a00911c66e4cf46153826f9c6d25c22e06",
+    "files": 190
+  },
+  "verification": "verification.json",
+  "delivery": "delivery.json",
+  "resources": "final-static.json",
+  "doctor_payload_capability": "whole-package on both delivered executables",
+  "frozen_source_configurations": 4,
+  "plugin_sandbox_cases_per_configuration": 17,
+  "installed_validation": {
+    "windows": {
+      "receipt": "installed-windows/release-20261025T155338Z-5e5abcb9/verification.json",
+      "archive_check": "archive-check-windows.json",
+      "cases": 24,
+      "passed": 23,
+      "skipped": 1,
+      "from_fresh_archive_extraction": true,
+      "temporary_extraction_cleaned": true
+    },
+    "linux": {
+      "receipt": "installed-linux/release-20261025T155017Z-2ebb3c50/verification.json",
+      "archive_check": "archive-check-linux.json",
+      "cases": 24,
+      "passed": 24,
+      "skipped": 0,
+      "from_fresh_archive_extraction": true,
+      "temporary_extraction_cleaned": true
+    }
+  },
+  "static_validation": {
+    "python_ast_files": 41,
+    "relative_document_links": 259,
+    "missing_links": []
+  },
+  "cleanup": {
+    "zero_residue_gate": "failed",
+    "current_retained_crash_evidence": [
+      {
+        "staging": "C:\\Users\\dreamyloong\\AppData\\Local\\Temp\\codestudio-sandbox-dde261c74a8e2e7ea6aa8565ff08c2fa",
+        "receipt": "windows/debug-20261025T154313Z-c52398ad/build.log"
+      },
+      {
+        "staging": "C:\\Users\\dreamyloong\\AppData\\Local\\Temp\\codestudio-sandbox-72702746a00a4be8090db8250cff0882",
+        "receipt": "windows/debug-20261025T154313Z-c52398ad/build_proposals.log"
+      },
+      {
+        "staging": "C:\\Users\\dreamyloong\\AppData\\Local\\Temp\\codestudio-sandbox-826fb5719eb5115fe74433d27ab9f25f",
+        "receipt": "windows/release-20261025T154822Z-2d967f34/build.log"
+      },
+      {
+        "staging": "C:\\Users\\dreamyloong\\AppData\\Local\\Temp\\codestudio-sandbox-b3df00cdb00700a817b439de32545831",
+        "receipt": "windows/release-20261025T154822Z-2d967f34/build_proposals.log"
+      }
+    ],
+    "older_staging_and_profile_pairs": 65,
+    "all_staging_and_profile_pairs": 69,
+    "blocked_interface_fixture": "C:\\Users\\dreamyloong\\AppData\\Local\\Temp\\codestudio-package-interface-1116603879",
+    "automatic_rejection_reason": "blocked by policy",
+    "evidence": "cleanup-blocked.json",
+    "no_project_processes_startup_registrations_test_credentials_or_workspace_databases": true,
+    "linux_resources_clean": true,
+    "scope": "Current crash evidence is explicitly retained by pre-existing build and approval tests. Older directories predate these final full runs; no deletion was attempted for either set."
+  }
+}

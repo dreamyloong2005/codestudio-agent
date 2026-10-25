@@ -1,0 +1,120 @@
+{
+  "format": 2,
+  "product": "CodeStudio-Agent",
+  "platform": "windows",
+  "arch": "x64",
+  "mode": "debug",
+  "started_at": "2026-10-25T12:04:15.936570+00:00",
+  "status": "failed",
+  "selected_suites": [
+    "plugins",
+    "mcp_oauth",
+    "schema"
+  ],
+  "omitted_suites": [
+    "native",
+    "provider",
+    "streaming",
+    "contract",
+    "service",
+    "credentials",
+    "cli",
+    "local_models",
+    "mcp",
+    "mcp_http",
+    "resume",
+    "sandbox",
+    "scheduler",
+    "supervisor",
+    "cron",
+    "autostart",
+    "build",
+    "build_proposals",
+    "real_build",
+    "package",
+    "verification",
+    "delivery"
+  ],
+  "build_requested": false,
+  "steps": [
+    {
+      "name": "plugins",
+      "command": [
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\contract-python\\Scripts\\python.exe",
+        "tests/plugins_integration.py",
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\windows\\x64\\debug\\codestudio-agent.exe"
+      ],
+      "log": "plugins.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 15.219,
+      "cases": 22,
+      "skipped": 0,
+      "passed": 22
+    },
+    {
+      "name": "mcp_oauth",
+      "command": [
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\contract-python\\Scripts\\python.exe",
+        "tests/mcp_oauth_integration.py",
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\windows\\x64\\debug\\codestudio-agent.exe"
+      ],
+      "log": "mcp_oauth.log",
+      "status": "failed",
+      "returncode": 1,
+      "seconds": 11.484
+    }
+  ],
+  "source": {
+    "sha256": "3b825fdf57df8b5c506c967da89e82ffe77b818d574a0ef4c1f18ff4812f3154",
+    "files": 182
+  },
+  "toolchain": {
+    "python": "3.12.11",
+    "requirements": {
+      "format": 2,
+      "python_minimum": "3.11.0",
+      "xmake_minimum": "3.0.5",
+      "jsonschema": "4.23.0",
+      "windows": {
+        "arch": "x64",
+        "toolchain": "clang-cl",
+        "compiler_minimum": "22.0.0",
+        "requirements": [
+          "Visual Studio 2022 C++ build tools and Windows SDK",
+          "LLVM clang-cl 22 or newer"
+        ]
+      },
+      "linux": {
+        "arch": "x86_64",
+        "toolchain": "gcc",
+        "compiler_minimum": "16.0.0",
+        "pkg_config_minimum": {
+          "nlohmann_json": "3.12.0",
+          "sqlite3": "3.50.4",
+          "libcurl": "8.15.0",
+          "openssl": "3.0.0",
+          "libsecret-1": "0.21.0"
+        },
+        "requirements": [
+          "bubblewrap at /usr/bin/bwrap",
+          "tzdata",
+          "cgroup v2 delegation with cpu/memory/pids",
+          "user namespaces and seccomp"
+        ]
+      }
+    },
+    "jsonschema": "4.23.0"
+  },
+  "tested_artifacts": {
+    "codestudio-agent.exe": "2a88f9545e619794430b78a6b21f046817df7007de6289351f6c5e203332692a",
+    "agent-tests.exe": "22947957f8a5d068a6fe78016b6fd38a8d52c6f177cb6b19a269c7c97097be9f",
+    "provider-fixture.exe": "b421580c8a66a97a53105eea502f48e9796297c8913550026c5a97668b032f12",
+    "process-fixture.exe": "91c500b8c31faab7e5f5e44a52f6826a158e7e84a359e2f6915ad5409d0c0fa6",
+    "line-process-fixture.exe": "baa0610f3ead65411f683b39a7f8efeed5cd41216857dc47e6dfd82c0863971d",
+    "mcp-fixture.exe": "bbd8ddde699c07cdc126d96434ed1c1a9921783f39627cc6e1f12f3fd0ff1280",
+    "sandbox-fixture.exe": "f7606c7e320d81759f3513027c1901707efee6e570f269786998ffd1144569d7",
+    "build-fixture.exe": "3efc799b40a6ffde591f3af97c4c151ec83d948ec2390ad9a81f4345cd0d2830"
+  },
+  "finished_at": "2026-10-25T12:04:42.752190+00:00"
+}

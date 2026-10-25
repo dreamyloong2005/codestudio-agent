@@ -1,0 +1,6 @@
+[0m[38;5;2;1m[ 53%]:[0m [38;5;5;1m<agent-core>[0m cache compiling.release src/application/scheduler.cpp[0m
+[0m[38;5;2;1m[ 85%]:[0m [38;5;5;1m<agent-core>[0m [38;5;5;1marchiving.release libagent-core.a[0m
+[0m[38;5;2;1m[ 86%]:[0m [38;5;5;1m<agent-tests>[0m [38;5;5;1mlinking.release agent-tests[0m
+[0m[38;5;2;1m[ 86%]:[0m [38;5;5;1m<codestudio-agent>[0m [38;5;5;1mlinking.release codestudio-agent[0m
+[0m[38;5;2;1m[ 86%]:[0m [38;5;5;1m<provider-fixture>[0m [38;5;5;1mlinking.release provider-fixture[0m
+[0m[38;5;2;1m[100%]:[0m [38;5;2;1mbuild ok, spent 7.201s[0m

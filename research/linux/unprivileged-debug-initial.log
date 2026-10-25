@@ -1,0 +1,37 @@
+PASS persistence/recovery/transitions/schema
+PASS task loop/policy/budgets/redaction
+PASS current checkpoint format/atomicity/resume guards
+PASS scheduler persistence/fencing/budgets/atomic recovery
+PASS cron syntax/time zones/DST boundaries
+PASS cron atomic occurrences/overlap/recovery/controls
+PASS login autostart identity/ownership/argument boundaries
+PASS durable conversation resume/budgets/no replay
+PASS read-only state queries/pagination/commit visibility
+PASS Responses protocol and continuation
+PASS Messages protocol and continuation
+PASS workspace tool boundaries
+PASS isolated workspace import/export/hash/link boundaries
+PASS generic execution/manifest compatibility/frozen recipes
+PASS build proposals/digests/no execution/receipt validation
+PASS build decisions/atomic claims/no replay/current schema
+PASS process lifecycle/quoting/cancellation
+PASS persistent process transport/deadlines/environment
+PASS MCP grants/lifecycle/schemas/receipts
+PASS OS sandbox boundaries/stdio/descendants/cleanup
+.....
+----------------------------------------------------------------------
+Ran 5 tests in 0.436s
+
+OK
+test_enable_readback_idempotency_configuration_conflict_and_remove (__main__.AutostartTests.test_enable_readback_idempotency_configuration_conflict_and_remove) ... ok
+test_invalid_poll_cannot_register_or_create_workspace_state (__main__.AutostartTests.test_invalid_poll_cannot_register_or_create_workspace_state) ... ok
+test_linux_modified_unit_and_foreign_enable_link_are_not_removed (__main__.AutostartTests.test_linux_modified_unit_and_foreign_enable_link_are_not_removed) ... ok
+test_linux_orphan_enable_link_and_symlink_unit_fail_closed (__main__.AutostartTests.test_linux_orphan_enable_link_and_symlink_unit_fail_closed) ... ok
+test_linux_unit_contract_and_systemd_syntax (__main__.AutostartTests.test_linux_unit_contract_and_systemd_syntax) ... ok
+test_state_and_workspace_scope_have_distinct_owned_names (__main__.AutostartTests.test_state_and_workspace_scope_have_distinct_owned_names) ... ok
+test_status_and_absent_disable_do_not_create_state_or_launch_work (__main__.AutostartTests.test_status_and_absent_disable_do_not_create_state_or_launch_work) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.167s
+
+OK

@@ -1,0 +1,9 @@
+{
+  "ProjectProcesses": [],
+  "AutostartRegistrations": [],
+  "ReleaseConfigured": true,
+  "CredentialTestEntries": [],
+  "OAuthTestEntries": [],
+  "CredentialScanScope": "Synthetic ordinary and OAuth native namespaces; target names only",
+  "DeliveryTemporaryResources": []
+}

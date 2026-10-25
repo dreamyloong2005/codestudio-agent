@@ -1,0 +1,333 @@
+{
+  "date": "2026-10-25",
+  "state_schema": 7,
+  "protocol_version": 2,
+  "configurations": {
+    "windows-debug": {
+      "native_groups": 22,
+      "static_schema_tests": 12,
+      "suites": {
+        "credentials": {
+          "cases": 17,
+          "passed": 15,
+          "skipped": 2
+        },
+        "provider": {
+          "cases": 15,
+          "passed": 15,
+          "skipped": 0
+        },
+        "streaming": {
+          "cases": 18,
+          "passed": 18,
+          "skipped": 0
+        },
+        "cli": {
+          "cases": 11,
+          "passed": 11,
+          "skipped": 0
+        },
+        "mcp": {
+          "cases": 13,
+          "passed": 13,
+          "skipped": 0
+        },
+        "mcp_http": {
+          "cases": 39,
+          "passed": 39,
+          "skipped": 0
+        },
+        "resume": {
+          "cases": 18,
+          "passed": 18,
+          "skipped": 0
+        },
+        "scheduler": {
+          "cases": 19,
+          "passed": 18,
+          "skipped": 1
+        },
+        "supervisor": {
+          "cases": 16,
+          "passed": 16,
+          "skipped": 0
+        },
+        "cron": {
+          "cases": 12,
+          "passed": 12,
+          "skipped": 0
+        },
+        "autostart": {
+          "cases": 14,
+          "passed": 10,
+          "skipped": 4
+        },
+        "build_proposals": {
+          "cases": 25,
+          "passed": 25,
+          "skipped": 0
+        },
+        "contract": {
+          "cases": 16,
+          "passed": 16,
+          "skipped": 0
+        },
+        "service": {
+          "cases": 28,
+          "passed": 28,
+          "skipped": 0
+        }
+      },
+      "python_cases": 261,
+      "passed": 254,
+      "skipped": 7
+    },
+    "windows-release": {
+      "native_groups": 22,
+      "static_schema_tests": 12,
+      "suites": {
+        "credentials": {
+          "cases": 17,
+          "passed": 15,
+          "skipped": 2
+        },
+        "provider": {
+          "cases": 15,
+          "passed": 15,
+          "skipped": 0
+        },
+        "streaming": {
+          "cases": 18,
+          "passed": 18,
+          "skipped": 0
+        },
+        "cli": {
+          "cases": 11,
+          "passed": 11,
+          "skipped": 0
+        },
+        "mcp": {
+          "cases": 13,
+          "passed": 13,
+          "skipped": 0
+        },
+        "mcp_http": {
+          "cases": 39,
+          "passed": 39,
+          "skipped": 0
+        },
+        "resume": {
+          "cases": 18,
+          "passed": 18,
+          "skipped": 0
+        },
+        "scheduler": {
+          "cases": 19,
+          "passed": 18,
+          "skipped": 1
+        },
+        "supervisor": {
+          "cases": 16,
+          "passed": 16,
+          "skipped": 0
+        },
+        "cron": {
+          "cases": 12,
+          "passed": 12,
+          "skipped": 0
+        },
+        "autostart": {
+          "cases": 14,
+          "passed": 10,
+          "skipped": 4
+        },
+        "build_proposals": {
+          "cases": 25,
+          "passed": 25,
+          "skipped": 0
+        },
+        "contract": {
+          "cases": 16,
+          "passed": 16,
+          "skipped": 0
+        },
+        "service": {
+          "cases": 28,
+          "passed": 28,
+          "skipped": 0
+        }
+      },
+      "python_cases": 261,
+      "passed": 254,
+      "skipped": 7
+    },
+    "linux-debug": {
+      "native_groups": 22,
+      "static_schema_tests": 12,
+      "suites": {
+        "credentials": {
+          "cases": 17,
+          "passed": 17,
+          "skipped": 0
+        },
+        "provider": {
+          "cases": 15,
+          "passed": 15,
+          "skipped": 0
+        },
+        "streaming": {
+          "cases": 18,
+          "passed": 18,
+          "skipped": 0
+        },
+        "cli": {
+          "cases": 11,
+          "passed": 11,
+          "skipped": 0
+        },
+        "mcp": {
+          "cases": 13,
+          "passed": 13,
+          "skipped": 0
+        },
+        "mcp_http": {
+          "cases": 39,
+          "passed": 39,
+          "skipped": 0
+        },
+        "resume": {
+          "cases": 18,
+          "passed": 18,
+          "skipped": 0
+        },
+        "scheduler": {
+          "cases": 19,
+          "passed": 19,
+          "skipped": 0
+        },
+        "supervisor": {
+          "cases": 18,
+          "passed": 18,
+          "skipped": 0
+        },
+        "cron": {
+          "cases": 12,
+          "passed": 12,
+          "skipped": 0
+        },
+        "autostart": {
+          "cases": 14,
+          "passed": 13,
+          "skipped": 1
+        },
+        "build_proposals": {
+          "cases": 25,
+          "passed": 0,
+          "skipped": 25
+        },
+        "contract": {
+          "cases": 16,
+          "passed": 16,
+          "skipped": 0
+        },
+        "service": {
+          "cases": 28,
+          "passed": 28,
+          "skipped": 0
+        }
+      },
+      "python_cases": 263,
+      "passed": 237,
+      "skipped": 26
+    },
+    "linux-release": {
+      "native_groups": 22,
+      "static_schema_tests": 12,
+      "suites": {
+        "credentials": {
+          "cases": 17,
+          "passed": 17,
+          "skipped": 0
+        },
+        "provider": {
+          "cases": 15,
+          "passed": 15,
+          "skipped": 0
+        },
+        "streaming": {
+          "cases": 18,
+          "passed": 18,
+          "skipped": 0
+        },
+        "cli": {
+          "cases": 11,
+          "passed": 11,
+          "skipped": 0
+        },
+        "mcp": {
+          "cases": 13,
+          "passed": 13,
+          "skipped": 0
+        },
+        "mcp_http": {
+          "cases": 39,
+          "passed": 39,
+          "skipped": 0
+        },
+        "resume": {
+          "cases": 18,
+          "passed": 18,
+          "skipped": 0
+        },
+        "scheduler": {
+          "cases": 19,
+          "passed": 19,
+          "skipped": 0
+        },
+        "supervisor": {
+          "cases": 18,
+          "passed": 18,
+          "skipped": 0
+        },
+        "cron": {
+          "cases": 12,
+          "passed": 12,
+          "skipped": 0
+        },
+        "autostart": {
+          "cases": 14,
+          "passed": 13,
+          "skipped": 1
+        },
+        "build_proposals": {
+          "cases": 25,
+          "passed": 0,
+          "skipped": 25
+        },
+        "contract": {
+          "cases": 16,
+          "passed": 16,
+          "skipped": 0
+        },
+        "service": {
+          "cases": 28,
+          "passed": 28,
+          "skipped": 0
+        }
+      },
+      "python_cases": 263,
+      "passed": 237,
+      "skipped": 26
+    }
+  },
+  "scope": [
+    "Final related regression on Windows and Arch Linux WSL, Debug and Release; earlier full-platform runs are historical.",
+    "Synthetic Windows native credential entries and private signed gnome-keyring test service; no real user secret or inference.",
+    "Linux private collection lock/unlock/readback and unavailable-session cases run; Windows skips these two Linux cases.",
+    "The existing 25-case approval suite is Windows-only; cross-platform credentials tests independently exercise approved build output redaction.",
+    "No actual login/reboot or permanently registered workspace; outer Windows Job still limits detached-success verification.",
+    "Linux native timeout cancellation reproduced and repaired; uncertain effects remain unknown.",
+    "Explicit session reload on 404, no OAuth, Windows ASCII SSE cursors; synthetic loopback transport tests, not live third-party TLS services.",
+    "Initial HTTP fixture ping and empty-state expectation failures are retained separately; repeated cases count once."
+  ]
+}

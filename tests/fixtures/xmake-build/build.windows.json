@@ -1,0 +1,40 @@
+{
+  "version": 2,
+  "inputs": ["xmake.lua", "main.cpp"],
+  "mounts": [
+    {
+      "name": "xmake",
+      "source": "@XMAKE_DIRECTORY@",
+      "inputs": ["."],
+      "exclude": [".xmake", "repository", "uninstall.exe"]
+    },
+    {
+      "name": "llvm",
+      "source": "@LLVM_BIN_DIRECTORY@",
+      "inputs": ["clang-cl.exe", "lld-link.exe"]
+    }
+  ],
+  "environment": {
+    "PATH": "${llvm};${xmake}",
+    "XMAKE_PROGRAM_DIR": "${xmake}",
+    "XMAKE_GLOBALDIR": "${home}/.xmake",
+    "XMAKE_PKG_INSTALLDIR": "${home}/packages"
+  },
+  "steps": [
+    {
+      "executable": "${xmake}/xmake.exe",
+      "arguments": ["f", "-p", "windows", "-a", "x64", "-m", "release", "--toolchain=isolated-clang", "-y"]
+    },
+    {
+      "executable": "${xmake}/xmake.exe",
+      "arguments": ["build", "hello"]
+    },
+    {
+      "executable": "${workspace}/out/hello.exe",
+      "arguments": []
+    }
+  ],
+  "outputs": ["out/hello.exe"],
+  "artifact_directory": "artifacts",
+  "limits": {"timeout_ms": 120000, "processes": 32, "memory_mb": 2048, "cpu_percent": 80}
+}

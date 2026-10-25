@@ -1,0 +1,9 @@
+{
+  "format": 2,
+  "platform": "linux",
+  "source_matches_release_report": true,
+  "verification_receipt": "linux/release-20261025T111928Z-a0d6e200/verification.json",
+  "archive_sha256": "26c95b644d59c46827b349c52854e3d8fee2a28f04ba2f28038e5d3f4cfc3c3c",
+  "identical_archive_runs": 2,
+  "scope": "Same binary, payload, metadata and verification report; not cross-toolchain build reproducibility"
+}

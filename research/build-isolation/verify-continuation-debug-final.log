@@ -1,0 +1,152 @@
+[0m[32;1m[100%]:[0m [32;1mbuild ok, spent 0.171s[0m
+PASS persistence/recovery/transitions/schema
+PASS task loop/policy/budgets/redaction
+PASS current checkpoint format/atomicity/resume guards
+PASS durable conversation resume/budgets/no replay
+PASS read-only state queries/pagination/commit visibility
+PASS Responses protocol and continuation
+PASS Messages protocol and continuation
+PASS workspace tool boundaries
+PASS isolated workspace import/export/hash/link boundaries
+PASS generic execution/manifest compatibility/frozen recipes
+PASS build proposals/digests/no execution/receipt validation
+PASS build decisions/atomic claims/no replay/current schema
+PASS process lifecycle/quoting/cancellation
+PASS persistent process transport/deadlines/environment
+PASS MCP grants/lifecycle/schemas/receipts
+PASS OS sandbox boundaries/stdio/descendants/cleanup
+test_abnormal_finishes_and_empty_answers (__main__.ProviderTests.test_abnormal_finishes_and_empty_answers) ... ok
+test_complete_two_tool_rounds (__main__.ProviderTests.test_complete_two_tool_rounds) ... ok
+test_full_endpoint_and_normalized_response (__main__.ProviderTests.test_full_endpoint_and_normalized_response) ... ok
+test_http_errors_do_not_echo_credentials (__main__.ProviderTests.test_http_errors_do_not_echo_credentials) ... ok
+test_invalid_header_credential (__main__.ProviderTests.test_invalid_header_credential) ... ok
+test_invalid_json_and_top_level_shape (__main__.ProviderTests.test_invalid_json_and_top_level_shape) ... ok
+test_no_key_for_local_models (__main__.ProviderTests.test_no_key_for_local_models) ... ok
+test_offline_demo_and_readback_failure (__main__.ProviderTests.test_offline_demo_and_readback_failure) ... ok
+test_redirect_is_not_followed (__main__.ProviderTests.test_redirect_is_not_followed) ... ok
+test_response_size_limit (__main__.ProviderTests.test_response_size_limit) ... ok
+test_reused_tool_id_is_rejected (__main__.ProviderTests.test_reused_tool_id_is_rejected) ... ok
+test_timeout_and_cancellation (__main__.ProviderTests.test_timeout_and_cancellation) ... ok
+test_tool_arguments_must_be_complete_objects (__main__.ProviderTests.test_tool_arguments_must_be_complete_objects) ... ok
+test_tool_call_shape_and_finish_consistency (__main__.ProviderTests.test_tool_call_shape_and_finish_consistency) ... ok
+test_url_security (__main__.ProviderTests.test_url_security) ... ok
+
+----------------------------------------------------------------------
+Ran 15 tests in 2.934s
+
+OK
+...........
+----------------------------------------------------------------------
+Ran 11 tests in 2.015s
+
+OK
+test_all_apis_stream_text_and_usage (__main__.StreamingTests.test_all_apis_stream_text_and_usage) ... ok
+test_cancel_and_timeout_during_stream (__main__.StreamingTests.test_cancel_and_timeout_during_stream) ... ok
+test_chat_tool_deltas_accept_optional_null_fields (__main__.StreamingTests.test_chat_tool_deltas_accept_optional_null_fields) ... ok
+test_cli_incomplete_stream_never_executes_tool (__main__.StreamingTests.test_cli_incomplete_stream_never_executes_tool) ... ok
+test_cli_short_text_is_displayed_before_terminal (__main__.StreamingTests.test_cli_short_text_is_displayed_before_terminal) ... ok
+test_cli_stream_redacts_split_key_and_preserves_json_stdout (__main__.StreamingTests.test_cli_stream_redacts_split_key_and_preserves_json_stdout) ... ok
+test_cli_streaming_tools_are_persisted_and_replayed (__main__.StreamingTests.test_cli_streaming_tools_are_persisted_and_replayed) ... ok
+test_content_type_malformed_json_and_size_limit (__main__.StreamingTests.test_content_type_malformed_json_and_size_limit) ... ok
+test_http_chunked_transfer_and_transport_truncation (__main__.StreamingTests.test_http_chunked_transfer_and_transport_truncation) ... ok
+test_http_failure_body_is_never_streamed (__main__.StreamingTests.test_http_failure_body_is_never_streamed) ... ok
+test_in_stream_error_never_echoes_response_body (__main__.StreamingTests.test_in_stream_error_never_echoes_response_body) ... ok
+test_missing_terminal_rejects_complete_looking_tool (__main__.StreamingTests.test_missing_terminal_rejects_complete_looking_tool) ... ok
+test_multiline_sse_data_is_one_json_event (__main__.StreamingTests.test_multiline_sse_data_is_one_json_event) ... ok
+test_non_stream_responses_and_messages (__main__.StreamingTests.test_non_stream_responses_and_messages) ... ok
+test_post_terminal_and_duplicate_key_rejected (__main__.StreamingTests.test_post_terminal_and_duplicate_key_rejected) ... ok
+test_selected_full_endpoint_and_conflicting_endpoint (__main__.StreamingTests.test_selected_full_endpoint_and_conflicting_endpoint) ... ok
+test_text_arrives_before_server_releases_terminal (__main__.StreamingTests.test_text_arrives_before_server_releases_terminal) ... ok
+test_three_turn_tool_roundtrip_for_each_api (__main__.StreamingTests.test_three_turn_tool_roundtrip_for_each_api) ... ok
+
+----------------------------------------------------------------------
+Ran 18 tests in 4.856s
+
+OK
+...............
+----------------------------------------------------------------------
+Ran 15 tests in 4.342s
+
+OK
+.............
+----------------------------------------------------------------------
+Ran 13 tests in 6.268s
+
+OK
+..................
+----------------------------------------------------------------------
+Ran 18 tests in 5.964s
+
+OK
+.....
+----------------------------------------------------------------------
+Ran 5 tests in 2.159s
+
+OK
+test_active_task_remains_queryable_and_cancellation_does_not_authorize_other_work (__main__.ServiceTests.test_active_task_remains_queryable_and_cancellation_does_not_authorize_other_work) ... ok
+test_approval_continuation_uses_resume_option_validation_before_dispatch (__main__.ServiceTests.test_approval_continuation_uses_resume_option_validation_before_dispatch) ... ok
+test_client_notifications_cannot_start_tasks_or_shutdown_the_service (__main__.ServiceTests.test_client_notifications_cannot_start_tasks_or_shutdown_the_service) ... ok
+test_closed_output_cancels_active_task_and_releases_locks (__main__.ServiceTests.test_closed_output_cancels_active_task_and_releases_locks) ... ok
+test_crashed_process_requires_recover_and_unknown_effects_never_resume (__main__.ServiceTests.test_crashed_process_requires_recover_and_unknown_effects_never_resume) ... ok
+test_demo_and_cli_share_receipts_and_summarized_task_detail (__main__.ServiceTests.test_demo_and_cli_share_receipts_and_summarized_task_detail) ... ok
+test_eof_cancels_active_task_and_releases_runner_locks (__main__.ServiceTests.test_eof_cancels_active_task_and_releases_runner_locks) ... ok
+test_explicit_state_path_is_shared_with_the_cli (__main__.ServiceTests.test_explicit_state_path_is_shared_with_the_cli) ... ok
+test_external_cli_obeys_the_same_active_workspace_lock (__main__.ServiceTests.test_external_cli_obeys_the_same_active_workspace_lock) ... ok
+test_initialize_and_read_only_queries_do_not_create_state (__main__.ServiceTests.test_initialize_and_read_only_queries_do_not_create_state) ... ok
+test_malformed_requests_and_duplicate_keys_have_no_effects (__main__.ServiceTests.test_malformed_requests_and_duplicate_keys_have_no_effects) ... ok
+test_option_validation_pins_workspace_state_and_credentials (__main__.ServiceTests.test_option_validation_pins_workspace_state_and_credentials) ... ok
+test_oversized_input_frame_returns_error_and_exits_without_effects (__main__.ServiceTests.test_oversized_input_frame_returns_error_and_exits_without_effects) ... ok
+test_resume_requires_original_grants_and_reuses_completed_tool_receipt (__main__.ServiceTests.test_resume_requires_original_grants_and_reuses_completed_tool_receipt) ... ok
+test_shutdown_cancels_active_task_and_flushes_protocol_response (__main__.ServiceTests.test_shutdown_cancels_active_task_and_flushes_protocol_response) ... ok
+test_streaming_text_arrives_before_terminal_and_redacts_split_credentials (__main__.ServiceTests.test_streaming_text_arrives_before_terminal_and_redacts_split_credentials) ... ok
+test_subscription_delivers_committed_events_and_replays_after_cursor (__main__.ServiceTests.test_subscription_delivers_committed_events_and_replays_after_cursor) ... ok
+test_task_and_event_cursor_pages_do_not_skip_or_repeat_rows (__main__.ServiceTests.test_task_and_event_cursor_pages_do_not_skip_or_repeat_rows) ... ok
+test_unread_output_hits_write_deadline_without_waiting_for_input_eof (__main__.ServiceTests.test_unread_output_hits_write_deadline_without_waiting_for_input_eof) ... ok
+test_unsupported_state_schema_is_rejected_without_migration (__main__.ServiceTests.test_unsupported_state_schema_is_rejected_without_migration) ... ok
+
+----------------------------------------------------------------------
+Ran 20 tests in 11.347s
+
+OK
+.......Retained crash staging evidence: C:\Users\dreamyloong\AppData\Local\Temp\codestudio-sandbox-cd133a76bb16602e50e92724a5697427
+............
+----------------------------------------------------------------------
+Ran 19 tests in 14.075s
+
+OK
+test_approval_executes_once_without_model_and_persists_receipt (__main__.ProposalTests.test_approval_executes_once_without_model_and_persists_receipt) ... ok
+test_approval_retains_source_mcp_manifest_protection (__main__.ProposalTests.test_approval_retains_source_mcp_manifest_protection) ... ok
+test_combined_approval_stops_at_new_proposal_and_repeated_old_decision_skips (__main__.ProposalTests.test_combined_approval_stops_at_new_proposal_and_repeated_old_decision_skips) ... ok
+test_combined_continuation_cannot_increase_original_budget (__main__.ProposalTests.test_combined_continuation_cannot_increase_original_budget) ... ok
+test_combined_continuation_requires_original_grants_without_model_request (__main__.ProposalTests.test_combined_continuation_requires_original_grants_without_model_request) ... ok
+test_crashed_approval_is_claimed_once_and_unknown_effect_never_replays (__main__.ProposalTests.test_crashed_approval_is_claimed_once_and_unknown_effect_never_replays) ... Retained approval crash staging evidence: C:\Users\dreamyloong\AppData\Local\Temp\codestudio-sandbox-21700e55c880775b1e538c829a9f223c
+ok
+test_current_approval_credential_conflict_is_rejected_before_claim (__main__.ProposalTests.test_current_approval_credential_conflict_is_rejected_before_claim) ... ok
+test_invalid_plan_or_sensitive_content_cannot_become_approvable (__main__.ProposalTests.test_invalid_plan_or_sensitive_content_cannot_become_approvable) ... ok
+test_known_failed_build_feedback_allows_model_to_inspect_failure_without_reexecution (__main__.ProposalTests.test_known_failed_build_feedback_allows_model_to_inspect_failure_without_reexecution) ... ok
+test_models_cannot_enable_proposals_or_self_approve (__main__.ProposalTests.test_models_cannot_enable_proposals_or_self_approve) ... ok
+test_modified_approved_proposal_blocks_resume_without_mutating_durable_state (__main__.ProposalTests.test_modified_approved_proposal_blocks_resume_without_mutating_durable_state) ... ok
+test_new_execution_feedback_credential_collision_blocks_resume_before_mcp_start (__main__.ProposalTests.test_new_execution_feedback_credential_collision_blocks_resume_before_mcp_start) ... ok
+test_proposal_resume_requires_same_grant_and_reuses_receipt (__main__.ProposalTests.test_proposal_resume_requires_same_grant_and_reuses_receipt) ... ok
+test_rejection_is_durable_idempotent_and_cannot_be_approved (__main__.ProposalTests.test_rejection_is_durable_idempotent_and_cannot_be_approved) ... ok
+test_review_is_readonly_and_cross_workspace_approval_is_rejected (__main__.ProposalTests.test_review_is_readonly_and_cross_workspace_approval_is_rejected) ... ok
+test_service_approval_allows_review_rejects_busy_and_cancels_tree (__main__.ProposalTests.test_service_approval_allows_review_rejects_busy_and_cancels_tree) ... ok
+test_service_approval_stdin_eof_cancels_tree_without_replay (__main__.ProposalTests.test_service_approval_stdin_eof_cancels_tree_without_replay) ... ok
+test_service_proposes_reviews_and_approves_with_fixed_arguments (__main__.ProposalTests.test_service_proposes_reviews_and_approves_with_fixed_arguments) ... ok
+test_service_rejection_and_option_validation (__main__.ProposalTests.test_service_rejection_and_option_validation) ... ok
+test_three_protocols_model_failure_reuses_consumed_feedback_without_duplicate (__main__.ProposalTests.test_three_protocols_model_failure_reuses_consumed_feedback_without_duplicate) ... ok
+test_three_protocols_propose_and_review_without_execution (__main__.ProposalTests.test_three_protocols_propose_and_review_without_execution) ... ok
+test_three_protocols_resume_with_approved_or_rejected_feedback_once (__main__.ProposalTests.test_three_protocols_resume_with_approved_or_rejected_feedback_once) ... ok
+test_unknown_or_partial_approved_execution_blocks_original_task_feedback (__main__.ProposalTests.test_unknown_or_partial_approved_execution_blocks_original_task_feedback) ... ok
+test_unsupported_receipt_versions_cannot_be_reviewed_or_approved (__main__.ProposalTests.test_unsupported_receipt_versions_cannot_be_reviewed_or_approved) ... ok
+test_wrong_digest_or_modified_receipt_never_creates_execution (__main__.ProposalTests.test_wrong_digest_or_modified_receipt_never_creates_execution) ... ok
+
+----------------------------------------------------------------------
+Ran 25 tests in 21.698s
+
+OK
+PASS real isolated XMake / explicit-v2 / C++26 pack indexing / compile / link / execute / atomic export
+  steps=3, bytes=1024, sha256=ef1bced02524215311f872003116721414dec590ba199bf9066174561cf9a762
+PASS real isolated XMake / custom-cache-v2 / C++26 pack indexing / compile / link / execute / atomic export
+  steps=3, bytes=1024, sha256=fab09d1b163531b41e36ec5528e542c3213fa393e7a4adcacb4bb5f9ca07d6d4
+PASS 2 real isolated XMake builds: explicit-v2 and custom-cache-v2

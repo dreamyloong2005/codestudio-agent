@@ -1,0 +1,3 @@
+[0m[38;5;2;1m[ 23%]:[0m [38;5;5;1m<agent-tests>[0m cache compiling.debug tests/sandbox_tests.cpp[0m
+[0m[38;5;2;1m[ 93%]:[0m [38;5;5;1m<agent-tests>[0m [38;5;5;1mlinking.debug agent-tests[0m
+[0m[38;5;2;1m[100%]:[0m [38;5;2;1mbuild ok, spent 5.544s[0m

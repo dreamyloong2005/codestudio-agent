@@ -1,0 +1,9 @@
+{
+  "format": 2,
+  "platform": "windows",
+  "source_matches_release_report": true,
+  "verification_receipt": "windows/release-20261025T112115Z-f6340423/verification.json",
+  "archive_sha256": "979051fd169173c1ae8d5c5ec607b184ff2fbf7f2f5260566b252e98df0c5924",
+  "identical_archive_runs": 2,
+  "scope": "Same binary, payload, metadata and verification report; not cross-toolchain build reproducibility"
+}

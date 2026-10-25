@@ -1,0 +1,187 @@
+{
+  "date": "2026-10-24",
+  "state_schema": 7,
+  "protocol_version": 2,
+  "static_schema_tests": 11,
+  "configurations": {
+    "windows-debug": {
+      "native_groups": 21,
+      "suites": {
+        "autostart": {
+          "cases": 14,
+          "passed": 10,
+          "skipped": 4
+        },
+        "supervisor": {
+          "cases": 16,
+          "passed": 16,
+          "skipped": 0
+        },
+        "scheduler": {
+          "cases": 19,
+          "passed": 18,
+          "skipped": 1
+        },
+        "cron": {
+          "cases": 12,
+          "passed": 12,
+          "skipped": 0
+        },
+        "resume": {
+          "cases": 18,
+          "passed": 18,
+          "skipped": 0
+        },
+        "contract": {
+          "cases": 16,
+          "passed": 16,
+          "skipped": 0
+        },
+        "service": {
+          "cases": 28,
+          "passed": 28,
+          "skipped": 0
+        }
+      },
+      "python_cases": 123,
+      "passed": 118,
+      "skipped": 5
+    },
+    "windows-release": {
+      "native_groups": 21,
+      "suites": {
+        "autostart": {
+          "cases": 14,
+          "passed": 10,
+          "skipped": 4
+        },
+        "supervisor": {
+          "cases": 16,
+          "passed": 16,
+          "skipped": 0
+        },
+        "scheduler": {
+          "cases": 19,
+          "passed": 18,
+          "skipped": 1
+        },
+        "cron": {
+          "cases": 12,
+          "passed": 12,
+          "skipped": 0
+        },
+        "resume": {
+          "cases": 18,
+          "passed": 18,
+          "skipped": 0
+        },
+        "contract": {
+          "cases": 16,
+          "passed": 16,
+          "skipped": 0
+        },
+        "service": {
+          "cases": 28,
+          "passed": 28,
+          "skipped": 0
+        }
+      },
+      "python_cases": 123,
+      "passed": 118,
+      "skipped": 5
+    },
+    "linux-debug": {
+      "native_groups": 21,
+      "suites": {
+        "autostart": {
+          "cases": 14,
+          "passed": 13,
+          "skipped": 1
+        },
+        "supervisor": {
+          "cases": 18,
+          "passed": 18,
+          "skipped": 0
+        },
+        "scheduler": {
+          "cases": 19,
+          "passed": 19,
+          "skipped": 0
+        },
+        "cron": {
+          "cases": 12,
+          "passed": 12,
+          "skipped": 0
+        },
+        "resume": {
+          "cases": 18,
+          "passed": 18,
+          "skipped": 0
+        },
+        "contract": {
+          "cases": 16,
+          "passed": 16,
+          "skipped": 0
+        },
+        "service": {
+          "cases": 28,
+          "passed": 28,
+          "skipped": 0
+        }
+      },
+      "python_cases": 125,
+      "passed": 124,
+      "skipped": 1
+    },
+    "linux-release": {
+      "native_groups": 21,
+      "suites": {
+        "autostart": {
+          "cases": 14,
+          "passed": 13,
+          "skipped": 1
+        },
+        "supervisor": {
+          "cases": 18,
+          "passed": 18,
+          "skipped": 0
+        },
+        "scheduler": {
+          "cases": 19,
+          "passed": 19,
+          "skipped": 0
+        },
+        "cron": {
+          "cases": 12,
+          "passed": 12,
+          "skipped": 0
+        },
+        "resume": {
+          "cases": 18,
+          "passed": 18,
+          "skipped": 0
+        },
+        "contract": {
+          "cases": 16,
+          "passed": 16,
+          "skipped": 0
+        },
+        "service": {
+          "cases": 28,
+          "passed": 28,
+          "skipped": 0
+        }
+      },
+      "python_cases": 125,
+      "passed": 124,
+      "skipped": 1
+    }
+  },
+  "limitations": [
+    "Only the related suites listed here were rerun; earlier full-platform suites remain historical evidence.",
+    "No actual logon, logout, reboot or systemd user-manager reload/start was exercised.",
+    "Windows detached-worker success is blocked by the enclosing Job; refusal and lack of side effects are checked.",
+    "Tests use temporary workspaces and registrations plus mock HTTP/MCP; no permanent enrollment or real model inference.",
+    "Process observation identifies a process at query time; it does not establish health, future liveness or control authority."
+  ]
+}

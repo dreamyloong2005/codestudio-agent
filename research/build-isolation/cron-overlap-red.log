@@ -1,0 +1,2 @@
+PASS cron syntax/time zones/DST boundaries
+FAIL: cron store: finished occurrence backfilled a slot from its own active lifetime

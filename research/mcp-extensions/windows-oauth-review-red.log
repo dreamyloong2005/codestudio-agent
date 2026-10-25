@@ -1,0 +1,72 @@
+FFFFF
+======================================================================
+FAIL: test_relogin_refuses_secret_reflection_in_cli_and_service_authorization_notice (__main__.McpOAuthTests.test_relogin_refuses_secret_reflection_in_cli_and_service_authorization_notice)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_oauth_integration.py", line 486, in test_relogin_refuses_secret_reflection_in_cli_and_service_authorization_notice
+    process = self.capture(*self.auth_args("login"), "--login-timeout-ms", "500")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_oauth_integration.py", line 258, in capture
+    self.assertNotIn(secret.encode(), result.stdout + result.stderr)
+AssertionError: b'oauth-refresh-daa8bd776ad84438bc3ed2a88647879c' unexpectedly found in b'{\r\n  "error": "MCP OAuth: operation timed out",\r\n  "product": "CodeStudio-Agent"\r\n}\r\n{"authorization_url":"http://127.0.0.1:13701/authorize/oauth-refresh-daa8bd776ad84438bc3ed2a88647879c?response_type=code&client_id=fixture-client&redirect_uri=http%3A%2F%2F127.0.0.1%3A13711%2Foauth%2Fcallback&code_challenge=4goI48zEUc9gMqa5gp4yPmNHs9e5B6bqJZxQhQm4ZSg&code_challenge_method=S256&state=fvotK7bbpKde6AnjSN-vM3oHuZFsS_Y0if9dI0iRCTY&resource=http%3A%2F%2F127.0.0.1%3A13701%2Fmcp&scope=tools.read","redirect_uri":"http://127.0.0.1:13711/oauth/callback","type":"authorization"}\r\n'
+
+======================================================================
+FAIL: test_invalid_run_preflight_does_not_refresh_or_mutate_oauth_record (__main__.McpOAuthTests.test_invalid_run_preflight_does_not_refresh_or_mutate_oauth_record) (args=['run', '--workspace', WindowsPath('C:/Users/dreamyloong/AppData/Local/Temp/codestudio-resume-18fytfuq/workspace with spaces'), '--prompt', 'Safely continue this engineering task', '--base-url', 'http://127.0.0.1:13712/v1', '--model', 'resume-fixture', '--api', 'chat-completions', '--allow-http-loopback', '--no-stream', '--mcp-config', WindowsPath('C:/Users/dreamyloong/AppData/Local/Temp/codestudio-resume-18fytfuq/workspace with spaces/oauth-mcp.json'), '--allow-mcp', 'oauth', '--max-turns', '0'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_oauth_integration.py", line 624, in test_invalid_run_preflight_does_not_refresh_or_mutate_oauth_record
+    self.assertEqual(self.remote.records(), before)
+AssertionError: Lists differ: [{'ve[1276 chars].062}, {'verb': 'POST', 'path': '/token', 'hea[443 chars]125}] != [{'ve[1276 chars].062}]
+
+First list contains 1 additional elements.
+First extra element 4:
+{'verb': 'POST', 'path': '/token', 'headers': {'connection': 'Keep-Alive', 'content-type': 'application/x-www-form-urlencoded', 'accept': 'application/json', 'user-agent': 'CodeStudio-Agent-OAuth/0.1', 'content-length': '173', 'host': '127.0.0.1:13713'}, 'body': {'grant_type': ['refresh_token'], 'refresh_token': ['oauth-refresh-02f395547f4c475ba97a2a2206d1c32b'], 'client_id': ['fixture-client'], 'resource': ['http://127.0.0.1:13713/mcp'], 'scope': ['tools.read']}, 'at': 381321.125}
+
+Diff is 2291 characters long. Set self.maxDiff to None to see it.
+
+======================================================================
+FAIL: test_invalid_run_preflight_does_not_refresh_or_mutate_oauth_record (__main__.McpOAuthTests.test_invalid_run_preflight_does_not_refresh_or_mutate_oauth_record) (args=['run', '--workspace', WindowsPath('C:/Users/dreamyloong/AppData/Local/Temp/codestudio-resume-18fytfuq/workspace with spaces'), '--prompt', 'Safely continue this engineering task', '--base-url', 'http://127.0.0.1:13712/v1', '--model', 'resume-fixture', '--api', 'chat-completions', '--allow-http-loopback', '--no-stream', '--mcp-config', WindowsPath('C:/Users/dreamyloong/AppData/Local/Temp/codestudio-resume-18fytfuq/workspace with spaces/oauth-mcp.json'), '--allow-mcp', 'oauth', '--allow-process', 'relative-not-authorized'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_oauth_integration.py", line 624, in test_invalid_run_preflight_does_not_refresh_or_mutate_oauth_record
+    self.assertEqual(self.remote.records(), before)
+AssertionError: Lists differ: [{'ve[1276 chars].062}, {'verb': 'POST', 'path': '/token', 'hea[936 chars]187}] != [{'ve[1276 chars].062}]
+
+First list contains 2 additional elements.
+First extra element 4:
+{'verb': 'POST', 'path': '/token', 'headers': {'connection': 'Keep-Alive', 'content-type': 'application/x-www-form-urlencoded', 'accept': 'application/json', 'user-agent': 'CodeStudio-Agent-OAuth/0.1', 'content-length': '173', 'host': '127.0.0.1:13713'}, 'body': {'grant_type': ['refresh_token'], 'refresh_token': ['oauth-refresh-02f395547f4c475ba97a2a2206d1c32b'], 'client_id': ['fixture-client'], 'resource': ['http://127.0.0.1:13713/mcp'], 'scope': ['tools.read']}, 'at': 381321.125}
+
+Diff is 2935 characters long. Set self.maxDiff to None to see it.
+
+======================================================================
+FAIL: test_invalid_run_preflight_does_not_refresh_or_mutate_oauth_record (__main__.McpOAuthTests.test_invalid_run_preflight_does_not_refresh_or_mutate_oauth_record) (args=['run', '--workspace', WindowsPath('C:/Users/dreamyloong/AppData/Local/Temp/codestudio-resume-18fytfuq/workspace with spaces'), '--prompt', 'Safely continue this engineering task', '--base-url', 'http://127.0.0.1:13712/v1', '--model', 'resume-fixture', '--api', 'unsupported-api', '--allow-http-loopback', '--no-stream', '--mcp-config', WindowsPath('C:/Users/dreamyloong/AppData/Local/Temp/codestudio-resume-18fytfuq/workspace with spaces/oauth-mcp.json'), '--allow-mcp', 'oauth'])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_oauth_integration.py", line 624, in test_invalid_run_preflight_does_not_refresh_or_mutate_oauth_record
+    self.assertEqual(self.remote.records(), before)
+AssertionError: Lists differ: [{'ve[1276 chars].062}, {'verb': 'POST', 'path': '/token', 'hea[1428 chars].25}] != [{'ve[1276 chars].062}]
+
+First list contains 3 additional elements.
+First extra element 4:
+{'verb': 'POST', 'path': '/token', 'headers': {'connection': 'Keep-Alive', 'content-type': 'application/x-www-form-urlencoded', 'accept': 'application/json', 'user-agent': 'CodeStudio-Agent-OAuth/0.1', 'content-length': '173', 'host': '127.0.0.1:13713'}, 'body': {'grant_type': ['refresh_token'], 'refresh_token': ['oauth-refresh-02f395547f4c475ba97a2a2206d1c32b'], 'client_id': ['fixture-client'], 'resource': ['http://127.0.0.1:13713/mcp'], 'scope': ['tools.read']}, 'at': 381321.125}
+
+Diff is 3578 characters long. Set self.maxDiff to None to see it.
+
+======================================================================
+FAIL: test_changed_resume_policy_does_not_refresh_before_binding_refusal (__main__.McpOAuthTests.test_changed_resume_policy_does_not_refresh_before_binding_refusal)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_oauth_integration.py", line 644, in test_changed_resume_policy_does_not_refresh_before_binding_refusal
+    self.assertEqual(self.remote.records(), before)
+AssertionError: Lists differ: [{'ve[4536 chars].843}, {'verb': 'POST', 'path': '/token', 'hea[443 chars]906}] != [{'ve[4536 chars].843}]
+
+First list contains 1 additional elements.
+First extra element 12:
+{'verb': 'POST', 'path': '/token', 'headers': {'connection': 'Keep-Alive', 'content-type': 'application/x-www-form-urlencoded', 'accept': 'application/json', 'user-agent': 'CodeStudio-Agent-OAuth/0.1', 'content-length': '173', 'host': '127.0.0.1:13724'}, 'body': {'grant_type': ['refresh_token'], 'refresh_token': ['oauth-refresh-e0ace63b254c49b8aa4ce907466ac4a1'], 'client_id': ['fixture-client'], 'resource': ['http://127.0.0.1:13724/mcp'], 'scope': ['tools.read']}, 'at': 381321.906}
+
+Diff is 6790 characters long. Set self.maxDiff to None to see it.
+
+----------------------------------------------------------------------
+Ran 3 tests in 2.089s
+
+FAILED (failures=5)

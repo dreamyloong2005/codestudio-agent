@@ -1,0 +1,13 @@
+test_approval_executes_once_and_resume_consumes_receipt_once (__main__.LinuxBuildTests.test_approval_executes_once_and_resume_consumes_receipt_once) ... ok
+test_build_export_boundaries_and_distinct_bundles (__main__.LinuxBuildTests.test_build_export_boundaries_and_distinct_bundles) ... ok
+test_cancel_and_stdin_eof_stop_descendants_without_export (__main__.LinuxBuildTests.test_cancel_and_stdin_eof_stop_descendants_without_export) ... ok
+test_failed_steps_and_missing_outputs_publish_nothing (__main__.LinuxBuildTests.test_failed_steps_and_missing_outputs_publish_nothing) ... ok
+test_host_crash_kills_descendants_and_recovery_never_replays (__main__.LinuxBuildTests.test_host_crash_kills_descendants_and_recovery_never_replays) ... ok
+test_real_cpp26_compile_assemble_link_run_and_hash (__main__.LinuxBuildTests.test_real_cpp26_compile_assemble_link_run_and_hash) ... ok
+test_rejection_never_builds (__main__.LinuxBuildTests.test_rejection_never_builds) ... ok
+test_timeout_stops_live_descendants_without_export (__main__.LinuxBuildTests.test_timeout_stops_live_descendants_without_export) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 7.125s
+
+OK

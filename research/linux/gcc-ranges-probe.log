@@ -1,0 +1,119 @@
+<stdin>: In function 'int main()':
+<stdin>:4:75: error: no match for call to '(const std::ranges::__find_fn) (const std::vector<std::__cxx11::basic_string<char> >&, const char [16])'
+In file included from /usr/include/c++/16/bits/ranges_algo.h:40,
+                 from /usr/include/c++/16/algorithm:65,
+                 from <stdin>:1:
+  • there are 2 candidates
+    /usr/include/c++/16/bits/ranges_util.h:497:10:
+      497 |   struct __find_fn
+          |          ^~~~~~~~~
+    • candidate 1: 'template<class _Iter, class _Sent, class _Proj, class _Tp>  requires (input_iterator<_Iter>) && (sentinel_for<_Sent, _Iter>) && (indirect_binary_predicate<std::ranges::equal_to, typename std::__detail::__projected<_Iter, _Proj>::__type, const _Tp*>) constexpr _Iter std::ranges::__find_fn::operator()(_Iter, _Sent, const _Tp&, _Proj) const'
+      /usr/include/c++/16/bits/ranges_util.h:505:7:
+        505 |       operator()(_Iter __first, _Sent __last,
+            |       ^~~~~~~~
+      • candidate expects 3 arguments, 2 provided
+    • candidate 2: 'template<class _Range, class _Proj, class _Tp>  requires (input_range<_Range>) && (indirect_binary_predicate<std::ranges::equal_to, typename std::__detail::__projected<decltype(std::ranges::__access::__begin((declval<_Container&>)())), _Proj>::__type, const _Tp*>) constexpr std::ranges::borrowed_iterator_t<_Range> std::ranges::__find_fn::operator()(_Range&&, const _Tp&, _Proj) const'
+      /usr/include/c++/16/bits/ranges_util.h:541:7:
+        541 |       operator()(_Range&& __r, const _Tp& __value, _Proj __proj = {}) const
+            |       ^~~~~~~~
+      • template argument deduction/substitution failed:
+        • constraints not satisfied
+In file included from /usr/include/c++/16/compare:44,
+                 from /usr/include/c++/16/bits/stl_pair.h:65,
+                 from /usr/include/c++/16/bits/stl_algobase.h:63,
+                 from /usr/include/c++/16/algorithm:62:
+          • /usr/include/c++/16/concepts: In substitution of 'template<class _Range, class _Proj, class _Tp>  requires (input_range<_Range>) && (indirect_binary_predicate<std::ranges::equal_to, typename std::__detail::__projected<decltype(std::ranges::__access::__begin((declval<_Container&>)())), _Proj>::__type, const _Tp*>) constexpr std::ranges::borrowed_iterator_t<_Range> std::ranges::__find_fn::operator()(_Range&&, const _Tp&, _Proj) const [with _Range = const std::vector<std::__cxx11::basic_string<char> >&; _Proj = std::identity; _Tp = char [16]]':
+          • required from here
+            <stdin>:4:75:   
+          • required for the satisfaction of 'invocable<_Fn, _Args ...>' [with _Fn = std::ranges::equal_to&; _Args = {std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&, char (&)[16]}]
+            /usr/include/c++/16/concepts:383:13:   
+              383 |     concept invocable = is_invocable_v<_Fn, _Args...>;
+                  |             ^~~~~~~~~
+          • required for the satisfaction of 'regular_invocable<_Fn, _Args ...>' [with _Fn = std::ranges::equal_to&; _Args = {std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&, char (&)[16]}]
+            /usr/include/c++/16/concepts:387:13:   
+              387 |     concept regular_invocable = invocable<_Fn, _Args...>;
+                  |             ^~~~~~~~~~~~~~~~~
+          • required for the satisfaction of 'predicate<_Fn&, typename std::__detail::__indirect_value<_Iter>::type, typename std::__detail::__indirect_value<_I2>::type>' [with _Fn = std::ranges::equal_to; _I1 = std::__detail::__projected<__gnu_cxx::__normal_iterator<const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >*, std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >, std::identity>::__type; _I2 = const char (*)[16]]
+            /usr/include/c++/16/concepts:391:13:   
+              391 |     concept predicate = regular_invocable<_Fn, _Args...>
+                  |             ^~~~~~~~~
+          • required for the satisfaction of 'indirect_binary_predicate<std::ranges::equal_to, std::projected<decltype (std::ranges::__access::__begin(declval<_Container&>())), _Proj>, const _Tp*>' [with _Range = const std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >&; _Proj = std::identity; _Tp = char[16]]
+            /usr/include/c++/16/bits/iterator_concepts.h:733:13:   
+              733 |     concept indirect_binary_predicate
+                  |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+          • the expression 'is_invocable_v<_Fn, _Args ...> [with _Fn = std::ranges::equal_to&; _Args = {std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&, char (&)[16]}]' evaluated to 'false'
+            /usr/include/c++/16/concepts:383:25:
+              383 |     concept invocable = is_invocable_v<_Fn, _Args...>;
+                  |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+          • 'std::ranges::equal_to&' is not invocable by 'std::__cxx11::basic_string<char>&, char (&)[16]', because
+          • error: no match for call to '(std::ranges::equal_to) (std::__cxx11::basic_string<char>&, char [16])'
+In file included from /usr/include/c++/16/bits/iterator_concepts.h:40,
+                 from /usr/include/c++/16/bits/stl_iterator_base_types.h:73,
+                 from /usr/include/c++/16/bits/stl_algobase.h:64:
+            • there is 1 candidate
+              /usr/include/c++/16/bits/ranges_cmp.h:89:10:
+                 89 |   struct equal_to
+                    |          ^~~~~~~~
+              • candidate 1: 'template<class _Tp, class _Up>  requires  equality_comparable_with<_Tp, _Up> static constexpr bool std::ranges::equal_to::operator()(_Tp&&, _Up&&)'
+                /usr/include/c++/16/bits/ranges_cmp.h:94:7:
+                   94 |       operator()(_Tp&& __t, _Up&& __u)
+                      |       ^~~~~~~~
+                • template argument deduction/substitution failed:
+                  • constraints not satisfied
+                    • /usr/include/c++/16/concepts: In substitution of 'template<class _Tp, class _Up>  requires  equality_comparable_with<_Tp, _Up> static constexpr bool std::ranges::equal_to::operator()(_Tp&&, _Up&&) [with _Tp = std::__cxx11::basic_string<char>&; _Up = char (&)[16]]':
+                    • required by substitution of 'template<class _Range, class _Proj, class _Tp>  requires (input_range<_Range>) && (indirect_binary_predicate<std::ranges::equal_to, typename std::__detail::__projected<decltype(std::ranges::__access::__begin((declval<_Container&>)())), _Proj>::__type, const _Tp*>) constexpr std::ranges::borrowed_iterator_t<_Range> std::ranges::__find_fn::operator()(_Range&&, const _Tp&, _Proj) const [with _Range = const std::vector<std::__cxx11::basic_string<char> >&; _Proj = std::identity; _Tp = char [16]]'
+                      /usr/include/c++/16/concepts:383:25:   
+                        383 |     concept invocable = is_invocable_v<_Fn, _Args...>;
+                            |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    • required from here
+                      <stdin>:4:75:   
+                    • required for the satisfaction of '__weakly_eq_cmp_with<_Tp, _Tp>' [with _Tp = char (&)[16]]
+                      /usr/include/c++/16/concepts:325:15:   
+                        325 |       concept __weakly_eq_cmp_with
+                            |               ^~~~~~~~~~~~~~~~~~~~
+                    • required for the satisfaction of 'equality_comparable<_Up>' [with _Up = char (&)[16]]
+                      /usr/include/c++/16/concepts:335:13:   
+                        335 |     concept equality_comparable = __detail::__weakly_eq_cmp_with<_Tp, _Tp>;
+                            |             ^~~~~~~~~~~~~~~~~~~
+                    • required for the satisfaction of 'equality_comparable_with<_Tp, _Up>' [with _Tp = std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&; _Up = char (&)[16]]
+                      /usr/include/c++/16/concepts:338:13:   
+                        338 |     concept equality_comparable_with
+                            |             ^~~~~~~~~~~~~~~~~~~~~~~~
+                    • in requirements with 'std::remove_reference_t<_Tp>& __t', 'std::remove_reference_t<_Rhs>& __u' [with _Tp = char (&)[16]; _Up = char (&)[16]]
+                      /usr/include/c++/16/concepts:326:4:   
+                        326 |         = requires(__detail::__cref<_Tp> __t, __detail::__cref<_Up> __u) {
+                            |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                        327 |           { __t == __u } -> __boolean_testable;
+                            |           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                        328 |           { __t != __u } -> __boolean_testable;
+                            |           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                        329 |           { __u == __t } -> __boolean_testable;
+                            |           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                        330 |           { __u != __t } -> __boolean_testable;
+                            |           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                        331 |         };
+                            |         ~  
+                    • the required expression '(__t == __u)' is invalid, because
+                      /usr/include/c++/16/concepts:327:17:
+                        327 |           { __t == __u } -> __boolean_testable;
+                            |             ~~~~^~~~~~
+                      • error: comparison between two arrays is not allowed in C++26 [-Warray-compare]
+                      • use unary '+' which decays operands to pointers or '&(__t)[0] == &(__u)[0]' to compare the addresses
+                    • the required expression '(__t != __u)' is invalid, because
+                      /usr/include/c++/16/concepts:328:17:
+                        328 |           { __t != __u } -> __boolean_testable;
+                            |             ~~~~^~~~~~
+                      • error: comparison between two arrays is not allowed in C++26 [-Warray-compare]
+                      • use unary '+' which decays operands to pointers or '&(__t)[0] != &(__u)[0]' to compare the addresses
+                    • the required expression '(__u == __t)' is invalid, because
+                      /usr/include/c++/16/concepts:329:17:
+                        329 |           { __u == __t } -> __boolean_testable;
+                            |             ~~~~^~~~~~
+                      • error: comparison between two arrays is not allowed in C++26 [-Warray-compare]
+                      • use unary '+' which decays operands to pointers or '&(__u)[0] == &(__t)[0]' to compare the addresses
+                    • the required expression '(__u != __t)' is invalid, because
+                      /usr/include/c++/16/concepts:330:17:
+                        330 |           { __u != __t } -> __boolean_testable;
+                            |             ~~~~^~~~~~
+                      • error: comparison between two arrays is not allowed in C++26 [-Warray-compare]
+                      • use unary '+' which decays operands to pointers or '&(__u)[0] != &(__t)[0]' to compare the addresses

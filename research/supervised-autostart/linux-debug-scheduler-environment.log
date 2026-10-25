@@ -1,0 +1,30 @@
+test_foreground_worker_keeps_processing_after_stdin_eof (__main__.SchedulerTests.test_foreground_worker_keeps_processing_after_stdin_eof) ... FAIL
+
+======================================================================
+FAIL: test_foreground_worker_keeps_processing_after_stdin_eof (__main__.SchedulerTests.test_foreground_worker_keeps_processing_after_stdin_eof)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/tmp/codestudio-agent-linux/tests/scheduler_integration.py", line 344, in test_foreground_worker_keeps_processing_after_stdin_eof
+    task, action = self.waiting_task()
+                   ~~~~~~~~~~~~~~~~~^^
+  File "/var/tmp/codestudio-agent-linux/tests/scheduler_integration.py", line 97, in waiting_task
+    result = self.invoke(*self.run_args("--allow-build-proposals", "--max-turns", str(max_turns), api=api), expected=3)
+  File "/var/tmp/codestudio-agent-linux/tests/resume_integration.py", line 129, in invoke
+    self.assertEqual(process.returncode, expected, process.stdout + process.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 3 : {
+  "product": "CodeStudio-Agent",
+  "provider": "openai-compatible/responses",
+  "state_database": "/tmp/codestudio-resume-79xeu22k/workspace with spaces/.codestudio/state.sqlite3",
+  "status": "failed",
+  "summary": "Model provider: HTTP status 500 (response body omitted)",
+  "task_id": "5b13c40e19e7fafc7a5d5184b9a08007",
+  "turns": 2,
+  "verification": "Tool receipts recorded; final answer is not independent acceptance."
+}
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.052s
+
+FAILED (failures=1)

@@ -1,0 +1,23 @@
+--- /mnt/d/Dev/Projects/codestudio-agent/xmake-requires.lock	2026-10-21 08:50:05.001008600 +0800
++++ /var/tmp/codestudio-agent-linux/xmake-requires.lock	2026-10-22 22:59:17.102456793 +0800
+@@ -2,6 +2,20 @@
+     __meta__ = {
+         version = "1.0"
+     },
++    ["linux|x86_64"] = {
++        ["pkgconfig::libcurl#fd44226e"] = {
++            version = "latest"
++        },
++        ["pkgconfig::nlohmann_json#fd44226e"] = {
++            version = "latest"
++        },
++        ["pkgconfig::openssl#fd44226e"] = {
++            version = "latest"
++        },
++        ["pkgconfig::sqlite3#fd44226e"] = {
++            version = "latest"
++        }
++    },
+     ["windows|x64"] = {
+         ["nlohmann_json 3.12.0#f56260b5"] = {
+             repo = {

@@ -1,0 +1,144 @@
+{
+  "date": "2026-10-24",
+  "static_schema_tests": 10,
+  "configurations": {
+    "windows-debug": {
+      "native_groups": 20,
+      "suites": {
+        "autostart": {
+          "cases": 14,
+          "passed": 10,
+          "skipped": 4
+        },
+        "supervisor": {
+          "cases": 13,
+          "passed": 13,
+          "skipped": 0
+        },
+        "scheduler": {
+          "cases": 19,
+          "passed": 18,
+          "skipped": 1
+        },
+        "contract": {
+          "cases": 15,
+          "passed": 15,
+          "skipped": 0
+        },
+        "service": {
+          "cases": 27,
+          "passed": 27,
+          "skipped": 0
+        }
+      },
+      "python_cases": 88,
+      "passed": 83,
+      "skipped": 5
+    },
+    "windows-release": {
+      "native_groups": 20,
+      "suites": {
+        "autostart": {
+          "cases": 14,
+          "passed": 10,
+          "skipped": 4
+        },
+        "supervisor": {
+          "cases": 13,
+          "passed": 13,
+          "skipped": 0
+        },
+        "scheduler": {
+          "cases": 19,
+          "passed": 18,
+          "skipped": 1
+        },
+        "contract": {
+          "cases": 15,
+          "passed": 15,
+          "skipped": 0
+        },
+        "service": {
+          "cases": 27,
+          "passed": 27,
+          "skipped": 0
+        }
+      },
+      "python_cases": 88,
+      "passed": 83,
+      "skipped": 5
+    },
+    "linux-debug": {
+      "native_groups": 20,
+      "suites": {
+        "autostart": {
+          "cases": 14,
+          "passed": 13,
+          "skipped": 1
+        },
+        "supervisor": {
+          "cases": 15,
+          "passed": 15,
+          "skipped": 0
+        },
+        "scheduler": {
+          "cases": 19,
+          "passed": 19,
+          "skipped": 0
+        },
+        "contract": {
+          "cases": 15,
+          "passed": 15,
+          "skipped": 0
+        },
+        "service": {
+          "cases": 27,
+          "passed": 27,
+          "skipped": 0
+        }
+      },
+      "python_cases": 90,
+      "passed": 89,
+      "skipped": 1
+    },
+    "linux-release": {
+      "native_groups": 20,
+      "suites": {
+        "autostart": {
+          "cases": 14,
+          "passed": 13,
+          "skipped": 1
+        },
+        "supervisor": {
+          "cases": 15,
+          "passed": 15,
+          "skipped": 0
+        },
+        "scheduler": {
+          "cases": 19,
+          "passed": 19,
+          "skipped": 0
+        },
+        "contract": {
+          "cases": 15,
+          "passed": 15,
+          "skipped": 0
+        },
+        "service": {
+          "cases": 27,
+          "passed": 27,
+          "skipped": 0
+        }
+      },
+      "python_cases": 90,
+      "passed": 89,
+      "skipped": 1
+    }
+  },
+  "limitations": [
+    "No actual logon, logout or reboot trigger was exercised.",
+    "Windows detached worker success remains blocked by the enclosing Job; expected refusal is checked.",
+    "Registrations use temporary workspaces (Linux also a private XDG_CONFIG_HOME); no permanent enrollment or real model inference."
+  ],
+  "note": "EOF scheduler fixture now approves before worker startup and gates model completion across stdin EOF. Windows Debug reran all scheduler cases; other configurations passed a focused recheck on the same binaries. Repeated cases count once. Initial fixture/environment diagnostics are retained separately."
+}

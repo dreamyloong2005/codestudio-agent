@@ -1,0 +1,68 @@
+[ 10%]: <agent-tests> cache compiling.release tests/core_tests.cpp
+[ 10%]: <agent-tests> cache compiling.release tests/tools_tests.cpp
+[ 10%]: <agent-tests> cache compiling.release tests/process_tests.cpp
+[ 10%]: <agent-tests> cache compiling.release tests/responses_tests.cpp
+[ 10%]: <agent-tests> cache compiling.release tests/messages_tests.cpp
+[ 10%]: <agent-tests> cache compiling.release tests/line_process_tests.cpp
+[ 11%]: <agent-tests> cache compiling.release tests/mcp_tests.cpp
+[ 11%]: <agent-tests> cache compiling.release tests/checkpoint_store_tests.cpp
+[ 12%]: <agent-tests> cache compiling.release tests/resume_kernel_tests.cpp
+[ 13%]: <agent-tests> cache compiling.release tests/scheduler_store_tests.cpp
+[ 16%]: <agent-tests> cache compiling.release tests/cron_store_tests.cpp
+[ 17%]: <agent-tests> cache compiling.release tests/autostart_tests.cpp
+[ 18%]: <agent-tests> cache compiling.release tests/sandbox_tests.cpp
+[ 19%]: <agent-tests> cache compiling.release tests/state_reader_tests.cpp
+[ 20%]: <agent-tests> cache compiling.release tests/build_workspace_tests.cpp
+[ 21%]: <agent-tests> cache compiling.release tests/workspace_execution_tests.cpp
+[ 22%]: <agent-tests> cache compiling.release tests/build_proposal_tests.cpp
+[ 23%]: <agent-tests> cache compiling.release tests/build_decision_tests.cpp
+[ 23%]: <agent-core> cache compiling.release src/core/kernel.cpp
+[ 25%]: <agent-core> cache compiling.release src/core/state_reader.cpp
+[ 26%]: <agent-core> cache compiling.release src/core/store.cpp
+[ 29%]: <agent-core> cache compiling.release src/provider/responses.cpp
+[ 29%]: <agent-core> cache compiling.release src/provider/provider.cpp
+[ 30%]: <agent-core> cache compiling.release src/provider/messages.cpp
+[ 31%]: <agent-core> cache compiling.release src/tools/build_proposal.cpp
+[ 32%]: <agent-core> cache compiling.release src/tools/tools.cpp
+[ 33%]: <agent-core> cache compiling.release src/tools/workspace_build.cpp
+[ 34%]: <agent-core> cache compiling.release src/platform/autostart_options.cpp
+[ 35%]: <agent-core> cache compiling.release src/platform/build_workspace_linux.cpp
+[ 36%]: <agent-core> cache compiling.release src/platform/build_workspace.cpp
+[ 38%]: <agent-core> cache compiling.release src/platform/line_process.cpp
+[ 39%]: <agent-core> cache compiling.release src/platform/process.cpp
+[ 40%]: <agent-core> cache compiling.release src/platform/windows_sandbox.cpp
+[ 41%]: <agent-core> cache compiling.release src/platform/sandbox.cpp
+[ 41%]: <agent-core> cache compiling.release src/platform/autostart.cpp
+[ 42%]: <agent-core> cache compiling.release src/platform/linux_sandbox.cpp
+[ 44%]: <agent-core> cache compiling.release src/platform/process_package.cpp
+[ 46%]: <agent-core> cache compiling.release src/platform/autostart_linux.cpp
+[ 47%]: <agent-core> cache compiling.release src/mcp/mcp.cpp
+[ 47%]: <agent-core> cache compiling.release src/mcp/oauth_native.cpp
+[ 48%]: <agent-core> cache compiling.release src/mcp/http_transport.cpp
+[ 49%]: <agent-core> cache compiling.release src/mcp/oauth_http.cpp
+[ 50%]: <agent-core> cache compiling.release src/mcp/stdio_transport.cpp
+[ 51%]: <agent-core> cache compiling.release src/mcp/oauth.cpp
+[ 52%]: <agent-core> cache compiling.release src/application/scheduler.cpp
+[ 53%]: <agent-core> cache compiling.release src/application/service.cpp
+[ 53%]: <agent-core> cache compiling.release src/application/application.cpp
+[ 54%]: <agent-core> cache compiling.release src/application/build_approval.cpp
+[ 55%]: <agent-core> cache compiling.release src/application/supervisor_diagnostics.cpp
+[ 56%]: <agent-core> cache compiling.release src/application/extension_commands.cpp
+[ 57%]: <agent-core> cache compiling.release src/execution/workspace_execution.cpp
+[ 58%]: <agent-core> cache compiling.release src/execution/build_manifest.cpp
+[ 59%]: <agent-core> cache compiling.release src/plugins/download.cpp
+[ 59%]: <agent-core> cache compiling.release src/plugins/plugins.cpp
+[ 65%]: <plugin-sandbox-fixture> cache compiling.release tests/plugin_sandbox_fixture.cpp
+[ 65%]: <plugin-sandbox-library> cache compiling.release tests/plugin_sandbox_library.cpp
+[ 66%]: <plugin-sandbox-dependency> cache compiling.release tests/plugin_sandbox_dependency.cpp
+[ 67%]: <codestudio-agent> cache compiling.release src/cli/main.cpp
+[ 68%]: <codestudio-agent> cache compiling.release src/cli/credentials_cli.cpp
+[ 69%]: <provider-fixture> cache compiling.release tests/provider_fixture.cpp
+[ 74%]: <plugin-sandbox-dependency> linking.release libplugin-sandbox-dependency.so
+[ 80%]: <plugin-sandbox-library> linking.release libplugin-sandbox-library.so
+[ 84%]: <agent-core> archiving.release libagent-core.a
+[ 85%]: <codestudio-agent> linking.release codestudio-agent
+[ 87%]: <plugin-sandbox-fixture> linking.release plugin-sandbox-fixture
+[ 88%]: <agent-tests> linking.release agent-tests
+[ 93%]: <provider-fixture> linking.release provider-fixture
+[100%]: build ok, spent 59.809s

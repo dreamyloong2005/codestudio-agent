@@ -1,0 +1,10 @@
+debug readonly: Connected; current task-list page contains 0 task(s).
+Service closed.
+debug demo: Connected; current task-list page contains 0 task(s).
+Demo completed; session receipt and committed task verified; actions: 2.
+Service closed.
+release readonly: Connected; current task-list page contains 0 task(s).
+Service closed.
+release demo: Connected; current task-list page contains 0 task(s).
+Demo completed; session receipt and committed task verified; actions: 2.
+Service closed.

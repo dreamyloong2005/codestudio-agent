@@ -1,0 +1,40 @@
+test_enable_readback_idempotency_configuration_conflict_and_remove (__main__.AutostartTests.test_enable_readback_idempotency_configuration_conflict_and_remove) ... FAIL
+test_enable_readback_idempotency_configuration_conflict_and_remove (__main__.AutostartTests.test_enable_readback_idempotency_configuration_conflict_and_remove) ... FAIL
+test_invalid_poll_cannot_register_or_create_workspace_state (__main__.AutostartTests.test_invalid_poll_cannot_register_or_create_workspace_state) ... ok
+test_state_and_workspace_scope_have_distinct_owned_names (__main__.AutostartTests.test_state_and_workspace_scope_have_distinct_owned_names) ... ok
+test_status_and_absent_disable_do_not_create_state_or_launch_work (__main__.AutostartTests.test_status_and_absent_disable_do_not_create_state_or_launch_work) ... ok
+
+======================================================================
+FAIL: test_enable_readback_idempotency_configuration_conflict_and_remove (__main__.AutostartTests.test_enable_readback_idempotency_configuration_conflict_and_remove)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\autostart_integration.py", line 63, in test_enable_readback_idempotency_configuration_conflict_and_remove
+    created = self.invoke("enable", "--poll-ms", "25")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\Projects\codestudio-agent\tests\autostart_integration.py", line 40, in invoke
+    self.assertEqual(result.returncode, expected, result.stdout + result.stderr)
+AssertionError: 2 != 0 : {
+  "error": "Registered autostart task differs from the requested execution contract; inspect its status",
+  "product": "CodeStudio-Agent"
+}
+
+
+======================================================================
+FAIL: test_enable_readback_idempotency_configuration_conflict_and_remove (__main__.AutostartTests.test_enable_readback_idempotency_configuration_conflict_and_remove)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\autostart_integration.py", line 47, in remove_registration
+    removed = self.invoke("disable")
+              ^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\Projects\codestudio-agent\tests\autostart_integration.py", line 40, in invoke
+    self.assertEqual(result.returncode, expected, result.stdout + result.stderr)
+AssertionError: 2 != 0 : {
+  "error": "Autostart registration conflicts with this executable or configuration; no task was changed",
+  "product": "CodeStudio-Agent"
+}
+
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.750s
+
+FAILED (failures=2)

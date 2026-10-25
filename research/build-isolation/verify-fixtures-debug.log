@@ -1,0 +1,5 @@
+PASS real isolated XMake / legacy-v1 / C++26 pack indexing / compile / link / execute / atomic export
+  steps=3, bytes=1024, sha256=e28a64253e75af405d80a7a63174727925578326c7eee63ac724e11f7009ac2a
+PASS real isolated XMake / explicit-v2 / C++26 pack indexing / compile / link / execute / atomic export
+  steps=3, bytes=1024, sha256=dfee0053ee0a8b411cca8e1b58e75cff407944034e1dc4552a15b5b527d1aea4
+PASS 2 real isolated XMake builds: legacy-v1 and explicit-v2

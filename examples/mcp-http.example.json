@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "servers": [
+    {
+      "id": "remote",
+      "transport": "streamable-http",
+      "url": "https://tools.example.com/mcp",
+      "credential": "system:remote-tools",
+      "tools": ["echo"],
+      "timeout_ms": 10000
+    }
+  ]
+}

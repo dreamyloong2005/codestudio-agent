@@ -1,0 +1,8 @@
+test_idle_worker_stop_preserves_delayed_and_approval_waiting_jobs (__main__.SchedulerTests.test_idle_worker_stop_preserves_delayed_and_approval_waiting_jobs) ... ok
+test_foreground_worker_keeps_processing_after_stdin_eof (__main__.SchedulerTests.test_foreground_worker_keeps_processing_after_stdin_eof) ... ok
+test_custom_state_scheduler_lock_is_protected_from_write_file (__main__.SchedulerTests.test_custom_state_scheduler_lock_is_protected_from_write_file) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 1.759s
+
+OK

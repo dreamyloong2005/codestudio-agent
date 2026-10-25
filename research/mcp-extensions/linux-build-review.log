@@ -1,0 +1,9 @@
+[0m[38;5;2;1m[ 54%]:[0m [38;5;5;1m<agent-core>[0m cache compiling.debug src/mcp/mcp.cpp[0m
+[0m[38;5;2;1m[ 58%]:[0m [38;5;5;1m<agent-core>[0m cache compiling.debug src/mcp/oauth.cpp[0m
+[0m[38;5;2;1m[ 60%]:[0m [38;5;5;1m<agent-core>[0m cache compiling.debug src/application/application.cpp[0m
+[0m[38;5;2;1m[ 62%]:[0m [38;5;5;1m<agent-core>[0m cache compiling.debug src/application/extension_commands.cpp[0m
+[0m[38;5;2;1m[ 87%]:[0m [38;5;5;1m<agent-core>[0m [38;5;5;1marchiving.debug libagent-core.a[0m
+[0m[38;5;2;1m[ 88%]:[0m [38;5;5;1m<agent-tests>[0m [38;5;5;1mlinking.debug agent-tests[0m
+[0m[38;5;2;1m[ 88%]:[0m [38;5;5;1m<codestudio-agent>[0m [38;5;5;1mlinking.debug codestudio-agent[0m
+[0m[38;5;2;1m[ 88%]:[0m [38;5;5;1m<provider-fixture>[0m [38;5;5;1mlinking.debug provider-fixture[0m
+[0m[38;5;2;1m[100%]:[0m [38;5;2;1mbuild ok, spent 6.864s[0m

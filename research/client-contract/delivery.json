@@ -1,0 +1,49 @@
+{
+  "date": "2026-10-24",
+  "source_tests_and_schema_match_tested_mirror": true,
+  "linux_release": {
+    "path": "build/linux/x86_64/release/codestudio-agent",
+    "bytes": 2552272,
+    "sha256": "0c785f83194149344be06daecbac17f8621531c9ecb4764d6855e304365fe237"
+  },
+  "windows_release": {
+    "path": "build/windows/x64/release/codestudio-agent.exe",
+    "sha256": "83107a3a822d5f30520acfff9c07ad168858feb46ed447e588cdbb6bb79ea98b"
+  },
+  "archive": {
+    "path": "build/linux/x86_64/release/codestudio-agent-linux-x86_64.tar.gz",
+    "bytes": 1120703,
+    "sha256": "9de73032cc78175b0bc09f465ba92569c33c80e6b9bb5a8781237f2813002312"
+  },
+  "schema_sha256": "c97b96cdd2693fef3dab8dd63f0cfa0dfc6e2900a8a41901e33aea30da57e6c5",
+  "archive_checksums_verified": true,
+  "delivered_initialization": {
+    "capabilities": {
+      "approval_continuation": true,
+      "automatic_resume": true,
+      "background_scheduler": true,
+      "build_proposals": true,
+      "cron": true,
+      "event_replay": true,
+      "login_autostart": true,
+      "operation_lookup": true,
+      "structured_errors": true,
+      "task_operations": true,
+      "text_deltas": true
+    },
+    "limits": {
+      "active_operations": 1,
+      "input_bytes": 1048576,
+      "operation_history": 64,
+      "operation_result_bytes": 262144,
+      "output_bytes": 4194304,
+      "page_items": 100
+    },
+    "product": "CodeStudio-Agent",
+    "protocol_version": 2,
+    "session_id": "5812243b9490f5fd58f093ae52005039",
+    "state_database": "/tmp/codestudio-delivery-check-hnfwwzkz/.codestudio/state.sqlite3",
+    "version": "0.1.0",
+    "workspace": "/tmp/codestudio-delivery-check-hnfwwzkz"
+  }
+}

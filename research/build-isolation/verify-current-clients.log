@@ -1,0 +1,16 @@
+debug example read-only: PASS
+Connected; current task-list page contains 0 task(s).
+Service closed.
+debug example demo: PASS
+Connected; current task-list page contains 0 task(s).
+Demo completed; committed task.finished received; actions: 2.
+Service closed.
+debug doctor: protocol 2, build manifest [2]
+release example read-only: PASS
+Connected; current task-list page contains 0 task(s).
+Service closed.
+release example demo: PASS
+Connected; current task-list page contains 0 task(s).
+Demo completed; committed task.finished received; actions: 2.
+Service closed.
+release doctor: protocol 2, build manifest [2]

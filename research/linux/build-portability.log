@@ -1,0 +1,29 @@
+[0m[38;5;2;1m[ 46%]:[0m [38;5;5;1m<agent-core>[0m cache compiling.debug src/platform/build_workspace_linux.cpp[0m
+[0m[38;5;2;1m[ 52%]:[0m [38;5;5;1m<agent-core>[0m cache compiling.debug src/platform/autostart.cpp[0m
+[0m[38;5;2;1m[ 52%]:[0m [38;5;5;1m<agent-core>[0m cache compiling.debug src/platform/scheduler_process.cpp[0m
+[0m[38;5;2;1m[ 52%]:[0m [38;5;5;1m<agent-core>[0m cache compiling.debug src/platform/autostart_linux.cpp[0m
+[0m[38;5;2;1m[ 56%]:[0m [38;5;5;1m<agent-core>[0m cache compiling.debug src/application/application.cpp[0m
+[0m[38;5;2;1m[ 66%]:[0m [38;5;5;1m<provider-fixture>[0m cache compiling.debug tests/provider_fixture.cpp[0m
+[0m[38;5;2;1m[ 68%]:[0m [38;5;5;1m<process-fixture>[0m [38;5;5;1mlinking.debug process-fixture[0m
+[0m[38;5;2;1m[ 69%]:[0m [38;5;5;1m<line-process-fixture>[0m [38;5;5;1mlinking.debug line-process-fixture[0m
+[0m[38;5;2;1m[ 70%]:[0m [38;5;5;1m<mcp-fixture>[0m [38;5;5;1mlinking.debug mcp-fixture[0m
+[0m[38;5;2;1m[ 71%]:[0m [38;5;5;1m<sandbox-fixture>[0m [38;5;5;1mlinking.debug sandbox-fixture[0m
+[0m[38;5;2;1m[ 72%]:[0m [38;5;5;1m<build-fixture>[0m [38;5;5;1mlinking.debug build-fixture[0m
+[0m[1;38;5;1;1merror: [0msrc/platform/autostart_linux.cpp:250:24: error: no match for 'operator!=' (operand types are 'const std::string' {aka 'const std::__cxx11::basic_string<char>'} and 'const nlohmann::json_abi_v3_12_0::basic_json<>::value_type' {aka 'const nlohmann::json_abi_v3_12_0::basic_json<>'})
+  250 |     if (verify.contents!=expected.at("unit_text") || !read_link(wants.get(),name).owned)
+      |         ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                |                    |
+      |                |                    const nlohmann::json_abi_v3_12_0::basic_json<>::value_type {aka const nlohmann::json_abi_v3_12_0::basic_json<>}
+      |                const std::string {aka const std::__cxx11::basic_string<char>}
+  • there are 50 candidates
+    src/platform/autostart_linux.cpp:250:24:
+      250 |     if (verify.contents!=expected.at("unit_text") || !read_link(wants.get(),name).owned)
+          |         ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from include/codestudio/types.hpp:3,
+                 from include/codestudio/autostart.hpp:3,
+                 from src/platform/autostart_linux.hpp:2,
+                 from src/platform/autostart_linux.cpp:1:
+    • candidate 1: 'template<class ScalarType>  requires  is_scalar_v<ScalarType> bool nlohmann::json_abi_v3_12_0::basic_json<ObjectType, ArrayType, StringType, BooleanType, NumberIntegerType, NumberUnsignedType, NumberFloatType, AllocatorType, JSONSerializer, BinaryType, CustomBaseClass>::operator==(ScalarType) const [with ObjectType = std::map; ArrayType = std::vector; StringType = std::__cxx11::basic_string<char>; BooleanType = bool; NumberIntegerType = long int; NumberUnsignedType = long unsigned int; NumberFloatType = double; AllocatorType = std::allocator; JSONSerializer = nlohmann::json_abi_v3_12_0::adl_serializer; BinaryType = std::vector<unsigned char>; CustomBaseClass = void]' (reversed)
+      /usr/include/nlohmann/json.hpp:3727:10:
+       3727 |     bool operator==(ScalarType rhs) const noexcept
+  [38;5;3m> in [1msrc/platform/autostart_linux.cpp[0m

@@ -1,0 +1,55 @@
+{
+  "date": "2026-10-24",
+  "static_schema_tests": 9,
+  "configurations": {
+    "windows-debug": {
+      "native_groups": 20,
+      "supervisor": 13,
+      "scheduler": 19,
+      "cron": 12,
+      "resume": 18,
+      "contract": 14,
+      "service": 26,
+      "python_cases": 102,
+      "skipped": 1,
+      "passed": 101
+    },
+    "windows-release": {
+      "native_groups": 20,
+      "supervisor": 13,
+      "scheduler": 19,
+      "cron": 12,
+      "resume": 18,
+      "contract": 14,
+      "service": 26,
+      "python_cases": 102,
+      "skipped": 1,
+      "passed": 101
+    },
+    "linux-debug": {
+      "native_groups": 20,
+      "supervisor": 15,
+      "scheduler": 19,
+      "cron": 12,
+      "resume": 18,
+      "contract": 14,
+      "service": 26,
+      "python_cases": 104,
+      "skipped": 0,
+      "passed": 104
+    },
+    "linux-release": {
+      "native_groups": 20,
+      "supervisor": 15,
+      "scheduler": 19,
+      "cron": 12,
+      "resume": 18,
+      "contract": 14,
+      "service": 26,
+      "python_cases": 104,
+      "skipped": 0,
+      "passed": 104
+    }
+  },
+  "note": "Final count-only refinement rebuilt all four configurations; native, supervision, contract and service rechecked. Scheduler, cron and resume retain preceding passed runs; repeated cases are counted once."
+}

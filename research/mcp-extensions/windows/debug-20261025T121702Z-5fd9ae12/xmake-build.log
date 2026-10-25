@@ -1,0 +1,7 @@
+[ 55%]: <agent-core> cache compiling.debug src\mcp\mcp.cpp
+[ 59%]: <agent-core> cache compiling.debug src\application\application.cpp
+[ 87%]: <agent-core> archiving.debug agent-core.lib
+[ 88%]: <agent-tests> linking.debug agent-tests.exe
+[ 88%]: <codestudio-agent> linking.debug codestudio-agent.exe
+[ 88%]: <provider-fixture> linking.debug provider-fixture.exe
+[100%]: build ok, spent 3.953s

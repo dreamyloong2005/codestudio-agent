@@ -1,0 +1,111 @@
+{
+  "format": 2,
+  "product": "CodeStudio-Agent",
+  "platform": "linux",
+  "arch": "x86_64",
+  "mode": "release",
+  "started_at": "2026-10-25T11:10:48.479568+00:00",
+  "status": "succeeded",
+  "selected_suites": [
+    "delivery"
+  ],
+  "omitted_suites": [
+    "native",
+    "schema",
+    "provider",
+    "streaming",
+    "contract",
+    "service",
+    "credentials",
+    "cli",
+    "local_models",
+    "mcp",
+    "mcp_http",
+    "resume",
+    "sandbox",
+    "scheduler",
+    "supervisor",
+    "cron",
+    "autostart",
+    "real_build",
+    "package",
+    "verification"
+  ],
+  "build_requested": false,
+  "steps": [
+    {
+      "name": "delivery",
+      "command": [
+        "/var/tmp/codestudio-agent-linux/build/contract-python/bin/python",
+        "tests/delivery_integration.py",
+        "/var/tmp/codestudio-agent-linux/build/linux/x86_64/release/codestudio-agent",
+        "--package",
+        "/var/tmp/codestudio-agent-linux/build/codestudio-delivery-archive-pn79xzdh"
+      ],
+      "log": "delivery.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 3.68,
+      "cases": 24,
+      "skipped": 0,
+      "passed": 24
+    }
+  ],
+  "source": {
+    "sha256": "d59e0667478975228514afb84ceb9c5a8a0ffedf39ce03037b1986f32774af33",
+    "files": 165
+  },
+  "toolchain": {
+    "python": "3.14.6",
+    "requirements": {
+      "format": 2,
+      "python_minimum": "3.11.0",
+      "xmake_minimum": "3.0.5",
+      "jsonschema": "4.23.0",
+      "windows": {
+        "arch": "x64",
+        "toolchain": "clang-cl",
+        "compiler_minimum": "22.0.0",
+        "requirements": [
+          "Visual Studio 2022 C++ build tools and Windows SDK",
+          "LLVM clang-cl 22 or newer"
+        ]
+      },
+      "linux": {
+        "arch": "x86_64",
+        "toolchain": "gcc",
+        "compiler_minimum": "16.0.0",
+        "pkg_config_minimum": {
+          "nlohmann_json": "3.12.0",
+          "sqlite3": "3.50.4",
+          "libcurl": "8.15.0",
+          "openssl": "3.0.0",
+          "libsecret-1": "0.21.0"
+        },
+        "requirements": [
+          "bubblewrap at /usr/bin/bwrap",
+          "tzdata",
+          "cgroup v2 delegation with cpu/memory/pids",
+          "user namespaces and seccomp"
+        ]
+      }
+    },
+    "isolation_delegation": "provided"
+  },
+  "tested_artifacts": {
+    "codestudio-agent": "90ea6b8a46b8eb702a3ec89f5360ef2f303485bb33041603b2203b157a5b3ea5",
+    "agent-tests": "4c58ae47ec24d47ac87e7b900e28036386061f567e1efdd131b1d4d9b391cb4e",
+    "provider-fixture": "e1479f80c96c849d6dbb6c71aefef95a6a6313760138c3c4f716973cdf342d0f",
+    "process-fixture": "e85b42302dd91e44de6fc323bb4f71f65b1c9ef1ee4c22023e6853eb4a42c7ce",
+    "line-process-fixture": "7886f923737f2dc47fb563260c94ee8852b66aab337a29aba97bbf3b889a9391",
+    "mcp-fixture": "a27de5411cb042ae7ab66531c56c94f7246e5082e8f5297ced74539999dabe58",
+    "sandbox-fixture": "1ecdee953818803a1cac02fd43d3fbce97f078ed3e8711a794e3d1944278d2b6",
+    "build-fixture": "488c84a6ecfd590c85eb9951fd3f85dc5d7d4d5d9e0f7e943f5a1aa0cd707d90"
+  },
+  "artifact": {
+    "path": "build/linux/x86_64/release/codestudio-agent",
+    "size": 2901224,
+    "sha256": "90ea6b8a46b8eb702a3ec89f5360ef2f303485bb33041603b2203b157a5b3ea5"
+  },
+  "finished_at": "2026-10-25T11:10:52.232977+00:00"
+}

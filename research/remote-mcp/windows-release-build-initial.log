@@ -1,0 +1,11 @@
+[0m[32;1m[ 10%]:[0m [36;1m<agent-tests>[0m cache compiling.release tests\mcp_tests.cpp[0m
+[0m[32;1m[ 52%]:[0m [36;1m<agent-core>[0m cache compiling.release src\mcp\http_transport.cpp[0m
+[0m[32;1m[ 53%]:[0m [36;1m<agent-core>[0m cache compiling.release src\mcp\mcp.cpp[0m
+[0m[32;1m[ 54%]:[0m [36;1m<agent-core>[0m cache compiling.release src\mcp\stdio_transport.cpp[0m
+[0m[32;1m[ 55%]:[0m [36;1m<agent-core>[0m cache compiling.release src\application\application.cpp[0m
+[0m[32;1m[ 58%]:[0m [36;1m<agent-core>[0m cache compiling.release src\application\service.cpp[0m
+[0m[32;1m[ 86%]:[0m [36;1m<agent-core>[0m [36;1marchiving.release agent-core.lib[0m
+[0m[32;1m[ 87%]:[0m [36;1m<agent-tests>[0m [36;1mlinking.release agent-tests.exe[0m
+[0m[32;1m[ 87%]:[0m [36;1m<codestudio-agent>[0m [36;1mlinking.release codestudio-agent.exe[0m
+[0m[32;1m[ 87%]:[0m [36;1m<provider-fixture>[0m [36;1mlinking.release provider-fixture.exe[0m
+[0m[32;1m[100%]:[0m [32;1mbuild ok, spent 6.515s[0m

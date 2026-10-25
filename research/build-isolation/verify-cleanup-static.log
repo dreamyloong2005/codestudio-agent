@@ -1,0 +1,5 @@
+debug: 16 C++ groups, 149 Python cases, 2 real isolated builds passed
+release: 16 C++ groups, 149 Python cases, 2 real isolated builds passed
+Documentation: 14 files, 13 JSON objects and 55 local links passed
+Workspace scan: 430 files; no SQLite database, sidecar, runner lock or obsolete plugin artifact remains
+Current product sources/configuration contain v1 only in external API URL paths

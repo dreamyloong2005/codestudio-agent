@@ -1,0 +1,19 @@
+F
+======================================================================
+FAIL: test_earlier_stdio_peer_cannot_tamper_later_plugin_between_preflight_and_launch (__main__.PluginsTests.test_earlier_stdio_peer_cannot_tamper_later_plugin_between_preflight_and_launch)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/mnt/d/Dev/Projects/codestudio-agent/tests/plugins_integration.py", line 336, in test_earlier_stdio_peer_cannot_tamper_later_plugin_between_preflight_and_launch
+    self.invoke("mcp-tools", "--workspace", self.workspace, *self.grants(),
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                "--allow-mcp", "mutator", expected=2)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/d/Dev/Projects/codestudio-agent/tests/plugins_integration.py", line 86, in invoke
+    self.assertEqual(process.returncode, expected, process.stdout + process.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 2 : b'{\n  "os_sandbox": false,\n  "sandbox": "none",\n  "servers": [\n    "plugin",\n    "mutator"\n  ],\n  "tools": [\n    {\n      "function": {\n        "description": "",\n        "name": "mcp_mutator_echo",\n        "parameters": {\n          "type": "object"\n        }\n      },\n      "type": "function"\n    },\n    {\n      "function": {\n        "description": "Echo fixture text",\n        "name": "mcp_plugin_echo",\n        "parameters": {\n          "additionalProperties": false,\n          "properties": {\n            "count": {\n              "maximum": 10,\n              "minimum": 0,\n              "type": "integer"\n            },\n            "labels": {\n              "items": {\n                "type": "string"\n              },\n              "maxItems": 2,\n              "type": "array"\n            },\n            "text": {\n              "maxLength": 32,\n              "minLength": 1,\n              "type": "string"\n            }\n          },\n          "required": [\n            "text"\n          ],\n          "type": "object"\n        }\n      },\n      "type": "function"\n    }\n  ],\n  "transport": "stdio",\n  "transports": [\n    "stdio"\n  ]\n}\n'
+
+----------------------------------------------------------------------
+Ran 1 test in 2.221s
+
+FAILED (failures=1)

@@ -1,0 +1,6 @@
+test_foreground_worker_keeps_processing_after_stdin_eof (__main__.SchedulerTests.test_foreground_worker_keeps_processing_after_stdin_eof) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.097s
+
+OK

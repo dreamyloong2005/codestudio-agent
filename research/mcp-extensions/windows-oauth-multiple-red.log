@@ -1,0 +1,19 @@
+F
+======================================================================
+FAIL: test_later_oauth_binding_failure_prevents_earlier_token_refresh (__main__.McpOAuthTests.test_later_oauth_binding_failure_prevents_earlier_token_refresh)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\mcp_oauth_integration.py", line 625, in test_later_oauth_binding_failure_prevents_earlier_token_refresh
+    self.assertEqual(self.remote.records(), before)
+AssertionError: Lists differ: [{'ve[1271 chars].812}, {'verb': 'POST', 'path': '/token', 'hea[441 chars]875}] != [{'ve[1271 chars].812}]
+
+First list contains 1 additional elements.
+First extra element 4:
+{'verb': 'POST', 'path': '/token', 'headers': {'connection': 'Keep-Alive', 'content-type': 'application/x-www-form-urlencoded', 'accept': 'application/json', 'user-agent': 'CodeStudio-Agent-OAuth/0.1', 'content-length': '172', 'host': '127.0.0.1:3497'}, 'body': {'grant_type': ['refresh_token'], 'refresh_token': ['oauth-refresh-6541ef084904486ea803578484cc4737'], 'client_id': ['fixture-client'], 'resource': ['http://127.0.0.1:3497/mcp'], 'scope': ['tools.read']}, 'at': 381591.875}
+
+Diff is 2284 characters long. Set self.maxDiff to None to see it.
+
+----------------------------------------------------------------------
+Ran 1 test in 0.432s
+
+FAILED (failures=1)

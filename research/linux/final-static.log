@@ -1,0 +1,64 @@
+{
+  "checked_date": "2026-10-23 Asia/Shanghai",
+  "test_logs": {
+    "verify-linux-debug-final.log": {
+      "main_native_groups": 20,
+      "main_python_tests": 167,
+      "unprivileged_native_groups": 20,
+      "unprivileged_real_build_tests": 1,
+      "skips": 0,
+      "failures": 0
+    },
+    "verify-linux-release-final.log": {
+      "main_native_groups": 20,
+      "main_python_tests": 167,
+      "unprivileged_native_groups": 20,
+      "unprivileged_real_build_tests": 1,
+      "skips": 0,
+      "failures": 0
+    },
+    "windows-debug-regression.log": {
+      "native_groups": 20,
+      "python_passes": 199,
+      "python_skips": 4,
+      "real_isolated_xmake_builds": 2,
+      "failures": 0
+    },
+    "windows-release-regression.log": {
+      "native_groups": 20,
+      "python_passes": 199,
+      "python_skips": 4,
+      "real_isolated_xmake_builds": 2,
+      "failures": 0
+    }
+  },
+  "document_relative_links_checked": 93,
+  "missing_document_targets": [],
+  "linux": {
+    "python_ast_files": 19,
+    "workspace_regular_files_scanned": 574,
+    "workspace_databases": [],
+    "linux_project_processes": [],
+    "linux_temporary_cgroups": [],
+    "linux_private_staging": [],
+    "linux_real_autostart_entries": []
+  },
+  "windows": {
+    "WindowsProjectProcesses": [],
+    "WindowsCodeStudioRegistrations": [],
+    "WindowsConfiguration": "windows/x64 release clang-cl system_deps=false",
+    "WindowsArtifacts": [
+      {
+        "FullName": "D:\\Dev\\Projects\\codestudio-agent\\build\\windows\\x64\\debug\\codestudio-agent.exe",
+        "Length": 5816832
+      },
+      {
+        "FullName": "D:\\Dev\\Projects\\codestudio-agent\\build\\windows\\x64\\release\\codestudio-agent.exe",
+        "Length": 4206080
+      }
+    ]
+  },
+  "fixture_processes": [],
+  "delivered_help_exit": 0,
+  "delivery_receipt": "research/linux/delivery.json"
+}

@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "servers": [
+    {
+      "id": "echo",
+      "command": "C:/Path/To/python.exe",
+      "args": ["D:/Path/To/CodeStudio-Agent/examples/mcp_echo.py"],
+      "tools": ["echo"],
+      "timeout_ms": 10000
+    }
+  ]
+}

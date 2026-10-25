@@ -1,0 +1,4 @@
+[0m[38;5;2;1m[ 25%]:[0m [38;5;5;1m<agent-tests>[0m cache compiling.debug tests/sandbox_tests.cpp[0m
+[0m[38;5;2;1m[ 92%]:[0m [38;5;5;1m<agent-tests>[0m [38;5;5;1mlinking.debug agent-tests[0m
+[0m[38;5;2;1m[100%]:[0m [38;5;2;1mbuild ok, spent 4.235s[0m
+FAIL: sandbox test: isolated process must work with host stdio closed: execve: Bad file descriptor

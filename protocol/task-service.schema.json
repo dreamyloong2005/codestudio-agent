@@ -1,0 +1,5323 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:codestudio-agent:task-service:2",
+  "title": "CodeStudio-Agent stdio task service protocol 2",
+  "description": "UTF-8 JSON lines. Strict request parameters and extensible result records. x-maxBytes is a UTF-8 byte bound, unlike maxLength. Method results require request/response correlation. See protocol/README.md.",
+  "$comment": "Runtime permissions, state/binding, paths, cron syntax/timezone and cross-field budgets remain authoritative. This schema does not imply safe retries or durable operation lookup.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/request"
+    },
+    {
+      "$ref": "#/$defs/successResponse"
+    },
+    {
+      "$ref": "#/$defs/errorResponse"
+    },
+    {
+      "$ref": "#/$defs/notification"
+    }
+  ],
+  "x-protocol-version": 2,
+  "x-methods": {
+    "initialize": {
+      "params": {
+        "$ref": "#/$defs/initializeParams"
+      },
+      "result": {
+        "$ref": "#/$defs/initializeResult"
+      },
+      "execution": "control",
+      "retry": "never"
+    },
+    "tasks/list": {
+      "params": {
+        "$ref": "#/$defs/paginationParams"
+      },
+      "result": {
+        "$ref": "#/$defs/taskPage"
+      },
+      "execution": "query",
+      "retry": "query_only"
+    },
+    "tasks/get": {
+      "params": {
+        "$ref": "#/$defs/taskIdParams"
+      },
+      "result": {
+        "$ref": "#/$defs/taskDetail"
+      },
+      "execution": "query",
+      "retry": "query_only"
+    },
+    "tasks/start": {
+      "params": {
+        "$ref": "#/$defs/taskStartParams"
+      },
+      "result": {
+        "$ref": "#/$defs/operationAccepted"
+      },
+      "execution": "operation",
+      "retry": "never",
+      "completion_result": {
+        "$ref": "#/$defs/taskRunResult"
+      }
+    },
+    "tasks/resume": {
+      "params": {
+        "$ref": "#/$defs/taskResumeParams"
+      },
+      "result": {
+        "$ref": "#/$defs/operationAccepted"
+      },
+      "execution": "operation",
+      "retry": "never",
+      "completion_result": {
+        "$ref": "#/$defs/taskRunResult"
+      }
+    },
+    "tasks/recover": {
+      "params": {
+        "$ref": "#/$defs/emptyParams"
+      },
+      "result": {
+        "$ref": "#/$defs/recoverResult"
+      },
+      "execution": "control",
+      "retry": "never"
+    },
+    "builds/review": {
+      "params": {
+        "$ref": "#/$defs/buildReviewParams"
+      },
+      "result": {
+        "$ref": "#/$defs/buildReviewResult"
+      },
+      "execution": "query",
+      "retry": "query_only"
+    },
+    "builds/approve": {
+      "params": {
+        "$ref": "#/$defs/buildDecisionParams"
+      },
+      "result": {
+        "$ref": "#/$defs/operationAccepted"
+      },
+      "execution": "operation",
+      "retry": "never",
+      "completion_result": {
+        "$ref": "#/$defs/buildDecisionResult"
+      }
+    },
+    "builds/reject": {
+      "params": {
+        "$ref": "#/$defs/buildDecisionParams"
+      },
+      "result": {
+        "$ref": "#/$defs/operationAccepted"
+      },
+      "execution": "operation",
+      "retry": "never",
+      "completion_result": {
+        "$ref": "#/$defs/buildDecisionResult"
+      }
+    },
+    "events/list": {
+      "params": {
+        "$ref": "#/$defs/eventsListParams"
+      },
+      "result": {
+        "$ref": "#/$defs/eventPage"
+      },
+      "execution": "query",
+      "retry": "query_only"
+    },
+    "events/subscribe": {
+      "params": {
+        "$ref": "#/$defs/subscribeParams"
+      },
+      "result": {
+        "$ref": "#/$defs/subscribeResult"
+      },
+      "execution": "control",
+      "retry": "never"
+    },
+    "events/unsubscribe": {
+      "params": {
+        "$ref": "#/$defs/emptyParams"
+      },
+      "result": {
+        "$ref": "#/$defs/unsubscribeResult"
+      },
+      "execution": "control",
+      "retry": "never"
+    },
+    "operations/status": {
+      "params": {
+        "$ref": "#/$defs/emptyParams"
+      },
+      "result": {
+        "$ref": "#/$defs/operationStatus"
+      },
+      "execution": "query",
+      "retry": "query_only"
+    },
+    "operations/get": {
+      "params": {
+        "$ref": "#/$defs/operationGetParams"
+      },
+      "result": {
+        "$ref": "#/$defs/operationSnapshot"
+      },
+      "execution": "query",
+      "retry": "query_only"
+    },
+    "operations/cancel": {
+      "params": {
+        "$ref": "#/$defs/operationCancelParams"
+      },
+      "result": {
+        "$ref": "#/$defs/operationCancelled"
+      },
+      "execution": "control",
+      "retry": "never"
+    },
+    "schedules/list": {
+      "params": {
+        "$ref": "#/$defs/paginationParams"
+      },
+      "result": {
+        "$ref": "#/$defs/schedulePage"
+      },
+      "execution": "query",
+      "retry": "query_only"
+    },
+    "schedules/get": {
+      "params": {
+        "$ref": "#/$defs/scheduleIdParams"
+      },
+      "result": {
+        "$ref": "#/$defs/scheduledJob"
+      },
+      "execution": "query",
+      "retry": "query_only"
+    },
+    "schedules/create": {
+      "params": {
+        "$ref": "#/$defs/scheduleCreateParams"
+      },
+      "result": {
+        "$ref": "#/$defs/scheduledJob"
+      },
+      "execution": "control",
+      "retry": "never"
+    },
+    "schedules/cancel": {
+      "params": {
+        "$ref": "#/$defs/scheduleIdParams"
+      },
+      "result": {
+        "$ref": "#/$defs/scheduledJob"
+      },
+      "execution": "control",
+      "retry": "never"
+    },
+    "scheduler/status": {
+      "params": {
+        "$ref": "#/$defs/emptyParams"
+      },
+      "result": {
+        "$ref": "#/$defs/schedulerDiagnostics"
+      },
+      "execution": "query",
+      "retry": "query_only"
+    },
+    "scheduler/start": {
+      "params": {
+        "$ref": "#/$defs/schedulerLaunchParams"
+      },
+      "result": {
+        "$ref": "#/$defs/schedulerStarted"
+      },
+      "execution": "control",
+      "retry": "never"
+    },
+    "scheduler/stop": {
+      "params": {
+        "$ref": "#/$defs/emptyParams"
+      },
+      "result": {
+        "$ref": "#/$defs/schedulerStopped"
+      },
+      "execution": "control",
+      "retry": "never"
+    },
+    "crons/list": {
+      "params": {
+        "$ref": "#/$defs/paginationParams"
+      },
+      "result": {
+        "$ref": "#/$defs/cronPage"
+      },
+      "execution": "query",
+      "retry": "query_only"
+    },
+    "crons/get": {
+      "params": {
+        "$ref": "#/$defs/cronIdParams"
+      },
+      "result": {
+        "$ref": "#/$defs/cron"
+      },
+      "execution": "query",
+      "retry": "query_only"
+    },
+    "crons/create": {
+      "params": {
+        "$ref": "#/$defs/cronCreateParams"
+      },
+      "result": {
+        "$ref": "#/$defs/operationAccepted"
+      },
+      "execution": "operation",
+      "retry": "never",
+      "completion_result": {
+        "$ref": "#/$defs/cron"
+      }
+    },
+    "crons/preview": {
+      "params": {
+        "$ref": "#/$defs/cronPreviewParams"
+      },
+      "result": {
+        "$ref": "#/$defs/cronPreviewResult"
+      },
+      "execution": "query",
+      "retry": "query_only"
+    },
+    "crons/pause": {
+      "params": {
+        "$ref": "#/$defs/cronIdParams"
+      },
+      "result": {
+        "$ref": "#/$defs/cron"
+      },
+      "execution": "control",
+      "retry": "never"
+    },
+    "crons/resume": {
+      "params": {
+        "$ref": "#/$defs/cronIdParams"
+      },
+      "result": {
+        "$ref": "#/$defs/cron"
+      },
+      "execution": "control",
+      "retry": "never"
+    },
+    "crons/cancel": {
+      "params": {
+        "$ref": "#/$defs/cronIdParams"
+      },
+      "result": {
+        "$ref": "#/$defs/cron"
+      },
+      "execution": "control",
+      "retry": "never"
+    },
+    "scheduler/autostart/status": {
+      "params": {
+        "$ref": "#/$defs/emptyParams"
+      },
+      "result": {
+        "$ref": "#/$defs/autostartResult"
+      },
+      "execution": "query",
+      "retry": "query_only"
+    },
+    "scheduler/autostart/enable": {
+      "params": {
+        "$ref": "#/$defs/schedulerLaunchParams"
+      },
+      "result": {
+        "$ref": "#/$defs/autostartResult"
+      },
+      "execution": "control",
+      "retry": "never"
+    },
+    "scheduler/autostart/disable": {
+      "params": {
+        "$ref": "#/$defs/emptyParams"
+      },
+      "result": {
+        "$ref": "#/$defs/autostartResult"
+      },
+      "execution": "control",
+      "retry": "never"
+    },
+    "shutdown": {
+      "params": {
+        "$ref": "#/$defs/emptyParams"
+      },
+      "result": {
+        "$ref": "#/$defs/shutdownResult"
+      },
+      "execution": "control",
+      "retry": "never"
+    },
+    "scheduler/supervisor/status": {
+      "params": {
+        "$ref": "#/$defs/emptyParams"
+      },
+      "result": {
+        "$ref": "#/$defs/supervisorStatus"
+      },
+      "execution": "query",
+      "retry": "query_only"
+    },
+    "scheduler/supervisor/events": {
+      "params": {
+        "$ref": "#/$defs/eventsListParams"
+      },
+      "result": {
+        "$ref": "#/$defs/supervisorEvents"
+      },
+      "execution": "query",
+      "retry": "query_only"
+    },
+    "mcp/auth/discover": {
+      "params": {
+        "$ref": "#/$defs/mcpAuthParams"
+      },
+      "result": {
+        "$ref": "#/$defs/operationAccepted"
+      },
+      "execution": "operation",
+      "retry": "never",
+      "completion_result": {
+        "$ref": "#/$defs/extensionResult"
+      }
+    },
+    "mcp/auth/status": {
+      "params": {
+        "$ref": "#/$defs/mcpAuthParams"
+      },
+      "result": {
+        "$ref": "#/$defs/operationAccepted"
+      },
+      "execution": "operation",
+      "retry": "never",
+      "completion_result": {
+        "$ref": "#/$defs/extensionResult"
+      }
+    },
+    "mcp/auth/login": {
+      "params": {
+        "$ref": "#/$defs/mcpAuthLoginParams"
+      },
+      "result": {
+        "$ref": "#/$defs/operationAccepted"
+      },
+      "execution": "operation",
+      "retry": "never",
+      "completion_result": {
+        "$ref": "#/$defs/extensionResult"
+      }
+    },
+    "mcp/auth/logout": {
+      "params": {
+        "$ref": "#/$defs/mcpAuthParams"
+      },
+      "result": {
+        "$ref": "#/$defs/operationAccepted"
+      },
+      "execution": "operation",
+      "retry": "never",
+      "completion_result": {
+        "$ref": "#/$defs/extensionResult"
+      }
+    },
+    "plugins/pack": {
+      "params": {
+        "$ref": "#/$defs/pluginPackParams"
+      },
+      "result": {
+        "$ref": "#/$defs/operationAccepted"
+      },
+      "execution": "operation",
+      "retry": "never",
+      "completion_result": {
+        "$ref": "#/$defs/extensionResult"
+      }
+    },
+    "plugins/install": {
+      "params": {
+        "$ref": "#/$defs/pluginInstallParams"
+      },
+      "result": {
+        "$ref": "#/$defs/operationAccepted"
+      },
+      "execution": "operation",
+      "retry": "never",
+      "completion_result": {
+        "$ref": "#/$defs/extensionResult"
+      }
+    },
+    "plugins/lock": {
+      "params": {
+        "$ref": "#/$defs/pluginLockParams"
+      },
+      "result": {
+        "$ref": "#/$defs/operationAccepted"
+      },
+      "execution": "operation",
+      "retry": "never",
+      "completion_result": {
+        "$ref": "#/$defs/extensionResult"
+      }
+    },
+    "plugins/inspect": {
+      "params": {
+        "$ref": "#/$defs/pluginInspectParams"
+      },
+      "result": {
+        "$ref": "#/$defs/operationAccepted"
+      },
+      "execution": "operation",
+      "retry": "never",
+      "completion_result": {
+        "$ref": "#/$defs/extensionResult"
+      }
+    }
+  },
+  "x-notifications": {
+    "operation/text": {
+      "$ref": "#/$defs/operationText"
+    },
+    "operation/finished": {
+      "$ref": "#/$defs/operationFinished"
+    },
+    "events/batch": {
+      "$ref": "#/$defs/eventPage"
+    },
+    "events/error": {
+      "$ref": "#/$defs/eventsError"
+    },
+    "operation/authorization": {
+      "$ref": "#/$defs/operationAuthorization"
+    }
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "x-maxBytes": 128,
+      "pattern": "^[^\\u0000]*$"
+    },
+    "storedIdentifier": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "x-maxBytes": 256,
+      "pattern": "^[^\\u0000]*$"
+    },
+    "requestId": {
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "x-maxBytes": 128
+        },
+        {
+          "type": "integer",
+          "minimum": -9223372036854775808,
+          "maximum": 9223372036854775807
+        }
+      ]
+    },
+    "emptyParams": {
+      "type": "object",
+      "properties": {},
+      "required": [],
+      "additionalProperties": false
+    },
+    "paginationParams": {
+      "type": "object",
+      "properties": {
+        "before": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    },
+    "eventsListParams": {
+      "type": "object",
+      "properties": {
+        "after": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    },
+    "credentialReference": {
+      "type": "string",
+      "maxLength": 135,
+      "pattern": "^(env:[A-Za-z_][A-Za-z0-9_]{0,127}|system:[A-Za-z0-9][A-Za-z0-9._-]{0,127})$",
+      "not": {
+        "pattern": "[\\r\\n]"
+      },
+      "description": "Nonsecret credential reference. Model tasks pin the reference in their execution binding and resolve its current value once per run or resume."
+    },
+    "runOptions": {
+      "type": "object",
+      "properties": {
+        "credential": {
+          "$ref": "#/$defs/credentialReference"
+        },
+        "prompt": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 65536,
+          "x-maxBytes": 65536,
+          "pattern": "^[^\\u0000]*$"
+        },
+        "base_url": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 65536,
+          "x-maxBytes": 65536,
+          "pattern": "^[^\\u0000]*$"
+        },
+        "model": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 65536,
+          "x-maxBytes": 65536,
+          "pattern": "^[^\\u0000]*$"
+        },
+        "mcp_config": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 65536,
+          "x-maxBytes": 65536,
+          "pattern": "^[^\\u0000]*$"
+        },
+        "build_config": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 65536,
+          "x-maxBytes": 65536,
+          "pattern": "^[^\\u0000]*$"
+        },
+        "api": {
+          "enum": [
+            "chat-completions",
+            "responses",
+            "messages"
+          ]
+        },
+        "sandbox": {
+          "enum": [
+            "none",
+            "appcontainer",
+            "linux-namespace"
+          ]
+        },
+        "max_turns": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "timeout_ms": {
+          "type": "integer",
+          "minimum": 100,
+          "maximum": 300000
+        },
+        "process_timeout_ms": {
+          "type": "integer",
+          "minimum": 100,
+          "maximum": 300000
+        },
+        "max_output_tokens": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000000
+        },
+        "stream": {
+          "type": "boolean"
+        },
+        "allow_write": {
+          "type": "boolean"
+        },
+        "allow_http_loopback": {
+          "type": "boolean"
+        },
+        "allow_build_proposals": {
+          "type": "boolean"
+        },
+        "allow_process": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 32768,
+            "x-maxBytes": 32768,
+            "pattern": "^[^\\u0000]*$"
+          },
+          "maxItems": 128
+        },
+        "allow_mcp": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 32768,
+            "x-maxBytes": 32768,
+            "pattern": "^[^\\u0000]*$"
+          },
+          "maxItems": 128
+        }
+      },
+      "required": [],
+      "additionalProperties": false,
+      "description": "Explicit grants only. Provider configuration, paths, grants and execution bindings also require runtime validation; schema acceptance never authorizes execution."
+    },
+    "resumeOptions": {
+      "type": "object",
+      "properties": {
+        "credential": {
+          "$ref": "#/$defs/credentialReference"
+        },
+        "base_url": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 65536,
+          "x-maxBytes": 65536,
+          "pattern": "^[^\\u0000]*$"
+        },
+        "model": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 65536,
+          "x-maxBytes": 65536,
+          "pattern": "^[^\\u0000]*$"
+        },
+        "mcp_config": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 65536,
+          "x-maxBytes": 65536,
+          "pattern": "^[^\\u0000]*$"
+        },
+        "build_config": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 65536,
+          "x-maxBytes": 65536,
+          "pattern": "^[^\\u0000]*$"
+        },
+        "api": {
+          "enum": [
+            "chat-completions",
+            "responses",
+            "messages"
+          ]
+        },
+        "sandbox": {
+          "enum": [
+            "none",
+            "appcontainer",
+            "linux-namespace"
+          ]
+        },
+        "max_turns": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "timeout_ms": {
+          "type": "integer",
+          "minimum": 100,
+          "maximum": 300000
+        },
+        "process_timeout_ms": {
+          "type": "integer",
+          "minimum": 100,
+          "maximum": 300000
+        },
+        "max_output_tokens": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000000
+        },
+        "stream": {
+          "const": false
+        },
+        "allow_write": {
+          "type": "boolean"
+        },
+        "allow_http_loopback": {
+          "type": "boolean"
+        },
+        "allow_build_proposals": {
+          "type": "boolean"
+        },
+        "allow_process": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 32768,
+            "x-maxBytes": 32768,
+            "pattern": "^[^\\u0000]*$"
+          },
+          "maxItems": 128
+        },
+        "allow_mcp": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 32768,
+            "x-maxBytes": 32768,
+            "pattern": "^[^\\u0000]*$"
+          },
+          "maxItems": 128
+        }
+      },
+      "required": [],
+      "additionalProperties": false,
+      "description": "Omit stream to retain the saved mode. Resume requires the exact saved configuration and explicit permissions again."
+    },
+    "buildOptions": {
+      "type": "object",
+      "properties": {
+        "build_config": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 65536,
+          "x-maxBytes": 65536,
+          "pattern": "^[^\\u0000]*$"
+        }
+      },
+      "required": [
+        "build_config"
+      ],
+      "additionalProperties": false
+    },
+    "initializeParams": {
+      "type": "object",
+      "properties": {
+        "protocol_version": {
+          "type": "integer",
+          "const": 2
+        }
+      },
+      "required": [
+        "protocol_version"
+      ],
+      "additionalProperties": false
+    },
+    "taskStartParams": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "mode": {
+              "const": "run"
+            },
+            "options": {
+              "$ref": "#/$defs/runOptions"
+            }
+          },
+          "required": [
+            "mode"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "mode": {
+              "const": "demo"
+            },
+            "options": {
+              "$ref": "#/$defs/emptyParams"
+            }
+          },
+          "required": [
+            "mode"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "mode": {
+              "const": "build"
+            },
+            "options": {
+              "$ref": "#/$defs/buildOptions"
+            }
+          },
+          "required": [
+            "mode",
+            "options"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "taskResumeParams": {
+      "type": "object",
+      "properties": {
+        "task_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "options": {
+          "$ref": "#/$defs/resumeOptions"
+        }
+      },
+      "required": [
+        "task_id"
+      ],
+      "additionalProperties": false
+    },
+    "taskIdParams": {
+      "type": "object",
+      "properties": {
+        "task_id": {
+          "$ref": "#/$defs/identifier"
+        }
+      },
+      "required": [
+        "task_id"
+      ],
+      "additionalProperties": false
+    },
+    "scheduleIdParams": {
+      "type": "object",
+      "properties": {
+        "job_id": {
+          "$ref": "#/$defs/identifier"
+        }
+      },
+      "required": [
+        "job_id"
+      ],
+      "additionalProperties": false
+    },
+    "cronIdParams": {
+      "type": "object",
+      "properties": {
+        "cron_id": {
+          "$ref": "#/$defs/identifier"
+        }
+      },
+      "required": [
+        "cron_id"
+      ],
+      "additionalProperties": false
+    },
+    "buildReviewParams": {
+      "type": "object",
+      "properties": {
+        "task_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "action_id": {
+          "$ref": "#/$defs/identifier"
+        }
+      },
+      "required": [
+        "task_id",
+        "action_id"
+      ],
+      "additionalProperties": false
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "minLength": 64,
+      "maxLength": 64
+    },
+    "buildDecisionParams": {
+      "type": "object",
+      "properties": {
+        "task_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "action_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "digest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "continue_options": {
+          "$ref": "#/$defs/resumeOptions"
+        }
+      },
+      "required": [
+        "task_id",
+        "action_id",
+        "digest"
+      ],
+      "additionalProperties": false
+    },
+    "subscribeParams": {
+      "type": "object",
+      "properties": {
+        "after": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    },
+    "operationGetParams": {
+      "type": "object",
+      "properties": {
+        "session_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "operation_id": {
+          "$ref": "#/$defs/identifier"
+        }
+      },
+      "required": [
+        "session_id",
+        "operation_id"
+      ],
+      "additionalProperties": false
+    },
+    "operationCancelParams": {
+      "type": "object",
+      "properties": {
+        "operation_id": {
+          "$ref": "#/$defs/identifier"
+        }
+      },
+      "required": [
+        "operation_id"
+      ],
+      "additionalProperties": false
+    },
+    "schedulerLaunchParams": {
+      "type": "object",
+      "properties": {
+        "poll_ms": {
+          "type": "integer",
+          "minimum": 20,
+          "maximum": 5000
+        },
+        "supervise": {
+          "type": "boolean",
+          "default": false
+        },
+        "max_restarts": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100,
+          "default": 3
+        },
+        "restart_delay_ms": {
+          "type": "integer",
+          "minimum": 100,
+          "maximum": 60000,
+          "default": 1000
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "anyOf": [
+              {
+                "required": [
+                  "max_restarts"
+                ]
+              },
+              {
+                "required": [
+                  "restart_delay_ms"
+                ]
+              }
+            ]
+          },
+          "then": {
+            "properties": {
+              "supervise": {
+                "const": true
+              }
+            },
+            "required": [
+              "supervise"
+            ]
+          }
+        }
+      ],
+      "additionalProperties": false,
+      "description": "Supervision is opt-in. Limits require supervise=true; restarts are counted across the supervisor lifetime, with exponential delay capped at 60000 ms."
+    },
+    "scheduleCreateParams": {
+      "type": "object",
+      "properties": {
+        "task_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "options": {
+          "$ref": "#/$defs/resumeOptions"
+        },
+        "delay_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 604800000
+        },
+        "deadline_ms": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 604800000
+        },
+        "max_attempts": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "retry_delay_ms": {
+          "type": "integer",
+          "minimum": 100,
+          "maximum": 60000
+        }
+      },
+      "required": [
+        "task_id"
+      ],
+      "additionalProperties": false,
+      "description": "The command also requires deadline_ms > delay_ms, using defaults of 86400000 and 0."
+    },
+    "cronCreateParams": {
+      "type": "object",
+      "properties": {
+        "expression": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "x-maxBytes": 256,
+          "pattern": "^[^\\u0000]*$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "x-maxBytes": 128,
+          "pattern": "^[^\\u0000]*$"
+        },
+        "timezone": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "x-maxBytes": 128,
+          "pattern": "^[^\\u0000]*$"
+        },
+        "options": {
+          "$ref": "#/$defs/runOptions"
+        },
+        "max_runs": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000
+        },
+        "deadline_ms": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 604800000
+        },
+        "max_attempts": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "retry_delay_ms": {
+          "type": "integer",
+          "minimum": 100,
+          "maximum": 60000
+        }
+      },
+      "required": [
+        "expression"
+      ],
+      "additionalProperties": false
+    },
+    "cronPreviewParams": {
+      "type": "object",
+      "properties": {
+        "expression": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "x-maxBytes": 256,
+          "pattern": "^[^\\u0000]*$"
+        },
+        "timezone": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "x-maxBytes": 128,
+          "pattern": "^[^\\u0000]*$"
+        },
+        "after": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "count": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        }
+      },
+      "required": [
+        "expression"
+      ],
+      "additionalProperties": false
+    },
+    "initializeResult": {
+      "type": "object",
+      "properties": {
+        "protocol_version": {
+          "const": 2
+        },
+        "product": {
+          "const": "CodeStudio-Agent"
+        },
+        "version": {
+          "type": "string"
+        },
+        "session_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "workspace": {
+          "type": "string"
+        },
+        "state_database": {
+          "type": "string"
+        },
+        "capabilities": {
+          "type": "object",
+          "properties": {
+            "task_operations": {
+              "const": true
+            },
+            "event_replay": {
+              "const": true
+            },
+            "text_deltas": {
+              "const": true
+            },
+            "automatic_resume": {
+              "const": true
+            },
+            "background_scheduler": {
+              "const": true
+            },
+            "cron": {
+              "const": true
+            },
+            "operation_lookup": {
+              "const": true
+            },
+            "structured_errors": {
+              "const": true
+            },
+            "mcp_streamable_http": {
+              "const": true
+            },
+            "build_proposals": {
+              "const": true
+            },
+            "approval_continuation": {
+              "const": true
+            },
+            "login_autostart": {
+              "type": "boolean"
+            },
+            "worker_supervision": {
+              "type": "boolean"
+            },
+            "supervised_autostart": {
+              "type": "boolean"
+            },
+            "supervisor_diagnostics": {
+              "type": "boolean"
+            },
+            "mcp_oauth": {
+              "const": true
+            },
+            "plugin_locks": {
+              "const": true
+            },
+            "plugin_distribution": {
+              "const": true
+            },
+            "plugin_sandbox": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "task_operations",
+            "event_replay",
+            "text_deltas",
+            "automatic_resume",
+            "background_scheduler",
+            "cron",
+            "operation_lookup",
+            "structured_errors",
+            "mcp_streamable_http",
+            "build_proposals",
+            "approval_continuation",
+            "login_autostart",
+            "worker_supervision",
+            "supervised_autostart",
+            "supervisor_diagnostics"
+          ],
+          "additionalProperties": true
+        },
+        "limits": {
+          "type": "object",
+          "properties": {
+            "input_bytes": {
+              "const": 1048576
+            },
+            "output_bytes": {
+              "const": 4194304
+            },
+            "page_items": {
+              "const": 100
+            },
+            "active_operations": {
+              "const": 1
+            },
+            "operation_history": {
+              "const": 64
+            },
+            "operation_result_bytes": {
+              "const": 262144
+            }
+          },
+          "required": [
+            "input_bytes",
+            "output_bytes",
+            "page_items",
+            "active_operations",
+            "operation_history",
+            "operation_result_bytes"
+          ],
+          "additionalProperties": true
+        }
+      },
+      "required": [
+        "protocol_version",
+        "product",
+        "version",
+        "session_id",
+        "workspace",
+        "state_database",
+        "capabilities",
+        "limits"
+      ],
+      "additionalProperties": true
+    },
+    "taskSummary": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/storedIdentifier"
+        },
+        "prompt": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "workspace": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "provider": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "status": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "summary": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "created_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "updated_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "prompt_omitted": {
+          "const": true
+        },
+        "prompt_bytes": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "workspace_omitted": {
+          "const": true
+        },
+        "workspace_bytes": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "provider_omitted": {
+          "const": true
+        },
+        "provider_bytes": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "status_omitted": {
+          "const": true
+        },
+        "status_bytes": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "summary_omitted": {
+          "const": true
+        },
+        "summary_bytes": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "created_at_omitted": {
+          "const": true
+        },
+        "created_at_bytes": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "updated_at_omitted": {
+          "const": true
+        },
+        "updated_at_bytes": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        }
+      },
+      "required": [
+        "id",
+        "prompt",
+        "workspace",
+        "provider",
+        "status",
+        "summary",
+        "created_at",
+        "updated_at"
+      ],
+      "additionalProperties": true,
+      "description": "Oversized stored fields are null with FIELD_omitted:true and FIELD_bytes. Status/provider strings remain extensible."
+    },
+    "checkpointSummary": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": 2
+        },
+        "resumable": {
+          "type": "boolean"
+        },
+        "phase": {
+          "enum": [
+            "ready",
+            "model_pending",
+            "tools",
+            "finished"
+          ]
+        },
+        "turns": {
+          "type": "integer"
+        },
+        "max_turns": {
+          "type": "integer"
+        },
+        "blocked_reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "blocked_reason_omitted": {
+          "const": true
+        },
+        "blocked_reason_bytes": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        }
+      },
+      "required": [
+        "version",
+        "resumable",
+        "phase"
+      ],
+      "additionalProperties": true
+    },
+    "taskDetail": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/taskSummary"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "action_count": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9223372036854775807
+            },
+            "checkpoint": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/checkpointSummary"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "action_count",
+            "checkpoint"
+          ],
+          "additionalProperties": true
+        }
+      ]
+    },
+    "event": {
+      "type": "object",
+      "properties": {
+        "seq": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9223372036854775807
+        },
+        "task_id": {
+          "$ref": "#/$defs/storedIdentifier"
+        },
+        "kind": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "payload": {
+          "description": "Event-specific JSON selected by kind; outside this transport contract."
+        },
+        "created_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "schema_version": {
+          "const": 2
+        },
+        "kind_omitted": {
+          "const": true
+        },
+        "kind_bytes": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "payload_omitted": {
+          "const": true
+        },
+        "payload_bytes": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "created_at_omitted": {
+          "const": true
+        },
+        "created_at_bytes": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        }
+      },
+      "required": [
+        "seq",
+        "task_id",
+        "kind",
+        "payload",
+        "created_at",
+        "schema_version"
+      ],
+      "additionalProperties": true
+    },
+    "taskPage": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/taskSummary"
+          },
+          "maxItems": 100
+        },
+        "next_before": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "has_more": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "items",
+        "next_before",
+        "has_more"
+      ],
+      "additionalProperties": true
+    },
+    "eventPage": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/event"
+          },
+          "maxItems": 100
+        },
+        "next_after": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "has_more": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "items",
+        "next_after",
+        "has_more"
+      ],
+      "additionalProperties": true
+    },
+    "binding": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": 2
+        }
+      },
+      "required": [
+        "version"
+      ],
+      "additionalProperties": true,
+      "description": "Exact persisted execution binding. The checkpoint contract owns provider, policy, tools and configuration; this partial description must never reconstruct authorization."
+    },
+    "scheduledJob": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "task_id": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "owner": {
+          "type": "string"
+        },
+        "claim_token": {
+          "type": "string"
+        },
+        "last_error": {
+          "type": "string"
+        },
+        "budget_turns": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "expected_revision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "due_at_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "deadline_at_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "max_attempts": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "retry_delay_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "attempts": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "generation": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "created_at_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "updated_at_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "resume_argv": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "binding": {
+          "$ref": "#/$defs/binding"
+        },
+        "cancel_requested": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "task_id",
+        "status",
+        "owner",
+        "claim_token",
+        "last_error",
+        "budget_turns",
+        "expected_revision",
+        "due_at_ms",
+        "deadline_at_ms",
+        "max_attempts",
+        "retry_delay_ms",
+        "attempts",
+        "generation",
+        "created_at_ms",
+        "updated_at_ms",
+        "resume_argv",
+        "binding",
+        "cancel_requested"
+      ],
+      "additionalProperties": true
+    },
+    "schedulePage": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/scheduledJob"
+          },
+          "maxItems": 100
+        },
+        "next_before": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "has_more": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "items",
+        "next_before",
+        "has_more"
+      ],
+      "additionalProperties": true
+    },
+    "cron": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "expression": {
+          "type": "string"
+        },
+        "timezone": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "workspace": {
+          "type": "string"
+        },
+        "prompt": {
+          "type": "string"
+        },
+        "provider": {
+          "type": "string"
+        },
+        "last_job_id": {
+          "type": "string"
+        },
+        "last_error": {
+          "type": "string"
+        },
+        "deadline_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "max_attempts": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "retry_delay_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "max_runs": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "run_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "next_due_at_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "last_due_at_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "created_at_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "updated_at_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "resume_argv": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "binding": {
+          "$ref": "#/$defs/binding"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "expression",
+        "timezone",
+        "status",
+        "workspace",
+        "prompt",
+        "provider",
+        "last_job_id",
+        "last_error",
+        "deadline_ms",
+        "max_attempts",
+        "retry_delay_ms",
+        "max_runs",
+        "run_count",
+        "next_due_at_ms",
+        "last_due_at_ms",
+        "created_at_ms",
+        "updated_at_ms",
+        "resume_argv",
+        "binding"
+      ],
+      "additionalProperties": true
+    },
+    "cronPage": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/cron"
+          },
+          "maxItems": 100
+        },
+        "next_before": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "has_more": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "items",
+        "next_before",
+        "has_more"
+      ],
+      "additionalProperties": true
+    },
+    "schedulerStatus": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "type": "string"
+        },
+        "owner": {
+          "type": "string"
+        },
+        "pid": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "generation": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "stop_epoch": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "started_at_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "heartbeat_at_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "supervisor": {
+          "$ref": "#/$defs/supervisorStatus"
+        }
+      },
+      "required": [
+        "state",
+        "owner",
+        "pid",
+        "generation",
+        "stop_epoch",
+        "started_at_ms",
+        "heartbeat_at_ms"
+      ],
+      "additionalProperties": true,
+      "description": "Last-observed persisted state, not proof that a PID is alive."
+    },
+    "schedulerStarted": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/schedulerStatus"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "started": {
+              "const": true
+            },
+            "supervised": {
+              "const": true
+            },
+            "supervisor_pid": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9223372036854775807
+            },
+            "max_restarts": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "restart_delay_ms": {
+              "type": "integer",
+              "minimum": 100,
+              "maximum": 60000
+            }
+          },
+          "required": [
+            "started"
+          ],
+          "dependentRequired": {
+            "supervised": [
+              "supervisor_pid",
+              "max_restarts",
+              "restart_delay_ms"
+            ],
+            "supervisor_pid": [
+              "supervised"
+            ],
+            "max_restarts": [
+              "supervised"
+            ],
+            "restart_delay_ms": [
+              "supervised"
+            ]
+          },
+          "additionalProperties": true
+        }
+      ]
+    },
+    "schedulerStopped": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/schedulerStatus"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "stop_requested": {
+              "const": true
+            }
+          },
+          "required": [
+            "stop_requested"
+          ],
+          "additionalProperties": true
+        }
+      ]
+    },
+    "autostartResult": {
+      "type": "object",
+      "properties": {
+        "available": {
+          "type": "boolean"
+        },
+        "registered": {
+          "type": "boolean"
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "conflict": {
+          "type": "boolean"
+        },
+        "task_name": {
+          "type": "string"
+        },
+        "workspace": {
+          "type": "string"
+        },
+        "state_database": {
+          "type": "string"
+        },
+        "executable": {
+          "type": "string"
+        },
+        "poll_ms": {
+          "type": "integer",
+          "minimum": 20,
+          "maximum": 5000
+        },
+        "trigger": {
+          "enum": [
+            "current_user_logon",
+            "user_manager_start"
+          ]
+        },
+        "started": {
+          "const": false
+        },
+        "user_sid": {
+          "type": "string"
+        },
+        "user_uid": {
+          "type": "string"
+        },
+        "backend": {
+          "const": "systemd-user"
+        },
+        "unit_path": {
+          "type": "string"
+        },
+        "requires_manager_reload": {
+          "type": "boolean"
+        },
+        "created": {
+          "type": "boolean"
+        },
+        "removed": {
+          "type": "boolean"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "supervised": {
+          "type": "boolean"
+        },
+        "max_restarts": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "restart_delay_ms": {
+          "type": "integer",
+          "minimum": 100,
+          "maximum": 60000
+        }
+      },
+      "required": [
+        "available",
+        "registered",
+        "enabled",
+        "conflict",
+        "task_name",
+        "workspace",
+        "state_database",
+        "executable",
+        "poll_ms",
+        "trigger",
+        "started",
+        "supervised"
+      ],
+      "additionalProperties": true,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "trigger": {
+                "const": "user_manager_start"
+              }
+            },
+            "required": [
+              "trigger"
+            ]
+          },
+          "then": {
+            "required": [
+              "backend",
+              "unit_path",
+              "user_uid",
+              "requires_manager_reload"
+            ]
+          },
+          "else": {
+            "required": [
+              "user_sid"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "supervised": {
+                "const": true
+              }
+            },
+            "required": [
+              "supervised"
+            ]
+          },
+          "then": {
+            "required": [
+              "max_restarts",
+              "restart_delay_ms"
+            ]
+          },
+          "else": {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "max_restarts"
+                  ]
+                },
+                {
+                  "required": [
+                    "restart_delay_ms"
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "cronPreviewResult": {
+      "type": "object",
+      "properties": {
+        "expression": {
+          "type": "string"
+        },
+        "timezone": {
+          "type": "string"
+        },
+        "after_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "occurrences": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "at_ms": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9223372036854775807
+              },
+              "utc": {
+                "type": "string"
+              },
+              "local": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "at_ms",
+              "utc",
+              "local"
+            ],
+            "additionalProperties": true
+          },
+          "maxItems": 100
+        },
+        "misfire": {
+          "const": "coalesce"
+        },
+        "overlap": {
+          "const": "skip"
+        }
+      },
+      "required": [
+        "expression",
+        "timezone",
+        "after_ms",
+        "occurrences",
+        "misfire",
+        "overlap"
+      ],
+      "additionalProperties": true
+    },
+    "buildProposal": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": 2
+        },
+        "status": {
+          "const": "pending_approval"
+        },
+        "workspace": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "manifest": {
+          "type": "object",
+          "description": "Explicit build manifest version 2; governed by the workspace-build contract."
+        },
+        "recipe": {
+          "type": "object",
+          "description": "Full frozen version-2 recipe; never a client reconstruction."
+        },
+        "protected_paths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "backend": {
+          "enum": [
+            "windows-lpac-build-v2",
+            "linux-namespace-build-v2"
+          ]
+        },
+        "network": {
+          "const": "none"
+        },
+        "export": {
+          "const": "new-atomic-bundle"
+        },
+        "digest": {
+          "$ref": "#/$defs/sha256"
+        }
+      },
+      "required": [
+        "version",
+        "status",
+        "workspace",
+        "reason",
+        "manifest",
+        "recipe",
+        "protected_paths",
+        "backend",
+        "network",
+        "export",
+        "digest"
+      ],
+      "additionalProperties": true
+    },
+    "buildDecision": {
+      "type": "object",
+      "properties": {
+        "decision": {
+          "enum": [
+            "approved",
+            "rejected"
+          ]
+        },
+        "digest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "execution_task_id": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/identifier"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "execution_action_id": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/identifier"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "decision",
+        "digest",
+        "execution_task_id",
+        "execution_action_id"
+      ],
+      "additionalProperties": true
+    },
+    "buildReviewResult": {
+      "type": "object",
+      "properties": {
+        "task_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "action_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "proposal": {
+          "$ref": "#/$defs/buildProposal"
+        },
+        "decision": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/buildDecision"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "task_id",
+        "action_id",
+        "proposal",
+        "decision"
+      ],
+      "additionalProperties": true
+    },
+    "actionReceipt": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "call_id": {
+          "type": "string"
+        },
+        "tool": {
+          "type": "string"
+        },
+        "arguments": {},
+        "status": {
+          "type": "string"
+        },
+        "effect": {
+          "type": "string"
+        },
+        "result": {},
+        "continuation": {},
+        "continuation_consumed": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "call_id",
+        "tool",
+        "arguments",
+        "status",
+        "effect",
+        "result"
+      ],
+      "additionalProperties": true,
+      "description": "Arguments, results and continuation feedback are tool-specific JSON."
+    },
+    "executionTask": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/taskSummary"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "actions": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/actionReceipt"
+              }
+            },
+            "checkpoint": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {},
+                  "required": [],
+                  "additionalProperties": true
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "actions",
+            "checkpoint"
+          ],
+          "additionalProperties": true
+        }
+      ]
+    },
+    "taskRunResult": {
+      "type": "object",
+      "properties": {
+        "product": {
+          "const": "CodeStudio-Agent"
+        },
+        "task_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "status": {
+          "type": "string"
+        },
+        "summary": {
+          "type": "string"
+        },
+        "turns": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "provider": {
+          "type": "string"
+        },
+        "verification": {
+          "type": "string"
+        },
+        "state_database": {
+          "type": "string"
+        },
+        "approval": {
+          "type": "object",
+          "properties": {
+            "action_id": {
+              "$ref": "#/$defs/identifier"
+            },
+            "digest": {
+              "$ref": "#/$defs/sha256"
+            }
+          },
+          "required": [
+            "action_id",
+            "digest"
+          ],
+          "additionalProperties": true
+        },
+        "build": {}
+      },
+      "required": [
+        "product",
+        "task_id",
+        "status",
+        "summary",
+        "turns",
+        "provider",
+        "verification",
+        "state_database"
+      ],
+      "additionalProperties": true
+    },
+    "continuationResult": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "status": {
+              "const": "started"
+            },
+            "result": {
+              "$ref": "#/$defs/taskRunResult"
+            },
+            "exit_code": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "status",
+            "result",
+            "exit_code"
+          ],
+          "additionalProperties": true
+        },
+        {
+          "type": "object",
+          "properties": {
+            "status": {
+              "const": "skipped"
+            },
+            "reason": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "status",
+            "reason"
+          ],
+          "additionalProperties": true
+        },
+        {
+          "type": "object",
+          "properties": {
+            "status": {
+              "const": "failed"
+            },
+            "error": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "status",
+            "error"
+          ],
+          "additionalProperties": true
+        }
+      ]
+    },
+    "buildDecisionResult": {
+      "type": "object",
+      "properties": {
+        "proposal": {
+          "$ref": "#/$defs/buildReviewResult"
+        },
+        "execution": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/executionTask"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "state_database": {
+          "type": "string"
+        },
+        "continuation": {
+          "$ref": "#/$defs/continuationResult"
+        }
+      },
+      "required": [
+        "proposal",
+        "execution",
+        "state_database"
+      ],
+      "additionalProperties": true
+    },
+    "recoverResult": {
+      "type": "object",
+      "properties": {
+        "recovered": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "task_id": {
+                "$ref": "#/$defs/identifier"
+              },
+              "unknown_actions": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9223372036854775807
+              },
+              "automatic_retry": {
+                "const": false
+              }
+            },
+            "required": [
+              "task_id",
+              "unknown_actions",
+              "automatic_retry"
+            ],
+            "additionalProperties": true
+          }
+        },
+        "tools_executed": {
+          "const": false
+        }
+      },
+      "required": [
+        "recovered",
+        "tools_executed"
+      ],
+      "additionalProperties": true
+    },
+    "subscribeResult": {
+      "type": "object",
+      "properties": {
+        "after": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        }
+      },
+      "required": [
+        "after"
+      ],
+      "additionalProperties": true
+    },
+    "unsubscribeResult": {
+      "type": "object",
+      "properties": {
+        "subscribed": {
+          "const": false
+        }
+      },
+      "required": [
+        "subscribed"
+      ],
+      "additionalProperties": true
+    },
+    "operationAccepted": {
+      "type": "object",
+      "properties": {
+        "session_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "operation_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "status": {
+          "const": "accepted"
+        }
+      },
+      "required": [
+        "session_id",
+        "operation_id",
+        "status"
+      ],
+      "additionalProperties": true
+    },
+    "operationStatus": {
+      "type": "object",
+      "properties": {
+        "session_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "active": {
+          "type": "boolean"
+        },
+        "operation_id": {
+          "type": "string",
+          "maxLength": 128,
+          "x-maxBytes": 128
+        }
+      },
+      "required": [
+        "session_id",
+        "active",
+        "operation_id"
+      ],
+      "additionalProperties": true
+    },
+    "operationCancelled": {
+      "type": "object",
+      "properties": {
+        "operation_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "cancel_requested": {
+          "const": true
+        }
+      },
+      "required": [
+        "operation_id",
+        "cancel_requested"
+      ],
+      "additionalProperties": true
+    },
+    "shutdownResult": {
+      "type": "object",
+      "properties": {
+        "stopping": {
+          "const": true
+        }
+      },
+      "required": [
+        "stopping"
+      ],
+      "additionalProperties": true
+    },
+    "errorData": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "enum": [
+            "parse_error",
+            "invalid_request",
+            "invalid_params",
+            "method_not_found",
+            "not_initialized",
+            "already_initialized",
+            "busy",
+            "operation_not_found",
+            "session_mismatch",
+            "command_failed",
+            "operation_failed",
+            "internal_error"
+          ]
+        },
+        "recovery": {
+          "enum": [
+            "fix_request",
+            "initialize",
+            "wait_for_idle",
+            "query_state",
+            "query_operation",
+            "none"
+          ]
+        },
+        "outcome": {
+          "enum": [
+            "not_started",
+            "unknown"
+          ]
+        },
+        "session_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "message_truncated": {
+          "const": true
+        }
+      },
+      "required": [
+        "kind",
+        "recovery",
+        "outcome",
+        "session_id"
+      ],
+      "additionalProperties": true
+    },
+    "rpcError": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer"
+        },
+        "message": {
+          "type": "string",
+          "maxLength": 8192,
+          "x-maxBytes": 8192
+        },
+        "data": {
+          "$ref": "#/$defs/errorData"
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "data"
+      ],
+      "additionalProperties": true,
+      "description": "unknown never authorizes replay. Recovery is an observation/control path, not a retry grant.",
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "data": {
+                "properties": {
+                  "kind": {
+                    "const": "parse_error"
+                  }
+                },
+                "required": [
+                  "kind"
+                ]
+              }
+            },
+            "required": [
+              "data"
+            ]
+          },
+          "then": {
+            "properties": {
+              "code": {
+                "const": -32700
+              },
+              "data": {
+                "properties": {
+                  "recovery": {
+                    "const": "fix_request"
+                  },
+                  "outcome": {
+                    "const": "not_started"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "data": {
+                "properties": {
+                  "kind": {
+                    "const": "invalid_request"
+                  }
+                },
+                "required": [
+                  "kind"
+                ]
+              }
+            },
+            "required": [
+              "data"
+            ]
+          },
+          "then": {
+            "properties": {
+              "code": {
+                "const": -32600
+              },
+              "data": {
+                "properties": {
+                  "recovery": {
+                    "const": "fix_request"
+                  },
+                  "outcome": {
+                    "const": "not_started"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "data": {
+                "properties": {
+                  "kind": {
+                    "const": "invalid_params"
+                  }
+                },
+                "required": [
+                  "kind"
+                ]
+              }
+            },
+            "required": [
+              "data"
+            ]
+          },
+          "then": {
+            "properties": {
+              "code": {
+                "const": -32602
+              },
+              "data": {
+                "properties": {
+                  "recovery": {
+                    "const": "fix_request"
+                  },
+                  "outcome": {
+                    "const": "not_started"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "data": {
+                "properties": {
+                  "kind": {
+                    "const": "method_not_found"
+                  }
+                },
+                "required": [
+                  "kind"
+                ]
+              }
+            },
+            "required": [
+              "data"
+            ]
+          },
+          "then": {
+            "properties": {
+              "code": {
+                "const": -32601
+              },
+              "data": {
+                "properties": {
+                  "recovery": {
+                    "const": "fix_request"
+                  },
+                  "outcome": {
+                    "const": "not_started"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "data": {
+                "properties": {
+                  "kind": {
+                    "const": "not_initialized"
+                  }
+                },
+                "required": [
+                  "kind"
+                ]
+              }
+            },
+            "required": [
+              "data"
+            ]
+          },
+          "then": {
+            "properties": {
+              "code": {
+                "const": -32002
+              },
+              "data": {
+                "properties": {
+                  "recovery": {
+                    "const": "initialize"
+                  },
+                  "outcome": {
+                    "const": "not_started"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "data": {
+                "properties": {
+                  "kind": {
+                    "const": "already_initialized"
+                  }
+                },
+                "required": [
+                  "kind"
+                ]
+              }
+            },
+            "required": [
+              "data"
+            ]
+          },
+          "then": {
+            "properties": {
+              "code": {
+                "const": -32000
+              },
+              "data": {
+                "properties": {
+                  "recovery": {
+                    "const": "none"
+                  },
+                  "outcome": {
+                    "const": "not_started"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "data": {
+                "properties": {
+                  "kind": {
+                    "const": "busy"
+                  }
+                },
+                "required": [
+                  "kind"
+                ]
+              }
+            },
+            "required": [
+              "data"
+            ]
+          },
+          "then": {
+            "properties": {
+              "code": {
+                "const": -32000
+              },
+              "data": {
+                "properties": {
+                  "recovery": {
+                    "const": "wait_for_idle"
+                  },
+                  "outcome": {
+                    "const": "not_started"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "data": {
+                "properties": {
+                  "kind": {
+                    "const": "session_mismatch"
+                  }
+                },
+                "required": [
+                  "kind"
+                ]
+              }
+            },
+            "required": [
+              "data"
+            ]
+          },
+          "then": {
+            "properties": {
+              "code": {
+                "const": -32000
+              },
+              "data": {
+                "properties": {
+                  "recovery": {
+                    "const": "query_state"
+                  },
+                  "outcome": {
+                    "const": "unknown"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "data": {
+                "properties": {
+                  "kind": {
+                    "const": "command_failed"
+                  }
+                },
+                "required": [
+                  "kind"
+                ]
+              }
+            },
+            "required": [
+              "data"
+            ]
+          },
+          "then": {
+            "properties": {
+              "code": {
+                "const": -32000
+              },
+              "data": {
+                "properties": {
+                  "recovery": {
+                    "const": "query_state"
+                  },
+                  "outcome": {
+                    "const": "unknown"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "data": {
+                "properties": {
+                  "kind": {
+                    "const": "operation_failed"
+                  }
+                },
+                "required": [
+                  "kind"
+                ]
+              }
+            },
+            "required": [
+              "data"
+            ]
+          },
+          "then": {
+            "properties": {
+              "code": {
+                "const": -32000
+              },
+              "data": {
+                "properties": {
+                  "recovery": {
+                    "const": "query_state"
+                  },
+                  "outcome": {
+                    "const": "unknown"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "data": {
+                "properties": {
+                  "kind": {
+                    "const": "internal_error"
+                  }
+                },
+                "required": [
+                  "kind"
+                ]
+              }
+            },
+            "required": [
+              "data"
+            ]
+          },
+          "then": {
+            "properties": {
+              "code": {
+                "const": -32000
+              },
+              "data": {
+                "properties": {
+                  "recovery": {
+                    "const": "query_state"
+                  },
+                  "outcome": {
+                    "const": "not_started"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "data": {
+                "properties": {
+                  "kind": {
+                    "const": "operation_not_found"
+                  }
+                },
+                "required": [
+                  "kind"
+                ]
+              }
+            },
+            "required": [
+              "data"
+            ]
+          },
+          "then": {
+            "properties": {
+              "code": {
+                "const": -32000
+              },
+              "data": {
+                "oneOf": [
+                  {
+                    "properties": {
+                      "recovery": {
+                        "const": "query_state"
+                      },
+                      "outcome": {
+                        "const": "unknown"
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "recovery": {
+                        "const": "query_operation"
+                      },
+                      "outcome": {
+                        "const": "not_started"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "operationCompletion": {
+      "type": "object",
+      "properties": {
+        "session_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "operation_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "exit_code": {
+          "type": "integer"
+        },
+        "result": {
+          "anyOf": [
+            {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/taskRunResult"
+                },
+                {
+                  "$ref": "#/$defs/cron"
+                },
+                {
+                  "$ref": "#/$defs/buildDecisionResult"
+                },
+                {
+                  "$ref": "#/$defs/extensionResult"
+                }
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "error": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/rpcError"
+            },
+            {
+              "properties": {
+                "data": {
+                  "properties": {
+                    "kind": {
+                      "enum": [
+                        "operation_failed",
+                        "internal_error"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "result_omitted": {
+          "const": true
+        },
+        "result_bytes": {
+          "type": "integer",
+          "minimum": 262145,
+          "maximum": 9223372036854775807
+        },
+        "result_refs": {
+          "type": "object",
+          "properties": {
+            "task_id": {
+              "type": "string",
+              "maxLength": 128,
+              "x-maxBytes": 128
+            },
+            "id": {
+              "type": "string",
+              "maxLength": 128,
+              "x-maxBytes": 128
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "session_id",
+        "operation_id",
+        "exit_code"
+      ],
+      "additionalProperties": true,
+      "oneOf": [
+        {
+          "required": [
+            "result"
+          ],
+          "not": {
+            "required": [
+              "error"
+            ]
+          }
+        },
+        {
+          "required": [
+            "error"
+          ],
+          "not": {
+            "required": [
+              "result"
+            ]
+          }
+        }
+      ],
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "result_omitted"
+            ]
+          },
+          "then": {
+            "required": [
+              "result",
+              "result_bytes",
+              "result_refs"
+            ],
+            "properties": {
+              "result": {
+                "type": "null"
+              }
+            }
+          },
+          "else": {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "result_bytes"
+                  ]
+                },
+                {
+                  "required": [
+                    "result_refs"
+                  ]
+                }
+              ]
+            },
+            "properties": {
+              "result": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/taskRunResult"
+                  },
+                  {
+                    "$ref": "#/$defs/cron"
+                  },
+                  {
+                    "$ref": "#/$defs/buildDecisionResult"
+                  },
+                  {
+                    "$ref": "#/$defs/extensionResult"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "operationSnapshot": {
+      "type": "object",
+      "properties": {
+        "session_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "operation_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "method": {
+          "enum": [
+            "tasks/start",
+            "tasks/resume",
+            "crons/create",
+            "builds/approve",
+            "builds/reject",
+            "mcp/auth/discover",
+            "mcp/auth/status",
+            "mcp/auth/login",
+            "mcp/auth/logout",
+            "plugins/pack",
+            "plugins/install",
+            "plugins/lock",
+            "plugins/inspect"
+          ]
+        },
+        "state": {
+          "enum": [
+            "running",
+            "finished"
+          ]
+        },
+        "cancel_requested": {
+          "type": "boolean"
+        },
+        "completion": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/operationCompletion"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "session_id",
+        "operation_id",
+        "method",
+        "state",
+        "cancel_requested",
+        "completion"
+      ],
+      "additionalProperties": true,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "running"
+              }
+            },
+            "required": [
+              "state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "completion": {
+                "type": "null"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "completion": {
+                "$ref": "#/$defs/operationCompletion"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "request": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "id": {
+              "$ref": "#/$defs/requestId"
+            },
+            "method": {
+              "const": "initialize"
+            },
+            "params": {
+              "$ref": "#/$defs/initializeParams"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "id",
+            "method",
+            "params"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "id": {
+              "$ref": "#/$defs/requestId"
+            },
+            "method": {
+              "const": "tasks/list"
+            },
+            "params": {
+              "$ref": "#/$defs/paginationParams"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "id",
+            "method"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "id": {
+              "$ref": "#/$defs/requestId"
+            },
+            "method": {
+              "const": "tasks/get"
+            },
+            "params": {
+              "$ref": "#/$defs/taskIdParams"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "id",
+            "method",
+            "params"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "id": {
+              "$ref": "#/$defs/requestId"
+            },
+            "method": {
+              "const": "tasks/start"
+            },
+            "params": {
+              "$ref": "#/$defs/taskStartParams"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "id",
+            "method",
+            "params"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "id": {
+              "$ref": "#/$defs/requestId"
+            },
+            "method": {
+              "const": "tasks/resume"
+            },
+            "params": {
+              "$ref": "#/$defs/taskResumeParams"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "id",
+            "method",
+            "params"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "id": {
+              "$ref": "#/$defs/requestId"
+            },
+            "method": {
+              "const": "tasks/recover"
+            },
+            "params": {
+              "$ref": "#/$defs/emptyParams"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "id",
+            "method"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "id": {
+              "$ref": "#/$defs/requestId"
+            },
+            "method": {
+              "const": "builds/review"
+            },
+            "params": {
+              "$ref": "#/$defs/buildReviewParams"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "id",
+            "method",
+            "params"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "id": {
+              "$ref": "#/$defs/requestId"
+            },
+            "method": {
+              "const": "builds/approve"
+            },
+            "params": {
+              "$ref": "#/$defs/buildDecisionParams"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "id",
+            "method",
+            "params"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "id": {
+              "$ref": "#/$defs/requestId"
+            },
+            "method": {
+              "const": "builds/reject"
+            },
+            "params": {
+              "$ref": "#/$defs/buildDecisionParams"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "id",
+            "method",
+            "params"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "id": {
+              "$ref": "#/$defs/requestId"
+            },
+            "method": {
+              "const": "events/list"
+            },
+            "params": {
+              "$ref": "#/$defs/eventsListParams"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "id",
+            "method"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "id": {
+              "$ref": "#/$defs/requestId"
+            },
+            "method": {
+              "const": "events/subscribe"
+            },
+            "params": {
+              "$ref": "#/$defs/subscribeParams"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "id",
+            "method"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "id": {
+              "$ref": "#/$defs/requestId"
+            },
+            "method": {
+              "const": "events/unsubscribe"
+            },
+            "params": {
+              "$ref": "#/$defs/emptyParams"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "id",
+            "method"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "id": {
+              "$ref": "#/$defs/requestId"
+            },
+            "method": {
+              "const": "operations/status"
+            },
+            "params": {
+              "$ref": "#/$defs/emptyParams"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "id",
+            "method"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "id": {
+              "$ref": "#/$defs/requestId"
+            },
+            "method": {
+              "const": "operations/get"
+            },
+            "params": {
+              "$ref": "#/$defs/operationGetParams"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "id",
+            "method",
+            "params"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "id": {
+              "$ref": "#/$defs/requestId"
+            },
+            "method": {
+              "const": "operations/cancel"
+            },
+            "params": {
+              "$ref": "#/$defs/operationCancelParams"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "id",
+            "method",
+            "params"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "id": {
+              "$ref": "#/$defs/requestId"
+            },
+            "method": {
+              "const": "schedules/list"
+            },
+            "params": {
+              "$ref": "#/$defs/paginationParams"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "id",
+            "method"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "id": {
+              "$ref": "#/$defs/requestId"
+            },
+            "method": {
+              "const": "schedules/get"
+            },
+            "params": {
+              "$ref": "#/$defs/scheduleIdParams"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "id",
+            "method",
+            "params"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "id": {
+              "$ref": "#/$defs/requestId"
+            },
+            "method": {
+              "const": "schedules/create"
+            },
+            "params": {
+              "$ref": "#/$defs/scheduleCreateParams"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "id",
+            "method",
+            "params"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "id": {
+              "$ref": "#/$defs/requestId"
+            },
+            "method": {
+              "const": "schedules/cancel"
+            },
+            "params": {
+              "$ref": "#/$defs/scheduleIdParams"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "id",
+            "method",
+            "params"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "id": {
+              "$ref": "#/$defs/requestId"
+            },
+            "method": {
+              "const": "scheduler/status"
+            },
+            "params": {
+              "$ref": "#/$defs/emptyParams"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "id",
+            "method"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "id": {
+              "$ref": "#/$defs/requestId"
+            },
+            "method": {
+              "const": "scheduler/start"
+            },
+            "params": {
+              "$ref": "#/$defs/schedulerLaunchParams"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "id",
+            "method"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "id": {
+              "$ref": "#/$defs/requestId"
+            },
+            "method": {
+              "const": "scheduler/stop"
+            },
+            "params": {
+              "$ref": "#/$defs/emptyParams"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "id",
+            "method"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "id": {
+              "$ref": "#/$defs/requestId"
+            },
+            "method": {
+              "const": "crons/list"
+            },
+            "params": {
+              "$ref": "#/$defs/paginationParams"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "id",
+            "method"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "id": {
+              "$ref": "#/$defs/requestId"
+            },
+            "method": {
+              "const": "crons/get"
+            },
+            "params": {
+              "$ref": "#/$defs/cronIdParams"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "id",
+            "method",
+            "params"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "id": {
+              "$ref": "#/$defs/requestId"
+            },
+            "method": {
+              "const": "crons/create"
+            },
+            "params": {
+              "$ref": "#/$defs/cronCreateParams"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "id",
+            "method",
+            "params"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "id": {
+              "$ref": "#/$defs/requestId"
+            },
+            "method": {
+              "const": "crons/preview"
+            },
+            "params": {
+              "$ref": "#/$defs/cronPreviewParams"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "id",
+            "method",
+            "params"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "id": {
+              "$ref": "#/$defs/requestId"
+            },
+            "method": {
+              "const": "crons/pause"
+            },
+            "params": {
+              "$ref": "#/$defs/cronIdParams"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "id",
+            "method",
+            "params"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "id": {
+              "$ref": "#/$defs/requestId"
+            },
+            "method": {
+              "const": "crons/resume"
+            },
+            "params": {
+              "$ref": "#/$defs/cronIdParams"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "id",
+            "method",
+            "params"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "id": {
+              "$ref": "#/$defs/requestId"
+            },
+            "method": {
+              "const": "crons/cancel"
+            },
+            "params": {
+              "$ref": "#/$defs/cronIdParams"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "id",
+            "method",
+            "params"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "id": {
+              "$ref": "#/$defs/requestId"
+            },
+            "method": {
+              "const": "scheduler/autostart/status"
+            },
+            "params": {
+              "$ref": "#/$defs/emptyParams"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "id",
+            "method"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "id": {
+              "$ref": "#/$defs/requestId"
+            },
+            "method": {
+              "const": "scheduler/autostart/enable"
+            },
+            "params": {
+              "$ref": "#/$defs/schedulerLaunchParams"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "id",
+            "method"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "id": {
+              "$ref": "#/$defs/requestId"
+            },
+            "method": {
+              "const": "scheduler/autostart/disable"
+            },
+            "params": {
+              "$ref": "#/$defs/emptyParams"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "id",
+            "method"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "id": {
+              "$ref": "#/$defs/requestId"
+            },
+            "method": {
+              "const": "shutdown"
+            },
+            "params": {
+              "$ref": "#/$defs/emptyParams"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "id",
+            "method"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "id": {
+              "$ref": "#/$defs/requestId"
+            },
+            "method": {
+              "const": "scheduler/supervisor/status"
+            },
+            "params": {
+              "$ref": "#/$defs/emptyParams"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "id",
+            "method"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "id": {
+              "$ref": "#/$defs/requestId"
+            },
+            "method": {
+              "const": "scheduler/supervisor/events"
+            },
+            "params": {
+              "$ref": "#/$defs/eventsListParams"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "id",
+            "method"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "id": {
+              "$ref": "#/$defs/requestId"
+            },
+            "method": {
+              "const": "mcp/auth/discover"
+            },
+            "params": {
+              "$ref": "#/$defs/mcpAuthParams"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "id",
+            "method",
+            "params"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "id": {
+              "$ref": "#/$defs/requestId"
+            },
+            "method": {
+              "const": "mcp/auth/status"
+            },
+            "params": {
+              "$ref": "#/$defs/mcpAuthParams"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "id",
+            "method",
+            "params"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "id": {
+              "$ref": "#/$defs/requestId"
+            },
+            "method": {
+              "const": "mcp/auth/login"
+            },
+            "params": {
+              "$ref": "#/$defs/mcpAuthLoginParams"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "id",
+            "method",
+            "params"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "id": {
+              "$ref": "#/$defs/requestId"
+            },
+            "method": {
+              "const": "mcp/auth/logout"
+            },
+            "params": {
+              "$ref": "#/$defs/mcpAuthParams"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "id",
+            "method",
+            "params"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "id": {
+              "$ref": "#/$defs/requestId"
+            },
+            "method": {
+              "const": "plugins/pack"
+            },
+            "params": {
+              "$ref": "#/$defs/pluginPackParams"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "id",
+            "method",
+            "params"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "id": {
+              "$ref": "#/$defs/requestId"
+            },
+            "method": {
+              "const": "plugins/install"
+            },
+            "params": {
+              "$ref": "#/$defs/pluginInstallParams"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "id",
+            "method",
+            "params"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "id": {
+              "$ref": "#/$defs/requestId"
+            },
+            "method": {
+              "const": "plugins/lock"
+            },
+            "params": {
+              "$ref": "#/$defs/pluginLockParams"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "id",
+            "method",
+            "params"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "id": {
+              "$ref": "#/$defs/requestId"
+            },
+            "method": {
+              "const": "plugins/inspect"
+            },
+            "params": {
+              "$ref": "#/$defs/pluginInspectParams"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "id",
+            "method",
+            "params"
+          ],
+          "additionalProperties": false
+        }
+      ],
+      "description": "Requests carry IDs. Client notifications are ignored, never an invocation mechanism. Omitted params means an empty object only where permitted."
+    },
+    "successResponse": {
+      "type": "object",
+      "properties": {
+        "jsonrpc": {
+          "const": "2.0"
+        },
+        "id": {
+          "$ref": "#/$defs/requestId"
+        },
+        "result": {
+          "type": "object",
+          "description": "After ID correlation validate x-methods[request.method].result; responses do not repeat their method."
+        }
+      },
+      "required": [
+        "jsonrpc",
+        "id",
+        "result"
+      ],
+      "additionalProperties": false
+    },
+    "errorResponse": {
+      "type": "object",
+      "properties": {
+        "jsonrpc": {
+          "const": "2.0"
+        },
+        "id": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/requestId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "error": {
+          "$ref": "#/$defs/rpcError"
+        }
+      },
+      "required": [
+        "jsonrpc",
+        "id",
+        "error"
+      ],
+      "additionalProperties": false
+    },
+    "operationText": {
+      "type": "object",
+      "properties": {
+        "operation_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "text": {
+          "type": "string"
+        },
+        "provisional": {
+          "const": true
+        }
+      },
+      "required": [
+        "operation_id",
+        "text",
+        "provisional"
+      ],
+      "additionalProperties": true
+    },
+    "eventsError": {
+      "type": "object",
+      "properties": {
+        "after": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "message": {
+          "type": "string"
+        },
+        "error": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/rpcError"
+            },
+            {
+              "properties": {
+                "data": {
+                  "properties": {
+                    "kind": {
+                      "const": "command_failed"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      "required": [
+        "after",
+        "message",
+        "error"
+      ],
+      "additionalProperties": true
+    },
+    "notification": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "method": {
+              "const": "operation/text"
+            },
+            "params": {
+              "$ref": "#/$defs/operationText"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "method",
+            "params"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "method": {
+              "const": "operation/finished"
+            },
+            "params": {
+              "$ref": "#/$defs/operationFinished"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "method",
+            "params"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "method": {
+              "const": "events/batch"
+            },
+            "params": {
+              "$ref": "#/$defs/eventPage"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "method",
+            "params"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "method": {
+              "const": "events/error"
+            },
+            "params": {
+              "$ref": "#/$defs/eventsError"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "method",
+            "params"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "method": {
+              "const": "operation/authorization"
+            },
+            "params": {
+              "$ref": "#/$defs/operationAuthorization"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "method",
+            "params"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "operationFinished": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/operationCompletion"
+        },
+        {
+          "not": {
+            "required": [
+              "result_omitted"
+            ]
+          }
+        }
+      ]
+    },
+    "supervisorRecord": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "x-maxBytes": 256
+        },
+        "owner": {
+          "type": "string",
+          "x-maxBytes": 256
+        },
+        "process_identity": {
+          "type": "string",
+          "x-maxBytes": 256
+        },
+        "workspace": {
+          "type": "string",
+          "x-maxBytes": 32768
+        },
+        "pid": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9223372036854775807
+        },
+        "poll_ms": {
+          "type": "integer",
+          "minimum": 20,
+          "maximum": 5000
+        },
+        "max_restarts": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "restart_delay_ms": {
+          "type": "integer",
+          "minimum": 100,
+          "maximum": 60000
+        },
+        "phase": {
+          "enum": [
+            "starting",
+            "running",
+            "backoff",
+            "stopping",
+            "stopped"
+          ]
+        },
+        "restarts": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "last_exit_code": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9223372036854775807
+            }
+          ]
+        },
+        "exit_reason": {
+          "enum": [
+            "",
+            "normal_exit",
+            "stop_requested",
+            "cancelled",
+            "restart_limit",
+            "startup_failed",
+            "ownership_changed",
+            "internal_error",
+            "superseded"
+          ]
+        },
+        "worker_pid": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "generation": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "stop_epoch": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "started_at_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "updated_at_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "heartbeat_at_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "next_restart_at_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "finished_at_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        }
+      },
+      "required": [
+        "id",
+        "owner",
+        "process_identity",
+        "workspace",
+        "pid",
+        "poll_ms",
+        "max_restarts",
+        "restart_delay_ms",
+        "phase",
+        "restarts",
+        "last_exit_code",
+        "exit_reason",
+        "worker_pid",
+        "generation",
+        "stop_epoch",
+        "started_at_ms",
+        "updated_at_ms",
+        "heartbeat_at_ms",
+        "next_restart_at_ms",
+        "finished_at_ms"
+      ],
+      "additionalProperties": true,
+      "description": "Durable lifecycle snapshot. Its phase and heartbeat are historical evidence, not proof of current liveness."
+    },
+    "supervisorObservation": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "enum": [
+            "matching_process",
+            "not_running",
+            "identity_mismatch",
+            "unavailable",
+            "not_checked"
+          ]
+        },
+        "observed_at_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        }
+      },
+      "required": [
+        "state",
+        "observed_at_ms"
+      ],
+      "additionalProperties": true,
+      "description": "Read-only OS creation identity observation; never authorization to kill, restart or replay. Can become stale immediately."
+    },
+    "supervisorStatus": {
+      "type": "object",
+      "properties": {
+        "record": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/supervisorRecord"
+            }
+          ]
+        },
+        "observation": {
+          "$ref": "#/$defs/supervisorObservation"
+        },
+        "worker_matches": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "record",
+        "observation",
+        "worker_matches"
+      ],
+      "additionalProperties": true
+    },
+    "supervisorEvent": {
+      "type": "object",
+      "properties": {
+        "seq": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9223372036854775807
+        },
+        "run_id": {
+          "type": "string",
+          "x-maxBytes": 256
+        },
+        "kind": {
+          "enum": [
+            "supervisor.starting",
+            "supervisor.running",
+            "supervisor.backoff",
+            "supervisor.stopping",
+            "supervisor.stopped",
+            "supervisor.child_exited"
+          ]
+        },
+        "payload": {
+          "$ref": "#/$defs/supervisorRecord"
+        },
+        "created_at_ms": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9223372036854775807
+        }
+      },
+      "required": [
+        "seq",
+        "run_id",
+        "kind",
+        "payload",
+        "created_at_ms"
+      ],
+      "additionalProperties": true
+    },
+    "supervisorEvents": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/supervisorEvent"
+          },
+          "maxItems": 100
+        },
+        "next_after": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "has_more": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "items",
+        "next_after",
+        "has_more"
+      ],
+      "additionalProperties": true
+    },
+    "schedulerDiagnostics": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/schedulerStatus"
+        },
+        {
+          "type": "object",
+          "required": [
+            "supervisor"
+          ]
+        }
+      ]
+    },
+    "mcpAuthParams": {
+      "type": "object",
+      "properties": {
+        "mcp_config": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 32768,
+          "x-maxBytes": 32768
+        },
+        "server": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,16}$"
+        }
+      },
+      "required": [
+        "mcp_config",
+        "server"
+      ],
+      "additionalProperties": false
+    },
+    "mcpAuthLoginParams": {
+      "type": "object",
+      "properties": {
+        "mcp_config": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 32768,
+          "x-maxBytes": 32768
+        },
+        "server": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,16}$"
+        },
+        "login_timeout_ms": {
+          "type": "integer",
+          "minimum": 100,
+          "maximum": 300000
+        }
+      },
+      "required": [
+        "mcp_config",
+        "server"
+      ],
+      "additionalProperties": false
+    },
+    "pluginPackParams": {
+      "type": "object",
+      "properties": {
+        "source": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 32768,
+          "x-maxBytes": 32768
+        },
+        "output": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 32768,
+          "x-maxBytes": 32768
+        }
+      },
+      "required": [
+        "source",
+        "output"
+      ],
+      "additionalProperties": false
+    },
+    "pluginInstallParams": {
+      "type": "object",
+      "properties": {
+        "bundle": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 32768,
+          "x-maxBytes": 32768
+        },
+        "url": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8192,
+          "x-maxBytes": 8192
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "store": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 32768,
+          "x-maxBytes": 32768
+        },
+        "allow_http_loopback": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "sha256",
+        "store"
+      ],
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "required": [
+            "bundle"
+          ],
+          "not": {
+            "required": [
+              "url"
+            ]
+          }
+        },
+        {
+          "required": [
+            "url"
+          ],
+          "not": {
+            "required": [
+              "bundle"
+            ]
+          }
+        }
+      ]
+    },
+    "pluginLockParams": {
+      "type": "object",
+      "properties": {
+        "directory": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 32768,
+          "x-maxBytes": 32768
+        },
+        "output": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 32768,
+          "x-maxBytes": 32768
+        }
+      },
+      "required": [
+        "directory",
+        "output"
+      ],
+      "additionalProperties": false
+    },
+    "pluginInspectParams": {
+      "type": "object",
+      "properties": {
+        "lock": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 32768,
+          "x-maxBytes": 32768
+        }
+      },
+      "required": [
+        "lock"
+      ],
+      "additionalProperties": false
+    },
+    "extensionResult": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "x-maxBytes": 64
+        },
+        "status": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "x-maxBytes": 64
+        },
+        "format": {
+          "const": 2
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "state"
+          ]
+        },
+        {
+          "required": [
+            "status"
+          ]
+        },
+        {
+          "required": [
+            "format"
+          ]
+        }
+      ],
+      "additionalProperties": true
+    },
+    "operationAuthorization": {
+      "type": "object",
+      "properties": {
+        "operation_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "type": {
+          "const": "authorization"
+        },
+        "authorization_url": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 16384,
+          "x-maxBytes": 16384
+        },
+        "redirect_uri": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "x-maxBytes": 256
+        }
+      },
+      "required": [
+        "operation_id",
+        "type",
+        "authorization_url",
+        "redirect_uri"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,67 @@
+[0mchecking for LLVM Clang C/C++ Compiler (x64) ... [32;1mok[0m
+[0mchecking for Microsoft Visual Studio (x64) version ... [32;1m2022[0m
+[0m[32;1m[ 10%]:[0m [36;1m<agent-tests>[0m cache compiling.release tests\core_tests.cpp[0m
+[0m[32;1m[ 10%]:[0m [36;1m<agent-tests>[0m cache compiling.release tests\tools_tests.cpp[0m
+[0m[32;1m[ 10%]:[0m [36;1m<agent-tests>[0m cache compiling.release tests\process_tests.cpp[0m
+[0m[32;1m[ 10%]:[0m [36;1m<agent-tests>[0m cache compiling.release tests\messages_tests.cpp[0m
+[0m[32;1m[ 10%]:[0m [36;1m<agent-tests>[0m cache compiling.release tests\resume_kernel_tests.cpp[0m
+[0m[32;1m[ 10%]:[0m [36;1m<agent-tests>[0m cache compiling.release tests\scheduler_store_tests.cpp[0m
+[0m[32;1m[ 10%]:[0m [36;1m<agent-tests>[0m cache compiling.release tests\line_process_tests.cpp[0m
+[0m[32;1m[ 10%]:[0m [36;1m<agent-tests>[0m cache compiling.release tests\cron_tests.cpp[0m
+[0m[32;1m[ 10%]:[0m [36;1m<agent-tests>[0m cache compiling.release tests\cron_store_tests.cpp[0m
+[0m[32;1m[ 10%]:[0m [36;1m<agent-tests>[0m cache compiling.release tests\responses_tests.cpp[0m
+[0m[32;1m[ 10%]:[0m [36;1m<agent-tests>[0m cache compiling.release tests\mcp_tests.cpp[0m
+[0m[32;1m[ 10%]:[0m [36;1m<agent-tests>[0m cache compiling.release tests\autostart_tests.cpp[0m
+[0m[32;1m[ 10%]:[0m [36;1m<agent-tests>[0m cache compiling.release tests\sandbox_tests.cpp[0m
+[0m[32;1m[ 10%]:[0m [36;1m<agent-tests>[0m cache compiling.release tests\checkpoint_store_tests.cpp[0m
+[0m[32;1m[ 10%]:[0m [36;1m<agent-tests>[0m cache compiling.release tests\state_reader_tests.cpp[0m
+[0m[32;1m[ 10%]:[0m [36;1m<agent-core>[0m cache compiling.release src\core\build_info.cpp[0m
+[0m[32;1m[ 10%]:[0m [36;1m<agent-tests>[0m cache compiling.release tests\workspace_execution_tests.cpp[0m
+[0m[32;1m[ 10%]:[0m [36;1m<agent-tests>[0m cache compiling.release tests\build_proposal_tests.cpp[0m
+[0m[32;1m[ 10%]:[0m [36;1m<agent-tests>[0m cache compiling.release tests\build_decision_tests.cpp[0m
+[0m[32;1m[ 10%]:[0m [36;1m<agent-tests>[0m cache compiling.release tests\build_workspace_tests.cpp[0m
+[0m[32;1m[ 10%]:[0m [36;1m<agent-core>[0m cache compiling.release src\core\state_reader.cpp[0m
+[0m[32;1m[ 10%]:[0m [36;1m<agent-core>[0m cache compiling.release src\provider\messages.cpp[0m
+[0m[32;1m[ 10%]:[0m [36;1m<agent-core>[0m cache compiling.release src\core\cron.cpp[0m
+[0m[32;1m[ 10%]:[0m [36;1m<agent-core>[0m cache compiling.release src\core\kernel.cpp[0m
+[0m[32;1m[ 10%]:[0m [36;1m<agent-core>[0m cache compiling.release src\core\store.cpp[0m
+[0m[32;1m[ 10%]:[0m [36;1m<agent-core>[0m cache compiling.release src\core\digest.cpp[0m
+[0m[32;1m[ 11%]:[0m [36;1m<agent-core>[0m cache compiling.release src\provider\provider.cpp[0m
+[0m[32;1m[ 12%]:[0m [36;1m<agent-core>[0m cache compiling.release src\provider\responses.cpp[0m
+[0m[32;1m[ 13%]:[0m [36;1m<agent-core>[0m cache compiling.release src\tools\build_proposal.cpp[0m
+[0m[32;1m[ 15%]:[0m [36;1m<agent-core>[0m cache compiling.release src\tools\tools.cpp[0m
+[0m[32;1m[ 16%]:[0m [36;1m<agent-core>[0m cache compiling.release src\tools\workspace_build.cpp[0m
+[0m[32;1m[ 17%]:[0m [36;1m<agent-core>[0m cache compiling.release src\platform\autostart.cpp[0m
+[0m[32;1m[ 18%]:[0m [36;1m<agent-core>[0m cache compiling.release src\platform\autostart_linux.cpp[0m
+[0m[32;1m[ 19%]:[0m [36;1m<agent-core>[0m cache compiling.release src\platform\build_workspace.cpp[0m
+[0m[32;1m[ 20%]:[0m [36;1m<agent-core>[0m cache compiling.release src\platform\build_workspace_linux.cpp[0m
+[0m[32;1m[ 22%]:[0m [36;1m<agent-core>[0m cache compiling.release src\platform\line_process.cpp[0m
+[0m[32;1m[ 23%]:[0m [36;1m<agent-core>[0m cache compiling.release src\platform\linux_sandbox.cpp[0m
+[0m[32;1m[ 24%]:[0m [36;1m<agent-core>[0m cache compiling.release src\platform\process.cpp[0m
+[0m[32;1m[ 25%]:[0m [36;1m<agent-core>[0m cache compiling.release src\platform\sandbox.cpp[0m
+[0m[32;1m[ 26%]:[0m [36;1m<agent-core>[0m cache compiling.release src\platform\scheduler_process.cpp[0m
+[0m[32;1m[ 27%]:[0m [36;1m<agent-core>[0m cache compiling.release src\platform\windows_sandbox.cpp[0m
+[0m[32;1m[ 28%]:[0m [36;1m<agent-core>[0m cache compiling.release src\mcp\mcp.cpp[0m
+[0m[32;1m[ 30%]:[0m [36;1m<agent-core>[0m cache compiling.release src\application\application.cpp[0m
+[0m[32;1m[ 31%]:[0m [36;1m<agent-core>[0m cache compiling.release src\application\build_approval.cpp[0m
+[0m[32;1m[ 32%]:[0m [36;1m<agent-core>[0m cache compiling.release src\application\scheduler.cpp[0m
+[0m[32;1m[ 33%]:[0m [36;1m<agent-core>[0m cache compiling.release src\application\service.cpp[0m
+[0m[32;1m[ 34%]:[0m [36;1m<agent-core>[0m cache compiling.release src\execution\build_manifest.cpp[0m
+[0m[32;1m[ 35%]:[0m [36;1m<agent-core>[0m cache compiling.release src\execution\workspace_execution.cpp[0m
+[0m[32;1m[ 37%]:[0m [36;1m<process-fixture>[0m cache compiling.release tests\process_fixture.cpp[0m
+[0m[32;1m[ 38%]:[0m [36;1m<line-process-fixture>[0m cache compiling.release tests\line_process_fixture.cpp[0m
+[0m[32;1m[ 39%]:[0m [36;1m<mcp-fixture>[0m cache compiling.release tests\mcp_fixture.cpp[0m
+[0m[32;1m[ 40%]:[0m [36;1m<sandbox-fixture>[0m cache compiling.release tests\sandbox_fixture.cpp[0m
+[0m[32;1m[ 41%]:[0m [36;1m<build-fixture>[0m cache compiling.release tests\build_fixture.cpp[0m
+[0m[32;1m[ 42%]:[0m [36;1m<codestudio-agent>[0m cache compiling.release src\cli\main.cpp[0m
+[0m[32;1m[ 44%]:[0m [36;1m<provider-fixture>[0m cache compiling.release tests\provider_fixture.cpp[0m
+[0m[32;1m[ 53%]:[0m [36;1m<process-fixture>[0m [36;1mlinking.release process-fixture.exe[0m
+[0m[32;1m[ 54%]:[0m [36;1m<line-process-fixture>[0m [36;1mlinking.release line-process-fixture.exe[0m
+[0m[32;1m[ 69%]:[0m [36;1m<sandbox-fixture>[0m [36;1mlinking.release sandbox-fixture.exe[0m
+[0m[32;1m[ 75%]:[0m [36;1m<build-fixture>[0m [36;1mlinking.release build-fixture.exe[0m
+[0m[32;1m[ 78%]:[0m [36;1m<mcp-fixture>[0m [36;1mlinking.release mcp-fixture.exe[0m
+[0m[32;1m[ 85%]:[0m [36;1m<agent-core>[0m [36;1marchiving.release agent-core.lib[0m
+[0m[32;1m[ 86%]:[0m [36;1m<agent-tests>[0m [36;1mlinking.release agent-tests.exe[0m
+[0m[32;1m[ 86%]:[0m [36;1m<codestudio-agent>[0m [36;1mlinking.release codestudio-agent.exe[0m
+[0m[32;1m[ 86%]:[0m [36;1m<provider-fixture>[0m [36;1mlinking.release provider-fixture.exe[0m
+[0m[32;1m[100%]:[0m [32;1mbuild ok, spent 12.891s[0m

@@ -1,0 +1,7 @@
+[ 23%]: <agent-tests> cache compiling.debug tests/sandbox_tests.cpp
+[ 47%]: <agent-core> cache compiling.debug src/platform/process_package.cpp
+[ 87%]: <agent-core> archiving.debug libagent-core.a
+[ 88%]: <codestudio-agent> linking.debug codestudio-agent
+[ 88%]: <provider-fixture> linking.debug provider-fixture
+[ 93%]: <agent-tests> linking.debug agent-tests
+[100%]: build ok, spent 5.611s

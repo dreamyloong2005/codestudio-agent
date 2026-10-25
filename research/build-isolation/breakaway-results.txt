@@ -1,0 +1,16 @@
+host_loopback_control=0
+parent ac=1 job=1 caps=1 cap=S-1-15-3-1024-1065365936-1281604716-3511738428-1654721687-432734479-3232135806-4053264122-3456934681 app=S-1-15-2-1117033993-3801952544-3285977335-1725133397-931881732-294820648-803158923 integrity=4096 granted=2
+exit=5
+inner ac=1 job=1 caps=1 cap=S-1-15-3-1024-1065365936-1281604716-3511738428-1654721687-432734479-3232135806-4053264122-3456934681 app=S-1-15-2-1117033993-3801952544-3285977335-1725133397-931881732-294820648-803158923 integrity=4096 granted=2
+open=1 error=0 path=probe.exe
+open=1 error=0 path=kernelbase.dll
+open=1 error=0 path=apphelp.dll
+open=1 error=0 path=ntdll.dll
+host_file_read=0 error=5
+host_file_write=0 error=5
+host_registry_read=5
+host_registry_write=5
+afd=0 error=5
+wsa=0
+socket=0 error=10013
+spawn=0 error=5

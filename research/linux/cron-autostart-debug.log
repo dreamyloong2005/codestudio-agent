@@ -1,0 +1,29 @@
+............
+----------------------------------------------------------------------
+Ran 12 tests in 5.235s
+
+OK
+test_enable_readback_idempotency_configuration_conflict_and_remove (__main__.AutostartTests.test_enable_readback_idempotency_configuration_conflict_and_remove) ... ok
+test_invalid_poll_cannot_register_or_create_workspace_state (__main__.AutostartTests.test_invalid_poll_cannot_register_or_create_workspace_state) ... ok
+test_linux_modified_unit_and_foreign_enable_link_are_not_removed (__main__.AutostartTests.test_linux_modified_unit_and_foreign_enable_link_are_not_removed) ... ok
+test_linux_orphan_enable_link_and_symlink_unit_fail_closed (__main__.AutostartTests.test_linux_orphan_enable_link_and_symlink_unit_fail_closed) ... ok
+test_linux_unit_contract_and_systemd_syntax (__main__.AutostartTests.test_linux_unit_contract_and_systemd_syntax) ... FAIL
+test_state_and_workspace_scope_have_distinct_owned_names (__main__.AutostartTests.test_state_and_workspace_scope_have_distinct_owned_names) ... ok
+test_status_and_absent_disable_do_not_create_state_or_launch_work (__main__.AutostartTests.test_status_and_absent_disable_do_not_create_state_or_launch_work) ... ok
+
+======================================================================
+FAIL: test_linux_unit_contract_and_systemd_syntax (__main__.AutostartTests.test_linux_unit_contract_and_systemd_syntax)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/tmp/codestudio-agent-linux/tests/autostart_integration.py", line 122, in test_linux_unit_contract_and_systemd_syntax
+    self.assertEqual(verified.returncode, 0, verified.stdout + verified.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : /tmp/codestudio-autostart-zwla1axi/private configuration/systemd/user/codestudio-agent-c8953c85f8068e93637fb85ef6cbd4e5bf1192748a2392690bbc3076dd852da8.service:9: WorkingDirectory= path is not absolute: "/tmp/codestudio-autostart-zwla1axi/workspace with spaces 工作区"
+codestudio-agent-c8953c85f8068e93637fb85ef6cbd4e5bf1192748a2392690bbc3076dd852da8.service: Unit configuration has fatal error, unit will not be started.
+Unit codestudio-agent-c8953c85f8068e93637fb85ef6cbd4e5bf1192748a2392690bbc3076dd852da8.service has a bad unit file setting.
+
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.252s
+
+FAILED (failures=1)

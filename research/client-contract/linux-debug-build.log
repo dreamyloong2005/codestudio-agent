@@ -1,0 +1,6 @@
+[0m[38;5;2;1m[ 54%]:[0m [38;5;5;1m<agent-core>[0m cache compiling.debug src/application/service.cpp[0m
+[0m[38;5;2;1m[ 85%]:[0m [38;5;5;1m<agent-core>[0m [38;5;5;1marchiving.debug libagent-core.a[0m
+[0m[38;5;2;1m[ 86%]:[0m [38;5;5;1m<agent-tests>[0m [38;5;5;1mlinking.debug agent-tests[0m
+[0m[38;5;2;1m[ 86%]:[0m [38;5;5;1m<codestudio-agent>[0m [38;5;5;1mlinking.debug codestudio-agent[0m
+[0m[38;5;2;1m[ 86%]:[0m [38;5;5;1m<provider-fixture>[0m [38;5;5;1mlinking.debug provider-fixture[0m
+[0m[38;5;2;1m[100%]:[0m [38;5;2;1mbuild ok, spent 5.813s[0m

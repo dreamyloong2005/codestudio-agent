@@ -1,0 +1,48 @@
+test_abnormal_finishes_and_empty_answers (__main__.ProviderTests.test_abnormal_finishes_and_empty_answers) ... ok
+test_complete_two_tool_rounds (__main__.ProviderTests.test_complete_two_tool_rounds) ... ok
+test_full_endpoint_and_normalized_response (__main__.ProviderTests.test_full_endpoint_and_normalized_response) ... ok
+test_http_errors_do_not_echo_credentials (__main__.ProviderTests.test_http_errors_do_not_echo_credentials) ... ok
+test_invalid_header_credential (__main__.ProviderTests.test_invalid_header_credential) ... ok
+test_invalid_json_and_top_level_shape (__main__.ProviderTests.test_invalid_json_and_top_level_shape) ... ok
+test_no_key_for_local_models (__main__.ProviderTests.test_no_key_for_local_models) ... ok
+test_offline_demo_and_readback_failure (__main__.ProviderTests.test_offline_demo_and_readback_failure) ... ok
+test_redirect_is_not_followed (__main__.ProviderTests.test_redirect_is_not_followed) ... ok
+test_response_size_limit (__main__.ProviderTests.test_response_size_limit) ... ok
+test_reused_tool_id_is_rejected (__main__.ProviderTests.test_reused_tool_id_is_rejected) ... ok
+test_timeout_and_cancellation (__main__.ProviderTests.test_timeout_and_cancellation) ... ok
+test_tool_arguments_must_be_complete_objects (__main__.ProviderTests.test_tool_arguments_must_be_complete_objects) ... ok
+test_tool_call_shape_and_finish_consistency (__main__.ProviderTests.test_tool_call_shape_and_finish_consistency) ... ok
+test_url_security (__main__.ProviderTests.test_url_security) ... ok
+
+----------------------------------------------------------------------
+Ran 15 tests in 1.331s
+
+OK
+...........
+----------------------------------------------------------------------
+Ran 11 tests in 0.667s
+
+OK
+test_all_apis_stream_text_and_usage (__main__.StreamingTests.test_all_apis_stream_text_and_usage) ... ok
+test_cancel_and_timeout_during_stream (__main__.StreamingTests.test_cancel_and_timeout_during_stream) ... ok
+test_chat_tool_deltas_accept_optional_null_fields (__main__.StreamingTests.test_chat_tool_deltas_accept_optional_null_fields) ... ok
+test_cli_incomplete_stream_never_executes_tool (__main__.StreamingTests.test_cli_incomplete_stream_never_executes_tool) ... ok
+test_cli_short_text_is_displayed_before_terminal (__main__.StreamingTests.test_cli_short_text_is_displayed_before_terminal) ... ok
+test_cli_stream_redacts_split_key_and_preserves_json_stdout (__main__.StreamingTests.test_cli_stream_redacts_split_key_and_preserves_json_stdout) ... ok
+test_cli_streaming_tools_are_persisted_and_replayed (__main__.StreamingTests.test_cli_streaming_tools_are_persisted_and_replayed) ... ok
+test_content_type_malformed_json_and_size_limit (__main__.StreamingTests.test_content_type_malformed_json_and_size_limit) ... ok
+test_http_chunked_transfer_and_transport_truncation (__main__.StreamingTests.test_http_chunked_transfer_and_transport_truncation) ... ok
+test_http_failure_body_is_never_streamed (__main__.StreamingTests.test_http_failure_body_is_never_streamed) ... ok
+test_in_stream_error_never_echoes_response_body (__main__.StreamingTests.test_in_stream_error_never_echoes_response_body) ... ok
+test_missing_terminal_rejects_complete_looking_tool (__main__.StreamingTests.test_missing_terminal_rejects_complete_looking_tool) ... ok
+test_multiline_sse_data_is_one_json_event (__main__.StreamingTests.test_multiline_sse_data_is_one_json_event) ... ok
+test_non_stream_responses_and_messages (__main__.StreamingTests.test_non_stream_responses_and_messages) ... ok
+test_post_terminal_and_duplicate_key_rejected (__main__.StreamingTests.test_post_terminal_and_duplicate_key_rejected) ... ok
+test_selected_full_endpoint_and_conflicting_endpoint (__main__.StreamingTests.test_selected_full_endpoint_and_conflicting_endpoint) ... ok
+test_text_arrives_before_server_releases_terminal (__main__.StreamingTests.test_text_arrives_before_server_releases_terminal) ... ok
+test_three_turn_tool_roundtrip_for_each_api (__main__.StreamingTests.test_three_turn_tool_roundtrip_for_each_api) ... ok
+
+----------------------------------------------------------------------
+Ran 18 tests in 3.708s
+
+OK

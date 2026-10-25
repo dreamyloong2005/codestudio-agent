@@ -1,0 +1,26 @@
+[0m[32;1m[ 14%]:[0m [36;1m<agent-tests>[0m cache compiling.debug tests\mcp_tests.cpp[0m
+[0m[32;1m[ 54%]:[0m [36;1m<agent-core>[0m cache compiling.debug src\mcp\mcp.cpp[0m
+[0m[32;1m[ 54%]:[0m [36;1m<agent-core>[0m cache compiling.debug src\mcp\oauth.cpp[0m
+[0m[32;1m[ 54%]:[0m [36;1m<agent-core>[0m cache compiling.debug src\mcp\oauth_http.cpp[0m
+[0m[32;1m[ 54%]:[0m [36;1m<agent-core>[0m cache compiling.debug src\mcp\oauth_native.cpp[0m
+[0m[32;1m[ 55%]:[0m [36;1m<agent-core>[0m cache compiling.debug src\application\application.cpp[0m
+[0m[32;1m[ 57%]:[0m [36;1m<agent-core>[0m cache compiling.debug src\application\extension_commands.cpp[0m
+[0m[32;1m[ 63%]:[0m [36;1m<agent-core>[0m cache compiling.debug src\plugins\plugins.cpp[0m
+[0m[32;1m[ 70%]:[0m [36;1m<codestudio-agent>[0m cache compiling.debug src\cli\main.cpp[0m
+[0m[1;31;1merror: [0msrc\plugins\plugins.cpp(487,24): error: call to 'absolute' is ambiguous
+  487 |     const auto store = absolute(requested_store);
+      |                        ^~~~~~~~
+C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.44.35207\include\filesystem(3032,40): note: candidate function
+ 3032 |     _EXPORT_STD _NODISCARD inline path absolute(const path& _Input) {
+      |                                        ^
+src\plugins\plugins.cpp(34,10): note: candidate function
+   34 | fs::path absolute(fs::path path) {
+      |          ^
+src\plugins\plugins.cpp(525,40): error: call to 'absolute' is ambiguous
+  525 |     require(directory.is_absolute() && absolute(directory) == directory, "lock installation path must be absolute and canonical");
+      |                                        ^~~~~~~~
+C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.44.35207\include\filesystem(3032,40): note: candidate function
+ 3032 |     _EXPORT_STD _NODISCARD inline path absolute(const path& _Input) {
+      |                                        ^
+src\plugins\plugins.cpp(34,10): note: candidate function
+   34 | fs::path absolute(fs::path path) {[0m

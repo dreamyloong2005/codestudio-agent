@@ -1,0 +1,19 @@
+test_enable_readback_idempotency_configuration_conflict_and_remove (__main__.AutostartTests.test_enable_readback_idempotency_configuration_conflict_and_remove) ... ok
+test_invalid_poll_cannot_register_or_create_workspace_state (__main__.AutostartTests.test_invalid_poll_cannot_register_or_create_workspace_state) ... ok
+test_state_and_workspace_scope_have_distinct_owned_names (__main__.AutostartTests.test_state_and_workspace_scope_have_distinct_owned_names) ... ok
+test_status_and_absent_disable_do_not_create_state_or_launch_work (__main__.AutostartTests.test_status_and_absent_disable_do_not_create_state_or_launch_work) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 1.001s
+
+OK
+PASS real isolated XMake / explicit-v2 / C++26 pack indexing / compile / link / execute / atomic export
+  steps=3, bytes=1024, sha256=7368667667e320d175dd91f94004e04b70a00fd4bb6aff0f37ebef648ca95bf8
+PASS real isolated XMake / custom-cache-v2 / C++26 pack indexing / compile / link / execute / atomic export
+  steps=3, bytes=1024, sha256=85aa459f55ee5fdb991d3faa57d1f489c261b06ac3fca6458962fa2990c5423a
+PASS 2 real isolated XMake builds: explicit-v2 and custom-cache-v2
+............
+----------------------------------------------------------------------
+Ran 12 tests in 8.921s
+
+OK

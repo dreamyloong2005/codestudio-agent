@@ -1,0 +1,31 @@
+[  9%]: <agent-tests> cache compiling.release tests\mcp_tests.cpp
+[ 13%]: <agent-tests> cache compiling.release tests\credentials_tests.cpp
+[ 40%]: <agent-core> cache compiling.release src\platform\credentials.cpp
+[ 49%]: <agent-core> cache compiling.release src\mcp\http_transport.cpp
+[ 50%]: <agent-core> cache compiling.release src\mcp\mcp.cpp
+[ 51%]: <agent-core> cache compiling.release src\mcp\oauth.cpp
+tests\credentials_tests.cpp(31,38): warning: 'getenv' is deprecated: This function or variable may be unsafe. Consider using _dupenv_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details. [-Wdeprecated-declarations]
+   31 |         if (const auto* value = std::getenv(name.c_str())) previous = value;
+      |                                      ^
+C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\stdlib.h(1183,20): note: 'getenv' has been explicitly marked deprecated here
+ 1183 |     _Check_return_ _CRT_INSECURE_DEPRECATE(_dupenv_s)
+      |                    ^
+C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.44.35207\include\vcruntime.h(368,55): note: expanded from macro '_CRT_INSECURE_DEPRECATE'
+  368 |         #define _CRT_INSECURE_DEPRECATE(_Replacement) _CRT_DEPRECATE_TEXT(    \
+[ 52%]: <agent-core> cache compiling.release src\mcp\oauth_http.cpp
+[ 53%]: <agent-core> cache compiling.release src\mcp\oauth_native.cpp
+[ 55%]: <agent-core> cache compiling.release src\application\application.cpp
+[ 56%]: <agent-core> cache compiling.release src\application\build_approval.cpp
+[ 57%]: <agent-core> cache compiling.release src\application\extension_commands.cpp
+[ 58%]: <agent-core> cache compiling.release src\application\scheduler.cpp
+[ 59%]: <agent-core> cache compiling.release src\application\service.cpp
+[ 60%]: <agent-core> cache compiling.release src\application\supervisor_diagnostics.cpp
+[ 63%]: <agent-core> cache compiling.release src\plugins\download.cpp
+[ 63%]: <agent-core> cache compiling.release src\plugins\plugins.cpp
+[ 69%]: <codestudio-agent> cache compiling.release src\cli\credentials_cli.cpp
+[ 70%]: <codestudio-agent> cache compiling.release src\cli\main.cpp
+[ 87%]: <agent-core> archiving.release agent-core.lib
+[ 88%]: <agent-tests> linking.release agent-tests.exe
+[ 88%]: <codestudio-agent> linking.release codestudio-agent.exe
+[ 88%]: <provider-fixture> linking.release provider-fixture.exe
+[100%]: build ok, spent 11.891s

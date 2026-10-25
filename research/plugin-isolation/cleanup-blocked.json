@@ -1,0 +1,15 @@
+{
+  "format": 2,
+  "path": "C:\\Users\\dreamyloong\\AppData\\Local\\Temp\\codestudio-package-interface-1116603879",
+  "origin": "Initial Windows native ProcessPackage test used a short TEMP alias and failed before fixture cleanup",
+  "verified_contents": {
+    "source/entry.exe": "owned-image-bytes",
+    "source/data/config.txt": "frozen configuration\n",
+    "source/unlisted-secret.txt": "must-not-be-imported"
+  },
+  "other_entries": ["good", "source", "source/data"],
+  "cleanup_status": "blocked_by_automatic_approval",
+  "reason": "blocked by policy",
+  "attempts": ["verified exact-tree recursive removal", "verified individual file and empty-directory removal"],
+  "scope": "No further deletion attempted; final checks must report this known fixture if it remains"
+}

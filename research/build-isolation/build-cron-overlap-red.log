@@ -1,0 +1,5 @@
+[0m[32;1m[ 24%]:[0m [36;1m<agent-tests>[0m cache compiling.release tests\cron_store_tests.cpp[0m
+[0m[32;1m[ 49%]:[0m [36;1m<agent-core>[0m cache compiling.release src\platform\autostart.cpp[0m
+[0m[32;1m[ 89%]:[0m [36;1m<agent-core>[0m [36;1marchiving.release agent-core.lib[0m
+[0m[32;1m[ 90%]:[0m [36;1m<agent-tests>[0m [36;1mlinking.release agent-tests.exe[0m
+[0m[32;1m[100%]:[0m [32;1mbuild ok, spent 3.61s[0m

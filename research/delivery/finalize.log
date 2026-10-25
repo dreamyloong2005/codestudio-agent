@@ -1,0 +1,96 @@
+{
+  "format": 2,
+  "product": "CodeStudio-Agent",
+  "generated_at": "2026-10-25T11:27:24.522505+00:00",
+  "status": "verified",
+  "source": {
+    "sha256": "e8d4b6bf30c645bed57662d2296377ea02940647c8c177c7f20ff7025e94d64b",
+    "files": 165
+  },
+  "native_mirror_file_set_and_bytes_match": true,
+  "full_verification": {
+    "windows-debug": "windows/debug-20261025T111755Z-9ee5c70f/verification.json",
+    "windows-release": "windows/release-20261025T112115Z-f6340423/verification.json",
+    "linux-debug": "linux/debug-20261025T111757Z-afd5f56d/verification.json",
+    "linux-release": "linux/release-20261025T111928Z-a0d6e200/verification.json"
+  },
+  "packages": {
+    "windows": {
+      "archive": {
+        "path": "build/packages/windows-x64/codestudio-agent-windows-x64.zip",
+        "sha256": "979051fd169173c1ae8d5c5ec607b184ff2fbf7f2f5260566b252e98df0c5924",
+        "bytes": 1898521
+      },
+      "binary": {
+        "path": "build/packages/windows-x64/codestudio-agent-windows-x64/codestudio-agent.exe",
+        "sha256": "a89613de8940beba859a4a6d0b07cfac8b8c696c27555784b988790fb67d2fd8",
+        "bytes": 4592640
+      },
+      "package_manifest_sha256": "485fa8e59eea28f0111ba581752350902e88f477c0c0ce502731f47c94fa1858",
+      "payload_files": 33,
+      "archive_bytes_and_modes_match": true,
+      "manifest_and_checksums_match": true,
+      "embedded_full_release_receipt": "windows/release-20261025T112115Z-f6340423/verification.json",
+      "deterministic_archive_receipt": "package-repro-windows.json",
+      "archive_repeated_runs": 2
+    },
+    "linux": {
+      "archive": {
+        "path": "/var/tmp/codestudio-agent-linux/build/packages/linux-x86_64/codestudio-agent-linux-x86_64.tar.gz",
+        "sha256": "26c95b644d59c46827b349c52854e3d8fee2a28f04ba2f28038e5d3f4cfc3c3c",
+        "bytes": 1405669
+      },
+      "binary": {
+        "path": "/var/tmp/codestudio-agent-linux/build/packages/linux-x86_64/codestudio-agent-linux-x86_64/codestudio-agent",
+        "sha256": "90ea6b8a46b8eb702a3ec89f5360ef2f303485bb33041603b2203b157a5b3ea5",
+        "bytes": 2901224
+      },
+      "package_manifest_sha256": "0e6cb2875fc165657d35624947abe0187c7104bc65b3e7a71ee0fb5997ba77bc",
+      "payload_files": 33,
+      "archive_bytes_and_modes_match": true,
+      "manifest_and_checksums_match": true,
+      "embedded_full_release_receipt": "linux/release-20261025T111928Z-a0d6e200/verification.json",
+      "deterministic_archive_receipt": "package-repro-linux.json",
+      "archive_repeated_runs": 2,
+      "delivered_archive": {
+        "path": "build/linux/x86_64/release/codestudio-agent-linux-x86_64.tar.gz",
+        "sha256": "26c95b644d59c46827b349c52854e3d8fee2a28f04ba2f28038e5d3f4cfc3c3c",
+        "bytes": 1405669
+      },
+      "delivered_binary": {
+        "path": "build/linux/x86_64/release/codestudio-agent",
+        "sha256": "90ea6b8a46b8eb702a3ec89f5360ef2f303485bb33041603b2203b157a5b3ea5",
+        "bytes": 2901224
+      }
+    }
+  },
+  "installed_verification": {
+    "windows": {
+      "receipt": "installed-windows/release-20261025T112532Z-30b4d967/verification.json",
+      "archive_check": "archive-check-windows.json",
+      "cases": 24,
+      "passed": 23,
+      "skipped": 1,
+      "from_fresh_archive_extraction": true,
+      "temporary_extraction_cleaned": true
+    },
+    "linux": {
+      "receipt": "installed-linux/release-20261025T112211Z-7de4566a/verification.json",
+      "archive_check": "archive-check-linux.json",
+      "cases": 24,
+      "passed": 24,
+      "skipped": 0,
+      "from_fresh_archive_extraction": true,
+      "temporary_extraction_cleaned": true
+    }
+  },
+  "linux_payload_copied_without_deletion": true,
+  "boundaries": [
+    "Windows and Arch Linux WSL are the existing test hosts, not clean machines.",
+    "The enclosing Windows Job limits detached background-success verification; receipt skips remain explicit.",
+    "Archive extraction and user-level install/upgrade/uninstall tests ran in temporary owned prefixes.",
+    "No hosted CI execution, Git publication, signing, real login/reboot or permanent installation is claimed.",
+    "SHA256 verifies bytes and does not establish publisher identity; packages are unsigned.",
+    "Linux extracted payload mode checks occurred on the native filesystem; the archive preserves executable modes."
+  ]
+}

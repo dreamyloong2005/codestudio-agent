@@ -1,0 +1,15 @@
+{
+  "WindowsProjectProcesses": [],
+  "WindowsCodeStudioRegistrations": [],
+  "WindowsConfiguration": "windows/x64 release clang-cl system_deps=false",
+  "WindowsArtifacts": [
+    {
+      "FullName": "D:\\Dev\\Projects\\codestudio-agent\\build\\windows\\x64\\debug\\codestudio-agent.exe",
+      "Length": 5816832
+    },
+    {
+      "FullName": "D:\\Dev\\Projects\\codestudio-agent\\build\\windows\\x64\\release\\codestudio-agent.exe",
+      "Length": 4206080
+    }
+  ]
+}

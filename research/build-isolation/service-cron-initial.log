@@ -1,0 +1,8 @@
+test_cron_and_autostart_validation_has_no_effects (__main__.ServiceTests.test_cron_and_autostart_validation_has_no_effects) ... ok
+test_cron_async_creation_survives_eof_and_controls_work_during_foreground_task (__main__.ServiceTests.test_cron_async_creation_survives_eof_and_controls_work_during_foreground_task) ... ok
+test_cron_preview_and_queries_are_read_only (__main__.ServiceTests.test_cron_preview_and_queries_are_read_only) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.965s
+
+OK

@@ -1,0 +1,31 @@
+[0m[38;5;2;1m[ 24%]:[0m [38;5;5;1m<agent-tests>[0m cache compiling.debug tests/autostart_tests.cpp[0m
+[0m[38;5;2;1m[ 24%]:[0m [38;5;5;1m<agent-tests>[0m cache compiling.debug tests/sandbox_tests.cpp[0m
+[0m[38;5;2;1m[ 26%]:[0m [38;5;5;1m<agent-tests>[0m cache compiling.debug tests/workspace_execution_tests.cpp[0m
+[0m[38;5;2;1m[ 50%]:[0m [38;5;5;1m<agent-core>[0m cache compiling.debug src/platform/linux_sandbox.cpp[0m
+[0m[38;5;2;1m[ 52%]:[0m [38;5;5;1m<agent-core>[0m cache compiling.debug src/platform/autostart_linux.cpp[0m
+[0m[38;5;2;1m[ 55%]:[0m [38;5;5;1m<agent-core>[0m cache compiling.debug src/application/application.cpp[0m
+[0m[38;5;2;1m[ 85%]:[0m [38;5;5;1m<agent-core>[0m [38;5;5;1marchiving.debug libagent-core.a[0m
+[0m[38;5;2;1m[ 86%]:[0m [38;5;5;1m<agent-tests>[0m [38;5;5;1mlinking.debug agent-tests[0m
+[0m[38;5;2;1m[ 86%]:[0m [38;5;5;1m<codestudio-agent>[0m [38;5;5;1mlinking.debug codestudio-agent[0m
+[0m[38;5;2;1m[ 86%]:[0m [38;5;5;1m<provider-fixture>[0m [38;5;5;1mlinking.debug provider-fixture[0m
+[0m[38;5;2;1m[100%]:[0m [38;5;2;1mbuild ok, spent 5.994s[0m
+PASS persistence/recovery/transitions/schema
+PASS task loop/policy/budgets/redaction
+PASS current checkpoint format/atomicity/resume guards
+PASS scheduler persistence/fencing/budgets/atomic recovery
+PASS cron syntax/time zones/DST boundaries
+PASS cron atomic occurrences/overlap/recovery/controls
+PASS login autostart identity/ownership/argument boundaries
+PASS durable conversation resume/budgets/no replay
+PASS read-only state queries/pagination/commit visibility
+PASS Responses protocol and continuation
+PASS Messages protocol and continuation
+PASS workspace tool boundaries
+PASS isolated workspace import/export/hash/link boundaries
+PASS generic execution/manifest compatibility/frozen recipes
+PASS build proposals/digests/no execution/receipt validation
+PASS build decisions/atomic claims/no replay/current schema
+PASS process lifecycle/quoting/cancellation
+PASS persistent process transport/deadlines/environment
+PASS MCP grants/lifecycle/schemas/receipts
+PASS OS sandbox boundaries/stdio/descendants/cleanup

@@ -1,0 +1,7 @@
+test_approval_retains_source_mcp_manifest_protection (__main__.ProposalTests.test_approval_retains_source_mcp_manifest_protection) ... ok
+test_current_approval_credential_conflict_is_rejected_before_claim (__main__.ProposalTests.test_current_approval_credential_conflict_is_rejected_before_claim) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.951s
+
+OK

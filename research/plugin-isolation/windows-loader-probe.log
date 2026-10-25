@@ -1,0 +1,15 @@
+F
+======================================================================
+FAIL: test_private_library_and_nested_config_run_with_readonly_package_and_private_scratch (__main__.PluginSandboxTests.test_private_library_and_nested_config_run_with_readonly_package_and_private_scratch)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\plugin_sandbox_integration.py", line 211, in test_private_library_and_nested_config_run_with_readonly_package_and_private_scratch
+    self.assert_probe(self.tool("probe", self.probe_arguments()))
+  File "D:\Dev\Projects\codestudio-agent\tests\plugin_sandbox_integration.py", line 184, in assert_probe
+    self.assertEqual(report["library_value"], 7331)
+AssertionError: -126 != 7331
+
+----------------------------------------------------------------------
+Ran 1 test in 3.167s
+
+FAILED (failures=1)

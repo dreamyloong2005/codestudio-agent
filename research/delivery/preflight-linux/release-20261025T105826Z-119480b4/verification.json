@@ -1,0 +1,87 @@
+{
+  "format": 2,
+  "product": "CodeStudio-Agent",
+  "platform": "linux",
+  "arch": "x86_64",
+  "mode": "release",
+  "started_at": "2026-10-25T10:58:26.121290+00:00",
+  "status": "preflight",
+  "selected_suites": [
+    "schema"
+  ],
+  "omitted_suites": [
+    "native",
+    "provider",
+    "streaming",
+    "contract",
+    "service",
+    "credentials",
+    "cli",
+    "local_models",
+    "mcp",
+    "mcp_http",
+    "resume",
+    "sandbox",
+    "scheduler",
+    "supervisor",
+    "cron",
+    "autostart",
+    "real_build",
+    "package",
+    "verification",
+    "delivery"
+  ],
+  "build_requested": true,
+  "steps": [],
+  "source": {
+    "sha256": "a039084fcee7a6bcc2280c69379e4c31c652c34888d9d4b311071a0b61f23e05",
+    "files": 165
+  },
+  "toolchain": {
+    "python": "3.14.6",
+    "requirements": {
+      "format": 2,
+      "python_minimum": "3.11.0",
+      "xmake_minimum": "3.0.5",
+      "jsonschema": "4.23.0",
+      "windows": {
+        "arch": "x64",
+        "toolchain": "clang-cl",
+        "compiler_minimum": "22.0.0",
+        "requirements": [
+          "Visual Studio 2022 C++ build tools and Windows SDK",
+          "LLVM clang-cl 22 or newer"
+        ]
+      },
+      "linux": {
+        "arch": "x86_64",
+        "toolchain": "gcc",
+        "compiler_minimum": "16.0.0",
+        "pkg_config_minimum": {
+          "nlohmann_json": "3.12.0",
+          "sqlite3": "3.50.4",
+          "libcurl": "8.15.0",
+          "openssl": "3.0.0",
+          "libsecret-1": "0.21.0"
+        },
+        "requirements": [
+          "bubblewrap at /usr/bin/bwrap",
+          "tzdata",
+          "cgroup v2 delegation with cpu/memory/pids",
+          "user namespaces and seccomp"
+        ]
+      }
+    },
+    "jsonschema": "4.23.0",
+    "xmake": "xmake v3.1.0+20260808, A cross-platform build utility based on Lua",
+    "compiler": "g++ (GCC) 16.2.1 20260810",
+    "system_dependencies": {
+      "nlohmann_json": "3.12.0",
+      "sqlite3": "3.53.4",
+      "libcurl": "8.21.0",
+      "openssl": "3.6.3",
+      "libsecret-1": "0.21.7"
+    }
+  },
+  "finished_at": "2026-10-25T10:58:26.283668+00:00"
+}

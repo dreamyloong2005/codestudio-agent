@@ -1,0 +1,35 @@
+Verification failed: Source changed during verification; the receipt is not valid for a single snapshot
+Report: C:\Users\dreamyloong\AppData\Local\Temp\codestudio-verification-6ram_sha\source\release-20261025T105725Z-54bedb63\verification.json
+Verification failed: Built executables changed while tests were running
+Report: C:\Users\dreamyloong\AppData\Local\Temp\codestudio-verification-6ram_sha\binary\release-20261025T105725Z-ef6a524e\verification.json
+windows/release schema: failed
+Ran 2 tests in 0.1s
+
+OK
+
+Report: C:\Users\dreamyloong\AppData\Local\Temp\codestudio-verification-r9akgic6\release-20261025T105725Z-f5b5c2fc\verification.json
+.....Verification failed: missing tool
+Report: C:\Users\dreamyloong\AppData\Local\Temp\codestudio-verification-fn3vrzna\release-20261025T105725Z-cf7c0f9b\verification.json
+Report: C:\Users\dreamyloong\AppData\Local\Temp\codestudio-verification-nlpd96di\debug-20261025T105725Z-fb01503a\verification.json
+windows/release schema: failed
+
+windows/release schema: succeeded
+windows/release schema: failed
+Ran 0 tests in 0.1s
+
+OK
+
+windows/release schema: failed
+Ran 1 test in 0.1s
+
+OK
+not a complete test run
+
+windows/release schema: failed
+just a message
+
+......
+----------------------------------------------------------------------
+Ran 11 tests in 2.850s
+
+OK

@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "servers": [{
+    "id": "echo",
+    "transport": "stdio",
+    "plugin_lock": "C:/Path/To/echo.lock.json",
+    "tools": ["echo"],
+    "timeout_ms": 10000
+  }]
+}

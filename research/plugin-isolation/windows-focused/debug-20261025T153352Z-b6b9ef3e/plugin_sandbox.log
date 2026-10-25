@@ -1,0 +1,117 @@
+FFFFF.....F..FFF.
+======================================================================
+FAIL: test_changed_process_limits_block_resume_until_original_binding_is_restored (__main__.PluginSandboxTests.test_changed_process_limits_block_resume_until_original_binding_is_restored)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\plugin_sandbox_integration.py", line 349, in test_changed_process_limits_block_resume_until_original_binding_is_restored
+    task = self.invoke(*self.run_args(*self.grants()), expected=1)["task_id"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\Projects\codestudio-agent\tests\plugin_sandbox_integration.py", line 136, in invoke
+    self.assertEqual(result.returncode, expected, result.stdout + result.stderr)
+AssertionError: 2 != 1 : b'{\r\n  "error": "MCP protocol exchange failed.",\r\n  "product": "CodeStudio-Agent"\r\n}\r\n'
+
+======================================================================
+FAIL: test_default_process_limit_denies_child_creation (__main__.PluginSandboxTests.test_default_process_limit_denies_child_creation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\plugin_sandbox_integration.py", line 224, in test_default_process_limit_denies_child_creation
+    result = self.tool("spawn")
+             ^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\Projects\codestudio-agent\tests\plugin_sandbox_integration.py", line 174, in tool
+    result = self.invoke(*self.run_args(*self.grants()), expected=expected)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\Projects\codestudio-agent\tests\plugin_sandbox_integration.py", line 136, in invoke
+    self.assertEqual(result.returncode, expected, result.stdout + result.stderr)
+AssertionError: 2 != 0 : b'{\r\n  "error": "MCP protocol exchange failed.",\r\n  "product": "CodeStudio-Agent"\r\n}\r\n'
+
+======================================================================
+FAIL: test_each_run_gets_fresh_scratch_and_preserves_locked_source (__main__.PluginSandboxTests.test_each_run_gets_fresh_scratch_and_preserves_locked_source)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\plugin_sandbox_integration.py", line 215, in test_each_run_gets_fresh_scratch_and_preserves_locked_source
+    first = self.tool("probe", self.probe_arguments())
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\Projects\codestudio-agent\tests\plugin_sandbox_integration.py", line 174, in tool
+    result = self.invoke(*self.run_args(*self.grants()), expected=expected)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\Projects\codestudio-agent\tests\plugin_sandbox_integration.py", line 136, in invoke
+    self.assertEqual(result.returncode, expected, result.stdout + result.stderr)
+AssertionError: 2 != 0 : b'{\r\n  "error": "MCP protocol exchange failed.",\r\n  "product": "CodeStudio-Agent"\r\n}\r\n'
+
+======================================================================
+FAIL: test_explicit_child_process_grant_executes_only_inside_owned_lifetime (__main__.PluginSandboxTests.test_explicit_child_process_grant_executes_only_inside_owned_lifetime)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\plugin_sandbox_integration.py", line 231, in test_explicit_child_process_grant_executes_only_inside_owned_lifetime
+    result = self.tool("spawn")
+             ^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\Projects\codestudio-agent\tests\plugin_sandbox_integration.py", line 174, in tool
+    result = self.invoke(*self.run_args(*self.grants()), expected=expected)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\Projects\codestudio-agent\tests\plugin_sandbox_integration.py", line 136, in invoke
+    self.assertEqual(result.returncode, expected, result.stdout + result.stderr)
+AssertionError: 2 != 0 : b'{\r\n  "error": "MCP protocol exchange failed.",\r\n  "product": "CodeStudio-Agent"\r\n}\r\n'
+
+======================================================================
+FAIL: test_explicit_memory_cpu_and_process_limits_reach_native_job_or_cgroup (__main__.PluginSandboxTests.test_explicit_memory_cpu_and_process_limits_reach_native_job_or_cgroup)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\plugin_sandbox_integration.py", line 246, in test_explicit_memory_cpu_and_process_limits_reach_native_job_or_cgroup
+    self.wait_for(lambda: len(self.requests()) == 2, process)
+  File "D:\Dev\Projects\codestudio-agent\tests\resume_integration.py", line 165, in wait_for
+    self.fail(f"runner exited before checkpoint boundary: {out!r} {err!r}")
+AssertionError: runner exited before checkpoint boundary: b'{\r\n  "error": "MCP protocol exchange failed.",\r\n  "product": "CodeStudio-Agent"\r\n}\r\n' b''
+
+======================================================================
+FAIL: test_missing_or_changed_package_execution_binding_cannot_resume (__main__.PluginSandboxTests.test_missing_or_changed_package_execution_binding_cannot_resume)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\plugin_sandbox_integration.py", line 363, in test_missing_or_changed_package_execution_binding_cannot_resume
+    task = self.invoke(*self.run_args(*self.grants()), expected=1)["task_id"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\Projects\codestudio-agent\tests\plugin_sandbox_integration.py", line 136, in invoke
+    self.assertEqual(result.returncode, expected, result.stdout + result.stderr)
+AssertionError: 2 != 1 : b'{\r\n  "error": "MCP protocol exchange failed.",\r\n  "product": "CodeStudio-Agent"\r\n}\r\n'
+
+======================================================================
+FAIL: test_private_library_and_nested_config_run_with_readonly_package_and_private_scratch (__main__.PluginSandboxTests.test_private_library_and_nested_config_run_with_readonly_package_and_private_scratch)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\plugin_sandbox_integration.py", line 211, in test_private_library_and_nested_config_run_with_readonly_package_and_private_scratch
+    self.assert_probe(self.tool("probe", self.probe_arguments()))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\Projects\codestudio-agent\tests\plugin_sandbox_integration.py", line 174, in tool
+    result = self.invoke(*self.run_args(*self.grants()), expected=expected)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\Projects\codestudio-agent\tests\plugin_sandbox_integration.py", line 136, in invoke
+    self.assertEqual(result.returncode, expected, result.stdout + result.stderr)
+AssertionError: 2 != 0 : b'{\r\n  "error": "MCP protocol exchange failed.",\r\n  "product": "CodeStudio-Agent"\r\n}\r\n'
+
+======================================================================
+FAIL: test_service_cancel_terminates_granted_child_and_removes_package_resources (__main__.PluginSandboxTests.test_service_cancel_terminates_granted_child_and_removes_package_resources)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\plugin_sandbox_integration.py", line 393, in test_service_cancel_terminates_granted_child_and_removes_package_resources
+    self.wait_for(child_started, client.process)
+  File "D:\Dev\Projects\codestudio-agent\tests\resume_integration.py", line 167, in wait_for
+    self.fail("durable boundary was not reached before deadline")
+AssertionError: durable boundary was not reached before deadline
+
+======================================================================
+FAIL: test_tool_timeout_preserves_unknown_effect_and_blocks_resume (__main__.PluginSandboxTests.test_tool_timeout_preserves_unknown_effect_and_blocks_resume)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\plugin_sandbox_integration.py", line 266, in test_tool_timeout_preserves_unknown_effect_and_blocks_resume
+    result, detail = self.tool("hang", expected=1)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\Projects\codestudio-agent\tests\plugin_sandbox_integration.py", line 174, in tool
+    result = self.invoke(*self.run_args(*self.grants()), expected=expected)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\Projects\codestudio-agent\tests\plugin_sandbox_integration.py", line 136, in invoke
+    self.assertEqual(result.returncode, expected, result.stdout + result.stderr)
+AssertionError: 2 != 1 : b'{\r\n  "error": "MCP protocol exchange failed.",\r\n  "product": "CodeStudio-Agent"\r\n}\r\n'
+
+----------------------------------------------------------------------
+Ran 17 tests in 45.846s
+
+FAILED (failures=9)
