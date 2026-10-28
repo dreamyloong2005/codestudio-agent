@@ -1,0 +1,18 @@
+[ 18%]: <agent-tests> cache compiling.debug tests/sandbox_tests.cpp
+[ 20%]: <agent-tests> cache compiling.debug tests/build_workspace_tests.cpp
+[ 20%]: <agent-tests> cache compiling.debug tests/workspace_execution_tests.cpp
+[ 30%]: <agent-core> cache compiling.debug src/tools/workspace_build.cpp
+[ 39%]: <agent-core> cache compiling.debug src/platform/build_manifest_macos.cpp
+[ 42%]: <agent-core> cache compiling.debug src/platform/build_workspace_macos.cpp
+[ 43%]: <agent-core> cache compiling.debug src/platform/build_workspace.cpp
+[ 44%]: <agent-core> cache compiling.debug src/platform/windows_sandbox.cpp
+[ 44%]: <agent-core> cache compiling.debug src/platform/process_package.cpp
+[ 57%]: <agent-core> cache compiling.debug src/execution/workspace_execution.cpp
+[ 59%]: <agent-core> cache compiling.debug src/plugins/plugins.cpp
+[ 86%]: <agent-core> archiving.debug libagent-core.a
+[ 86%]: <sandbox-resource-fixture> linking.debug sandbox-resource-fixture
+[ 86%]: <codestudio-agent> linking.debug codestudio-agent
+[ 86%]: <provider-fixture> linking.debug provider-fixture
+[ 86%]: <toolchain-probe> linking.debug toolchain-probe
+[ 91%]: <agent-tests> linking.debug agent-tests
+[100%]: build ok, spent 3.98s

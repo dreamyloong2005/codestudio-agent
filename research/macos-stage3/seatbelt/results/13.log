@@ -1,0 +1,13 @@
+{
+  "guardian_pid": 76034,
+  "child_pid": 76035,
+  "host_exited": true,
+  "child_signal": 9,
+  "initial": {
+    "pid": 76035,
+    "pgid": 76035,
+    "sid": 76035
+  },
+  "status": "passed_host_exit_only",
+  "limitation": "This trusted guardian handles the original host death but is not a kernel lifetime boundary; killing/crashing the guardian itself is not covered."
+}

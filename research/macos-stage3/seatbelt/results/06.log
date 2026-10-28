@@ -1,0 +1,22 @@
+/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/seatbelt-final/ipc_target.c:33:7: warning: 'bootstrap_register' is deprecated: first deprecated in macOS 10.5 [-Wdeprecated-declarations]
+   33 |   r = bootstrap_register(bootstrap_port, argv[1], port);
+      |       ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/servers/bootstrap.h:77:1: note: 'bootstrap_register' has been explicitly marked deprecated here
+   77 | bootstrap_register(mach_port_t bp, name_t service_name, mach_port_t sp);
+      | ^
+/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/seatbelt-final/ipc_target.c:38:3: warning: 'bootstrap_register' is deprecated: first deprecated in macOS 10.5 [-Wdeprecated-declarations]
+   38 |   bootstrap_register(bootstrap_port, argv[1], MACH_PORT_NULL);
+      |   ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/servers/bootstrap.h:77:1: note: 'bootstrap_register' has been explicitly marked deprecated here
+   77 | bootstrap_register(mach_port_t bp, name_t service_name, mach_port_t sp);
+      | ^
+/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/seatbelt-final/ipc_target.c:38:3: warning: ignoring return value of function declared with 'warn_unused_result' attribute [-Wunused-result]
+   38 |   bootstrap_register(bootstrap_port, argv[1], MACH_PORT_NULL);
+      |   ^~~~~~~~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/seatbelt-final/ipc_target.c:39:3: warning: 'mach_port_destroy' is deprecated: first deprecated in macOS 12.0 - Inherently unsafe API: instead manage rights with mach_port_destruct(), mach_port_deallocate() or mach_port_mod_refs() [-Wdeprecated-declarations]
+   39 |   mach_port_destroy(mach_task_self(), port);
+      |   ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/mach/mach_port.h:150:15: note: 'mach_port_destroy' has been explicitly marked deprecated here
+  150 | kern_return_t mach_port_destroy
+      |               ^
+4 warnings generated.

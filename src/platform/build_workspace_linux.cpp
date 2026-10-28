@@ -139,6 +139,11 @@ std::vector<fs::path> protections(const fs::path& root, const std::vector<fs::pa
     std::vector<fs::path> result;
     for (const auto& value : values) {
         const auto path = value.is_absolute() ? checked_absolute(value) : root / checked_relative(value);
+        // A source rooted inside protected state must not bypass its ancestor's policy.
+        if (under(root,path)) {
+            result.emplace_back();
+            continue;
+        }
         if (!under(path,root)) continue;
         auto cursor = path.begin();
         for (const auto& ignored : root) { (void)ignored; ++cursor; }

@@ -2,12 +2,12 @@
   "schema": 1,
   "status": "awaiting_real_login",
   "uid": 501,
-  "prepared_at": 1793152203.237073,
+  "prepared_at": 1793153008.134235,
   "baseline_session": {
     "asid": 100024,
     "boot_uuid": "3e5f398d-0ba4-4613-953c-22914fc3a110"
   },
-  "executable": "/Users/taosiyuan/codestudio-agent/build/macosx/arm64/release/codestudio-agent",
+  "executable": "/Users/taosiyuan/codestudio-agent/build/macos-stage2-login-runtime/codestudio-agent",
   "executable_sha256": "d8c3a1b2efeb0f27f59eb530d7e625ab9b3484ba7a487347f3e30e47599972e2",
   "fixtures": [
     {
@@ -16,7 +16,7 @@
       "database": "/Users/taosiyuan/codestudio-agent/build/macos-login-acceptance/ordinary workspace 工作区/state.sqlite3",
       "label": "com.codestudio.agent.scheduler.af31bbf259f8ebc9c0d62c4ecdbacec1cf5c455477cb3709531a29cf1d818702",
       "plist_path": "/Users/taosiyuan/Library/LaunchAgents/com.codestudio.agent.scheduler.af31bbf259f8ebc9c0d62c4ecdbacec1cf5c455477cb3709531a29cf1d818702.plist",
-      "plist_sha256": "e6f380b81ae40d66c2d52be2db6ad6d579d25fb32a13fd1552aeb60e753e8b9a"
+      "plist_sha256": "28a4c49c4ef4d8eda54c87c9fb5144ac8009aa1adf9a7dfb12e12e3653d77303"
     },
     {
       "mode": "supervised",
@@ -24,7 +24,7 @@
       "database": "/Users/taosiyuan/codestudio-agent/build/macos-login-acceptance/supervised workspace 工作区/state.sqlite3",
       "label": "com.codestudio.agent.scheduler.7b03932c3a079969d482f1434603ca1c538c0b45b3b354e3ecf9a59fe0f25ea7",
       "plist_path": "/Users/taosiyuan/Library/LaunchAgents/com.codestudio.agent.scheduler.7b03932c3a079969d482f1434603ca1c538c0b45b3b354e3ecf9a59fe0f25ea7.plist",
-      "plist_sha256": "e05163d0ad75cbce479b11334789a2f2cf31e30d2879923fc936520f9144b798"
+      "plist_sha256": "e32fd0eeba6b4252ac568a11a079758eb7937c719213fdfc966e71fde1f8c4e5"
     }
   ]
 }

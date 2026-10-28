@@ -16,7 +16,9 @@ struct BuildCopyLimits {
 struct BuildImportOptions {
     std::vector<std::filesystem::path> inputs;
     std::vector<std::filesystem::path> excludes;
-    // Absolute paths or paths relative to source_root. Paths outside it are ignored.
+    // Absolute paths or paths relative to source_root. A protected ancestor
+    // protects the entire root; disjoint paths are ignored. Ambiguous aliases
+    // may be rejected rather than treated as disjoint.
     std::vector<std::filesystem::path> protected_paths;
     // Disable only when importing a separately approved toolchain directory.
     bool workspace_exclusions = true;
@@ -34,8 +36,9 @@ std::string read_build_manifest_snapshot(const std::filesystem::path& path,
     std::size_t max_bytes = 1024 * 1024);
 
 // destination must already exist and be private to the caller. Never overwrites
-// files. Windows uses destination ACL inheritance; Linux normalizes file modes
-// to 0600 or 0700, retaining only whether the source was executable.
+// files. Windows uses destination ACL inheritance; Linux/macOS normalize modes
+// to 0600 or 0700, retaining only whether the source was executable. macOS clears
+// inherited ACLs on newly created objects before writing any source bytes.
 // Throws on cancellation, budget exhaustion, unsafe paths, or any I/O error.
 BuildCopyStats import_build_tree(const std::filesystem::path& source_root,
     const std::filesystem::path& destination, const BuildImportOptions& options,

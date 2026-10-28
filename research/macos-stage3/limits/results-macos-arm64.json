@@ -1,0 +1,444 @@
+{
+  "schema_version": 1,
+  "captured_at_utc": "2026-10-28T02:03:21.290436+00:00",
+  "host": {
+    "system": "Darwin",
+    "macos": "26.5.2",
+    "kernel": "25.5.0",
+    "machine": "arm64",
+    "effective_uid": 501,
+    "python": "3.13.14"
+  },
+  "sources_sha256": {
+    "rlimits.c": "11e25b643904e248830993f12403506a8991f147812bde186d3b2e70cf90bc23",
+    "private_limits.c": "fda7cf552feb9d02ddbce14e3a3a09720ce481e44a72f36ab27bdebbb3d15f49",
+    "virtualization.swift": "85e7087f651200a42cfdd942b4bd45408f6fa84e1a21080d818772b73dcc0e40",
+    "run.py": "48a247ec2a311102852105fdd7e59d3593ceb1317f2ffa1af78fbe73b0bb2b34"
+  },
+  "sdk": {
+    "command": [
+      "/usr/bin/xcrun",
+      "--show-sdk-path"
+    ],
+    "returncode": 0,
+    "timed_out": false,
+    "seconds": 0.00528,
+    "stdout": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk\n",
+    "stderr": "",
+    "records": []
+  },
+  "compiler": {
+    "command": [
+      "/usr/bin/clang",
+      "--version"
+    ],
+    "returncode": 0,
+    "timed_out": false,
+    "seconds": 0.008751,
+    "stdout": "Apple clang version 21.0.0 (clang-2100.1.1.101)\nTarget: arm64-apple-darwin25.5.0\nThread model: posix\nInstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin\n",
+    "stderr": "",
+    "records": []
+  },
+  "compilations": [
+    {
+      "command": [
+        "/usr/bin/clang",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-O1",
+        "/Users/taosiyuan/codestudio-agent/research/macos-stage3/limits/rlimits.c",
+        "-o",
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/limits/run-de3bpdx5/rlimits"
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "seconds": 0.053957,
+      "stdout": "",
+      "stderr": "",
+      "records": []
+    },
+    {
+      "command": [
+        "/usr/bin/clang",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-O1",
+        "/Users/taosiyuan/codestudio-agent/research/macos-stage3/limits/private_limits.c",
+        "-o",
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/limits/run-de3bpdx5/private_limits"
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "seconds": 0.052486,
+      "stdout": "",
+      "stderr": "",
+      "records": []
+    },
+    {
+      "command": [
+        "/usr/bin/xcrun",
+        "swiftc",
+        "/Users/taosiyuan/codestudio-agent/research/macos-stage3/limits/virtualization.swift",
+        "-o",
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/limits/run-de3bpdx5/virtualization"
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "seconds": 2.435139,
+      "stdout": "",
+      "stderr": "",
+      "records": []
+    }
+  ],
+  "experiments": [
+    {
+      "command": [
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/limits/run-de3bpdx5/rlimits",
+        "as"
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "seconds": 0.463521,
+      "stdout": "{\"api\":\"setrlimit\",\"mode\":\"as\",\"resource\":5,\"result\":-1,\"errno\":22,\"queried\":0,\"soft\":9223372036854775807,\"hard\":9223372036854775807}\n{\"mmap\":true,\"touched_bytes\":67108864,\"task_info\":0,\"resident_bytes\":68468736,\"phys_footprint\":68075880}\n",
+      "stderr": "",
+      "records": [
+        {
+          "api": "setrlimit",
+          "mode": "as",
+          "resource": 5,
+          "result": -1,
+          "errno": 22,
+          "queried": 0,
+          "soft": 9223372036854775807,
+          "hard": 9223372036854775807
+        },
+        {
+          "mmap": true,
+          "touched_bytes": 67108864,
+          "task_info": 0,
+          "resident_bytes": 68468736,
+          "phys_footprint": 68075880
+        }
+      ],
+      "fixture": "rlimits",
+      "mode": "as"
+    },
+    {
+      "command": [
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/limits/run-de3bpdx5/rlimits",
+        "rss"
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "seconds": 0.010788,
+      "stdout": "{\"api\":\"setrlimit\",\"mode\":\"rss\",\"resource\":5,\"result\":-1,\"errno\":22,\"queried\":0,\"soft\":9223372036854775807,\"hard\":9223372036854775807}\n{\"mmap\":true,\"touched_bytes\":67108864,\"task_info\":0,\"resident_bytes\":68468736,\"phys_footprint\":68075880}\n",
+      "stderr": "",
+      "records": [
+        {
+          "api": "setrlimit",
+          "mode": "rss",
+          "resource": 5,
+          "result": -1,
+          "errno": 22,
+          "queried": 0,
+          "soft": 9223372036854775807,
+          "hard": 9223372036854775807
+        },
+        {
+          "mmap": true,
+          "touched_bytes": 67108864,
+          "task_info": 0,
+          "resident_bytes": 68468736,
+          "phys_footprint": 68075880
+        }
+      ],
+      "fixture": "rlimits",
+      "mode": "rss"
+    },
+    {
+      "command": [
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/limits/run-de3bpdx5/rlimits",
+        "nproc"
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "seconds": 0.0027,
+      "stdout": "{\"api\":\"setrlimit\",\"mode\":\"nproc\",\"resource\":7,\"result\":0,\"errno\":0,\"queried\":0,\"soft\":2,\"hard\":2}\n{\"first_fork\":false,\"errno\":35}\n",
+      "stderr": "",
+      "records": [
+        {
+          "api": "setrlimit",
+          "mode": "nproc",
+          "resource": 7,
+          "result": 0,
+          "errno": 0,
+          "queried": 0,
+          "soft": 2,
+          "hard": 2
+        },
+        {
+          "first_fork": false,
+          "errno": 35
+        }
+      ],
+      "fixture": "rlimits",
+      "mode": "nproc"
+    },
+    {
+      "command": [
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/limits/run-de3bpdx5/rlimits",
+        "cpu"
+      ],
+      "returncode": -24,
+      "timed_out": false,
+      "seconds": 1.002066,
+      "stdout": "{\"api\":\"setrlimit\",\"mode\":\"cpu\",\"resource\":0,\"result\":0,\"errno\":0,\"queried\":0,\"soft\":1,\"hard\":2}\n",
+      "stderr": "",
+      "records": [
+        {
+          "api": "setrlimit",
+          "mode": "cpu",
+          "resource": 0,
+          "result": 0,
+          "errno": 0,
+          "queried": 0,
+          "soft": 1,
+          "hard": 2
+        }
+      ],
+      "fixture": "rlimits",
+      "mode": "cpu"
+    },
+    {
+      "command": [
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/limits/run-de3bpdx5/rlimits",
+        "footprint"
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "seconds": 0.005004,
+      "stdout": "{\"api\":\"task_set_phys_footprint_limit\",\"mb\":32,\"result\":8,\"old_mb\":-1}\n{\"mmap\":true,\"touched_bytes\":67108864,\"task_info\":0,\"resident_bytes\":68468736,\"phys_footprint\":68075880}\n",
+      "stderr": "",
+      "records": [
+        {
+          "api": "task_set_phys_footprint_limit",
+          "mb": 32,
+          "result": 8,
+          "old_mb": -1
+        },
+        {
+          "mmap": true,
+          "touched_bytes": 67108864,
+          "task_info": 0,
+          "resident_bytes": 68468736,
+          "phys_footprint": 68075880
+        }
+      ],
+      "fixture": "rlimits",
+      "mode": "footprint"
+    },
+    {
+      "command": [
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/limits/run-de3bpdx5/private_limits",
+        "memory"
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "seconds": 0.458429,
+      "stdout": "{\"task_info\":0,\"virtual_size\":445745938432,\"resident_size\":1343488,\"phys_footprint\":901408}\n{\"limit_bytes\":67108864,\"result\":-1,\"errno\":22}\n{\"limit_bytes\":536870912,\"result\":-1,\"errno\":22}\n{\"limit_bytes\":4294967296,\"result\":-1,\"errno\":22}\n{\"api\":\"memorystatus_control_SET_JETSAM_TASK_LIMIT\",\"result\":-1,\"errno\":1}\n",
+      "stderr": "",
+      "records": [
+        {
+          "task_info": 0,
+          "virtual_size": 445745938432,
+          "resident_size": 1343488,
+          "phys_footprint": 901408
+        },
+        {
+          "limit_bytes": 67108864,
+          "result": -1,
+          "errno": 22
+        },
+        {
+          "limit_bytes": 536870912,
+          "result": -1,
+          "errno": 22
+        },
+        {
+          "limit_bytes": 4294967296,
+          "result": -1,
+          "errno": 22
+        },
+        {
+          "api": "memorystatus_control_SET_JETSAM_TASK_LIMIT",
+          "result": -1,
+          "errno": 1
+        }
+      ],
+      "fixture": "private_limits",
+      "mode": "memory"
+    },
+    {
+      "command": [
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/limits/run-de3bpdx5/private_limits",
+        "thread"
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "seconds": 1.118814,
+      "stdout": "{\"api\":\"proc_setthread_cpupercent\",\"percent\":10,\"refill_ms\":100,\"result\":0,\"errno\":0}\n{\"wall_seconds\":1.111208,\"cpu_seconds\":0.183519}\n",
+      "stderr": "",
+      "records": [
+        {
+          "api": "proc_setthread_cpupercent",
+          "percent": 10,
+          "refill_ms": 100,
+          "result": 0,
+          "errno": 0
+        },
+        {
+          "wall_seconds": 1.111208,
+          "cpu_seconds": 0.183519
+        }
+      ],
+      "fixture": "private_limits",
+      "mode": "thread"
+    },
+    {
+      "command": [
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/limits/run-de3bpdx5/private_limits",
+        "newthread"
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "seconds": 1.10696,
+      "stdout": "{\"api\":\"proc_setthread_cpupercent\",\"percent\":10,\"refill_ms\":100,\"result\":0,\"errno\":0}\n{\"new_thread\":0}\n{\"wall_seconds\":1.100001,\"cpu_seconds\":1.099865}\n",
+      "stderr": "",
+      "records": [
+        {
+          "api": "proc_setthread_cpupercent",
+          "percent": 10,
+          "refill_ms": 100,
+          "result": 0,
+          "errno": 0
+        },
+        {
+          "new_thread": 0
+        },
+        {
+          "wall_seconds": 1.100001,
+          "cpu_seconds": 1.099865
+        }
+      ],
+      "fixture": "private_limits",
+      "mode": "newthread"
+    },
+    {
+      "command": [
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/limits/run-de3bpdx5/private_limits",
+        "process"
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "seconds": 1.103748,
+      "stdout": "{\"api\":\"proc_setcpu_percentage\",\"percent\":20,\"result\":0,\"errno\":0}\n{\"wall_seconds\":1.100002,\"cpu_seconds\":0.301397}\n",
+      "stderr": "",
+      "records": [
+        {
+          "api": "proc_setcpu_percentage",
+          "percent": 20,
+          "result": 0,
+          "errno": 0
+        },
+        {
+          "wall_seconds": 1.100002,
+          "cpu_seconds": 0.301397
+        }
+      ],
+      "fixture": "private_limits",
+      "mode": "process"
+    },
+    {
+      "command": [
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/limits/run-de3bpdx5/private_limits",
+        "clear"
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "seconds": 1.103452,
+      "stdout": "{\"api\":\"proc_setcpu_percentage\",\"percent\":20,\"result\":0,\"errno\":0}\n{\"api\":\"proc_clear_cpulimits\",\"result\":0,\"errno\":0}\n{\"wall_seconds\":1.100000,\"cpu_seconds\":1.099865}\n",
+      "stderr": "",
+      "records": [
+        {
+          "api": "proc_setcpu_percentage",
+          "percent": 20,
+          "result": 0,
+          "errno": 0
+        },
+        {
+          "api": "proc_clear_cpulimits",
+          "result": 0,
+          "errno": 0
+        },
+        {
+          "wall_seconds": 1.1,
+          "cpu_seconds": 1.099865
+        }
+      ],
+      "fixture": "private_limits",
+      "mode": "clear"
+    },
+    {
+      "command": [
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/limits/run-de3bpdx5/private_limits",
+        "fork"
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "seconds": 1.102726,
+      "stdout": "{\"api\":\"proc_setcpu_percentage\",\"percent\":20,\"result\":0,\"errno\":0}\n{\"fork_succeeded\":true,\"errno\":0}\n{\"wall_seconds\":1.100001,\"cpu_seconds\":1.099549}\n",
+      "stderr": "",
+      "records": [
+        {
+          "api": "proc_setcpu_percentage",
+          "percent": 20,
+          "result": 0,
+          "errno": 0
+        },
+        {
+          "fork_succeeded": true,
+          "errno": 0
+        },
+        {
+          "wall_seconds": 1.100001,
+          "cpu_seconds": 1.099549
+        }
+      ],
+      "fixture": "private_limits",
+      "mode": "fork"
+    },
+    {
+      "command": [
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/limits/run-de3bpdx5/virtualization"
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "seconds": 0.476945,
+      "stdout": "{\"supported\":true,\"minimum_cpus\":1,\"maximum_cpus\":64,\"minimum_memory_bytes\":4194304,\"maximum_memory_bytes\":17179869184}\n",
+      "stderr": "",
+      "records": [
+        {
+          "supported": true,
+          "minimum_cpus": 1,
+          "maximum_cpus": 64,
+          "minimum_memory_bytes": 4194304,
+          "maximum_memory_bytes": 17179869184
+        }
+      ],
+      "fixture": "virtualization",
+      "mode": "host_capabilities_only"
+    }
+  ]
+}

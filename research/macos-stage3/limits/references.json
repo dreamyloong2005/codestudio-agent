@@ -1,0 +1,61 @@
+{
+  "repository": "https://github.com/apple-oss-distributions/xnu",
+  "tree_sha": "f6217f891ac0bb64f3d375211650a4c1ff8ca1ea",
+  "note": "Apple source semantics reference. The snapshot is not asserted to match the running Darwin kernel source. Downloaded bytes were checked against the listed Git blob hashes.",
+  "files": [
+    {
+      "path": "bsd/kern/kern_resource.c",
+      "url": "https://github.com/apple-oss-distributions/xnu/blob/f6217f891ac0bb64f3d375211650a4c1ff8ca1ea/bsd/kern/kern_resource.c",
+      "git_blob_sha1": "5190630bfe4d4b592bf4e9dfd9c60b88bb34591f",
+      "sha256": "ffd547faab964b7860476a3b1e1c82525389666450b08eda19f9f5229eddd054"
+    },
+    {
+      "path": "osfmk/kern/task.c",
+      "url": "https://github.com/apple-oss-distributions/xnu/blob/f6217f891ac0bb64f3d375211650a4c1ff8ca1ea/osfmk/kern/task.c",
+      "git_blob_sha1": "205ac1358dc60a8e98f13de1219c41b8565a1cc9",
+      "sha256": "f5ea4822b15aca636c4d940679e878904729b88acf312821d2ebacbf69312f71"
+    },
+    {
+      "path": "bsd/sys/kern_memorystatus.h",
+      "url": "https://github.com/apple-oss-distributions/xnu/blob/f6217f891ac0bb64f3d375211650a4c1ff8ca1ea/bsd/sys/kern_memorystatus.h",
+      "git_blob_sha1": "fb5aa97f821c62124aa1d4c068ac829bfea79ba0",
+      "sha256": "76a7112eae56f41dc330adf13c477b0080184c503d6f9e03e7127ba4da2a3137"
+    },
+    {
+      "path": "bsd/kern/kern_memorystatus.c",
+      "url": "https://github.com/apple-oss-distributions/xnu/blob/f6217f891ac0bb64f3d375211650a4c1ff8ca1ea/bsd/kern/kern_memorystatus.c",
+      "git_blob_sha1": "a66554168439951b94657b3ebcb1590ff7b05b67",
+      "sha256": "d6c27445f00c811232320e968013d82898b54b86326d95310436d6515a3c719c"
+    },
+    {
+      "path": "osfmk/kern/task_policy.c",
+      "url": "https://github.com/apple-oss-distributions/xnu/blob/f6217f891ac0bb64f3d375211650a4c1ff8ca1ea/osfmk/kern/task_policy.c",
+      "git_blob_sha1": "2a7145682227b221c99ecae81206b65a2e00f98d",
+      "sha256": "9f2e8eaad2dfe8046c8ce9ee8425945b4d4e7e4790954ad806c8de848a4a47f4"
+    },
+    {
+      "path": "libsyscall/wrappers/libproc/libproc.c",
+      "url": "https://github.com/apple-oss-distributions/xnu/blob/f6217f891ac0bb64f3d375211650a4c1ff8ca1ea/libsyscall/wrappers/libproc/libproc.c",
+      "git_blob_sha1": "c3e7369f886fbb7bbc8d77f8fca9ecc943bb5f4e",
+      "sha256": "5c8a771427e04c5e1d55c4cdf5a077f3b52c5be4a091683b970084bfdda76df2"
+    },
+    {
+      "path": "libsyscall/wrappers/libproc/libproc_private.h",
+      "url": "https://github.com/apple-oss-distributions/xnu/blob/f6217f891ac0bb64f3d375211650a4c1ff8ca1ea/libsyscall/wrappers/libproc/libproc_private.h",
+      "git_blob_sha1": "e32a789bb0164da195a14c5cd09e40c28d54e452",
+      "sha256": "360297a0fb54c9d032b981add02675dc75ba9f6562a83ded84beacbddafdaccc"
+    },
+    {
+      "path": "bsd/sys/process_policy.h",
+      "url": "https://github.com/apple-oss-distributions/xnu/blob/f6217f891ac0bb64f3d375211650a4c1ff8ca1ea/bsd/sys/process_policy.h",
+      "git_blob_sha1": "3e389da3d3fdaea0988808868b58fa92e963bd86",
+      "sha256": "110e60c6c6e9bc79c0d1be030ea6d0745fde4c50014520880af18c08c7c36b5b"
+    },
+    {
+      "path": "bsd/kern/process_policy.c",
+      "url": "https://github.com/apple-oss-distributions/xnu/blob/f6217f891ac0bb64f3d375211650a4c1ff8ca1ea/bsd/kern/process_policy.c",
+      "git_blob_sha1": "e4eaadf146aa8df7a2b4092f19b4a87377754f92",
+      "sha256": "3c51f1a0b7bbe83cab9ad199060a55193f525e5d2cdd2d613bec9f366573c55f"
+    }
+  ]
+}

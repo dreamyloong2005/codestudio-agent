@@ -1,0 +1,9 @@
+{
+  "case": "guardian_crash",
+  "guardian_pid": 76038,
+  "child_pid": 76039,
+  "child_survived_guardian_crash": true,
+  "child_self_terminated": true,
+  "guardian_report_absent": true,
+  "conclusion": "A user-space guardian cannot by itself provide kernel-owned lifetime containment when the guardian also fails."
+}

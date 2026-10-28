@@ -1,0 +1,11 @@
+{
+  "case": "host_crash_with_permitted_descendant",
+  "host_exit_code": 73,
+  "original_child": {
+    "child_pid": 76030
+  },
+  "escaped_child_pid": 76031,
+  "survived_host_exit": true,
+  "descendant_self_terminated": true,
+  "intent": "negative evidence: sandbox-exec and POSIX groups alone do not bind descendant lifetime to host"
+}

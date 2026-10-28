@@ -1,0 +1,86 @@
+[
+  {
+    "name": "unrestricted",
+    "mode": "plain",
+    "exit": 0,
+    "out": "before_setexec pid=76012 pgid=75950 sid=75950\nafter_setexec pid=76012 pgid=75950 sid=75950\n",
+    "err": ""
+  },
+  {
+    "name": "deny_fork",
+    "mode": "plain",
+    "exit": 0,
+    "out": "before_setexec pid=76013 pgid=75950 sid=75950\nafter_setexec pid=76013 pgid=75950 sid=75950\n",
+    "err": ""
+  },
+  {
+    "name": "deny_setsid",
+    "mode": "plain",
+    "exit": 0,
+    "out": "before_setexec pid=76014 pgid=75950 sid=75950\nafter_setexec pid=76014 pgid=75950 sid=75950\n",
+    "err": ""
+  },
+  {
+    "name": "deny_spawn",
+    "mode": "plain",
+    "exit": 0,
+    "out": "before_setexec pid=76015 pgid=75950 sid=75950\nsetexec result=1\n",
+    "err": ""
+  },
+  {
+    "name": "unrestricted",
+    "mode": "group",
+    "exit": 0,
+    "out": "before_setexec pid=76016 pgid=75950 sid=75950\nafter_setexec pid=76016 pgid=76016 sid=75950\n",
+    "err": ""
+  },
+  {
+    "name": "deny_fork",
+    "mode": "group",
+    "exit": 0,
+    "out": "before_setexec pid=76017 pgid=75950 sid=75950\nafter_setexec pid=76017 pgid=76017 sid=75950\n",
+    "err": ""
+  },
+  {
+    "name": "deny_setsid",
+    "mode": "group",
+    "exit": 0,
+    "out": "before_setexec pid=76018 pgid=75950 sid=75950\nafter_setexec pid=76018 pgid=76018 sid=75950\n",
+    "err": ""
+  },
+  {
+    "name": "deny_spawn",
+    "mode": "group",
+    "exit": 0,
+    "out": "before_setexec pid=76019 pgid=75950 sid=75950\nsetexec result=1\n",
+    "err": ""
+  },
+  {
+    "name": "unrestricted",
+    "mode": "session",
+    "exit": 0,
+    "out": "before_setexec pid=76020 pgid=75950 sid=75950\nafter_setexec pid=76020 pgid=76020 sid=76020\n",
+    "err": ""
+  },
+  {
+    "name": "deny_fork",
+    "mode": "session",
+    "exit": 0,
+    "out": "before_setexec pid=76021 pgid=75950 sid=75950\nafter_setexec pid=76021 pgid=76021 sid=76021\n",
+    "err": ""
+  },
+  {
+    "name": "deny_setsid",
+    "mode": "session",
+    "exit": 0,
+    "out": "before_setexec pid=76022 pgid=75950 sid=75950\nafter_setexec pid=76022 pgid=76022 sid=76022\n",
+    "err": ""
+  },
+  {
+    "name": "deny_spawn",
+    "mode": "session",
+    "exit": 0,
+    "out": "before_setexec pid=76023 pgid=75950 sid=75950\nsetexec result=1\n",
+    "err": ""
+  }
+]

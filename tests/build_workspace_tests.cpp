@@ -1,5 +1,6 @@
 #include "codestudio/build_workspace.hpp"
 #include "codestudio/store.hpp"
+#include <cerrno>
 #include <cstring>
 #include <fstream>
 #include <iterator>
@@ -10,6 +11,12 @@
 #elif defined(__linux__) || defined(__APPLE__)
 #include <sys/stat.h>
 #include <unistd.h>
+#endif
+#ifdef __APPLE__
+#include <fcntl.h>
+#include <membership.h>
+#include <pwd.h>
+#include <sys/acl.h>
 #endif
 
 namespace {
@@ -71,10 +78,13 @@ std::size_t entries(const fs::path& directory) {
     if (!fs::exists(directory)) return 0;
     return static_cast<std::size_t>(std::distance(fs::directory_iterator(directory), fs::directory_iterator{}));
 }
-#elif defined(__linux__)
+#elif defined(__linux__) || defined(__APPLE__)
 struct Temp {
-    fs::path root = fs::temp_directory_path() / ("codestudio-build-copy-tests-" + codestudio::new_id());
-    Temp() { fs::create_directory(root); root = fs::canonical(root); }
+    fs::path root;
+    explicit Temp(const fs::path& parent=fs::temp_directory_path())
+        : root(parent / ("codestudio-build-copy-tests-" + codestudio::new_id())) {
+        fs::create_directory(root); root = fs::canonical(root);
+    }
     ~Temp() { try { codestudio::safe_remove_owned_tree(root); } catch (...) {} }
     fs::path directory(const char* name) { auto path = root / name; fs::create_directories(path); return path; }
 };
@@ -99,9 +109,85 @@ void link_to(const fs::path& link, const fs::path& target) {
     check(symlink(target.c_str(), link.c_str()) == 0, "create symlink fixture");
 }
 #endif
+#ifdef __APPLE__
+template <typename F> void rejects_with(F&& operation,const char* expected,const char* message) {
+    try { operation(); }
+    catch (const std::exception& error) {
+        check(std::string(error.what()).find(expected)!=std::string::npos,message);
+        return;
+    }
+    check(false,message);
+}
+fs::path descriptor_path(const fs::path& path,int command) {
+    const auto descriptor=open(path.c_str(),O_RDONLY | O_DIRECTORY | O_NOFOLLOW | O_CLOEXEC);
+    check(descriptor>=0,"open alias fixture");
+    char name[PATH_MAX]{};
+    const auto result=fcntl(descriptor,command,name);
+    close(descriptor);
+    check(result==0,"resolve alias fixture descriptor path");
+    return fs::path(name);
+}
+bool has_acl(const fs::path& path) {
+    const auto acl=acl_get_file(path.c_str(),ACL_TYPE_EXTENDED);
+    if (!acl && errno==ENOENT) {
+        struct stat metadata{};
+        check(lstat(path.c_str(),&metadata)==0,"ACL fixture entry disappeared");
+        return false; // Darwin reports ENOENT for an existing node with no ACL.
+    }
+    if (!acl) throw std::runtime_error("read fixture ACL: " + path.native() + " (errno " + std::to_string(errno) + ")");
+    acl_entry_t entry=nullptr;
+    const auto result=acl_get_entry(acl,ACL_FIRST_ENTRY,&entry);
+    acl_free(acl);
+    return result==0;
+}
+void inherited_acl(const fs::path& path) {
+    auto acl=acl_init(1);
+    check(acl!=nullptr,"create fixture ACL");
+    struct Release { acl_t& value; ~Release() { acl_free(value); } } release{acl};
+    acl_entry_t entry=nullptr;
+    acl_permset_t permissions=nullptr;
+    acl_flagset_t flags=nullptr;
+    uuid_t principal{};
+    check(mbr_uid_to_uuid(getuid(),principal)==0 && acl_create_entry(&acl,&entry)==0 &&
+          acl_set_tag_type(entry,ACL_EXTENDED_ALLOW)==0 && acl_set_qualifier(entry,principal)==0 &&
+          acl_get_permset(entry,&permissions)==0 && acl_add_perm(permissions,ACL_READ_DATA)==0 &&
+          acl_get_flagset_np(entry,&flags)==0 && acl_add_flag_np(flags,ACL_ENTRY_FILE_INHERIT)==0 &&
+          acl_add_flag_np(flags,ACL_ENTRY_DIRECTORY_INHERIT)==0 &&
+          acl_set_file(path.c_str(),ACL_TYPE_EXTENDED,acl)==0,"set inherited fixture ACL");
+}
+#endif
 }
 
 void run_build_workspace_tests() {
+#if defined(_WIN32) || defined(__linux__) || defined(__APPLE__)
+    {
+        using namespace codestudio;
+        Temp fixture;std::atomic_bool cancelled{false};
+        const auto protected_parent=fixture.directory("protected");
+        const auto nested_source=protected_parent / "child";
+        write(nested_source / "visible","private state");
+        BuildImportOptions inputs;inputs.workspace_exclusions=false;
+        for (const auto& protected_path:std::vector<fs::path>{protected_parent,nested_source}) {
+            inputs.protected_paths={protected_path};
+            for (const auto& selection:std::vector<fs::path>{"visible","."}) {
+                inputs.inputs={selection};
+                const auto destination=fixture.directory(("ancestor-rejected-"+new_id()).c_str());
+                rejects([&] {import_build_tree(nested_source,destination,inputs,cancelled);},
+                        "source inside a protected directory was imported with workspace exclusions disabled");
+                check(entries(destination)==0,"protected source ancestor copied data before refusal");
+            }
+        }
+        const auto host=protected_parent / "host";
+        fs::create_directory(host);
+        const auto artifacts_source=fixture.directory("artifacts-source");
+        write(artifacts_source / "visible","artifact");
+        for (const auto& protected_path:std::vector<fs::path>{protected_parent,host}) {
+            rejects([&] {export_build_artifacts(artifacts_source,{"visible"},host,"artifacts",
+                {protected_path},{},cancelled);},"artifact host inside a protected directory was accepted");
+            check(!fs::exists(host / "artifacts"),"protected host ancestor created an artifact directory");
+        }
+    }
+#endif
 #ifdef _WIN32
     using namespace codestudio;
     std::atomic_bool cancelled{false};
@@ -218,7 +304,7 @@ void run_build_workspace_tests() {
     check(SetFileAttributesW((cleanup / "readonly").c_str(), FILE_ATTRIBUTE_READONLY), "set readonly cleanup fixture");
     safe_remove_owned_tree(cleanup);
     check(!fs::exists(cleanup) && read(outside / "sentinel") == "untouched", "owned tree cleanup escaped or retained ordinary entries");
-#elif defined(__linux__)
+#elif defined(__linux__) || defined(__APPLE__)
     using namespace codestudio;
     Temp temp; std::atomic_bool cancelled{false};
     const auto source = temp.directory("source"), target = temp.directory("private"), host = temp.directory("host");
@@ -350,7 +436,8 @@ void run_build_workspace_tests() {
     check(!fs::exists(cleanup) && read(outside / "sentinel") == "untouched" && mode(outside / "sentinel") == outside_mode,
         "recursive cleanup escaped or changed external permissions");
     rejects([&] { safe_remove_owned_tree("/"); }, "cleanup accepted filesystem root");
-#elif defined(__APPLE__)
+#ifdef __APPLE__
+    {
     using namespace codestudio;
     struct SnapshotFixture {
         fs::path root;
@@ -385,8 +472,194 @@ void run_build_workspace_tests() {
     check(mkfifo(fifo.c_str(), 0600) == 0, "create FIFO fixture");
     rejects([&] { read_build_manifest_snapshot(fifo); }, "FIFO accepted as a manifest");
     check(read_build_manifest_snapshot(file) == bytes, "failed reads changed the source");
-    std::atomic_bool cancelled{false};
-    rejects([&] { import_build_tree("/source", "/destination", {}, cancelled); }, "unsupported import must fail closed");
+    }
+    // Policy comparisons must catch aliases even when the protected name or
+    // output directory does not exist yet. Conservative rejection also holds
+    // on a case-sensitive filesystem.
+    {
+        const auto aliases_source=temp.directory("aliases-source");
+        write(aliases_source / ".CoDeStUdIo/state", "private application state");
+        write(aliases_source / ".GiT/config", "private repository state");
+        write(aliases_source / "visible", "public");
+        const auto aliases_target=temp.directory("aliases-target");
+        BuildImportOptions inputs;inputs.inputs={"."};
+        import_build_tree(aliases_source,aliases_target,inputs,cancelled);
+        check(entries(aliases_target)==1 && read(aliases_target / "visible")=="public",
+              "case aliases of reserved input state were copied");
+        for (const auto& path:std::vector<fs::path>{".CoDeStUdIo/state",".GiT/config"}) {
+            inputs.inputs={path};
+            rejects([&] {import_build_tree(aliases_source,temp.directory(("reserved-alias-"+new_id()).c_str()),inputs,cancelled);},
+                    "explicit case alias of reserved state was copied");
+        }
+        const auto unicode_source=temp.directory("unicode-source");
+        const fs::path composed="\xc3\xa9-state",decomposed="e\xcc\x81-state";
+        write(unicode_source / composed / "secret", "private Unicode state");
+        write(unicode_source / "kept", "ordinary");
+        inputs.inputs={"."};inputs.protected_paths={unicode_source / decomposed};
+        const auto unicode_target=temp.directory("unicode-target");
+        import_build_tree(unicode_source,unicode_target,inputs,cancelled);
+        check(entries(unicode_target)==1 && read(unicode_target / "kept")=="ordinary",
+              "Unicode alias of protected input was copied");
+        inputs.inputs={composed / "secret"};
+        rejects([&] {import_build_tree(unicode_source,temp.directory("unicode-explicit"),inputs,cancelled);},
+                "explicit Unicode alias bypassed protected paths");
+        for (const auto& destination:std::vector<fs::path>{".CoDeStUdIo/new", ".GiT/new", composed / "new"}) {
+            rejects([&] {export_build_artifacts(target,{"src"},host,destination,{host/decomposed},{},cancelled);},
+                    "absent protected artifact directory alias was created");
+        }
+        check(!fs::exists(host / composed) && !fs::exists(host / ".CoDeStUdIo"),
+              "rejected alias export created its destination");
+        inputs.protected_paths.clear();inputs.inputs={"kept","KEPT"};
+        rejects([&] {import_build_tree(unicode_source,temp.directory("case-selections"),inputs,cancelled);},
+                "aliased declared input was silently deduplicated");
+        inputs.inputs={composed,decomposed / "secret"};
+        rejects([&] {import_build_tree(unicode_source,temp.directory("unicode-selections"),inputs,cancelled);},
+                "aliased input prefix was silently deduplicated");
+        fs::path invalid(std::string("invalid-")+static_cast<char>(0xff));
+        inputs.inputs={invalid};
+        rejects([&] {import_build_tree(unicode_source,temp.directory("invalid-utf8"),inputs,cancelled);},
+                "invalid UTF-8 path was accepted");
+        for (const auto& paths:std::vector<std::pair<fs::path,fs::path>>{
+                {unicode_source / composed,unicode_source / decomposed},
+                {aliases_source / ".CoDeStUdIo",aliases_source / ".codestudio"}}) {
+            const auto child=paths.first / "child";
+            write(child / "visible","private aliased state");
+            BuildImportOptions protected_inputs;protected_inputs.workspace_exclusions=false;
+            protected_inputs.protected_paths={paths.second};
+            for (const auto& root:std::vector<fs::path>{paths.first,child}) {
+                protected_inputs.inputs={(child / "visible").lexically_relative(root)};
+                const auto destination=temp.directory(("aliased-ancestor-"+new_id()).c_str());
+                rejects([&] {import_build_tree(root,destination,protected_inputs,cancelled);},
+                        "case or Unicode alias of a protected ancestor was ignored");
+                check(entries(destination)==0,"aliased protected ancestor copied input bytes");
+            }
+            rejects([&] {export_build_artifacts(target,{"src"},child,"artifacts",{paths.second},{},cancelled);},
+                    "case or Unicode alias of a protected host ancestor was ignored");
+            check(!fs::exists(child / "artifacts"),"aliased protected host ancestor created artifacts");
+        }
+        const auto escaped_source=temp.directory("escaped-source");
+        write(escaped_source / "with spaces & \"quotes\"" / "\xe6\x96\x87\xe4\xbb\xb6", "Unicode bytes");
+        const auto escaped_target=temp.directory("escaped-target");
+        inputs.inputs={"."};
+        import_build_tree(escaped_source,escaped_target,inputs,cancelled);
+        const auto artifact=export_build_artifacts(escaped_target,{"."},host,"Unicode artifacts & spaces",{},{},cancelled);
+        const auto artifact_file=fs::path(artifact.at("directory").get<std::string>()) / "files" / "with spaces & \"quotes\"" / "\xe6\x96\x87\xe4\xbb\xb6";
+        check(read(artifact_file)=="Unicode bytes", "ordinary Unicode artifact paths were changed");
+    }
+    {
+        const auto* account=getpwuid(getuid());
+        check(account!=nullptr && account->pw_dir!=nullptr,"resolve user home for firmlink fixture");
+        Temp home_fixture(fs::canonical(account->pw_dir));
+        const auto logical=descriptor_path(home_fixture.root,F_GETPATH);
+        const auto physical=descriptor_path(home_fixture.root,F_GETPATH_NOFIRMLINK);
+        check(fs::equivalent(logical,physical),"firmlink fixture roots have different identities");
+        // User homes on the system Data volume have distinct /Users and
+        // physical paths; custom external home volumes may have no firmlink.
+        if (logical!=physical) {
+            const auto original=home_fixture.directory("source");
+            const auto logical_source=logical / "source",physical_source=physical / "source";
+            const auto logical_host=logical / "host",physical_host=physical / "host";
+            home_fixture.directory("host");
+            write(original / "state/secret","private state");
+            write(original / "visible","ordinary");
+            BuildImportOptions inputs;inputs.inputs={"."};inputs.protected_paths={physical_source / "state"};
+            const auto imported=home_fixture.directory("copied");
+            check(import_build_tree(logical_source,imported,inputs,cancelled).files==1 &&
+                  !fs::exists(imported / "state") && read(imported / "visible")=="ordinary",
+                  "physical firmlink protection bypassed logical workspace root");
+            inputs.protected_paths={logical_source / "state"};
+            const auto reverse=home_fixture.directory("reverse");
+            check(import_build_tree(physical_source,reverse,inputs,cancelled).files==1 && !fs::exists(reverse / "state"),
+                  "logical firmlink protection bypassed physical workspace root");
+            for (const auto& roots:std::vector<std::pair<fs::path,fs::path>>{
+                    {logical_source,physical},{physical_source,logical},{logical_source,physical_source}}) {
+                inputs.inputs={"visible"};inputs.protected_paths={roots.second};
+                const auto destination=home_fixture.directory(("protected-ancestor-"+new_id()).c_str());
+                rejects([&] {import_build_tree(roots.first,destination,inputs,cancelled);},
+                        "firmlink protected ancestor or same-root alias did not cover the entire source");
+                check(entries(destination)==0,"firmlink protected ancestor copied a file");
+            }
+            for (const auto& roots:std::vector<std::pair<fs::path,fs::path>>{
+                    {logical_host,physical_host},{physical_host,logical_host}}) {
+                rejects([&] {export_build_artifacts(imported,{"visible"},roots.first,"future-state/artifacts",
+                    {roots.second / "future-state"},{},cancelled);},
+                    "nonexistent protected suffix bypassed a firmlink root alias");
+                check(!fs::exists(roots.first / "future-state"),"rejected firmlink protection created its destination");
+            }
+            fs::create_directory(original / "nested");write(original / "nested/file","nested");
+            inputs.inputs={"visible"};inputs.protected_paths.clear();
+            rejects([&] {import_build_tree(logical_source,physical_source,inputs,cancelled);},
+                    "same root with a different firmlink spelling was accepted");
+            rejects([&] {import_build_tree(logical_source,physical_source / "nested",inputs,cancelled);},
+                    "nested destination with a different firmlink spelling was accepted");
+            inputs.inputs={"file"};
+            rejects([&] {import_build_tree(physical_source / "nested",logical_source,inputs,cancelled);},
+                    "ancestor destination with a different firmlink spelling was accepted");
+            rejects([&] {export_build_artifacts(logical_source,{"visible"},physical_source,"artifacts",{},{},cancelled);},
+                    "export accepted identical roots through firmlink aliases");
+            rejects([&] {export_build_artifacts(logical_source,{"visible"},physical_source / "nested","artifacts",{},{},cancelled);},
+                    "export accepted a nested host through a firmlink alias");
+            rejects([&] {export_build_artifacts(physical_source / "nested",{"file"},logical_source,"artifacts",{},{},cancelled);},
+                    "export accepted an ancestor host through a firmlink alias");
+            check(!fs::exists(original / "nested/visible") && !fs::exists(original / "file") &&
+                  !fs::exists(original / "artifacts") && !fs::exists(original / "nested/artifacts"),
+                  "rejected firmlink root overlap wrote files");
+            const auto symlink=home_fixture.root / "source-link";
+            link_to(symlink,original);
+            inputs.inputs={"visible"};inputs.protected_paths={symlink / "state"};
+            const auto rejected=home_fixture.directory("protected-symlink");
+            rejects([&] {import_build_tree(logical_source,rejected,inputs,cancelled);},
+                    "ambiguous protected symlink ancestor was silently ignored");
+            check(entries(rejected)==0,"ambiguous protected ancestor copied data before refusal");
+
+            // Resolve the implicit volume prefix without hardcoding it. With
+            // the standard system home this is /System/Volumes/Data, which is
+            // absent from a logical /Users anchor chain.
+            auto volume=physical;
+            for (const auto& ignored:logical.relative_path()) { (void)ignored; volume=volume.parent_path(); }
+            if (volume!=volume.root_path() && volume / logical.relative_path()==physical) {
+                const auto leaf=(physical_source / "visible").lexically_relative(volume);
+                const auto artifact_parent=(physical_host / "implicit-artifacts").lexically_relative(volume);
+                BuildImportOptions bounded;bounded.inputs={leaf};
+                const auto bounded_target=home_fixture.directory("implicit-target");
+                rejects_with([&] {import_build_tree(volume,logical / "implicit-target",bounded,cancelled);},
+                    "roots overlap","implicit physical ancestor allowed a bounded leaf import into itself");
+                check(entries(bounded_target)==0,"implicit ancestor import copied its selected leaf");
+                rejects_with([&] {export_build_artifacts(volume,{leaf},logical_host,"implicit-artifacts",{},{},cancelled);},
+                    "roots overlap","export missed an implicit physical source ancestor");
+                rejects_with([&] {export_build_artifacts(logical_source,{"visible"},volume,artifact_parent,{},{},cancelled);},
+                    "roots overlap","export missed an implicit physical host ancestor");
+                const auto protected_destination=(physical_host / "future-state/artifacts").lexically_relative(volume);
+                rejects_with([&] {export_build_artifacts(logical_source,{"visible"},volume,protected_destination,
+                    {logical_host / "future-state"},{},cancelled);},"protected artifact destination",
+                    "implicit physical ancestor lost an absent protected suffix");
+                rejects_with([&] {export_build_artifacts(imported,{"visible"},logical_host,"ancestor-protected",
+                    {volume},{},cancelled);},"protected artifact destination",
+                    "implicit physical protected ancestor did not cover the entire host");
+                check(!fs::exists(logical_host / "implicit-artifacts") && !fs::exists(logical_host / "future-state") &&
+                      !fs::exists(logical_host / "ancestor-protected"),"implicit-ancestor refusal created artifacts");
+            }
+        }
+    }
+    {
+        const auto acl_target=temp.directory("acl-target");
+        inherited_acl(acl_target);
+        write(acl_target / "inherited", "fixture");
+        check(has_acl(acl_target / "inherited"),"fixture did not inherit the parent ACL");
+        fs::remove(acl_target / "inherited");
+        BuildImportOptions inputs;inputs.inputs={"src/text.txt"};
+        import_build_tree(source,acl_target,inputs,cancelled);
+        check(has_acl(acl_target) && !has_acl(acl_target / "src") && !has_acl(acl_target / "src/text.txt"),
+              "copy retained inherited ACLs or changed an existing destination ACL");
+        const auto acl_artifacts=host / "acl-artifacts";
+        fs::create_directory(acl_artifacts);inherited_acl(acl_artifacts);
+        const auto artifact=export_build_artifacts(acl_target,{"src"},host,"acl-artifacts",{},{},cancelled);
+        const auto directory=fs::path(artifact.at("directory").get<std::string>());
+        check(has_acl(acl_artifacts) && !has_acl(directory) && !has_acl(directory / "manifest.json") &&
+              !has_acl(directory / "files") && !has_acl(directory / "files/src/text.txt"),
+              "published artifact inherited access from its host parent");
+    }
+#endif
 #else
     std::atomic_bool cancelled{false};
     rejects([&] { codestudio::import_build_tree("/source", "/destination", {}, cancelled); }, "unsupported platform must fail closed");

@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "captured_at_utc": "2026-10-28T02:31:38.357298+00:00",
+  "scope": "Read-only current snapshot of known Stage 3 probe paths; no signal, build, cleanup, or product reclamation performed.",
+  "known_probe_root": "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes",
+  "process_observation": {
+    "method": "ps process enumeration, current UID filter, known probe-root command/executable path match, libproc executable and microsecond birth observation where available",
+    "auditor_pids_excluded": [
+      63561,
+      76140
+    ],
+    "same_uid_rows_inspected": 559,
+    "native_identity_or_executable_unavailable_rows": 1,
+    "matching_processes": [],
+    "matching_process_count": 0,
+    "interpretation": "No matching command or executable was observed at this instant if count is zero. This is not an identity-complete process-tree emptiness proof and cannot discover renamed or unrecorded historical descendants."
+  },
+  "retained_directories": [
+    {
+      "path": "build/macos-stage3-probes/design",
+      "regular_files": 3,
+      "symlinks": 0,
+      "descendant_directories": 0,
+      "regular_file_bytes": 9523432,
+      "classification": "retained_research_or_build_artifacts_not_product_sandbox_resources"
+    },
+    {
+      "path": "build/macos-stage3-probes/limits",
+      "regular_files": 19,
+      "symlinks": 0,
+      "descendant_directories": 1,
+      "regular_file_bytes": 3045735,
+      "classification": "retained_research_or_build_artifacts_not_product_sandbox_resources"
+    },
+    {
+      "path": "build/macos-stage3-probes/seatbelt",
+      "regular_files": 60,
+      "symlinks": 0,
+      "descendant_directories": 3,
+      "regular_file_bytes": 341904,
+      "classification": "retained_research_or_build_artifacts_not_product_sandbox_resources"
+    },
+    {
+      "path": "build/macos-stage3-probes/seatbelt-final",
+      "regular_files": 67,
+      "symlinks": 0,
+      "descendant_directories": 4,
+      "regular_file_bytes": 360172,
+      "classification": "retained_research_or_build_artifacts_not_product_sandbox_resources"
+    },
+    {
+      "path": "build/macos-stage3-probes/seatbelt-replay",
+      "regular_files": 65,
+      "symlinks": 0,
+      "descendant_directories": 4,
+      "regular_file_bytes": 359755,
+      "classification": "retained_research_or_build_artifacts_not_product_sandbox_resources"
+    },
+    {
+      "path": "build/macos-stage3-probes/seatbelt-replay2",
+      "regular_files": 67,
+      "symlinks": 0,
+      "descendant_directories": 4,
+      "regular_file_bytes": 360338,
+      "classification": "retained_research_or_build_artifacts_not_product_sandbox_resources"
+    }
+  ],
+  "retained_directory_count": 6,
+  "new_vs_historical": {
+    "known_task_artifacts": "The listed Stage 3 research work directories were created during this task and intentionally retained for reproduction/debugging. They are not reclaimed product resources.",
+    "pre_run_host_residue_baseline": "not_recorded",
+    "new_uncontrolled_process_residue": "none_observed_by_current_known_path_snapshot; exact_delta_unknown_without_baseline",
+    "historical_total_residue": "unknown_not_audited",
+    "product_registered_resource_inventory": "not_available_on_macos; no claim about historical cross-platform registered or unregistered resources",
+    "reclamation_success": "not_claimed; fixture self-exit, wait/reap, test-directed termination, and retained build caches are not product reclamation"
+  },
+  "limitations": [
+    "No kernel-owned execution container exists for these probes.",
+    "A current process snapshot cannot establish all historical process ownership or count new versus pre-existing resources.",
+    "Directories outside the known Stage 3 root and historical sandbox resource ledgers were not audited.",
+    "Dynamic process and directory counts describe capture time only."
+  ],
+  "retained_root_files": [
+    {
+      "path": "build/macos-stage3-probes/native-regression-baseline.json",
+      "bytes": 723,
+      "sha256": "05e6f5d4c0383ffaf3ec10bc4e1c7e0609100d05823b522bfd805c7967149ae7",
+      "classification": "retained_research_baseline_not_product_sandbox_resource"
+    }
+  ],
+  "retained_root_file_count": 1
+}

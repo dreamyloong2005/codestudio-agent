@@ -15,7 +15,7 @@ CodeStudio Agent 的 macOS 首个目标是 Apple Silicon（arm64）基础运行�
 | 后台 worker 与监督 | 支持独立会话后台启动、绑定父身份的受管 worker、有限重启和停止代数；复用持久队列与 cron | [后台启动](../src/platform/scheduler_process.cpp)、[监督子进程](../src/platform/scheduler_child.cpp)、[调度语义](scheduler.md) |
 | 系统凭据与 OAuth | 环境与非交互 Keychain 凭据可用；OAuth 使用独立记录域及跨进程刷新锁，保留崩溃不可重试标记 | [凭据后端](../src/platform/credentials.cpp)、[OAuth 原生能力](../src/mcp/oauth_native.cpp)、[凭据语义](credentials.md)、[OAuth](mcp-oauth.md) |
 | 当前用户登录自启 | 当前用户 LaunchAgent enable/status/disable 已实现；不立即执行、不无限重启，真实登录证据单列 | [自启入口](../src/platform/autostart.cpp)、[后台调度](scheduler.md) |
-| OS 隔离与工作区执行 | 只读清单快照已适配，拒绝链接、非普通文件与读取期间的身份/内容变化；工作区导入、执行与导出仍不支持，无宿主回退 | [沙箱入口](../src/platform/sandbox.cpp)、[工作区操作](../src/platform/build_workspace.cpp)、[隔离构建](workspace-builds.md) |
+| OS 隔离与工作区执行 | 只读清单快照及安全导入/原子导出前置层已适配，含大小写、Unicode 和 APFS 卷别名保护；隔离执行仍不支持，无宿主回退 | [沙箱入口](../src/platform/sandbox.cpp)、[Darwin 工作区操作](../src/platform/build_workspace_macos.cpp)、[隔离构建](workspace-builds.md) |
 | 资源登记与回收 | 非 Windows/Linux 平台使用不支持存根，缺少本机资源身份和回收实现 | [资源接口实现](../src/platform/sandbox_resources.cpp)、[资源生命周期](sandbox-resources.md) |
 | CI 与发布交付 | 已定义 macOS ARM64 自托管原生验证作业；尚无本轮托管运行结论，安装验收及签名公证留在阶段 4 | [CI 定义](../.github/workflows/native.yml)、[交付说明](delivery.md) |
 
@@ -25,7 +25,7 @@ CodeStudio Agent 的 macOS 首个目标是 Apple Silicon（arm64）基础运行�
 |---|---|---|---|
 | 1 | macOS arm64 基础运行与原生验证 | 代码已落地，本机原生验收通过 | 原生 Debug/Release 构建与基础功能测试通过，产生对应源码和产物的机器回执 |
 | 2 | Keychain、后台监督与登录自启 | 代码已实现；真实登录验收待完成 | 凭据生命周期、后台续跑、cron 和 LaunchAgent 的真实运行场景通过 |
-| 3 | 插件、工作区与资源生命周期隔离 | 待设计和实现，依赖基础进程与身份能力 | 后端方案确认，隔离拒绝、资源限额、取消和崩溃回收得到实际验证 |
+| 3 | 插件、工作区与资源生命周期隔离 | 文件准备层已实现；原生资源和生命周期保证存在实测缺口，整体验收未完成 | 后端方案确认，隔离拒绝、资源限额、取消和崩溃回收得到实际验证 |
 | 4 | 安装、签名公证与正式交付 | 待实现，依赖拟发布能力的验收 | 干净 Mac 完成安装、升级、卸载及发布包运行验收 |
 
 原生 CI 从阶段 1 开始接入，持续复用统一验证入口；阶段 4 才完成正式分发验收。隔离方案可提前调查，但阶段 1、2 的通过不能代替阶段 3 的验证。
@@ -144,6 +144,22 @@ prepare 仅登记独立的普通/监督两种 fixture，记录可执行文件与
 2. 资源限额、进程树收敛和宿主崩溃场景实际通过；能力声明不能替代 OS 层效果验证。
 3. 显式回收仅操作已登记且身份匹配的资源，不接管历史未登记资源、不向进程发送终止信号、不重放工具或改写任务/检查点状态。
 4. 分别报告本轮新增残留与历史总残留；测试清理不能伪装成产品成功回收。
+
+### 阶段 3 原生方案验证结果
+
+本机 macOS 26.5.2 的 [Seatbelt 原型](../research/macos-stage3/seatbelt/README.md) 与 [资源限额原型](../research/macos-stage3/limits/README.md) 已实际运行。它们记录允许和拒绝的差分结果，不是已交付的生产隔离后端。完整结果与复现源文件见 [阶段 3 记录](../research/macos-stage3/README.md)。
+
+| 保证 | 本机观察 | 当前产品处理 |
+|---|---|---|
+| 文件与网络 | Seatbelt deny-default 能限制宿主文件、只读包、scratch 与网络；同 UID 的信号、Mach lookup、共享内存、Unix socket 也经对照测试拒绝 | 保留原型，不以单项拒绝推导完整隔离可用 |
+| 子进程和进程组 | 严格 profile 可拒绝 fork；允许 fork 后可脱离原组，SETEXEC 也可在不 fork 时改变组/会话；进一步拒绝 posix_spawn 会影响编译器 | 不以普通进程组作为一般插件/构建的执行容器 |
+| 内存 | `RLIMIT_AS`/`RLIMIT_RSS` 不能直接实现物理内存字节额度；footprint/jetsam 相关接口被本用户权限拒绝 | 不接受未兑现的 memory_bytes 限额 |
+| CPU 与进程数 | CPU rlimit 是累计秒数；私有 CPU 百分比限制可自行清除且 fork 子进程不继承；NPROC 按整个 UID 计数 | 不替代现有整组 cpu_percent/processes 契约 |
+| 宿主崩溃与回收 | 可信 guardian 可收敛其持有的单个直接子进程；guardian 自身崩溃后负载仍存活，缺少一般进程树空状态证明 | 继续拒绝隔离执行和资源回收，不凭目录名认领残留 |
+
+已实现可独立验证的 macOS 文件准备层：逐级 `openat/O_NOFOLLOW` 锚定路径，拒绝非普通文件/硬链接及快照变化，按 Unicode 规范化与大小写折叠保护路径；来源根位于受保护目录内时拒绝整个来源，并通过锚定目录身份识别 APFS firmlink 别名和根目录重叠，限制文件/字节/目录深度，保留可执行位并清除新对象的继承 ACL。产物在私有目录中复制并生成 SHA256 清单，使用 `renameatx_np(RENAME_EXCL)` 原子发布；取消或发布前失败不会产生正式 bundle。安全清理不跟随链接、不跨挂载、不修改外部目标权限。该层不启动程序，不能据此批准构建或把 workspace_build 标为可用。
+
+当前 `os_sandbox`、`plugin_sandbox`、`sandbox_resources` 与 `workspace_build.available` 仍为 false；完整插件隔离、受限多进程构建及归属回收尚未达到本阶段验收条件。Seatbelt 的公开入口已被 Apple 标为 deprecated/不再支持，其 SBPL 行为也需绑定实际 OS 测试。当前选择保持原生 macOS，暂不启用未满足契约的隔离能力，不引入 Linux 虚拟机执行环境。虚拟化能力查询仅作为研究记录，不代表客体已配置或完成验收；本轮没有安装虚拟机、创建客体或放宽资源与授权约束。完整阶段 3 仍需满足上述原生隔离验收条件。
 
 ## 阶段 4：正式交付
 

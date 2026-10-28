@@ -1,0 +1,109 @@
+{
+  "created_at": "2026-10-28T02:30:16.748414+00:00",
+  "platform": "26.5.2",
+  "arch": "arm64",
+  "status": "characterization_passed_not_stage3_acceptance",
+  "scope": "Seatbelt deny-default file/network/process tests and process-group escape characterization",
+  "results": [
+    {
+      "name": "unrestricted",
+      "command": [
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/seatbelt-final/package/probe",
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/seatbelt-final/package/input",
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/seatbelt-final/scratch/output",
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/seatbelt-final/host/sentinel",
+        "53242"
+      ],
+      "returncode": 0,
+      "stdout": "dependency value=37\npackage_read ok=1 errno=0\npackage_write ok=1 errno=0\nscratch_write ok=1 errno=0\nhost_read ok=1 errno=0\nhost_write ok=1 errno=0\nsocket ok=1 errno=0\nnetwork_connect ok=1 errno=0\nfork ok=1 errno=0\n",
+      "stderr": "",
+      "host_after": "xost sentinel",
+      "package_after": "xeadonly package input",
+      "scratch_created": true
+    },
+    {
+      "name": "deny_default",
+      "command": [
+        "/usr/bin/sandbox-exec",
+        "-f",
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/seatbelt-final/root.sb",
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/seatbelt-final/package/probe",
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/seatbelt-final/package/input",
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/seatbelt-final/scratch/output",
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/seatbelt-final/host/sentinel",
+        "53242"
+      ],
+      "returncode": 0,
+      "stdout": "dependency value=37\npackage_read ok=1 errno=0\npackage_write ok=0 errno=1\nscratch_write ok=1 errno=0\nhost_read ok=0 errno=1\nhost_write ok=0 errno=1\nsocket ok=1 errno=0\nnetwork_connect ok=0 errno=1\nfork ok=0 errno=1\nforeign_exec ok=0 errno=1\n",
+      "stderr": "",
+      "host_after": "host sentinel",
+      "package_after": "readonly package input",
+      "scratch_created": true
+    },
+    {
+      "name": "groups_plain",
+      "command": [
+        "/usr/bin/sandbox-exec",
+        "-f",
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/seatbelt-final/groups_plain.sb",
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/seatbelt-final/package/groups"
+      ],
+      "returncode": 0,
+      "stdout": "initial pid=76000 pgid=75950 sid=75950\nchild setsid=76001 errno=0 pid=76001 pgid=76001 sid=76001\nchild setpgid=-1 errno=1\nspawn newgroup result=0\nspawned pid=76002 pgid=76002 sid=75950\n",
+      "stderr": ""
+    },
+    {
+      "name": "groups_deny_syscalls",
+      "command": [
+        "/usr/bin/sandbox-exec",
+        "-f",
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/seatbelt-final/groups_deny_syscalls.sb",
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/seatbelt-final/package/groups"
+      ],
+      "returncode": 0,
+      "stdout": "initial pid=76003 pgid=75950 sid=75950\nchild setsid=-1 errno=1 pid=76004 pgid=75950 sid=75950\nchild setpgid=-1 errno=1\nspawn newgroup result=0\nspawned pid=76005 pgid=76005 sid=75950\n",
+      "stderr": ""
+    },
+    {
+      "name": "groups_deny_spawn",
+      "command": [
+        "/usr/bin/sandbox-exec",
+        "-f",
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/seatbelt-final/groups_deny_spawn.sb",
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/seatbelt-final/package/groups"
+      ],
+      "returncode": 0,
+      "stdout": "initial pid=76006 pgid=75950 sid=75950\nchild setsid=-1 errno=1 pid=76007 pgid=75950 sid=75950\nchild setpgid=-1 errno=1\nspawn newgroup result=1\n",
+      "stderr": ""
+    },
+    {
+      "name": "groups_deny_fork",
+      "command": [
+        "/usr/bin/sandbox-exec",
+        "-f",
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/seatbelt-final/groups_deny_fork.sb",
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/seatbelt-final/package/groups"
+      ],
+      "returncode": 0,
+      "stdout": "initial pid=76008 pgid=75950 sid=75950\nspawn newgroup result=1\n",
+      "stderr": ""
+    }
+  ],
+  "profiles_sha256": {
+    "setexec_deny_setsid.sb": "f1a7e3c4c94799e38f06f4158eb1ee44aae41455b5172c6220cd829d1e365298",
+    "groups_deny_syscalls.sb": "91ec9851172af7c1155c30303f29a56a71e321656331d8ce8bfa2cc191f5f089",
+    "groups_deny_fork.sb": "f0d93aedd7462a68e556da60531a5430225be470639fd418078e01fe6fd36dc8",
+    "setexec_deny_spawn.sb": "32c84a804838ebe104353762f3d704a9db19bdf14d3997f5494291eeaece6f4a",
+    "setexec_deny_fork.sb": "78ab89202ce13c8f016bb9bb18036f912efb71ad47136351acef00f9e63a4f8b",
+    "groups_deny_spawn.sb": "2764dbe072a5df20d8a98a04afc2cfc4608e6be9d45df6f2e763ea56e8ab08ae",
+    "root.sb": "0ae8644f2ddead5f95e84a8f922c2741b8bcb0d989ecd59c40ed94ff3853b867",
+    "groups_plain.sb": "321101fce05897c71990213876a8dfa5f74c3f57212be5ef7361d4db842c7a4a",
+    "orphan.sb": "1cbc700ba844f0a2f53cfbf4f1134bde353d2752539da5fa038d4b653d0667be"
+  },
+  "limitations": [
+    "sandbox-exec and sandbox.h are deprecated; custom SBPL is not a supported public API contract",
+    "Unrestricted process-fork permits setsid and posix_spawn process-group escape",
+    "Denying setsid/setpgid syscalls alone does not block posix_spawn process-group escape",
+    "CPU/memory/process-count aggregate limits and host-death containment are not proved by these probes"
+  ]
+}

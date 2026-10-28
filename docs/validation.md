@@ -18,6 +18,14 @@
 
 状态读取和写入均要求当前数据库格式；其他已初始化版本在修改数据库设置前被拒绝，不迁移数据库，也不逐任务过滤历史。需要新建任务时使用空的状态路径或新工作区。`none` 沙箱策略也明确保存为 `{"version":2,"mode":"none"}`。本地 MCP 配置版本独立于 MCP 日期协议；模型服务 URL 中的 `/v1` 是供应商现行接口路径。
 
+## macOS 阶段 3：文件准备层与隔离方案验证
+
+本轮实现 Darwin 安全工作区导入、计量、原子产物导出和自有目录清理。原生测试新增普通/硬/符号链接、FIFO、保护路径、大小写/Unicode 别名、APFS firmlink 根重叠及缺失保护目录、复制限额、取消、SHA256 清单及真实 ACL 继承场景；可执行文件及 runtime 仍使用阶段 2 工具链。完整 Debug/Release 回归结果和源文件指纹见 [阶段 3 机器回执](../research/macos-stage3/verification.json)。文件准备层通过不等于隔离执行通过。受保护目录的祖先判定同时修正 Windows/Linux 的同形逻辑，通用回归已加入；本轮实际运行仅在 macOS，不增加其它平台通过结论。
+
+Seatbelt 和资源接口另有真实小规模探针，源代码、脚本、运行环境、差分结果和已知限制保存在 [阶段 3 原型目录](../research/macos-stage3/README.md)。原型表明文件/网络拒绝可实现，但当前非特权原生路径不满足已有整组内存、CPU 百分比、进程数和一般进程树收敛契约。私有 API、单进程 guardian、轮询后终止或 UID 总量都不被记为等价的内核执行容器。`os_sandbox`、`plugin_sandbox`、`workspace_build` 和资源回收继续明确拒绝；**阶段 3 整体验收尚未完成**，不能将原型案例成功或安全复制测试计为完整后端成功。
+
+阶段 2 的真实登录验收仍单列 pending；其原始已验证 executable 已复制到独立的 `build/macos-stage2-login-runtime/`，登录 fixture 使用该固定副本，后续开发构建不会替换其字节。更新后的准备回执见 [阶段 2 登录准备](../research/macos-stage2/login-acceptance-prepared.json)。
+
 ## macOS arm64 系统集成（阶段 2）
 
 阶段 2 新增非交互 Keychain、独立 OAuth 记录与刷新互斥、Darwin 后台启动/有界监督、当前用户 LaunchAgent 登记及真实后台 cron 联测。统一入口对 Debug/Release 运行完整的当前可用套件，逐项成功、失败、跳过、源码/产物/运行库摘要见 [阶段 2 机器回执](../research/macos-stage2/verification.json)。环境沿用下述阶段 1 的本机 macOS 26.5.2 arm64；本轮不推导 Windows/Linux、macOS 15.0 或 Intel 的新验收结论。

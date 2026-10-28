@@ -1,0 +1,180 @@
+{
+  "format": 2,
+  "product": "CodeStudio Agent",
+  "platform": "macosx",
+  "arch": "arm64",
+  "scope": "macOS stage 3 safe workspace preparation and native mechanism characterization",
+  "status": "partial_delivery_native_isolation_deferred",
+  "native_verification": "succeeded",
+  "stage3_accepted": false,
+  "decision": "Keep native macOS; leave isolation capabilities disabled where the existing guarantees are unmet. Do not introduce a Linux VM.",
+  "configurations": {
+    "debug": {
+      "report": "debug/verification.json",
+      "selected_suites": [
+        "toolchain",
+        "native",
+        "schema",
+        "provider",
+        "streaming",
+        "contract",
+        "service",
+        "credentials",
+        "cli",
+        "local_models",
+        "mcp",
+        "mcp_http",
+        "mcp_oauth",
+        "plugins",
+        "resume",
+        "scheduler",
+        "supervisor",
+        "cron",
+        "autostart",
+        "package",
+        "verification"
+      ],
+      "native_groups": 22,
+      "python_cases": 360,
+      "python_passed": 349,
+      "python_skipped": 11,
+      "unsupported_suites": {
+        "plugin_sandbox": "macOS OS isolation belongs to stage 3",
+        "sandbox": "macOS OS sandbox execution belongs to stage 3; refusal is covered by native/CLI tests",
+        "sandbox_resources": "macOS isolated resource ownership and reclamation belong to stage 3",
+        "real_build": "macOS isolated workspace execution belongs to stage 3",
+        "delivery": "macOS installation, signing and notarization belong to stage 4"
+      },
+      "artifact": {
+        "path": "build/macosx/arm64/debug/codestudio-agent",
+        "size": 14585232,
+        "sha256": "eafe4fd6496374f82417e4be90f4b5439a6373fd82da72da74bf013763f13e69"
+      },
+      "runtime_probe": {
+        "cplusplus": 202400,
+        "current_zone": "Asia/Shanghai",
+        "cxx26": true,
+        "dependencies": {
+          "curl": "libcurl/8.7.1 SecureTransport (LibreSSL/3.3.6) zlib/1.2.12 nghttp2/1.68.1",
+          "json": "3.12.0",
+          "openssl": "OpenSSL 3.6.5 29 Sep 2026",
+          "sqlite": "3.50.4"
+        },
+        "format": "probe:07",
+        "libcpp_version": 220108,
+        "timezone_dst": true,
+        "timezone_offsets": true,
+        "tzdb_version": "2026c-rearguard"
+      }
+    },
+    "release": {
+      "report": "release/verification.json",
+      "selected_suites": [
+        "toolchain",
+        "native",
+        "schema",
+        "provider",
+        "streaming",
+        "contract",
+        "service",
+        "credentials",
+        "cli",
+        "local_models",
+        "mcp",
+        "mcp_http",
+        "mcp_oauth",
+        "plugins",
+        "resume",
+        "scheduler",
+        "supervisor",
+        "cron",
+        "autostart",
+        "package",
+        "verification"
+      ],
+      "native_groups": 22,
+      "python_cases": 360,
+      "python_passed": 349,
+      "python_skipped": 11,
+      "unsupported_suites": {
+        "plugin_sandbox": "macOS OS isolation belongs to stage 3",
+        "sandbox": "macOS OS sandbox execution belongs to stage 3; refusal is covered by native/CLI tests",
+        "sandbox_resources": "macOS isolated resource ownership and reclamation belong to stage 3",
+        "real_build": "macOS isolated workspace execution belongs to stage 3",
+        "delivery": "macOS installation, signing and notarization belong to stage 4"
+      },
+      "artifact": {
+        "path": "build/macosx/arm64/release/codestudio-agent",
+        "size": 7545952,
+        "sha256": "376d1f2f5a303283f182d4046d6369487eee10676e8ed32b29ff54710759fdea"
+      },
+      "runtime_probe": {
+        "cplusplus": 202400,
+        "current_zone": "Asia/Shanghai",
+        "cxx26": true,
+        "dependencies": {
+          "curl": "libcurl/8.7.1 SecureTransport (LibreSSL/3.3.6) zlib/1.2.12 nghttp2/1.68.1",
+          "json": "3.12.0",
+          "openssl": "OpenSSL 3.6.5 29 Sep 2026",
+          "sqlite": "3.50.4"
+        },
+        "format": "probe:07",
+        "libcpp_version": 220108,
+        "timezone_dst": true,
+        "timezone_offsets": true,
+        "tzdb_version": "2026c-rearguard"
+      }
+    }
+  },
+  "source": {
+    "sha256": "eea7d6dfebe58f44655533723311a75183b4f395f7fddd088f3ba44663410069",
+    "files": 213
+  },
+  "tested_macos": "26.5.2",
+  "deployment_target": "15.0",
+  "ci": "No hosted CI run claimed",
+  "cross_platform": "Shared protected-ancestor checks were fixed in Windows and Linux and covered by common test source; this run executes only macOS.",
+  "capabilities": {
+    "os_sandbox": false,
+    "plugin_sandbox": false,
+    "workspace_build.available": false,
+    "sandbox_resources": false
+  },
+  "unmet_guarantees": [
+    "per-execution process-tree physical memory limit",
+    "irrevocable process-tree CPU percentage limit",
+    "per-execution process count limit",
+    "general process-tree convergence after host or guardian failure",
+    "native ownership journal, leases and identity-checked reclamation without process signals"
+  ],
+  "probes": {
+    "seatbelt": {
+      "report": "seatbelt/results/reproduction.json",
+      "source_hashes": "seatbelt/results/reproduction.json#source_sha256",
+      "interpretation": "Characterization includes expected containment failures; not stage 3 acceptance."
+    },
+    "limits": {
+      "report": "limits/results-macos-arm64.json",
+      "source_hashes": "limits/results-macos-arm64.json#sources_sha256",
+      "experiments": 12,
+      "interpretation": "Observed API behavior and permission refusals; not production resource enforcement."
+    }
+  },
+  "residues": {
+    "probes": "residue-audit.json",
+    "final_native_copy_fixtures": "native-fixture-audit.json",
+    "historical_total": "unknown_not_audited",
+    "product_reclamation": "not_claimed"
+  },
+  "failed_attempts": [
+    {
+      "report": "failed-attempts/debug-20261028T020646Z-c2dfae51/verification.json",
+      "reason": "Native package tests still expected macOS staging to be unsupported; final source runs the staging checks. This failed source also predates the final firmlink and protected-ancestor fixes."
+    }
+  ],
+  "stage2_real_login": {
+    "status": "awaiting_real_login",
+    "prepared_receipt": "../macos-stage2/login-acceptance-prepared.json",
+    "frozen_runtime": "build/macos-stage2-login-runtime/codestudio-agent"
+  }
+}

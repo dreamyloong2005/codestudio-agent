@@ -1,0 +1,88 @@
+Verification failed: C++ runtime changed while tests were running
+Report: /private/var/folders/wh/lj7xnlsd4ssdrgpwkw3vnsj40000gn/T/codestudio-verification-55aimby5/release-20261028T022617Z-cf3b9d4c/verification.json
+.Verification failed: Source changed during verification; the receipt is not valid for a single snapshot
+Report: /private/var/folders/wh/lj7xnlsd4ssdrgpwkw3vnsj40000gn/T/codestudio-verification-na9rlaaz/source/release-20261028T022617Z-57722a34/verification.json
+Verification failed: Built executables changed while tests were running
+Report: /private/var/folders/wh/lj7xnlsd4ssdrgpwkw3vnsj40000gn/T/codestudio-verification-na9rlaaz/binary/release-20261028T022617Z-49c66e8f/verification.json
+..macosx/release schema: failed
+Ran 2 tests in 0.1s
+
+OK
+
+.Report: /private/var/folders/wh/lj7xnlsd4ssdrgpwkw3vnsj40000gn/T/codestudio-verification-xpdf182_/release-20261028T022617Z-b5293d6b/verification.json
+......Verification failed: missing tool
+Report: /private/var/folders/wh/lj7xnlsd4ssdrgpwkw3vnsj40000gn/T/codestudio-verification-2nccrq_o/release-20261028T022617Z-ddc1f649/verification.json
+.Report: /private/var/folders/wh/lj7xnlsd4ssdrgpwkw3vnsj40000gn/T/codestudio-verification-vpzk9njq/debug-20261028T022617Z-c2499532/verification.json
+.macosx/release toolchain: succeeded
+macosx/release toolchain: failed
+{}
+
+macosx/release toolchain: failed
+{"cxx26": true, "cplusplus": 202400, "format": "probe:07", "timezone_offsets": true, "timezone_dst": false, "tzdb_version": "2026a", "current_zone": "Asia/Shanghai"}
+
+macosx/release toolchain: failed
+{"cxx26": true, "cplusplus": 202302, "format": "probe:07", "timezone_offsets": true, "timezone_dst": true, "tzdb_version": "2026a", "current_zone": "Asia/Shanghai"}
+
+..macosx/release schema: failed
+
+.macosx/release schema: succeeded
+.windows/release real_build: succeeded
+windows/release real_build: failed
+PASS 2 real isolated XMake builds: explicit-v2 and custom-cache-v2
+windows/release real_build: failed
+PASS real isolated XMake / explicit-v2 / C++26 pack indexing / compile / link / execute / atomic export
+  steps=3, bytes=1024, sha256=fixture
+PASS real isolated XMake / explicit-v2 / C++26 pack indexing / compile / link / execute / atomic export
+PASS 2 real isolated XMake builds: explicit-v2 and custom-cache-v2
+
+windows/release real_build: failed
+PASS real isolated XMake / explicit-v2 / C++26 pack indexing / compile / link / execute / atomic export
+  steps=3, bytes=1024, sha256=fixture
+
+PASS 2 real isolated XMake builds: explicit-v2 and custom-cache-v2
+
+windows/release real_build: failed
+PASS real isolated XMake / explicit-v2 / C++26 pack indexing / compile / link / execute / atomic export
+  steps=3, bytes=1024, sha256=fixture
+PASS real isolated XMake / custom-cache-v2 / C++26 pack indexing / compile / link / execute / atomic export
+
+
+windows/release real_build: failed
+PASS real isolated XMake / explicit-v2 / C++26 pack indexing / compile / link / execute / atomic export
+  steps=3, bytes=1024, sha256=fixture
+PASS real isolated XMake / custom-cache-v2 / C++26 pack indexing / compile / link / execute / atomic export
+PASS 2 real isolated XMake builds: explicit-v2 and custom-cache-v2
+unfinished
+
+windows/release real_build: failed
+FAIL earlier operation
+PASS real isolated XMake / explicit-v2 / C++26 pack indexing / compile / link / execute / atomic export
+  steps=3, bytes=1024, sha256=fixture
+PASS real isolated XMake / custom-cache-v2 / C++26 pack indexing / compile / link / execute / atomic export
+PASS 2 real isolated XMake builds: explicit-v2 and custom-cache-v2
+
+windows/release real_build: failed
+PASS real isolated XMake / explicit-v2 / C++26 pack indexing / compile / link / execute / atomic export
+  steps=3, bytes=1024, sha256=fixture
+PASS real isolated XMake / custom-cache-v2 / C++26 pack indexing / compile / link / execute / atomic export
+PASS 2 real isolated XMake builds: explicit-v2 and custom-cache-v2
+
+.macosx/release schema: failed
+Ran 0 tests in 0.1s
+
+OK
+
+macosx/release schema: failed
+Ran 1 test in 0.1s
+
+OK
+not a complete test run
+
+.macosx/release schema: failed
+just a message
+
+.
+----------------------------------------------------------------------
+Ran 19 tests in 1.296s
+
+OK

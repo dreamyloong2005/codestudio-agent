@@ -57,7 +57,7 @@ void process_package_tests(const std::filesystem::path& fixture) {
         ("codestudio-package-interface-"+std::to_string(std::random_device{}()));
     check(fs::create_directory(root),"create package interface workspace");
     struct Cleanup {fs::path root;~Cleanup(){
-#if defined(_WIN32) || defined(__linux__)
+#if defined(_WIN32) || defined(__linux__) || defined(__APPLE__)
         try {codestudio::safe_remove_owned_tree(root);} catch(...) {}
 #else
         std::error_code error; fs::remove_all(root, error);
@@ -87,7 +87,7 @@ void process_package_tests(const std::filesystem::path& fixture) {
     const ProcessPackage plan(caller_source,caller_files,caller_entry,caller_arguments);
     caller_files=Json::object();caller_arguments.assign(1,"changed");caller_source.clear();caller_entry.clear();
     const auto good=fresh("good");std::atomic_bool cancelled{false};
-#if defined(_WIN32) || defined(__linux__)
+#if defined(_WIN32) || defined(__linux__) || defined(__APPLE__)
     plan.stage(good,cancelled);
     check(plan.source()==source && plan.entrypoint()=="entry.exe","package owns caller paths");
     const auto mapped=plan.arguments(good);

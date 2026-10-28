@@ -1,0 +1,11 @@
+(version 1)
+(deny default)
+(allow file-read* file-map-executable (subpath "/System/Library") (subpath "/usr/lib") (subpath "@PROBE_ROOT@/package"))
+(allow file-read* file-write* (subpath "@PROBE_ROOT@/scratch"))
+(allow process-exec (literal "@PROBE_ROOT@/package/setexec"))
+(allow sysctl-read)
+(allow mach-bootstrap)
+(allow syscall*)
+
+(allow file-read* (literal "/"))
+(deny syscall-unix (syscall-number SYS_setsid SYS_setpgid))

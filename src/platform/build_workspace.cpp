@@ -130,6 +130,11 @@ std::vector<fs::path> protections(const fs::path& root, const std::vector<fs::pa
     std::vector<fs::path> result;
     for (const auto& value : values) {
         auto path = value.is_absolute() ? checked_absolute(value) : joined(root, checked_relative(value));
+        // A source rooted inside protected state must not bypass its ancestor's policy.
+        if (under(root, path)) {
+            result.emplace_back();
+            continue;
+        }
         if (under(path, root)) {
             auto part = path.begin();
             for (auto base = root.begin(); base != root.end(); ++base) ++part;
@@ -386,8 +391,7 @@ void write_manifest(const fs::path& path, const Json& value, std::size_t max_byt
 #endif
 }
 
-#ifndef __linux__
-#ifndef __APPLE__
+#if !defined(__linux__) && !defined(__APPLE__)
 std::string read_build_manifest_snapshot(const fs::path& manifest, std::size_t max_bytes) {
 #ifdef _WIN32
     const auto path = checked_absolute(manifest);
@@ -418,7 +422,6 @@ std::string read_build_manifest_snapshot(const fs::path& manifest, std::size_t m
     fail("safe build manifests currently require Windows");
 #endif
 }
-#endif
 
 BuildCopyStats import_build_tree(const fs::path& source_root, const fs::path& destination,
     const BuildImportOptions& options, const std::atomic_bool& cancelled) {

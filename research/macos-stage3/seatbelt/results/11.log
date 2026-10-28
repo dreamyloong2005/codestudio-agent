@@ -1,0 +1,18 @@
+{
+  "status": "passed",
+  "results": [
+    {
+      "case": "unrestricted",
+      "returncode": 0,
+      "stdout": "signal_probe result=0 errno=0\nsignal_delivery result=0 errno=0\ntask_name_for_pid result=0 port=7427\ntask_for_pid result=5 port=0\nmach_lookup result=0 port=7171\nshared_memory result=1 errno=0\nunix_connect result=0 errno=0\n",
+      "stderr": ""
+    },
+    {
+      "case": "deny_default",
+      "returncode": 0,
+      "stdout": "signal_probe result=-1 errno=1\nsignal_delivery result=-1 errno=1\ntask_name_for_pid result=5 port=0\ntask_for_pid result=5 port=0\nmach_lookup result=1100 port=0\nshared_memory result=0 errno=1\nunix_connect result=-1 errno=1\n",
+      "stderr": ""
+    }
+  ],
+  "task_for_pid_note": "task_for_pid is denied in both cases by host OS policy; this probe does not attribute that baseline refusal to Seatbelt."
+}

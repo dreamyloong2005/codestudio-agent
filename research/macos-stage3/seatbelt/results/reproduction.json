@@ -1,0 +1,195 @@
+{
+  "status": "characterization_passed_not_stage3_acceptance",
+  "started_at": "2026-10-28T02:30:14.779940+00:00",
+  "scope": "Seatbelt characterization, including expected containment failures",
+  "source_sha256": {
+    "setexec_deny_setsid.sb": "4cc14b56ea4fb8b27408e519dc11f7bf176ed2a535650044cf8b5dfe8d9fed36",
+    "guardian_crash_probe.py": "93ad25d6a6ee31c06ed0e0b5ebbbe0e4b71c1ae3b4345dfc533155a181be40f9",
+    "native_process_watch.py": "0a7ed9fbc0a18e5765a8d6b59f6aeb83072fa3baef7fbf80598fc5353414a3ab",
+    "groups_deny_syscalls.sb": "5eafde9858d909d5aae860b683d3f52a23392d215c439b2607d7bab5dcf51524",
+    "setexec_probe.py": "4fe364df32408d5d8a19860f0dae972a9981dac325d0e15570ddfd235910f776",
+    "run_probes.py": "799aff99cdcdc986979ef87c200173f3c3657cd4ba06bc1876057711afcd7e2a",
+    "reproduce.py": "c0fb26f4c4c6fa79b4c4521554ecd2fe04993ff622953e4f33b886b2ad6a264b",
+    "host_crash_probe.py": "5acfeff075efc3e95031397e65f3827421655850c1f3404b80c134f0bf6d42f9",
+    "groups_deny_fork.sb": "8914039ac032418097933f6761c74550b46fac3d25018716f52233ec947240c6",
+    "guarded.c": "c992930a0e81244377b7d40e15e371995e4a9db15b28b59fbc8dcad9e140135a",
+    "guardian_probe.py": "8c26154827254c1b024c8bc6e8689bc7ecee4c7dbcb1d34cb343ad0ca42575ed",
+    "setexec_deny_spawn.sb": "d1af3a3d8d48dc68a6280988ca05660c43060777f9c7973f9c39bc839a80e0ad",
+    "groups.c": "a9036aff373a986f78b3f4d500a6033e83797de5cdd90eeb37af94973500300f",
+    "ipc_target.c": "650a71a4f4a6be25cf87c7372cfa83c3f1c58ebd3dfbff076adbb08e898af007",
+    "setexec_deny_fork.sb": "e0bf3ca2c8d8c8a5713ab1fc07789ec7541a55fb50cb5f289898f94849a0d12e",
+    "groups_deny_spawn.sb": "e3473bc55609dd968393b464d040336f6deee71c21514468130255b49c215217",
+    "setexec.c": "eeafec9328c3586f875a8809af8bfe2f84cd60ced1b6cc34a093dff8683891b4",
+    "dependency.c": "414f496b1ca395d69e02c52a1a95a591a10e94f419e6b13cd87065c27bc44eb7",
+    "orphan.c": "ec7f66786fdc1e8f1cf72dc3dfbf3d86850a45c4be762be30a00d2a85ca1c4be",
+    "ipc.c": "736ce9bb4e59141b51485740ea1e6fc9156a6455ff6fa10b888662e3f624fa3d",
+    "root.sb": "e73352f3f7c2984098b312844371536d9d8f5722ec0ed33fefe5dc099d3facc7",
+    "ipc_probe.py": "c9285e1ac8afd5662a09c5a0b221e43c596f37a5bcf33bd0dcab62f3846c0555",
+    "probe.c": "a7475cf22e3afebe763cc3b6ba7bbfd84dbc919d0ede7065fdf714b59add2ba0",
+    "groups_plain.sb": "721602e5423996d9089470719b2ec24dd5188dd9ccf8cb8cde2ae9d97111cf69",
+    "guardian.c": "69b3402b8110cb306e4e6d7f96fabe8ea4a82e68adeba55d15aaab3dcaf2f9ee",
+    "orphan.sb": "71ff2199bfd25dbb9c2f8a0e7bbb6c9976c0f394008aac8e5e89022fea74c6f5"
+  },
+  "steps": [
+    {
+      "command": [
+        "xcrun",
+        "clang",
+        "-dynamiclib",
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/seatbelt-final/dependency.c",
+        "-Wl,-install_name,@loader_path/libdependency.dylib",
+        "-o",
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/seatbelt-final/package/libdependency.dylib"
+      ],
+      "returncode": 0,
+      "log": "00.log"
+    },
+    {
+      "command": [
+        "xcrun",
+        "clang",
+        "-O2",
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/seatbelt-final/probe.c",
+        "-L/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/seatbelt-final/package",
+        "-ldependency",
+        "-o",
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/seatbelt-final/package/probe"
+      ],
+      "returncode": 0,
+      "log": "01.log"
+    },
+    {
+      "command": [
+        "xcrun",
+        "clang",
+        "-O2",
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/seatbelt-final/groups.c",
+        "-o",
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/seatbelt-final/package/groups"
+      ],
+      "returncode": 0,
+      "log": "02.log"
+    },
+    {
+      "command": [
+        "xcrun",
+        "clang",
+        "-O2",
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/seatbelt-final/setexec.c",
+        "-o",
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/seatbelt-final/package/setexec"
+      ],
+      "returncode": 0,
+      "log": "03.log"
+    },
+    {
+      "command": [
+        "xcrun",
+        "clang",
+        "-O2",
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/seatbelt-final/orphan.c",
+        "-o",
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/seatbelt-final/package/orphan"
+      ],
+      "returncode": 0,
+      "log": "04.log"
+    },
+    {
+      "command": [
+        "xcrun",
+        "clang",
+        "-O2",
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/seatbelt-final/ipc.c",
+        "-o",
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/seatbelt-final/package/ipc"
+      ],
+      "returncode": 0,
+      "log": "05.log"
+    },
+    {
+      "command": [
+        "xcrun",
+        "clang",
+        "-O2",
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/seatbelt-final/ipc_target.c",
+        "-o",
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/seatbelt-final/host/ipc_target"
+      ],
+      "returncode": 0,
+      "log": "06.log"
+    },
+    {
+      "command": [
+        "xcrun",
+        "clang",
+        "-O2",
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/seatbelt-final/guardian.c",
+        "-o",
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/seatbelt-final/host/guardian"
+      ],
+      "returncode": 0,
+      "log": "07.log"
+    },
+    {
+      "command": [
+        "xcrun",
+        "clang",
+        "-O2",
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/seatbelt-final/guarded.c",
+        "-o",
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/seatbelt-final/package/guarded"
+      ],
+      "returncode": 0,
+      "log": "08.log"
+    },
+    {
+      "command": [
+        "/Users/taosiyuan/codestudio-agent/build/contract-python/bin/python",
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/seatbelt-final/run_probes.py"
+      ],
+      "returncode": 0,
+      "log": "09.log"
+    },
+    {
+      "command": [
+        "/Users/taosiyuan/codestudio-agent/build/contract-python/bin/python",
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/seatbelt-final/setexec_probe.py"
+      ],
+      "returncode": 0,
+      "log": "10.log"
+    },
+    {
+      "command": [
+        "/Users/taosiyuan/codestudio-agent/build/contract-python/bin/python",
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/seatbelt-final/ipc_probe.py"
+      ],
+      "returncode": 0,
+      "log": "11.log"
+    },
+    {
+      "command": [
+        "/Users/taosiyuan/codestudio-agent/build/contract-python/bin/python",
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/seatbelt-final/host_crash_probe.py"
+      ],
+      "returncode": 0,
+      "log": "12.log"
+    },
+    {
+      "command": [
+        "/Users/taosiyuan/codestudio-agent/build/contract-python/bin/python",
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/seatbelt-final/guardian_probe.py"
+      ],
+      "returncode": 0,
+      "log": "13.log"
+    },
+    {
+      "command": [
+        "/Users/taosiyuan/codestudio-agent/build/contract-python/bin/python",
+        "/Users/taosiyuan/codestudio-agent/build/macos-stage3-probes/seatbelt-final/guardian_crash_probe.py"
+      ],
+      "returncode": 0,
+      "log": "14.log"
+    }
+  ],
+  "finished_at": "2026-10-28T02:30:32.617097+00:00"
+}

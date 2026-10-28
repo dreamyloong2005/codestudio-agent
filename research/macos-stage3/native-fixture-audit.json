@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "captured_at_utc": "2026-10-28T02:29:08.365109+00:00",
+  "scope": "Immediate entries with the three exact native copy/package/manifest fixture prefixes in canonical user temporary directory and home. No cleanup or process signaling.",
+  "prefixes": [
+    "codestudio-build-copy-tests-",
+    "codestudio-package-interface-",
+    "codestudio-manifest-tests-"
+  ],
+  "parents": [
+    "/private/var/folders/wh/lj7xnlsd4ssdrgpwkw3vnsj40000gn/T",
+    "/Users/taosiyuan"
+  ],
+  "before_final_regression": {
+    "captured_at_utc": "2026-10-28T02:23:04.404745+00:00",
+    "entries": [],
+    "count": 0,
+    "source": "Filtered from the earlier read-only codestudio-* baseline; unrelated entries are excluded by the stated fixture prefixes."
+  },
+  "after_final_regression": {
+    "entries": [],
+    "count": 0
+  },
+  "new_entries": [],
+  "new_entry_count": 0,
+  "interpretation": "This only measures native fixture directory residue added by the final Debug/Release runs, not all earlier stage 3 work or global resources.",
+  "historical_total_residue": "unknown_not_audited",
+  "product_reclamation": "not_claimed; temporary fixture cleanup is not the unimplemented product sandbox reclamation backend"
+}
