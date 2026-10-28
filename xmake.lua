@@ -8,6 +8,23 @@ if is_plat("windows") then
     add_cxxflags("/utf-8", {tools = {"cl", "clang_cl"}})
 end
 
+option("macos_libcxx")
+    set_showmenu(true)
+    set_description("macOS LLVM libc++ prefix built with the C++ chrono time-zone database")
+option_end()
+
+if is_plat("macosx") then
+    local runtime = get_config("macos_libcxx")
+    if runtime then
+        add_defines("_LIBCPP_ENABLE_EXPERIMENTAL")
+        add_cxxflags("-nostdinc++", "-isystem" .. path.join(runtime, "include/c++/v1"), {force = true})
+        add_ldflags("-nostdlib++", "-L" .. path.join(runtime, "lib"),
+                    "-Wl,-rpath," .. path.join(runtime, "lib"), "-lc++experimental", "-lc++", "-lc++abi", {force = true})
+        add_shflags("-nostdlib++", "-L" .. path.join(runtime, "lib"),
+                    "-Wl,-rpath," .. path.join(runtime, "lib"), "-lc++experimental", "-lc++", "-lc++abi", {force = true})
+    end
+end
+
 option("system_deps")
     set_default(false)
     set_showmenu(true)
@@ -26,7 +43,9 @@ if is_plat("linux") and has_config("system_deps") then
 else
     add_requires("nlohmann_json 3.12.0")
     add_requires("sqlite3 3.50.0+400", {configs = {shared = false}})
-    if not is_plat("windows") then
+    if is_plat("macosx") then
+        add_requires("openssl3 3.6.5", {alias = "openssl", configs = {shared = false, toolchains = "xcode"}})
+    elseif not is_plat("windows") then
         add_requires("libcurl 8.15.0", {configs = {shared = false}})
         add_requires("openssl", {configs = {shared = false}})
     end
@@ -43,7 +62,13 @@ target("agent-core")
         add_defines("NOMINMAX", "WIN32_LEAN_AND_MEAN", {public = true})
         add_cxxflags("/utf-8", {tools = {"cl", "clang_cl"}})
     else
-        add_packages("libcurl", "openssl", {public = true})
+        add_packages("openssl", {public = true})
+        if is_plat("macosx") then
+            add_syslinks("curl", {public = true})
+            add_frameworks("CoreFoundation", {public = true})
+        else
+            add_packages("libcurl", {public = true})
+        end
         add_syslinks("pthread", {public = true})
         if is_plat("linux") then
             add_packages("libsecret", {public = true})
@@ -115,7 +140,8 @@ target("plugin-sandbox-fixture")
         add_syslinks("advapi32", "ws2_32")
         add_defines("NOMINMAX", "WIN32_LEAN_AND_MEAN")
     else
-        add_syslinks("dl", "pthread")
+        add_syslinks("pthread")
+        if not is_plat("macosx") then add_syslinks("dl") end
     end
 target_end()
 
@@ -163,3 +189,12 @@ target("provider-fixture")
     add_files("tests/provider_fixture.cpp")
     add_deps("agent-core")
 target_end()
+
+if is_plat("macosx") then
+    target("toolchain-probe")
+        set_kind("binary")
+        set_default(false)
+        add_files("tests/toolchain_probe.cpp")
+        add_deps("agent-core")
+    target_end()
+end

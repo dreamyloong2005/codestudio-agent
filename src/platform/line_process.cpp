@@ -25,6 +25,9 @@
 #include <signal.h>
 #include <sys/wait.h>
 #include <unistd.h>
+#ifdef __APPLE__
+#include "darwin_spawn.hpp"
+#endif
 #ifdef __linux__
 #include "linux_sandbox.hpp"
 #include <sys/prctl.h>
@@ -492,16 +495,35 @@ LineProcess::LineProcess(const ProcessRequest& request, const std::atomic_bool* 
     std::vector<char*> envp;
     for (auto& entry : child_environment) envp.push_back(entry.data());
     envp.push_back(nullptr);
-    Descriptor child_input, child_output, child_errors, launch_read, launch_write;
+    Descriptor child_input, child_output, child_errors;
     pipe_pair(child_input, impl_->input);
+#ifdef __APPLE__
+    // Darwin pipes support a descriptor-local EPIPE policy. Blocking SIGPIPE
+    // only on the writer is insufficient when the host has other threads.
+    if (fcntl(impl_->input.get(), F_SETNOSIGPIPE, 1) < 0) posix_error("fcntl(F_SETNOSIGPIPE)");
+#endif
     pipe_pair(impl_->output, child_output);
     pipe_pair(impl_->errors, child_errors);
+#ifndef __APPLE__
+    Descriptor launch_read, launch_write;
     pipe_pair(launch_read, launch_write);
+#endif
     nonblocking(impl_->input.get()); nonblocking(impl_->output.get()); nonblocking(impl_->errors.get());
+#ifdef __APPLE__
+    check_cancelled();
+    if (Clock::now() >= startup_deadline) throw std::runtime_error("RPC process startup timed out");
+    impl_->pid = darwin_spawn(arguments.front().c_str(), argv.data(), envp.data(),
+        request.working_directory.c_str(), child_input.get(), child_output.get(), child_errors.get());
+    child_input.reset(); child_output.reset(); child_errors.reset();
+    check_cancelled();
+    if (Clock::now() >= startup_deadline) throw std::runtime_error("RPC process startup timed out");
+#else
     const auto maximum_fd = sysconf(_SC_OPEN_MAX);
     if (maximum_fd < 0) posix_error("sysconf(_SC_OPEN_MAX)");
     if (Clock::now() >= startup_deadline) throw std::runtime_error("RPC process startup timed out");
+#ifdef __linux__
     const auto parent_pid = getpid();
+#endif
     check_cancelled();
     const auto pid = fork();
     if (pid < 0) posix_error("fork(RPC)");
@@ -542,6 +564,7 @@ LineProcess::LineProcess(const ProcessRequest& request, const std::atomic_bool* 
         if (count) throw std::system_error(error, std::generic_category(), "execve(RPC)");
         break;
     }
+#endif
 #endif
     impl_->reader = std::thread([state = impl_.get()] { state->drain(); });
 }

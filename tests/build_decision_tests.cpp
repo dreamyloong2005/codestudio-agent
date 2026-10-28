@@ -4,7 +4,7 @@
 #include <sqlite3.h>
 #include <stdexcept>
 
-#if defined(_WIN32) || defined(__linux__)
+#if defined(_WIN32) || defined(__linux__) || defined(__APPLE__)
 namespace {
 using namespace codestudio;
 void check(bool condition, const char* message) {
@@ -347,7 +347,7 @@ void reviewed_proposal_content_is_immutable() {
 }
 #endif
 void run_build_decision_tests() {
-#if defined(_WIN32) || defined(__linux__)
+#if defined(_WIN32) || defined(__linux__) || defined(__APPLE__)
     digest=sha256_bytes(Json{{"manifest",{{"version",2}}}}.dump());
     atomic_decisions_and_recovery();
     rejection_and_source_validation();

@@ -172,12 +172,12 @@ int main(int argc,char** argv) {
             run_cron_tests(); std::cout << "PASS cron syntax/time zones/DST boundaries\n";
             run_cron_store_tests(); std::cout << "PASS cron atomic occurrences/overlap/recovery/controls\n";
             run_process_observation_tests();std::cout << "PASS read-only process identity observation\n";
-        run_autostart_tests(); std::cout << "PASS login autostart identity/ownership/argument boundaries\n";
+        run_autostart_tests(); std::cout << "PASS autostart option validation and native capability boundaries\n";
             return 0;
         }
         if (argc == 2 && std::string_view(argv[1]) == "--build-io-only") {
             run_build_workspace_tests();
-            std::cout << "PASS isolated workspace import/export/hash/link boundaries\n";
+            std::cout << "PASS manifest snapshots and workspace copy capability boundaries\n";
             return 0;
         }
         if (argc == 2 && std::string_view(argv[1]) == "--state-reader-only") {
@@ -192,7 +192,11 @@ int main(int argc,char** argv) {
 #else
             run_sandbox_tests(directory / "sandbox-fixture");
 #endif
-            std::cout << "PASS OS sandbox boundaries/stdio/descendants/cleanup\n";
+#if defined(__APPLE__)
+        std::cout << "PASS unsupported sandbox and package execution refused\n";
+#else
+        std::cout << "PASS OS sandbox boundaries/stdio/descendants/cleanup\n";
+#endif
             return 0;
         }
         persistence_tests();std::cout << "PASS persistence/recovery/transitions/schema\n";
@@ -203,13 +207,13 @@ int main(int argc,char** argv) {
         run_cron_tests();std::cout << "PASS cron syntax/time zones/DST boundaries\n";
         run_cron_store_tests();std::cout << "PASS cron atomic occurrences/overlap/recovery/controls\n";
         run_process_observation_tests();std::cout << "PASS read-only process identity observation\n";
-        run_autostart_tests();std::cout << "PASS login autostart identity/ownership/argument boundaries\n";
+        run_autostart_tests();std::cout << "PASS autostart option validation and native capability boundaries\n";
         run_resume_kernel_tests();std::cout << "PASS durable conversation resume/budgets/no replay\n";
         run_state_reader_tests();std::cout << "PASS read-only state queries/pagination/commit visibility\n";
         run_responses_tests();std::cout << "PASS Responses protocol and continuation\n";
         run_messages_tests();std::cout << "PASS Messages protocol and continuation\n";
         run_tools_tests();std::cout << "PASS workspace tool boundaries\n";
-        run_build_workspace_tests();std::cout << "PASS isolated workspace import/export/hash/link boundaries\n";
+        run_build_workspace_tests();std::cout << "PASS manifest snapshots and workspace copy capability boundaries\n";
         run_workspace_execution_tests();std::cout << "PASS generic execution/manifest compatibility/frozen recipes\n";
         run_build_proposal_tests();std::cout << "PASS build proposals/digests/no execution/receipt validation\n";
         run_build_decision_tests();std::cout << "PASS build decisions/atomic claims/no replay/current schema\n";
@@ -237,7 +241,11 @@ int main(int argc,char** argv) {
 #else
         run_sandbox_tests(directory / "sandbox-fixture");
 #endif
+#if defined(__APPLE__)
+        std::cout << "PASS unsupported sandbox and package execution refused\n";
+#else
         std::cout << "PASS OS sandbox boundaries/stdio/descendants/cleanup\n";
+#endif
         return 0;
     } catch(const std::exception& e) {std::cerr << "FAIL: " << e.what() << '\n';return 1;}
 }

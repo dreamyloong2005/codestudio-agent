@@ -93,6 +93,98 @@ class CliTests(unittest.TestCase):
         with self.server.guard:
             self.server.responses = list(responses)
 
+    def test_doctor_declares_native_capabilities_for_the_current_platform(self):
+        doctor = self.invoke("doctor")
+        native_integration = os.name == "nt" or sys.platform.startswith("linux")
+        for capability in ("background_scheduler", "worker_supervision", "login_autostart",
+                           "supervised_autostart", "os_sandbox"):
+            self.assertEqual(doctor[capability], native_integration)
+        self.assertEqual(doctor["mcp_oauth"]["available"], native_integration)
+        self.assertEqual(doctor["workspace_build"]["available"], native_integration)
+        self.assertEqual(doctor["sandbox_resources"]["available"], native_integration)
+        self.assertTrue(doctor["build_proposals"])
+        self.assertTrue(doctor["approval_continuation"])
+        self.assertFalse(self.database.exists())
+
+    @unittest.skipIf(os.name == "nt" or sys.platform.startswith("linux"),
+                     "Checks unavailable native integrations on other platforms")
+    def test_unsupported_native_integrations_fail_without_host_fallback(self):
+        for sandbox in ("appcontainer", "linux-namespace"):
+            with self.subTest(sandbox=sandbox):
+                error = self.invoke(*self.run_args("--sandbox", sandbox), expected=2)
+                self.assertIn("isolation was not disabled", error["error"])
+                self.assertFalse((self.workspace / "CODESTUDIO_DEMO.txt").exists())
+        for command in ("scheduler-start", "scheduler-supervise", "scheduler-autostart-enable"):
+            with self.subTest(command=command):
+                error = self.invoke(command, "--workspace", self.workspace, expected=2)
+                self.assertIn("unsupported", error["error"].lower())
+        error = self.invoke("sandbox-resources", expected=2)
+        self.assertIn("unavailable", error["error"].lower())
+        self.assertFalse(self.database.exists())
+        # The default environment secret must not substitute for a requested
+        # system credential when no native store exists.
+        status = self.invoke("credential-status", "--credential", "system:macos-fixture", expected=2)
+        self.assertEqual((status["backend"], status["state"]), ("unsupported", "unavailable"))
+        self.invoke(*self.run_args("--credential", "system:macos-fixture"), expected=2)
+        self.assertEqual(self.server.requests, [])
+
+    @unittest.skipIf(os.name == "nt" or sys.platform.startswith("linux"),
+                     "Checks OAuth's unsupported native store and lock")
+    def test_unsupported_oauth_login_does_not_contact_server(self):
+        manifest = self.workspace / "oauth.json"
+        origin = f"http://127.0.0.1:{self.server.server_port}"
+        manifest.write_text(json.dumps({"version": 2, "servers": [{
+            "id": "oauth", "transport": "streamable-http", "url": origin + "/mcp",
+            "allow_http_loopback": True, "tools": ["echo"], "timeout_ms": 1000,
+            "oauth": {"issuer": origin + "/issuer", "client_id": "fixture-client",
+                      "credential": "system:macos-oauth-fixture", "scopes": ["tools.read"]}}]}))
+        for command in ("mcp-auth-login", "mcp-auth-status", "mcp-auth-logout"):
+            with self.subTest(command=command):
+                error = self.invoke(command, "--mcp-config", manifest, "--server", "oauth", expected=2)
+                self.assertIn("unsupported", error["error"].lower())
+        self.assertEqual(self.server.requests, [])
+        self.assertFalse(self.database.exists())
+
+    @unittest.skipUnless(sys.platform == "darwin", "macOS proposal state without an isolation backend")
+    def test_macos_proposal_rejection_continues_but_approval_cannot_execute(self):
+        arguments = {"reason": "Review a build without running it", "manifest": {
+            "version": 2, "inputs": ["missing-source.cpp"],
+            "mounts": [{"name": "compiler", "source": str(self.workspace / "missing-toolchain"),
+                        "inputs": ["compiler"]}],
+            "steps": [{"executable": "${compiler}/compiler", "arguments": ["missing-source.cpp"]}],
+            "outputs": ["out/program"], "artifact_directory": "artifacts"}}
+        self.set_responses(call("propose_build", arguments), final("The rejected build was not run"))
+        result = self.invoke(*self.run_args("--allow-build-proposals"), expected=3)
+        self.assertEqual(result["status"], "waiting_approval")
+        task = result["task_id"]
+        source = self.invoke("show", task, "--workspace", self.workspace)
+        action = source["actions"][0]
+        selection = [task, "--action", action["id"], "--workspace", self.workspace]
+        reviewed = self.invoke("build-review", *selection)
+        self.assertEqual(reviewed["proposal"]["backend"], "unsupported")
+        self.assertIsNone(reviewed["decision"])
+        digest = reviewed["proposal"]["digest"]
+        with closing(sqlite3.connect(self.database)) as database:
+            before = "\n".join(database.iterdump())
+        error = self.invoke("build-approve", *selection, "--digest", digest, expected=2)
+        self.assertIn("no backend", error["error"])
+        with closing(sqlite3.connect(self.database)) as database:
+            self.assertEqual("\n".join(database.iterdump()), before)
+        self.assertEqual(self.invoke("build-review", *selection), reviewed)
+        self.assertEqual(len(self.server.requests), 1)
+        rejected = self.invoke("build-reject", *selection, "--digest", digest)
+        self.assertIsNone(rejected["execution"])
+        self.assertEqual(rejected["proposal"]["decision"]["decision"], "rejected")
+        again = self.invoke("build-reject", *selection, "--digest", digest)
+        self.assertEqual(again["proposal"]["decision"], rejected["proposal"]["decision"])
+        resumed = self.invoke("resume", task, "--workspace", self.workspace,
+                              "--allow-http-loopback", "--allow-build-proposals")
+        self.assertEqual(resumed["status"], "completed")
+        self.assertEqual(len(self.server.requests), 2)
+        self.assertEqual(len(self.invoke("history", "--workspace", self.workspace)), 1)
+        self.assertFalse((self.workspace / "artifacts").exists())
+        self.assertFalse((self.workspace / "out").exists())
+
     def test_offline_demo_history_and_readback(self):
         result = self.invoke("demo", "--workspace", self.workspace)
         self.assertEqual(result["provider"], "offline-demo")

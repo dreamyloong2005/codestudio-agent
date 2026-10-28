@@ -17,7 +17,11 @@
 #include <dlfcn.h>
 #include <fcntl.h>
 #include <netinet/in.h>
+#ifdef __linux__
 #include <sys/prctl.h>
+#elif defined(__APPLE__)
+#include <mach-o/dyld.h>
+#endif
 #include <sys/socket.h>
 #include <sys/wait.h>
 #include <unistd.h>
@@ -43,6 +47,12 @@ fs::path executable() {
     const auto size=GetModuleFileNameW(nullptr,text.data(),static_cast<DWORD>(text.size()));
     if (!size || size==text.size()) throw std::runtime_error("Fixture image lookup failed");
     text.resize(size);return text;
+#elif defined(__APPLE__)
+    std::uint32_t size = 0;
+    _NSGetExecutablePath(nullptr, &size);
+    std::string text(size, '\0');
+    if (_NSGetExecutablePath(text.data(), &size)) throw std::runtime_error("Fixture image lookup failed");
+    return fs::canonical(text.c_str());
 #else
     std::string text(32768,'\0');
     const auto size=readlink("/proc/self/exe",text.data(),text.size());
@@ -95,7 +105,7 @@ Json identity() {
     if (!QueryInformationJobObject(nullptr,JobObjectCpuRateControlInformation,&cpu,sizeof(cpu),nullptr))
         throw std::runtime_error("Fixture CPU job query failed");
     result["cpu_percent"]=cpu.CpuRate/100;
-#else
+#elif defined(__linux__)
     result["seccomp"]=prctl(PR_GET_SECCOMP);
     result["no_new_privileges"]=prctl(PR_GET_NO_NEW_PRIVS,0,0,0,0);
 #endif

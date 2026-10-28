@@ -8,6 +8,7 @@ import os
 import pathlib
 import sqlite3
 import subprocess
+import sys
 import threading
 import time
 import unittest
@@ -452,6 +453,7 @@ class SchedulerTests(unittest.TestCase):
         self.assertEqual(snapshot(), before, "The scheduler recovered a task outside its own claimed jobs")
         self.assertEqual(self.requests(), requests)
 
+    @unittest.skipUnless(os.name == "nt" or sys.platform.startswith("linux"), "native detached worker startup")
     def test_hidden_worker_survives_control_process_eof_and_stops_by_owned_control(self):
         task, action = self.waiting_task()
         queued = self.schedule(task, "--allow-build-proposals")

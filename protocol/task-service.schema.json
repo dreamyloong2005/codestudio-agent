@@ -1260,7 +1260,7 @@
               "const": true
             },
             "background_scheduler": {
-              "const": true
+              "type": "boolean"
             },
             "cron": {
               "const": true
@@ -1293,7 +1293,7 @@
               "type": "boolean"
             },
             "mcp_oauth": {
-              "const": true
+              "type": "boolean"
             },
             "plugin_locks": {
               "const": true
@@ -2375,7 +2375,8 @@
         "backend": {
           "enum": [
             "windows-lpac-build-v2",
-            "linux-namespace-build-v2"
+            "linux-namespace-build-v2",
+            "unsupported"
           ]
         },
         "network": {

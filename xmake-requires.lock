@@ -19,6 +19,32 @@
             version = "latest"
         }
     },
+    ["macosx|arm64"] = {
+        ["nlohmann_json 3.12.0#f56260b5"] = {
+            repo = {
+                branch = "master",
+                commit = "747ff46a40bcfa847704671da22afa3b27494a22",
+                url = "https://gitee.com/tboox/xmake-repo.git"
+            },
+            version = "v3.12.0"
+        },
+        ["openssl3 3.6.5#06d62f95"] = {
+            repo = {
+                branch = "master",
+                commit = "747ff46a40bcfa847704671da22afa3b27494a22",
+                url = "https://gitee.com/tboox/xmake-repo.git"
+            },
+            version = "3.6.5"
+        },
+        ["sqlite3 3.50.0+400#a0c24696"] = {
+            repo = {
+                branch = "master",
+                commit = "747ff46a40bcfa847704671da22afa3b27494a22",
+                url = "https://gitee.com/tboox/xmake-repo.git"
+            },
+            version = "3.50.0+400"
+        }
+    },
     ["windows|x64"] = {
         ["nlohmann_json 3.12.0#f56260b5"] = {
             repo = {

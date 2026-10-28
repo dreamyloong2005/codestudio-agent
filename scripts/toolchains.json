@@ -7,7 +7,10 @@
     "arch": "x64",
     "toolchain": "clang-cl",
     "compiler_minimum": "22.0.0",
-    "requirements": ["Visual Studio 2022 C++ build tools and Windows SDK", "LLVM clang-cl 22 or newer"]
+    "requirements": [
+      "Visual Studio 2022 C++ build tools and Windows SDK",
+      "LLVM clang-cl 22 or newer"
+    ]
   },
   "linux": {
     "arch": "x86_64",
@@ -20,6 +23,26 @@
       "openssl": "3.0.0",
       "libsecret-1": "0.21.0"
     },
-    "requirements": ["bubblewrap at /usr/bin/bwrap", "tzdata", "cgroup v2 delegation with cpu/memory/pids", "user namespaces and seccomp"]
+    "requirements": [
+      "bubblewrap at /usr/bin/bwrap",
+      "tzdata",
+      "cgroup v2 delegation with cpu/memory/pids",
+      "user namespaces and seccomp"
+    ]
+  },
+  "macosx": {
+    "arch": "arm64",
+    "toolchain": "llvm",
+    "compiler_minimum": "22.1.8",
+    "llvm_environment": "CODESTUDIO_LLVM_ROOT",
+    "requirements": [
+      "Native Apple Silicon Mac (arm64)",
+      "Xcode command line tools and macOS SDK",
+      "LLVM 22.1.8 or newer and matching standalone libc++/libc++abi built with timezone support; bundled Apple and LLVM macOS libc++ disable timezones",
+      "Runtime C++26, std::format and IANA timezone/DST probe must pass",
+      "No Linux libsecret, namespace or cgroup dependency"
+    ],
+    "macos_minimum": "15.0",
+    "libcxx_environment": "CODESTUDIO_LIBCXX_ROOT"
   }
 }

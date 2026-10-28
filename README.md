@@ -1,8 +1,8 @@
-# CodeStudio-Agent
+# CodeStudioAgent
 
 以 **C++26 + XMake** 构建的本地 Agent/Harness。当前为 **0.1.0 CLI 基础版本**：模型通过受控工具操作指定工作区，任务、工具意图和结果保存到 SQLite。
 
-**CodeStudio-Agent** 负责无界面的执行内核、CLI、本地任务服务、工具权限、隔离和调度。桌面 UI 由独立项目 **CodeStudio Next** 负责，通过任务服务接口接入；界面实现及其技术选型归该项目管理。
+**CodeStudioAgent** 负责无界面的执行内核、CLI、本地任务服务、工具权限、隔离和调度。桌面 UI 由独立项目 **CodeStudio Next** 负责，通过任务服务接口接入；界面实现及其技术选型归该项目管理。
 
 长期架构见 [研究报告](Agent与Harness研究及新产品架构建议.md)。未来随着 mcpp 生态成熟再评估迁移；当前工程使用 XMake。
 
@@ -41,7 +41,18 @@ xmake run codestudio-agent doctor
 
 构建时检查 C++26 模式，工具链不支持时明确失败。暂未依赖 reflection、contracts 或 `std::execution`，这些能力将分别验证后启用。
 
-`set_xmakever("3.0.5")` 是最低版本要求；实际开发/CI 应固定通过验证的 XMake 精确版本。`xmake-requires.lock` 记录 Windows x64 依赖；默认 SQLite、JSON 库采用固定版本。Linux 已在 Arch WSL2、GCC 16、XMake 3.1.0 下构建运行，`--system_deps=y` 可使用发行版 pkg-config 开发包；HTTP 使用 libcurl，摘要使用 OpenSSL，系统凭据使用 libsecret；Linux 始终需要系统 libsecret-1 开发包和运行库。WSL 独立镜像、构建和验证命令见 [Linux 指南](docs/linux.md)。macOS 尚未验证；下一里程碑为 Apple Silicon 基础运行与原生验证，详见 [macOS 适配计划](docs/macos.md)。
+`set_xmakever("3.0.5")` 是最低版本要求；实际开发/CI 应固定通过验证的 XMake 精确版本。`xmake-requires.lock` 记录 Windows x64 与 macOS arm64 依赖；默认 SQLite、JSON 库采用固定版本。Linux 已在 Arch WSL2、GCC 16、XMake 3.1.0 下构建运行，`--system_deps=y` 可使用发行版 pkg-config 开发包；HTTP 使用 libcurl，摘要使用 OpenSSL，系统凭据使用 libsecret；Linux 始终需要系统 libsecret-1 开发包和运行库。WSL 独立镜像、构建和验证命令见 [Linux 指南](docs/linux.md)。macOS 已加入 Apple Silicon 基础运行适配和统一验证入口，原生 Debug/Release 验收通过；工具链与能力边界见 [macOS 指南](docs/macos.md)。
+
+macOS arm64 使用 LLVM 22.1.8 及配套、启用时区数据库的 libc++；最低部署目标为 macOS 15.0，本轮仅在 26.5.2 实测。系统 Apple libc++ 和官方 macOS LLVM 包附带的 libc++ 均未启用所需时区功能；先按 [macOS 指南](docs/macos.md) 构建专用运行库，再运行：
+
+```sh
+export CODESTUDIO_LLVM_ROOT=/absolute/path/to/llvm
+export CODESTUDIO_LIBCXX_ROOT="$PWD/build/toolchains/libcxx-22.1.8-tzdb"
+export CODESTUDIO_CONTRACT_PYTHON=/absolute/path/to/python3
+bash scripts/verify-macos.sh all
+```
+
+验证会实际编译和运行 C++26、`std::format`、时区与 DST 探针，并生成 `build/verification/macosx/` 下的独立回执。macOS 当前使用环境凭据和 `--sandbox none`；Keychain/OAuth 原生存储、后台启动与监督、LaunchAgent 和隔离执行均明确声明为不可用。构建提案可创建、审阅、拒绝并续跑；批准请求因隔离后端缺失而在提交决定前拒绝。安装与签名公证属于后续阶段。
 
 ## 无需密钥体验
 
@@ -279,7 +290,7 @@ tests/               C++ 行为测试与本地 HTTP/CLI 集成测试
 
 Windows/Linux 工作区导入/导出和 CPU/内存限制已实现，后续仍需 OS 磁盘配额、工具链自动打包、macOS 后端与跨平台 CI。其他构建工具的清单仍需分别验证依赖和沙箱兼容性。CodeStudio Next 通过本地任务 API 复用核心。本地模型后续工作已按要求暂停。Windows/Linux 持久续跑、cron、各自平台自启、显式有界 worker 监督、持久监督诊断和模型凭据引用/系统存储已实现，自启也可显式选择监督模式；远程 MCP 的 Streamable HTTP 和显式 Bearer 凭据已实现；公开客户端 OAuth、插件精确版本锁定和本地/HTTPS 分发已实现；多代理、费用估算、任务数据库加密和托管插件市场尚未实现。具体依赖与验收条件见 [开发路线](docs/roadmap.md)。
 
-下一阶段优先实施 **macOS arm64 基础运行与原生验证**，随后依次完成 Keychain/后台调度/LaunchAgent 系统集成、隔离后端和正式交付。原生 CI 从第一阶段接入；Intel/Universal 包按需求扩展。当前缺口、四阶段验收标准和真实 Mac 环境要求见 [macOS 适配计划](docs/macos.md)。
+本轮实现 **macOS arm64 基础运行与原生验证**，本机验收结果见 [验证记录](docs/validation.md)；已提供 macOS 原生 CI 作业定义，托管运行仍须单独确认。后续依次完成 Keychain/后台调度/LaunchAgent 系统集成、隔离后端和正式交付；Intel/Universal 包按需求扩展。四阶段边界见 [macOS 指南](docs/macos.md)。
 
 MCP 扩展管理：[OAuth 登录与刷新](docs/mcp-oauth.md) · [插件版本锁定与分发](docs/plugins.md)。
 

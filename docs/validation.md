@@ -1,6 +1,6 @@
-# CodeStudio-Agent 0.1.0 验证记录
+# CodeStudioAgent 0.1.0 验证记录
 
-本记录描述当前格式的回归范围和本轮验证状态。项目自身使用 C++26 + XMake；工作区隔离执行接受通用步骤清单，XMake 命令只属于真实构建测试夹具。当前验证目标为 Windows x64 / clang-cl 和 Arch Linux x86-64 / GCC 16（WSL2）。各平台的 Debug 与 Release 顺序执行；Linux 使用独立原生目录，不覆盖 Windows XMake 缓存。
+本记录描述当前格式的回归范围和本轮验证状态。项目自身使用 C++26 + XMake；工作区隔离执行接受通用步骤清单，XMake 命令只属于真实构建测试夹具。当前验证目标为 Windows x64 / clang-cl、Arch Linux x86-64 / GCC 16（WSL2）和新增的 macOS arm64 / LLVM 22。各平台的 Debug 与 Release 顺序执行；Linux 使用独立原生目录，不覆盖 Windows XMake 缓存。
 
 ## 当前格式约定
 
@@ -17,6 +17,18 @@
 | 事件、产物 `manifest.json` | `schema_version: 2` |
 
 状态读取和写入均要求当前数据库格式；其他已初始化版本在修改数据库设置前被拒绝，不迁移数据库，也不逐任务过滤历史。需要新建任务时使用空的状态路径或新工作区。`none` 沙箱策略也明确保存为 `{"version":2,"mode":"none"}`。本地 MCP 配置版本独立于 MCP 日期协议；模型服务 URL 中的 `/v1` 是供应商现行接口路径。
+
+## macOS arm64 基础运行（2026-10-28）
+
+阶段 1 代码与统一验证入口已加入，**本机 Debug/Release 原生验收均通过**。本轮环境为 macOS 26.5.2 arm64、SDK 26.5、LLVM 22.1.8、XMake 3.0.9（HEAD `2b184e178`）、Python 3.13.14。部署目标为 macOS 15.0，本轮仅验证 26.5.2。专用 libc++/libc++abi 22.1.8 由 `scripts/build-macos-libcxx.py` 启用实验性时区数据库并绑定系统 IANA 数据；系统 Apple libc++ 和官方 LLVM 包附带的运行库均不满足所需时区功能。依赖为 SQLite 3.50.4、nlohmann JSON 3.12.0、静态 OpenSSL 3.6.5 和系统 libcurl 8.7.1（SecureTransport）。详细复现命令见 [macOS 指南](macos.md)。
+
+新增覆盖包括 C++26/格式化/时区 DST 运行探针、Darwin posix_spawn 的参数/环境/继承描述符与信号、超时取消、启动 UUID/出生时间身份、清单读取的链接/类型/大小与变动拒绝，以及 doctor/服务的平台能力声明。CLI、三种模型协议、流式、stdio/HTTP MCP、任务状态与恢复、共享审批决定、前台队列/cron 与协议契约继续使用本地夹具验证。
+
+Keychain/OAuth 原生存储与刷新互斥、独立后台启动与监督、LaunchAgent、OS 沙箱、隔离工作区执行、资源回收、安装/签名公证均不属于本轮通过范围。不支持的完整套件与套件内场景分别记录为跳过；额外 CLI 回归检查这些请求明确失败、无环境密钥回退、无隔离降级。macOS 自托管 CI 作业仅完成定义，本记录不声称托管运行通过。
+
+每个配置通过 22 组原生测试、1 个工具链运行探针和 280 项 Python 测试；Python 共登记 291 项，其中 11 项因对应原生功能未实现而跳过。8 个尚不支持的完整套件单独列入 `unsupported_suites`，不计入已通过套件；18 个实际运行套件均通过。构建、源码、产物及运行库摘要、逐套件日志见 [macOS 机器回执](../research/macos-stage1/verification.json)，详细原始回执由 `scripts/verify.py` 生成并保存在同目录。
+
+首轮发现并修复了 Apple/LLVM 预编译 libc++ 缺少时区、Darwin 测试夹具误用 Linux 头文件、临时目录 `/var` 符号链接、沙箱测试误调用已明确不支持的工作区复制，以及新增 CLI 测试参数/模块导入问题；HTTP MCP 中真实隔离构建场景明确跳过，其余通信测试继续执行。原生测试还覆盖受保护目录/缺失 sidecar 的大小写与 Unicode 别名、关闭 stdin 和 RPC 管道后的 SIGPIPE、子进程退出身份。失败尝试保留在本机 `build/verification/macosx/`，不计入最终通过结果。
 
 ## 沙箱资源生命周期与崩溃回收（2026-10-25）
 
@@ -256,7 +268,7 @@ Linux 测试环境为 Arch WSL2、内核 `6.18.33.2-microsoft-standard-WSL2`、G
 
 Release 交付目录为 `build/linux/x86_64/release/`，包含 `codestudio-agent`、`codestudio-agent-linux-x86_64.tar.gz`、运行说明、构建机动态库清单和 `SHA256SUMS`。已核对源码、测试和构建脚本与最终测试镜像一致；镜像中的锁文件差异仅为 XMake 生成的 Linux pkg-config 记录，Windows 依赖记录未改动。二进制从 Linux 镜像复制后的 SHA256 与压缩包内字节一致，在工作区交付路径运行 `doctor` 成功。详见 [交付回执](../research/linux/delivery.json)。这是 Arch x86-64 动态链接产物，未宣称其他发行版兼容。
 
-最终静态检查见 [final-static.log](../research/linux/final-static.log)：Python 源码通过 AST 解析，文档相对链接目标存在；未发现项目残留进程、临时隔离 cgroup/目录、真实用户配置中的 CodeStudio-Agent 自启项或工作区数据库。Windows XMake 仍为 Windows x64 / clang-cl / Release，Debug 与 Release 产物均保留。检查未启动后台 worker 或登记自启。
+最终静态检查见 [final-static.log](../research/linux/final-static.log)：Python 源码通过 AST 解析，文档相对链接目标存在；未发现项目残留进程、临时隔离 cgroup/目录、真实用户配置中的 CodeStudioAgent 自启项或工作区数据库。Windows XMake 仍为 Windows x64 / clang-cl / Release，Debug 与 Release 产物均保留。检查未启动后台 worker 或登记自启。
 
 ## 已完成的前次工作区清理
 

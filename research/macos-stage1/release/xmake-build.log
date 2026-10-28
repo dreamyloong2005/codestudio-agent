@@ -1,0 +1,3 @@
+[ 10%]: <agent-tests> cache compiling.release tests/core_tests.cpp
+[ 93%]: <agent-tests> linking.release agent-tests
+[100%]: build ok, spent 1.437s

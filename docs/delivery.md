@@ -1,10 +1,10 @@
 # 构建、验证与用户级安装
 
-CodeStudio-Agent 的运行程序使用 C++26 + XMake。Python 仅用于开发验证、打包和安装管理；已安装的 Agent 本身不需要 Python。包保留原可执行文件名称，用户工作区、SQLite 数据库和系统凭据独立于应用安装目录。
+CodeStudioAgent 的运行程序使用 C++26 + XMake。Python 仅用于开发验证、打包和安装管理；已安装的 Agent 本身不需要 Python。包保留原可执行文件名称，用户工作区、SQLite 数据库和系统凭据独立于应用安装目录。
 
 ## 构建要求与统一入口
 
-[toolchains.json](../scripts/toolchains.json) 是机器可读的最低要求：Python 3.11、XMake 3.0.5、Windows x64 clang-cl 22 + Visual Studio 2022 C++ 工具/Windows SDK，或 Linux x86-64 GCC 16。Windows 使用 XMake 锁定的依赖；Linux 使用明确的 pkg-config 系统依赖，包括 libsecret。最低版本不等于任意组合均经过验证；报告记录实际版本及源文件摘要。当前具体环境见 [验证记录](validation.md)。
+[toolchains.json](../scripts/toolchains.json) 是机器可读的最低要求：Python 3.11、XMake 3.0.5、Windows x64 clang-cl 22 + Visual Studio 2022 C++ 工具/Windows SDK，Linux x86-64 GCC 16，或 macOS arm64 LLVM 22.1.8 及配套时区可用的 libc++。Windows 使用 XMake 锁定的依赖；Linux 使用明确的 pkg-config 系统依赖，包括 libsecret。最低版本不等于任意组合均经过验证；报告记录实际版本及源文件摘要。当前具体环境见 [验证记录](validation.md)。
 
 ```powershell
 python -m venv build/contract-python
@@ -12,7 +12,7 @@ build/contract-python/Scripts/python.exe -m pip install -r tests/requirements.tx
 build/contract-python/Scripts/python.exe scripts/verify.py --mode all
 ```
 
-Linux 将解释器路径替换为 `build/contract-python/bin/python`，须预先提供 `CODESTUDIO_CGROUP_ROOT`，启用 cpu/memory/pids 委派并安装 Bubblewrap；配置步骤见 [Linux 文档](linux.md)。验证入口不安装系统包、不创建用户、不启用全局控制器。原来的 `scripts/verify.ps1` 和 `scripts/verify-linux.sh` 只是同一入口的包装。
+Linux 将解释器路径替换为 `build/contract-python/bin/python`，须预先提供 `CODESTUDIO_CGROUP_ROOT`，启用 cpu/memory/pids 委派并安装 Bubblewrap；配置步骤见 [Linux 文档](linux.md)。验证入口不安装系统包、不创建用户、不启用全局控制器。`scripts/verify.ps1`、`scripts/verify-linux.sh` 与 `scripts/verify-macos.sh` 都是同一入口的包装。macOS 设置 `CODESTUDIO_LLVM_ROOT` 指向 LLVM 安装，`CODESTUDIO_LIBCXX_ROOT` 指向 `scripts/build-macos-libcxx.py` 构建的时区运行库，以 `CODESTUDIO_CONTRACT_PYTHON` 选择测试 Python；具体环境与标准库要求见 [macOS 指南](macos.md)。
 
 `--mode all` 按 Debug、Release 顺序运行，不并行修改一个 XMake 缓存。WSL 先通过 `scripts/wsl_sync.py` 同步到独立的 Linux 原生目录。所有 Python 套件均使用启动入口的同一个解释器。默认完整集合包括平台相应的真实隔离构建及包测试；本地模型测试只运行既有合成 HTTP 夹具，不联系 Ollama 或真实模型。
 
@@ -28,15 +28,15 @@ python scripts/verify.py --mode release --skip-build --suite schema --suite mcp_
 
 ## CI
 
-[native.yml](../.github/workflows/native.yml) 提供 Windows/Linux 两个自托管 runner 作业，要求标签 `codestudio-agent` 及对应系统/架构。作业复用统一入口运行两种配置，打包并验证临时安装，最后上传报告和包作为 CI artifacts。它不发布 Release、不推送代码、不永久安装 Agent。runner 需要预先满足工具链、OS 隔离、网络依赖获取与测试会话条件。
+[native.yml](../.github/workflows/native.yml) 提供 Windows、Linux 和 macOS ARM64 自托管 runner 作业，要求标签 `codestudio-agent` 及对应系统/架构。作业复用统一入口运行两种配置；Windows/Linux 额外打包并验证临时安装，上传报告和包；macOS 阶段 1 上传原生验证报告。它不发布 Release、不推送代码、不永久安装 Agent。runner 需要预先满足工具链、OS 隔离、网络依赖获取与测试会话条件。
 
 工作流只配置手动触发及 main 分支 push，未为不可信 PR 启用自托管执行。仓库已建立 Git 远端；提交或推送工作流不代表托管 CI 已经通过。CI 的实际状态以对应 runner 的作业日志为准。
 
-macOS 当前尚无验证、打包或 CI 后端。[macOS 适配计划](macos.md)将原生 arm64 Debug/Release CI 列入阶段 1，将用户级安装/升级/卸载、签名、公证和干净 Mac 验收列入阶段 4；Intel/Universal 包按需求增加。各阶段回执必须明确覆盖范围，未实现的隔离或系统集成能力不得标为通过。
+macOS 已有原生 arm64 验证入口与 CI 作业定义，本机 Debug/Release 验收通过，尚未提供发布包、安装或签名公证后端。[macOS 指南](macos.md)将用户级安装/升级/卸载、签名、公证和干净 Mac 验收保留在阶段 4；Intel/Universal 包按需求增加。阶段 1 回执会明确跳过原生 OAuth、监督、隔离资源/插件、真实隔离构建与安装；通用协议和失败关闭行为继续验证。不能把这些跳过项或 CI 定义视为验收通过。
 
 ## 创建发布包
 
-在相应原生平台构建 Release 后执行：
+以下发布打包入口当前仅支持 Windows/Linux。在相应原生平台构建 Release 后执行：
 
 ```text
 python scripts/package.py --mode release --verification <成功的Release报告>/verification.json

@@ -1,11 +1,11 @@
-# CodeStudio-Agent：Agent 与 Harness 市场研究及产品架构
+# CodeStudioAgent：Agent 与 Harness 市场研究及产品架构
 
 **报告日期：2026 年 10 月 21 日（Asia/Shanghai）**  
 **研究范围：开发者与编码 Agent 为主，兼顾通用任务执行；依据本次可访问的官方文档、官方仓库与标准/编译器资料。**
 
 本报告中的“主流”指具有代表性的商业产品与活跃生态，不是市场份额排名。产品能力是文档核实结果；“痛点”“机会”“推荐架构”是基于这些能力边界的分析，未经统一实机横评或用户调查验证。文档可能滚动更新，具体账户、版本、区域和部署方式仍会影响可用能力。
 
-**产品正式命名为 CodeStudio-Agent。** 当前已落地 C++26 + XMake 的 0.1.0 CLI 基础版本，包括 Chat Completions、OpenAI Responses、Anthropic Messages 的流式/非流式接口、离线演示、权限控制、文件/进程工具、SQLite 任务记录、显式授权的 MCP stdio 插件、本地模型列表/能力探测，以及检查点驱动的显式任务续跑。已实现本地 stdio JSON-RPC 任务服务，提供查询、事件订阅/重放、流式文本与启动/取消/续跑，供后续桌面客户端复用。Windows LPAC 子进程隔离的范围为无网络 capabilities、单 executable 暂存和私有 scratch；默认仍为 `none`，动态验证结果见 [验证记录](docs/validation.md)，详细限制见 [沙箱说明](docs/sandbox.md)。本地模型后续工作已暂停。本文描述的完整插件生态、受控工作区沙箱与资源配额、桌面 UI、后台自动续跑、独立验收与多代理架构属于后续目标；已实现范围与运行方法见 [README](README.md)，实施依赖见 [开发路线](docs/roadmap.md)。
+**产品正式命名为 CodeStudioAgent。** 当前已落地 C++26 + XMake 的 0.1.0 CLI 基础版本，包括 Chat Completions、OpenAI Responses、Anthropic Messages 的流式/非流式接口、离线演示、权限控制、文件/进程工具、SQLite 任务记录、显式授权的 MCP stdio 插件、本地模型列表/能力探测，以及检查点驱动的显式任务续跑。已实现本地 stdio JSON-RPC 任务服务，提供查询、事件订阅/重放、流式文本与启动/取消/续跑，供后续桌面客户端复用。Windows LPAC 子进程隔离的范围为无网络 capabilities、单 executable 暂存和私有 scratch；默认仍为 `none`，动态验证结果见 [验证记录](docs/validation.md)，详细限制见 [沙箱说明](docs/sandbox.md)。本地模型后续工作已暂停。本文描述的完整插件生态、受控工作区沙箱与资源配额、桌面 UI、后台自动续跑、独立验收与多代理架构属于后续目标；已实现范围与运行方法见 [README](README.md)，实施依赖见 [开发路线](docs/roadmap.md)。
 
 ## 一、我的判断
 

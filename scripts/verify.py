@@ -17,15 +17,37 @@ import shutil
 import signal
 import subprocess
 import sys
+import tempfile
 import time
 import uuid
 
 ROOT = Path(__file__).resolve().parents[1]
-PLATFORM = "windows" if sys.platform == "win32" else "linux" if sys.platform.startswith("linux") else "unsupported"
-ARCH = "x64" if PLATFORM == "windows" else "x86_64"
+PLATFORM = "windows" if sys.platform == "win32" else "linux" if sys.platform.startswith("linux") else "macosx" if sys.platform == "darwin" else "unsupported"
+ARCH = "x64" if PLATFORM == "windows" else "arm64" if PLATFORM == "macosx" else "x86_64"
 SUFFIX = ".exe" if PLATFORM == "windows" else ""
 COMMON = ("native", "schema", "credentials", "provider", "streaming", "cli", "local_models", "mcp", "mcp_http", "mcp_oauth", "plugins", "plugin_sandbox",
           "resume", "sandbox", "sandbox_resources", "contract", "service", "scheduler", "supervisor", "cron", "autostart")
+
+
+def unsupported_suites():
+    if PLATFORM != "macosx":
+        return {}
+    return {
+        "mcp_oauth": "macOS native OAuth storage and refresh locking belong to stage 2",
+        "plugin_sandbox": "macOS OS isolation belongs to stage 3",
+        "sandbox": "macOS OS sandbox execution belongs to stage 3; refusal is covered by native/CLI tests",
+        "autostart": "macOS LaunchAgent integration belongs to stage 2; refusal is covered by native/CLI tests",
+        "sandbox_resources": "macOS isolated resource ownership and reclamation belong to stage 3",
+        "supervisor": "macOS background worker supervision belongs to stage 2",
+        "real_build": "macOS isolated workspace execution belongs to stage 3",
+        "delivery": "macOS installation, signing and notarization belong to stage 4",
+    }
+
+
+def shared_library(name):
+    if PLATFORM == "windows":
+        return name + ".dll"
+    return "lib" + name + (".dylib" if PLATFORM == "macosx" else ".so")
 
 
 def now():
@@ -63,9 +85,10 @@ def artifact_fingerprint(mode):
              "mcp-fixture", "sandbox-fixture", "build-fixture", "sandbox-resource-fixture")
     result = {name + SUFFIX: digest(directory / (name + SUFFIX)) for name in names}
     for name in ("plugin-sandbox-fixture" + SUFFIX,
-                 "plugin-sandbox-library.dll" if PLATFORM == "windows" else "libplugin-sandbox-library.so",
-                 "plugin-sandbox-dependency.dll" if PLATFORM == "windows" else "libplugin-sandbox-dependency.so"):
+                 shared_library("plugin-sandbox-library"), shared_library("plugin-sandbox-dependency")):
         result[name] = digest(directory / name)
+    if PLATFORM == "macosx":
+        result["toolchain-probe"] = digest(directory / "toolchain-probe")
     return result
 
 
@@ -95,25 +118,84 @@ def capture(command, env):
     return text.strip().splitlines()[0][:512]
 
 
+def llvm_root(env):
+    value = env.get("CODESTUDIO_LLVM_ROOT", "")
+    root = Path(value)
+    if not value or not root.is_absolute() or not (root / "bin/clang++").is_file():
+        raise RuntimeError("macOS verification requires CODESTUDIO_LLVM_ROOT pointing to an absolute LLVM installation")
+    return root.resolve()
+
+
+def libcxx_root(env):
+    value = env.get("CODESTUDIO_LIBCXX_ROOT", "")
+    root = Path(value)
+    required = ("include/c++/v1/chrono", "lib/libc++.1.dylib", "lib/libc++abi.1.dylib", "lib/libc++experimental.a")
+    if not value or not root.is_absolute() or not all((root / name).is_file() for name in required):
+        raise RuntimeError("macOS verification requires CODESTUDIO_LIBCXX_ROOT with timezone-enabled libc++ headers and libraries")
+    return root.resolve()
+
+
+def runtime_fingerprint(env):
+    runtime = libcxx_root(env)
+    return {name: digest(runtime / "lib" / name)
+            for name in ("libc++.1.dylib", "libc++abi.1.dylib", "libc++experimental.a")}
+
+
+def prepare_test_environment(env):
+    if PLATFORM == "macosx":
+        # Darwin's usual /var/folders TMPDIR traverses the /var symlink. Native
+        # fixtures must use its real directory so product path checks still
+        # reject symbolic links rather than granting a testing-only exception.
+        directory = Path(env.get("TMPDIR") or tempfile.gettempdir()).resolve(strict=True)
+        if not directory.is_dir():
+            raise RuntimeError("The macOS test temporary directory is not a directory")
+        env["TMPDIR"] = str(directory)
+        return {"temporary_directory": str(directory)}
+    return {}
+
+
+def configure_command(mode, env):
+    toolchain = "clang-cl" if PLATFORM == "windows" else "llvm" if PLATFORM == "macosx" else "gcc"
+    options = ["--system_deps=y"] if PLATFORM == "linux" else []
+    if PLATFORM == "macosx":
+        options += ["--sdk=" + str(llvm_root(env)), "--macos_libcxx=" + str(libcxx_root(env)),
+                    "--target_minver=15.0"]
+    return ["xmake", "f", "-p", PLATFORM, "-a", ARCH, "--toolchain=" + toolchain,
+            "-m", mode, *options, "-y"]
+
+
 def preflight(env, build, suites):
-    if PLATFORM == "unsupported" or platform.machine().lower() not in ("amd64", "x86_64"):
-        raise RuntimeError("Verification supports native Windows/Linux x86-64 only")
+    expected_arches = ("arm64", "aarch64") if PLATFORM == "macosx" else ("amd64", "x86_64")
+    if PLATFORM == "unsupported" or platform.machine().lower() not in expected_arches:
+        raise RuntimeError("Verification requires native Windows/Linux x86-64 or macOS arm64")
     config = json.loads((ROOT / "scripts/toolchains.json").read_text(encoding="utf-8"))
     if sys.version_info[:3] < version(config["python_minimum"]):
         raise RuntimeError("Python 3.11 or newer is required")
     observed = {"python": platform.python_version(), "requirements": config}
+    if PLATFORM == "macosx":
+        observed["libcxx_root"] = str(libcxx_root(env))
+        observed["libcxx_sha256"] = runtime_fingerprint(env)
+        observed["macos"] = capture(["sw_vers", "-productVersion"], env)
+        observed["deployment_target"] = config["macosx"]["macos_minimum"]
+        if version(observed["macos"]) < version(observed["deployment_target"]):
+            raise RuntimeError("macOS is below scripts/toolchains.json requirements")
     if "schema" in suites or "contract" in suites or "service" in suites:
         observed["jsonschema"] = importlib.metadata.version("jsonschema")
         if observed["jsonschema"] != config["jsonschema"]:
             raise RuntimeError("Install the pinned tests/requirements.txt in the selected Python environment")
     if build:
         observed["xmake"] = capture(["xmake", "--version"], env)
-        compiler = "clang-cl" if PLATFORM == "windows" else "g++"
+        compiler = ("clang-cl" if PLATFORM == "windows" else
+                    str(llvm_root(env) / "bin/clang++") if PLATFORM == "macosx" else "g++")
         observed["compiler"] = capture([compiler, "--version"], env)
         if version(observed["xmake"]) < version(config["xmake_minimum"]):
             raise RuntimeError("XMake does not meet scripts/toolchains.json requirements")
         if version(observed["compiler"]) < version(config[PLATFORM]["compiler_minimum"]):
             raise RuntimeError("Compiler does not meet the C++26 baseline in scripts/toolchains.json")
+        if PLATFORM == "macosx":
+            observed["llvm_root"] = str(llvm_root(env))
+            observed["sdk"] = capture(["xcrun", "--sdk", "macosx", "--show-sdk-path"], env)
+            observed["sdk_version"] = capture(["xcrun", "--sdk", "macosx", "--show-sdk-version"], env)
         if PLATFORM == "linux":
             observed["system_dependencies"] = {}
             for name, minimum in config["linux"]["pkg_config_minimum"].items():
@@ -142,6 +224,8 @@ def commands(mode, package):
               "streaming": [sys.executable, "tests/streaming_integration.py", provider, agent],
               "contract": [sys.executable, "tests/client_contract_integration.py", agent],
               "service": [sys.executable, "tests/client_contract_integration.py", agent, "--service-suite"]}
+    if PLATFORM == "macosx":
+        result = {"toolchain": [str(binary / "toolchain-probe")], **result}
     for name in COMMON:
         if name not in result:
             result[name] = [sys.executable, f"tests/{name}_integration.py", agent]
@@ -150,12 +234,12 @@ def commands(mode, package):
         for name in ("build", "build_proposals"):
             result[name] = [sys.executable, f"tests/{name}_integration.py", agent]
         result["real_build"] = [sys.executable, "tests/xmake_build_integration.py", agent]
-    else:
+    elif PLATFORM == "linux":
         result["real_build"] = [sys.executable, "tests/linux_build_integration.py", agent]
     result["package"] = [sys.executable, "tests/package_tests.py"]
     result["verification"] = [sys.executable, "tests/verification_tests.py"]
     result["delivery"] = [sys.executable, "tests/delivery_integration.py", agent, "--package", str(package)]
-    return result
+    return {name: command for name, command in result.items() if name not in unsupported_suites()}
 
 
 def terminate(process):
@@ -191,7 +275,17 @@ def step(name, command, directory, env, timeout):
     content = log.read_text(encoding="utf-8", errors="replace")
     if result["returncode"] == 0 and not result.get("interrupted"):
         result["status"] = "succeeded"
-    if name == "native":
+    if name == "toolchain":
+        try:
+            probe = json.loads(content)
+            if not (probe["cxx26"] is True and probe["cplusplus"] > 202302
+                    and probe["format"] == "probe:07" and probe["timezone_offsets"] is True
+                    and probe["timezone_dst"] is True and probe["tzdb_version"] and probe["current_zone"]):
+                raise ValueError("Incomplete runtime probe")
+            result["capabilities"] = probe
+        except (KeyError, TypeError, ValueError):
+            result["status"] = "failed"
+    elif name == "native":
         result["native_groups"] = len(re.findall(r"^PASS ", content, re.MULTILINE))
         if result["native_groups"] != 22 or re.search(r"^FAIL", content, re.MULTILINE):
             result["status"] = "failed"
@@ -239,22 +333,24 @@ def verify(args, mode):
     report = {"format": 2, "product": "CodeStudio-Agent", "platform": PLATFORM, "arch": ARCH, "mode": mode,
               "started_at": now(), "status": "failed", "selected_suites": selected,
               "omitted_suites": [name for name in available if name not in selected],
+              "unsupported_suites": unsupported_suites(),
               "build_requested": not args.skip_build, "steps": []}
     env = dict(os.environ)
     env.update({"PYTHONIOENCODING": "utf-8", "PYTHONUTF8": "1", "XMAKE_COLORTERM": "nocolor"})
     if PLATFORM == "linux" and os.getuid() == 0:
         env["XMAKE_ROOT"] = "y"
     try:
+        report["test_environment"] = prepare_test_environment(env)
         report["source"] = source_fingerprint()
         report["toolchain"] = preflight(env, not args.skip_build, selected)
+        if PLATFORM == "macosx" and not args.skip_build:
+            env["SDKROOT"] = report["toolchain"]["sdk"]
         if args.preflight_only:
             report["status"] = "preflight"
             return 0
         schedule = []
         if not args.skip_build:
-            schedule += [("configure", ["xmake", "f", "-p", PLATFORM, "-a", ARCH,
-                          "--toolchain=" + ("clang-cl" if PLATFORM == "windows" else "gcc"), "-m", mode,
-                          *(["--system_deps=y"] if PLATFORM == "linux" else []), "-y"]),
+            schedule += [("configure", configure_command(mode, env)),
                          ("xmake-build", ["xmake", "build", "-a", "-j", str(args.jobs)])]
         schedule += [(name, available[name]) for name in selected]
         tested = None
@@ -271,6 +367,8 @@ def verify(args, mode):
                               "sha256": digest(binary)}
         if artifact_fingerprint(mode) != tested:
             raise RuntimeError("Built executables changed while tests were running")
+        if "libcxx_sha256" in report["toolchain"] and runtime_fingerprint(env) != report["toolchain"]["libcxx_sha256"]:
+            raise RuntimeError("C++ runtime changed while tests were running")
         if source_fingerprint() != report["source"]:
             raise RuntimeError("Source changed during verification; the receipt is not valid for a single snapshot")
         report["status"] = "succeeded"
@@ -298,7 +396,8 @@ def main():
     parser.add_argument("--timeout", type=int, default=900, help="Per-step wall-clock deadline in seconds")
     args = parser.parse_args()
     if args.list:
-        print(json.dumps({"platform": PLATFORM, "arch": ARCH, "suites": list(commands("release", None))}, indent=2))
+        print(json.dumps({"platform": PLATFORM, "arch": ARCH, "suites": list(commands("release", None)),
+                          "unsupported_suites": unsupported_suites()}, indent=2))
         return 0
     if not 1 <= args.jobs <= 64 or not 1 <= args.timeout <= 7200:
         parser.error("--jobs must be 1..64; --timeout must be 1..7200")

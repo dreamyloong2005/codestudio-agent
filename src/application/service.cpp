@@ -583,13 +583,15 @@ int serve(const Configuration& config, const std::atomic_bool& shutdown) {
                 response(io,id,{{"protocol_version",2},{"product","CodeStudio-Agent"},{"version","0.1.0"},{"session_id",session},
                     {"workspace",path_utf8(config.workspace)},{"state_database",path_utf8(config.database)},
                     {"capabilities",{{"task_operations",true},{"event_replay",true},{"text_deltas",true},{"automatic_resume",true},
-                        {"background_scheduler",true},{"cron",true},{"operation_lookup",true},{"structured_errors",true},
-                        {"mcp_streamable_http",true},{"mcp_oauth",true},{"plugin_locks",true},{"plugin_distribution",true},
+                        {"cron",true},{"operation_lookup",true},{"structured_errors",true},
+                        {"mcp_streamable_http",true},{"plugin_locks",true},{"plugin_distribution",true},
 #if defined(_WIN32) || defined(__linux__)
+                        {"background_scheduler",true},{"mcp_oauth",true},
                         {"plugin_sandbox",true},{"sandbox_resources",true},
                         {"worker_supervision",true},{"supervised_autostart",true},{"supervisor_diagnostics",true},
                         {"login_autostart",true},
 #else
+                        {"background_scheduler",false},{"mcp_oauth",false},
                         {"plugin_sandbox",false},{"sandbox_resources",false},
                         {"worker_supervision",false},{"supervised_autostart",false},{"supervisor_diagnostics",false},
                         {"login_autostart",false},

@@ -472,6 +472,7 @@ class RemoteMcpTests(unittest.TestCase):
         self.setup_responses({"body": fixture.reply()})
         self.assertEqual(self.invoke(*self.resume_args(result["task_id"], *self.grants()))["status"], "completed")
 
+    @unittest.skipUnless(os.name == "nt" or sys.platform.startswith("linux"), "native isolated build execution")
     def test_approved_build_redacts_saved_remote_credential_when_current_manifest_is_changed_or_deleted(self):
         build_fixture = fixture.EXE.parent / ("build-fixture.exe" if os.name == "nt" else "build-fixture")
         self.assertTrue(build_fixture.is_file())

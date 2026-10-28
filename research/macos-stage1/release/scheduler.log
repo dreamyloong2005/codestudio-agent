@@ -1,0 +1,24 @@
+test_custom_state_scheduler_lock_is_protected_from_write_file (__main__.SchedulerTests.test_custom_state_scheduler_lock_is_protected_from_write_file) ... ok
+test_delay_and_queued_cancellation_never_dispatch_early (__main__.SchedulerTests.test_delay_and_queued_cancellation_never_dispatch_early) ... ok
+test_dispatched_process_crash_blocks_scheduler_without_restarting_mcp (__main__.SchedulerTests.test_dispatched_process_crash_blocks_scheduler_without_restarting_mcp) ... ok
+test_duplicate_active_schedule_is_rejected_and_manual_resume_revokes_it (__main__.SchedulerTests.test_duplicate_active_schedule_is_rejected_and_manual_resume_revokes_it) ... ok
+test_expired_job_and_model_budget_never_gain_new_turns (__main__.SchedulerTests.test_expired_job_and_model_budget_never_gain_new_turns) ... ok
+test_foreground_worker_keeps_processing_after_stdin_eof (__main__.SchedulerTests.test_foreground_worker_keeps_processing_after_stdin_eof) ... ok
+test_grants_and_changed_mcp_configuration_block_before_launch (__main__.SchedulerTests.test_grants_and_changed_mcp_configuration_block_before_launch) ... ok
+test_hidden_worker_survives_control_process_eof_and_stops_by_owned_control (__main__.SchedulerTests.test_hidden_worker_survives_control_process_eof_and_stops_by_owned_control) ... skipped 'native detached worker startup'
+test_idle_worker_stop_preserves_delayed_and_approval_waiting_jobs (__main__.SchedulerTests.test_idle_worker_stop_preserves_delayed_and_approval_waiting_jobs) ... ok
+test_invalid_schedule_parameters_have_no_persistent_or_model_effects (__main__.SchedulerTests.test_invalid_schedule_parameters_have_no_persistent_or_model_effects) ... ok
+test_model_failures_retry_with_backoff_and_bounded_attempts (__main__.SchedulerTests.test_model_failures_retry_with_backoff_and_bounded_attempts) ... ok
+test_model_pending_worker_crash_recovers_only_owned_task_without_replaying_tools (__main__.SchedulerTests.test_model_pending_worker_crash_recovers_only_owned_task_without_replaying_tools) ... ok
+test_new_proposal_waits_for_a_new_explicit_decision (__main__.SchedulerTests.test_new_proposal_waits_for_a_new_explicit_decision) ... ok
+test_running_job_cancel_is_persistent_and_does_not_retry (__main__.SchedulerTests.test_running_job_cancel_is_persistent_and_does_not_retry) ... ok
+test_scheduler_recovery_does_not_recover_unrelated_running_task (__main__.SchedulerTests.test_scheduler_recovery_does_not_recover_unrelated_running_task) ... ok
+test_three_protocols_queued_resume_survives_the_creating_process (__main__.SchedulerTests.test_three_protocols_queued_resume_survives_the_creating_process) ... ok
+test_two_workers_cannot_claim_the_same_job (__main__.SchedulerTests.test_two_workers_cannot_claim_the_same_job) ... ok
+test_worker_stop_cancels_active_job_and_preserves_other_queue (__main__.SchedulerTests.test_worker_stop_cancels_active_job_and_preserves_other_queue) ... ok
+test_worker_uses_current_secret_without_persisting_it_in_schedule (__main__.SchedulerTests.test_worker_uses_current_secret_without_persisting_it_in_schedule) ... ok
+
+----------------------------------------------------------------------
+Ran 19 tests in 13.974s
+
+OK (skipped=1)

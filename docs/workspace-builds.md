@@ -2,7 +2,7 @@
 
 `build` 在 Windows LPAC 或 Linux namespace/cgroup 沙箱内执行固定构建清单：复制指定源码和工具链、运行整个构建进程树、核验并导出声明的产物。原工作区不是构建进程的工作目录。整个流程通过现有动作账本记录，CLI、模型工具和 stdio 服务使用同一实现。Linux 环境与工具链打包要求见 [Linux 与 WSL](linux.md)。
 
-隔离执行模块按通用 v2 清单执行显式声明的可执行文件、参数和环境，不添加工具专用默认值或设置专用环境白名单。XMake 构建能力由测试夹具验证，其他构建工具尚未完成集成验证。CodeStudio-Agent 自身继续使用 C++26 + XMake 构建。
+隔离执行模块按通用 v2 清单执行显式声明的可执行文件、参数和环境，不添加工具专用默认值或设置专用环境白名单。XMake 构建能力由测试夹具验证，其他构建工具尚未完成集成验证。CodeStudioAgent 自身继续使用 C++26 + XMake 构建。
 
 ```powershell
 codestudio-agent build --workspace D:\YourProject --build-config D:\YourProject\build.json

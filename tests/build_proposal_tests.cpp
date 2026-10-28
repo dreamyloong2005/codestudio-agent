@@ -33,7 +33,7 @@ Json arguments(const fs::path& workspace) {
 
 void run_build_proposal_tests() {
     using namespace codestudio;
-#if defined(_WIN32) || defined(__linux__)
+#if defined(_WIN32) || defined(__linux__) || defined(__APPLE__)
     check(sha256_bytes("") == "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "empty SHA256 vector");
     check(sha256_bytes("abc") == "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad", "abc SHA256 vector");
     check(sha256_bytes(std::string(1000000, 'a')) == "cdc76e5c9914fb9281a1c7e284d73e67f1809a48a497200e046d39ccc7112cd0", "incremental SHA256 vector");
@@ -42,6 +42,9 @@ void run_build_proposal_tests() {
     const std::vector<fs::path> protected_paths{temp.root / ".codestudio", temp.root / "build.json"};
     const auto proposal = inspect_build_proposal(args, temp.root, protected_paths);
     check(proposal.at("status") == "pending_approval", "proposal implied execution approval");
+#ifdef __APPLE__
+    check(proposal.at("backend") == "unsupported", "proposal falsely advertised a macOS isolation backend");
+#endif
     check(proposal.at("version") == 2 && proposal.at("manifest") == args.at("manifest") &&
           proposal.at("recipe") == args.at("manifest"),
           "proposal lost original or expanded configuration");

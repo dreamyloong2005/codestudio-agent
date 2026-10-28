@@ -126,13 +126,94 @@ class VerificationTests(unittest.TestCase):
     def test_native_suite_uses_one_python_interpreter(self):
         commands = verification.commands("release", Path("package"))
         for name, command in commands.items():
-            if name != "native":
+            if name not in ("native", "toolchain"):
                 self.assertEqual(command[0], sys.executable)
-        self.assertNotEqual(commands["real_build"][1], "tests/local_models_integration.py")
+        if "real_build" in commands:
+            self.assertNotEqual(commands["real_build"][1], "tests/local_models_integration.py")
+
+    def test_macos_inventory_preserves_base_tests_and_reports_unsupported_suites(self):
+        with patch.object(verification, "PLATFORM", "macosx"), patch.object(verification, "ARCH", "arm64"), \
+             patch.object(verification, "SUFFIX", ""):
+            commands = verification.commands("debug", None)
+            unsupported = verification.unsupported_suites()
+            for name in ("toolchain", "native", "credentials", "provider", "streaming", "cli",
+                         "mcp", "mcp_http", "plugins", "resume", "contract", "service", "scheduler", "cron"):
+                self.assertIn(name, commands)
+            self.assertFalse(set(commands).intersection(unsupported))
+            self.assertIn("supervisor", unsupported)
+            self.assertIn("real_build", unsupported)
+            self.assertIn("delivery", unsupported)
+            self.assertTrue(all(unsupported.values()))
+            self.assertEqual(Path(commands["native"][0]).parts[-4:],
+                             ("macosx", "arm64", "debug", "agent-tests"))
+            self.assertEqual(verification.shared_library("fixture"), "libfixture.dylib")
+
+    def test_macos_temporary_directory_is_canonical_without_relaxing_product_checks(self):
+        actual = self.root / "actual-temp"
+        actual.mkdir()
+        alias = self.root / "temp-alias"
+        try:
+            alias.symlink_to(actual, target_is_directory=True)
+        except OSError:
+            self.skipTest("Host cannot create a temporary-directory symlink")
+        env = {"TMPDIR": str(alias), "UNCHANGED": "fixture"}
+        with patch.object(verification, "PLATFORM", "macosx"):
+            observed = verification.prepare_test_environment(env)
+        self.assertEqual(env, {"TMPDIR": str(actual.resolve()), "UNCHANGED": "fixture"})
+        self.assertEqual(observed, {"temporary_directory": str(actual.resolve())})
+        self.assertTrue(alias.is_symlink())
+
+    def test_macos_configuration_requires_explicit_native_llvm(self):
+        installation = self.root / "llvm with spaces"
+        (installation / "bin").mkdir(parents=True)
+        (installation / "bin/clang++").write_bytes(b"fixture")
+        runtime = self.root / "libcxx"
+        for name in ("include/c++/v1/chrono", "lib/libc++.1.dylib", "lib/libc++abi.1.dylib", "lib/libc++experimental.a"):
+            path = runtime / name
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(b"fixture")
+        with patch.object(verification, "PLATFORM", "macosx"), patch.object(verification, "ARCH", "arm64"):
+            for env in ({}, {"CODESTUDIO_LLVM_ROOT": "relative"},
+                        {"CODESTUDIO_LLVM_ROOT": str(self.root / "missing")}):
+                with self.subTest(env=env), self.assertRaises(RuntimeError):
+                    verification.configure_command("debug", env)
+            command = verification.configure_command("release", {"CODESTUDIO_LLVM_ROOT": str(installation),
+                                                                   "CODESTUDIO_LIBCXX_ROOT": str(runtime)})
+            self.assertIn("--toolchain=llvm", command)
+            self.assertIn("--sdk=" + str(installation.resolve()), command)
+            self.assertIn("--macos_libcxx=" + str(runtime.resolve()), command)
+            self.assertIn("--target_minver=15.0", command)
+            self.assertNotIn("--system_deps=y", command)
+            self.assertEqual(command[command.index("-a") + 1], "arm64")
+
+    def test_changed_external_runtime_never_yields_successful_receipt(self):
+        binary = self.root / "build" / verification.PLATFORM / verification.ARCH / "release" / ("codestudio-agent" + verification.SUFFIX)
+        binary.parent.mkdir(parents=True)
+        binary.write_bytes(b"fixture")
+        with patch.object(verification, "ROOT", self.root), \
+             patch.object(verification, "source_fingerprint", return_value={"sha256": "a", "files": 1}), \
+             patch.object(verification, "artifact_fingerprint", return_value={"agent": "same"}), \
+             patch.object(verification, "preflight", return_value={"libcxx_sha256": {"libc++.1.dylib": "old"}}), \
+             patch.object(verification, "runtime_fingerprint", return_value={"libc++.1.dylib": "new"}), \
+             patch.object(verification, "step", return_value={"name": "schema", "status": "succeeded", "returncode": 0}):
+            self.assertEqual(verification.verify(self.args, "release"), 2)
+        report = json.loads(next(self.root.glob("*/verification.json")).read_text())
+        self.assertEqual(report["status"], "failed")
+        self.assertIn("runtime changed", report["error"])
+
+    def test_runtime_probe_requires_executed_format_and_timezone_evidence(self):
+        valid = dict(cxx26=True, cplusplus=202400, format="probe:07", timezone_offsets=True,
+                     timezone_dst=True, tzdb_version="2026a", current_zone="Asia/Shanghai")
+        for payload, expected in ((valid, "succeeded"), ({}, "failed"),
+                                  (dict(valid, timezone_dst=False), "failed"),
+                                  (dict(valid, cplusplus=202302), "failed")):
+            with self.subTest(payload=payload):
+                result = self.step("print(" + repr(json.dumps(payload)) + ")", name="toolchain")
+                self.assertEqual(result["status"], expected)
 
     def test_native_wrapper_forwards_arguments_to_selected_python(self):
         wrapper = (["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", str(ROOT / "scripts/verify.ps1")]
-                   if os.name == "nt" else ["bash", str(ROOT / "scripts/verify-linux.sh")])
+                   if os.name == "nt" else ["bash", str(ROOT / ("scripts/verify-macos.sh" if sys.platform == "darwin" else "scripts/verify-linux.sh"))])
         env = dict(os.environ, CODESTUDIO_CONTRACT_PYTHON=sys.executable)
         process = subprocess.run([*wrapper, "release", "--list"], cwd=self.root, env=env,
                                  capture_output=True, text=True, timeout=15)

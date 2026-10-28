@@ -1,4 +1,5 @@
 #include "codestudio/line_process.hpp"
+#include "darwin_launch_state.hpp"
 
 #include <cstdlib>
 #include <fstream>
@@ -10,6 +11,8 @@
 #define NOMINMAX
 #endif
 #include <windows.h>
+#else
+#include <signal.h>
 #endif
 
 namespace {
@@ -71,6 +74,16 @@ void run_line_process_tests(const std::filesystem::path& fixture_path) {
         child.send(large, Clock::now() + 3s, cancelled);
         check(child.receive(Clock::now() + 3s, cancelled) == large, "large request streams through finite pipe buffers");
     }
+#ifdef __APPLE__
+    {
+        DarwinLaunchState host_state;
+        request.arguments = {"launch-state", std::to_string(host_state.sentinel)};
+        LineProcess child(request);
+        for (const auto* expected : {"descriptor-closed", "stdin-open", "sigpipe-default", "signal-unblocked"})
+            check(child.receive(Clock::now() + 3s, cancelled) == expected,
+                  "Darwin RPC launch isolates descriptors and initializes stdio and signals");
+    }
+#endif
     request.arguments = {"args", "", "two words", "a\"b", "slash\\", "中文", "& | ; $(not-a-shell)"};
     {
         LineProcess child(request);
@@ -78,6 +91,19 @@ void run_line_process_tests(const std::filesystem::path& fixture_path) {
             check(child.receive(Clock::now() + 3s, cancelled) ==
                 std::to_string(request.arguments[i].size()) + ':' + request.arguments[i], "direct arguments preserve quoting");
     }
+#ifndef _WIN32
+    request.arguments = {"closed-input"};
+    {
+        struct sigaction before{}, after{};
+        check(sigaction(SIGPIPE, nullptr, &before) == 0, "read host SIGPIPE policy");
+        LineProcess child(request);
+        check(child.receive(Clock::now() + 3s, cancelled) == "input-closed", "fixture closed stdin");
+        rejects([&] { child.send("broken-pipe", Clock::now() + 3s, cancelled); },
+                "broken pipe fails without signalling the host", "write(RPC input)");
+        check(sigaction(SIGPIPE, nullptr, &after) == 0 && before.sa_handler == after.sa_handler,
+              "broken pipe handling preserves the host SIGPIPE policy");
+    }
+#endif
     request.arguments = {"stderr"};
     {
         LineProcess child(request);

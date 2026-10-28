@@ -48,8 +48,8 @@ class PluginsTests(unittest.TestCase):
         (self.source / "README.txt").write_text("Owned plugin fixture\n", encoding="utf-8")
         self.marker = self.workspace / "plugin.started"
         self.descriptor = {"format": 2, "id": "fixture-echo", "version": "1.2.3",
-                           "platform": "windows" if os.name == "nt" else "linux",
-                           "arch": "x64" if os.name == "nt" else "x86_64",
+                           "platform": "windows" if os.name == "nt" else "macosx" if sys.platform == "darwin" else "linux",
+                           "arch": "x64" if os.name == "nt" else "arm64" if sys.platform == "darwin" else "x86_64",
                            "entrypoint": self.executable, "args": ["normal", str(self.marker)],
                            "tools": ["echo"]}
         self.write_descriptor()

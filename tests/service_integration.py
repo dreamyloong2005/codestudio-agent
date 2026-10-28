@@ -339,7 +339,9 @@ class ServiceTests(unittest.TestCase):
         self.assertIsInstance(initialized["capabilities"], dict)
         self.assertTrue(initialized["capabilities"]["approval_continuation"])
         self.assertTrue(initialized["capabilities"]["automatic_resume"])
-        self.assertTrue(initialized["capabilities"]["background_scheduler"])
+        for capability in ("background_scheduler", "mcp_oauth"):
+            self.assertEqual(initialized["capabilities"][capability],
+                             os.name == "nt" or sys.platform.startswith("linux"))
         self.assertEqual(initialized["capabilities"]["supervisor_diagnostics"],
                          os.name == "nt" or sys.platform.startswith("linux"))
         self.assertEqual(client.rpc("tasks/list")["items"], [])

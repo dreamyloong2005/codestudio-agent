@@ -5,7 +5,7 @@
 #ifdef _WIN32
 #include <windows.h>
 #include <bcrypt.h>
-#elif defined(__linux__)
+#elif defined(__linux__) || defined(__APPLE__)
 #include <openssl/evp.h>
 #endif
 
@@ -40,7 +40,7 @@ std::string sha256_bytes(std::string_view bytes) {
         result.push_back(digits[byte & 15]);
     }
     return result;
-#elif defined(__linux__)
+#elif defined(__linux__) || defined(__APPLE__)
     std::array<unsigned char, EVP_MAX_MD_SIZE> bytes_out{};
     unsigned length = 0;
     if (EVP_Digest(bytes.data(), bytes.size(), bytes_out.data(), &length, EVP_sha256(), nullptr) != 1 || length != 32)
@@ -54,7 +54,7 @@ std::string sha256_bytes(std::string_view bytes) {
     return result;
 #else
     (void)bytes;
-    throw std::runtime_error("Build proposal SHA256 requires Windows or Linux");
+    throw std::runtime_error("SHA256 is unavailable on this platform");
 #endif
 }
 }

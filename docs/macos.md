@@ -1,29 +1,29 @@
 # macOS 适配路线
 
-macOS 是 CodeStudio-Agent 的下一项平台适配工作，优先完成 Apple Silicon（arm64）基础运行版，再依次补齐系统集成、隔离能力和正式交付。本文记录实施范围与验收要求，不表示这些能力已经实现或验证通过，也不承诺工期。
+CodeStudioAgent 的 macOS 首个目标是 Apple Silicon（arm64）基础运行版。本轮已落地阶段 1 适配与原生验证入口，Debug/Release 验收通过；系统集成、隔离能力和正式交付分别属于后续阶段。实现状态、测试通过和托管 CI 运行结果分别记录。
 
-核心继续使用 **C++26 + XMake**，mcpp 等生态成熟后再评估迁移。CodeStudio-Agent 负责无界面的 Agent/Harness、CLI 和服务接口；桌面 UI 属于 **CodeStudio Next**。本地模型后续开发继续暂停，macOS 适配不包含模型下载、服务管理或内嵌推理。
+核心继续使用 **C++26 + XMake**，mcpp 等生态成熟后再评估迁移。CodeStudioAgent 负责无界面的 Agent/Harness、CLI 和服务接口；桌面 UI 属于 **CodeStudio Next**。本地模型后续开发继续暂停，macOS 适配不包含模型下载、服务管理或内嵌推理。
 
 ## 当前状态
 
-当前已验证平台为 Windows 和 Linux；macOS 尚未形成可验证的平台支持。已有通用业务逻辑与部分 POSIX 进程代码可以作为移植基础，但不能据此宣称 macOS 可运行或与已有平台具有同等隔离能力。
+当前新增 macOS 原生构建配置、Darwin 子进程启动、进程出生身份、只读清单快照、平台能力声明与基础套件选择。CLI、stdio 任务服务、模型协议、MCP、审批和恢复继续共用业务实现。最终原生通过范围以 [验证记录](validation.md) 与机器回执为准；普通进程组不构成 OS 沙箱。
 
-| 能力 | 当前缺口 | 主要代码与文档入口 |
+| 能力 | 当前实现或后续缺口 | 主要代码与文档入口 |
 |---|---|---|
-| 原生构建与验证 | 验证、工具链配置和打包入口目前仅覆盖 Windows/Linux x86-64；缺少 macOS arm64 配置和原生回执 | [XMake 配置](../xmake.lua)、[工具链要求](../scripts/toolchains.json)、[验证入口](../scripts/verify.py)、[打包入口](../scripts/package.py) |
-| 普通进程与身份 | POSIX 进程路径需要在 Darwin 上检查；进程出生身份目前仅有 Windows/Linux 实现 | [进程执行](../src/platform/process.cpp)、[stdio 子进程](../src/platform/line_process.cpp)、[身份观测](../src/platform/process_observation.cpp) |
-| 后台 worker 与监督 | 其他平台的后台启动和受管监督子进程进入不支持分支；Linux 的 `/proc`、`pipe2`、`prctl` 逻辑不能直接用于 macOS | [后台启动](../src/platform/scheduler_process.cpp)、[监督子进程](../src/platform/scheduler_child.cpp)、[调度语义](scheduler.md) |
-| 系统凭据与 OAuth | 缺少 Keychain 后端；OAuth 的原生存储、互斥与刷新边界需要单独适配验证 | [凭据后端](../src/platform/credentials.cpp)、[OAuth 原生能力](../src/mcp/oauth_native.cpp)、[凭据语义](credentials.md)、[OAuth](mcp-oauth.md) |
+| 原生构建与验证 | 已增加 macosx/arm64 配置、C++26/格式化/时区运行探针和 Debug/Release 回执；本机 Debug/Release 验收通过，打包留在阶段 4 | [XMake 配置](../xmake.lua)、[工具链要求](../scripts/toolchains.json)、[验证入口](../scripts/verify.py)、[打包入口](../scripts/package.py) |
+| 普通进程与身份 | Darwin 使用 posix_spawn、明确继承标准流与进程组；出生身份绑定系统启动 UUID 和微秒级启动时间，使用 kqueue 检查查询中的退出 | [进程执行](../src/platform/process.cpp)、[stdio 子进程](../src/platform/line_process.cpp)、[身份观测](../src/platform/process_observation.cpp) |
+| 后台 worker 与监督 | 后台启动与监督明确返回不支持；通用队列、cron 与前台 scheduler-run 可以独立验证，原生生命周期留在阶段 2 | [后台启动](../src/platform/scheduler_process.cpp)、[监督子进程](../src/platform/scheduler_child.cpp)、[调度语义](scheduler.md) |
+| 系统凭据与 OAuth | 环境凭据可用；系统后端返回 unsupported，OAuth 登录/刷新原生互斥明确拒绝，Keychain 留在阶段 2 | [凭据后端](../src/platform/credentials.cpp)、[OAuth 原生能力](../src/mcp/oauth_native.cpp)、[凭据语义](credentials.md)、[OAuth](mcp-oauth.md) |
 | 当前用户登录自启 | 缺少 macOS LaunchAgent 后端 | [自启入口](../src/platform/autostart.cpp)、[后台调度](scheduler.md) |
-| OS 隔离与工作区执行 | 缺少 macOS 沙箱；安全工作区导入、导出等平台操作尚未支持 | [沙箱入口](../src/platform/sandbox.cpp)、[工作区操作](../src/platform/build_workspace.cpp)、[隔离构建](workspace-builds.md) |
+| OS 隔离与工作区执行 | 只读清单快照已适配，拒绝链接、非普通文件与读取期间的身份/内容变化；工作区导入、执行与导出仍不支持，无宿主回退 | [沙箱入口](../src/platform/sandbox.cpp)、[工作区操作](../src/platform/build_workspace.cpp)、[隔离构建](workspace-builds.md) |
 | 资源登记与回收 | 非 Windows/Linux 平台使用不支持存根，缺少本机资源身份和回收实现 | [资源接口实现](../src/platform/sandbox_resources.cpp)、[资源生命周期](sandbox-resources.md) |
-| CI 与发布交付 | 工作流仅定义 Windows/Linux 作业，缺少 macOS 原生作业、安装验收及签名公证流程 | [CI 定义](../.github/workflows/native.yml)、[交付说明](delivery.md) |
+| CI 与发布交付 | 已定义 macOS ARM64 自托管原生验证作业；尚无本轮托管运行结论，安装验收及签名公证留在阶段 4 | [CI 定义](../.github/workflows/native.yml)、[交付说明](delivery.md) |
 
 ## 阶段与依赖
 
 | 顺序 | 里程碑 | 状态 | 完成标志 |
 |---|---|---|---|
-| 1 | macOS arm64 基础运行与原生验证 | 下一步，待实现 | 原生 Debug/Release 构建与基础功能测试通过，产生对应源码和产物的机器回执 |
+| 1 | macOS arm64 基础运行与原生验证 | 代码已落地，本机原生验收通过 | 原生 Debug/Release 构建与基础功能测试通过，产生对应源码和产物的机器回执 |
 | 2 | Keychain、后台监督与登录自启 | 待实现，依赖阶段 1 | 凭据生命周期、后台续跑、cron 和 LaunchAgent 的真实运行场景通过 |
 | 3 | 插件、工作区与资源生命周期隔离 | 待设计和实现，依赖基础进程与身份能力 | 后端方案确认，隔离拒绝、资源限额、取消和崩溃回收得到实际验证 |
 | 4 | 安装、签名公证与正式交付 | 待实现，依赖拟发布能力的验收 | 干净 Mac 完成安装、升级、卸载及发布包运行验收 |
@@ -32,7 +32,7 @@ macOS 是 CodeStudio-Agent 的下一项平台适配工作，优先完成 Apple S
 
 ## 阶段 1：macOS arm64 基础运行与原生验证
 
-本阶段是下一轮具体开发范围，目标是在真实 Apple Silicon Mac 上建立可重复的基础运行与测试路径。
+本阶段是本轮开发范围，在真实 Apple Silicon Mac 上建立可重复的基础运行与测试路径。
 
 实施内容：
 
@@ -52,6 +52,37 @@ macOS 是 CodeStudio-Agent 的下一项平台适配工作，优先完成 Apple S
 4. Debug/Release 的通过、失败和跳过分别记录，CI 实际运行结果可追溯；仅增加工作流文件不算验收通过。
 
 阶段 1 不宣称已具备 Keychain、登录自启、强隔离或正式分发能力。调度与 cron 的通用逻辑可以提前验证，后台平台生命周期留在阶段 2。
+
+## 原生构建与验证命令
+
+本轮环境为 macOS 26.5.2 arm64、macOS SDK 26.5、LLVM 22.1.8、XMake 3.0.9（HEAD `2b184e178`）及 Python 3.13.14。编译器和专用运行库的最低部署目标固定为 macOS 15.0；本轮实际运行仅覆盖 26.5.2，不能据此宣称 15.0 或 Intel/Rosetta 已验收。
+
+需要 LLVM 编译器和与之配套、启用 `std::chrono` 时区数据库的 libc++/libc++abi。系统 Apple libc++ 与官方 macOS LLVM 包附带的 libc++ 均未启用所需时区功能，仅替换 `clang++` 不满足要求。
+
+从 [LLVM 22.1.8 官方发布页](https://github.com/llvm/llvm-project/releases/tag/llvmorg-22.1.8) 取得 `LLVM-22.1.8-macOS-ARM64.tar.xz`，核对 SHA256 `f260f4f7c0d430828a81ae8a3826a1d63fc0963ec2459489308cc23b1f7eab4f` 后解压，并将 `CODESTUDIO_LLVM_ROOT` 指向包含 `bin/clang++` 的目录。另需 CMake 3.20+、Ninja 和 Xcode Command Line Tools；CMake/Ninja 不在 PATH 时可向下方构建脚本传 `--cmake` / `--ninja` 绝对路径。
+
+[build-macos-libcxx.py](../scripts/build-macos-libcxx.py) 下载并校验固定 LLVM 22.1.8 源码，在工作区构建 libc++/libc++abi，启用实验性时区实现，并将 Darwin 的时区查找指向系统 `/usr/share/zoneinfo/`。脚本要求该目录已有 `tzdata.zi` 和 `leapseconds`，不回退到伪造时区或关闭 cron；完成后写入 `build/toolchains/libcxx-toolchain.json`。构建脚本与统一验证入口均实际运行格式化、IANA 时区和 DST 缺失/重复时间探针。
+
+```sh
+python3 -m venv build/contract-python
+build/contract-python/bin/python -m pip install -r tests/requirements.txt
+export CODESTUDIO_LLVM_ROOT=/absolute/path/to/llvm
+build/contract-python/bin/python scripts/build-macos-libcxx.py --llvm-root "$CODESTUDIO_LLVM_ROOT"
+export CODESTUDIO_LIBCXX_ROOT="$PWD/build/toolchains/libcxx-22.1.8-tzdb"
+export CODESTUDIO_CONTRACT_PYTHON="$PWD/build/contract-python/bin/python"
+bash scripts/verify-macos.sh all
+```
+
+两个配置顺序执行；产物位于 `build/macosx/arm64/<mode>/`，回执位于 `build/verification/macosx/`。macOS 使用原生 arm64 的 SQLite 3.50.4、nlohmann JSON 3.12.0、静态 OpenSSL 3.6.5（摘要），HTTP 使用系统 libcurl（本轮运行库 8.7.1，SecureTransport）；不加载 Linux libsecret。开发二进制通过运行库路径加载上述专用 libc++，必须保留对应目录，不能把单个 executable 当作独立发布包。发布包和安装验证尚未开放；验证工具为不支持的套件记录明确的跳过原因，而不是成功结果。
+
+能力查询示例：
+
+```sh
+build/macosx/arm64/release/codestudio-agent doctor
+build/macosx/arm64/release/codestudio-agent demo --workspace .demo-workspace
+```
+
+`doctor` 和服务 `initialize` 对 macOS 返回 `background_scheduler: false`、`mcp_oauth: false`（doctor 中为 `mcp_oauth.available`）、`worker_supervision: false`、`login_autostart: false`、`plugin_sandbox: false`、`sandbox_resources: false`。`doctor.workspace_build.available` 为 false。`build_proposals` 与 `approval_continuation` 支持创建、审阅、拒绝提案及随后续跑；提案回执的 backend 为 unsupported，批准请求在提交决定前因缺少隔离后端而拒绝，不能用来推导隔离构建可执行。系统凭据不会回退到已有环境密钥，隔离请求不会降级为宿主运行。
 
 ## 阶段 2：系统集成
 

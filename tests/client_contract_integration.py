@@ -101,6 +101,8 @@ class ClientContractTests(unittest.TestCase):
             client.initialize()
         return client
 
+    @unittest.skipUnless(os.name == "nt" or sys.platform.startswith("linux"),
+                         "Windows/Linux native worker supervision")
     def test_supervised_start_contract_and_independent_client_lifecycle(self):
         client = self.client(initialize=False)
         self.assertTrue(client.initialize()["capabilities"]["worker_supervision"])
@@ -135,6 +137,8 @@ class ClientContractTests(unittest.TestCase):
                 return probe.returncode == 0
             self.wait_for(released)
 
+    @unittest.skipUnless(os.name == "nt" or sys.platform.startswith("linux"),
+                         "Windows/Linux native worker supervision")
     def test_supervisor_diagnostics_survive_client_reconnection_and_page_durable_runs(self):
         client = self.client(initialize=False)
         self.assertTrue(client.initialize()["capabilities"]["supervisor_diagnostics"])
@@ -310,6 +314,9 @@ class ClientContractTests(unittest.TestCase):
         self.assert_error(before, "not_initialized", "initialize", "not_started", code=-32002)
         initialized = client.initialize()
         self.assertEqual(initialized["session_id"], before["data"]["session_id"])
+        for capability in ("background_scheduler", "mcp_oauth"):
+            self.assertEqual(initialized["capabilities"][capability],
+                             os.name == "nt" or sys.platform.startswith("linux"))
         self.assertTrue(initialized["capabilities"]["operation_lookup"])
         self.assertTrue(initialized["capabilities"]["structured_errors"])
         self.assertEqual(initialized["capabilities"]["supervised_autostart"],
@@ -546,7 +553,7 @@ class ClientContractTests(unittest.TestCase):
         self.assertEqual(len(self.requests()), 2)
 
     def test_review_rejection_and_continuation_preserve_one_decision_and_one_feedback(self):
-        # This validates the complete approval protocol on either platform
+        # This validates the complete approval protocol on every platform
         # without approving or launching a build. The mounted executable only
         # identifies a genuine frozen plan for the user to review and reject.
         self.workspace = self.workspace.resolve()
@@ -585,6 +592,8 @@ class ClientContractTests(unittest.TestCase):
         self.assertEqual(review["action_id"], approval["action_id"])
         self.assertEqual(review["proposal"]["digest"], approval["digest"])
         self.assertEqual(review["proposal"]["status"], "pending_approval")
+        if sys.platform == "darwin":
+            self.assertEqual(review["proposal"]["backend"], "unsupported")
         self.assertIsNone(review["decision"])
         self.assertEqual(self.sql("SELECT count(*) FROM events"), before)
         self.assertEqual(len(self.requests()), 1)

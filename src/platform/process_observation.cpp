@@ -10,6 +10,14 @@
 #define NOMINMAX
 #endif
 #include <windows.h>
+#elif defined(__APPLE__)
+#include <array>
+#include <cerrno>
+#include <libproc.h>
+#include <sys/event.h>
+#include <sys/proc.h>
+#include <sys/sysctl.h>
+#include <unistd.h>
 #elif defined(__linux__)
 #include <array>
 #include <cerrno>
@@ -58,7 +66,7 @@ std::string encode_identity(std::uint64_t creation) {
     }
     return result;
 }
-#elif defined(__linux__)
+#elif defined(__linux__) || defined(__APPLE__)
 class Descriptor {
 public:
     explicit Descriptor(int value) : value_(value) {}
@@ -93,12 +101,51 @@ bool boot_uuid(std::string_view text) {
 }
 
 bool parse_identity(std::string_view identity, std::string_view& boot, std::uint64_t& start) {
-    if (identity.size() < 44 || identity.size() > 63 || !identity.starts_with("linux:") || identity[42] != ':')
-        return false;
-    boot = identity.substr(6, 36);
-    return boot_uuid(boot) && unsigned_decimal(identity.substr(43), start);
+#ifdef __APPLE__
+    constexpr std::string_view prefix = "darwin:";
+#else
+    constexpr std::string_view prefix = "linux:";
+#endif
+    const auto start_offset = prefix.size() + 37;
+    if (identity.size() <= start_offset || identity.size() > start_offset + 20 ||
+        !identity.starts_with(prefix) || identity[start_offset - 1] != ':') return false;
+    boot = identity.substr(prefix.size(), 36);
+    return boot_uuid(boot) && unsigned_decimal(identity.substr(start_offset), start);
 }
 
+#ifdef __APPLE__
+bool current_boot(std::string& boot) {
+    std::array<char, 64> buffer{};
+    auto size = buffer.size();
+    if (sysctlbyname("kern.bootsessionuuid", buffer.data(), &size, nullptr, 0) != 0 ||
+        size != 37 || buffer[36] != '\0') return false;
+    boot.assign(buffer.data(), 36);
+    for (auto& c : boot) if (c >= 'A' && c <= 'F') c += 'a' - 'A';
+    return boot_uuid(boot);
+}
+
+bool process_start(std::int64_t pid, std::uint64_t& start, bool& exited) {
+    proc_bsdinfo info{};
+    if (proc_pidinfo(static_cast<int>(pid), PROC_PIDTBSDINFO, 0, &info, sizeof(info)) != sizeof(info) ||
+        info.pbi_pid != pid || !info.pbi_start_tvsec || info.pbi_start_tvusec >= 1000000 ||
+        info.pbi_start_tvsec > (std::numeric_limits<std::uint64_t>::max() - info.pbi_start_tvusec) / 1000000)
+        return false;
+    start = info.pbi_start_tvsec * 1000000 + info.pbi_start_tvusec;
+    exited = info.pbi_status == SZOMB || (info.pbi_flags & PROC_FLAG_INEXIT);
+    return true;
+}
+
+// EVFILT_PROC binds to the process present at registration, so an exit during
+// proc_pidinfo cannot be mistaken for the birth identity of a reused PID.
+int process_event_state(int queue) {
+    struct kevent event{};
+    timespec timeout{};
+    int count;
+    do { count = kevent(queue, nullptr, 0, &event, 1, &timeout); } while (count < 0 && errno == EINTR);
+    if (count < 0 || (count && (event.flags & EV_ERROR))) return -1;
+    return count ? ((event.fflags & NOTE_EXIT) ? 1 : -1) : 0;
+}
+#else
 bool read_small_file(const std::string& path, std::size_t maximum, std::string& output) {
     const Descriptor file(open(path.c_str(), O_RDONLY | O_CLOEXEC | O_NOFOLLOW));
     if (file.get() < 0) return false;
@@ -156,6 +203,7 @@ int pidfd_state(int fd) {
     return result == 0 ? 0 : -1;
 }
 #endif
+#endif
 }
 
 std::string current_process_identity() {
@@ -164,13 +212,17 @@ std::string current_process_identity() {
     if (!process_creation(GetCurrentProcess(), creation))
         throw std::runtime_error("Cannot read the current Windows process creation time");
     return encode_identity(creation);
-#elif defined(__linux__)
+#elif defined(__linux__) || defined(__APPLE__)
     std::string boot;
     std::uint64_t start = 0;
     bool exited = false;
     if (!current_boot(boot) || !process_start(static_cast<std::int64_t>(getpid()), start, exited) || exited)
-        throw std::runtime_error("Cannot read the current Linux process birth identity");
+        throw std::runtime_error("Cannot read the current process birth identity");
+#ifdef __APPLE__
+    return "darwin:" + boot + ":" + std::to_string(start);
+#else
     return "linux:" + boot + ":" + std::to_string(start);
+#endif
 #else
     throw std::runtime_error("Process identity is unavailable on this platform");
 #endif
@@ -195,6 +247,30 @@ std::string observe_process_identity(std::int64_t pid, const std::string& identi
         if (state == WAIT_OBJECT_0) return "not_running";
         if (state != WAIT_TIMEOUT) return "unavailable";
         return actual_creation == expected_creation ? "matching_process" : "identity_mismatch";
+#elif defined(__APPLE__)
+        std::string_view expected_boot;
+        std::uint64_t expected_start = 0;
+        if (pid <= 0 || pid > std::numeric_limits<pid_t>::max() ||
+            !parse_identity(identity, expected_boot, expected_start)) return "unavailable";
+        const Descriptor queue(kqueue());
+        if (queue.get() < 0) return "unavailable";
+        struct kevent registration{};
+        EV_SET(&registration, static_cast<uintptr_t>(pid), EVFILT_PROC, EV_ADD | EV_CLEAR,
+               NOTE_EXIT, 0, nullptr);
+        if (kevent(queue.get(), &registration, 1, nullptr, 0, nullptr) < 0)
+            return errno == ESRCH ? "not_running" : "unavailable";
+        auto state = process_event_state(queue.get());
+        if (state != 0) return state == 1 ? "not_running" : "unavailable";
+        std::string actual_boot;
+        std::uint64_t actual_start = 0;
+        bool exited = false;
+        const bool readable = current_boot(actual_boot) && process_start(pid, actual_start, exited);
+        state = process_event_state(queue.get());
+        if (state != 0) return state == 1 ? "not_running" : "unavailable";
+        if (!readable) return "unavailable";
+        if (exited) return "not_running";
+        return actual_boot == expected_boot && actual_start == expected_start
+            ? "matching_process" : "identity_mismatch";
 #elif defined(__linux__)
         std::string_view expected_boot;
         std::uint64_t expected_start = 0;

@@ -56,7 +56,13 @@ void process_package_tests(const std::filesystem::path& fixture) {
     const auto root=fs::canonical(fs::temp_directory_path())/
         ("codestudio-package-interface-"+std::to_string(std::random_device{}()));
     check(fs::create_directory(root),"create package interface workspace");
-    struct Cleanup {fs::path root;~Cleanup(){try {codestudio::safe_remove_owned_tree(root);} catch(...) {}}} cleanup{root};
+    struct Cleanup {fs::path root;~Cleanup(){
+#if defined(_WIN32) || defined(__linux__)
+        try {codestudio::safe_remove_owned_tree(root);} catch(...) {}
+#else
+        std::error_code error; fs::remove_all(root, error);
+#endif
+    }} cleanup{root};
     const auto source=root/"source";
     fs::create_directories(source/"data");
     const auto write=[](const fs::path& path,const std::string& text) {
@@ -81,6 +87,7 @@ void process_package_tests(const std::filesystem::path& fixture) {
     const ProcessPackage plan(caller_source,caller_files,caller_entry,caller_arguments);
     caller_files=Json::object();caller_arguments.assign(1,"changed");caller_source.clear();caller_entry.clear();
     const auto good=fresh("good");std::atomic_bool cancelled{false};
+#if defined(_WIN32) || defined(__linux__)
     plan.stage(good,cancelled);
     check(plan.source()==source && plan.entrypoint()=="entry.exe","package owns caller paths");
     const auto mapped=plan.arguments(good);
@@ -114,6 +121,10 @@ void process_package_tests(const std::filesystem::path& fixture) {
     fs::create_hard_link(saved,source/"data/config.txt");
     rejects([&]{plan.stage(fresh("hardlink"),cancelled);},"package copy must reject hard-linked source");
     fs::remove(source/"data/config.txt");fs::rename(saved,source/"data/config.txt");
+#else
+    rejects([&]{plan.stage(good,cancelled);},"unsupported package staging must fail closed");
+    check(fs::is_empty(good),"unsupported package staging must not copy any files");
+#endif
     for(const auto* name:{"../escape","/absolute","data/../config.txt","data//config.txt","data\\config.txt","NUL.txt","data/trailing."}) {
         auto files=original;files[1]["path"]=name;
         rejects([&]{ProcessPackage invalid(source,files,"entry.exe",{});},(std::string("noncanonical package inventory path must fail: ")+name).c_str());

@@ -15,6 +15,12 @@
 #else
 #include <sys/wait.h>
 #include <unistd.h>
+#ifdef __APPLE__
+#include <cerrno>
+#include <fcntl.h>
+#include <pthread.h>
+#include <signal.h>
+#endif
 #endif
 
 namespace {
@@ -24,6 +30,20 @@ std::filesystem::path from_utf8(const std::string& value) {
 
 int run_fixture(const std::vector<std::string>& args, const std::filesystem::path& self) {
     if (args.empty()) return 2;
+#ifdef __APPLE__
+    if (args[0] == "launch-state") {
+        const auto descriptor = std::stoi(args.at(1));
+        const bool descriptor_closed = fcntl(descriptor, F_GETFD) == -1 && errno == EBADF;
+        struct sigaction action{};
+        sigset_t mask;
+        if (sigaction(SIGPIPE, nullptr, &action) || pthread_sigmask(SIG_BLOCK, nullptr, &mask)) return 7;
+        std::cout << (descriptor_closed ? "descriptor-closed" : "descriptor-leaked") << '\n'
+                  << (fcntl(STDIN_FILENO, F_GETFD) >= 0 ? "stdin-open" : "stdin-closed") << '\n'
+                  << (action.sa_handler == SIG_DFL ? "sigpipe-default" : "sigpipe-inherited") << '\n'
+                  << (sigismember(&mask, SIGUSR1) == 0 ? "signal-unblocked" : "signal-blocked") << '\n';
+        return 0;
+    }
+#endif
     if (args[0] == "echo") {
         for (std::size_t i = 1; i < args.size(); ++i) std::cout << args[i].size() << ':' << args[i] << '\n';
     } else if (args[0] == "spam") {

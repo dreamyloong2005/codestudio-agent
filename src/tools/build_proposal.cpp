@@ -40,7 +40,12 @@ Json inspect_build_proposal(const Json& arguments, const std::filesystem::path& 
     const auto& manifest = arguments["manifest"];
     if (!manifest.contains("version") || !manifest["version"].is_number_integer() || manifest["version"] != 2)
         throw std::invalid_argument("Build proposals require a version 2 manifest");
+#ifndef __APPLE__
     WorkspaceExecution::validate_available();
+#endif
+    // macOS stage 1 can review/reject plans and continue their source tasks.
+    // Its receipt explicitly names the unsupported backend; approving a build
+    // still checks availability before persisting a decision or running code.
     const auto canonical = std::filesystem::canonical(workspace);
     auto recipe = normalize_build_manifest(manifest);
     if (protected_paths.size() > build_proposal_protected_path_limit)

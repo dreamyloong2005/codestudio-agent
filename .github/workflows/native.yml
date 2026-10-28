@@ -87,3 +87,27 @@ jobs:
           name: codestudio-agent-linux-x86_64
           path: build/packages/linux-x86_64/
           if-no-files-found: error
+
+  macos:
+    runs-on: [self-hosted, macOS, ARM64, codestudio-agent]
+    timeout-minutes: 60
+    # The runner owner supplies Python >= 3.11, XMake and a matching LLVM/libc++
+    # installation through CODESTUDIO_LLVM_ROOT / CODESTUDIO_LIBCXX_ROOT.
+    # The latter must have timezone support. This is a stage 1 test artifact,
+    # not a signed/notarized macOS distribution package.
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Prepare test interpreter
+        run: |
+          python3 -m venv build/contract-python
+          build/contract-python/bin/python -m pip install -r tests/requirements.txt
+      - name: Verify both configurations
+        run: build/contract-python/bin/python scripts/verify.py --mode all
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: codestudio-agent-macos-arm64-verification
+          path: build/verification/macosx/
+          if-no-files-found: error

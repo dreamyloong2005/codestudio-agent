@@ -17,8 +17,13 @@
 #include <cerrno>
 #include <fcntl.h>
 #include <sys/stat.h>
+#ifdef __linux__
 #include <sys/syscall.h>
 #include <linux/fs.h>
+#endif
+#ifdef __APPLE__
+#include <stdio.h>
+#endif
 #include <unistd.h>
 #endif
 
@@ -106,8 +111,10 @@ std::pair<std::string, std::string> native() {
     return {"windows", "x64"};
 #elif defined(__linux__) && defined(__x86_64__)
     return {"linux", "x86_64"};
+#elif defined(__APPLE__) && defined(__aarch64__)
+    return {"macosx", "arm64"};
 #else
-    fail("native plugins require Windows or Linux x86-64");
+    fail("native plugins are unavailable for this platform/architecture");
 #endif
 }
 std::string unique() {
@@ -219,8 +226,13 @@ public:
                            MOVEFILE_WRITE_THROUGH | (replace ? MOVEFILE_REPLACE_EXISTING : 0)) != 0,
                 "publication failed; staging path retained for inspection");
 #else
+#ifdef __APPLE__
+        const auto code = renameatx_np(handles_.back(), from.c_str(), handles_.back(), to.c_str(),
+                                      replace ? 0 : RENAME_EXCL);
+#else
         const auto code = replace ? renameat(handles_.back(), from.c_str(), handles_.back(), to.c_str()) :
             syscall(SYS_renameat2, handles_.back(), from.c_str(), handles_.back(), to.c_str(), RENAME_NOREPLACE);
+#endif
         require(code == 0,
                 "publication failed; staging path retained for inspection");
         require(fsync(handles_.back()) == 0, "publication directory sync failed");

@@ -1,6 +1,6 @@
-# CodeStudio-Agent
+# CodeStudioAgent
 
-CodeStudio-Agent is a headless agent runtime and harness. It connects model reasoning to explicitly authorized tools while retaining execution and recovery records.
+CodeStudioAgent is a headless agent runtime and harness. It connects model reasoning to explicitly authorized tools while retaining execution and recovery records.
 
 ## Language
 
@@ -15,3 +15,9 @@ CodeStudio-Agent is a headless agent runtime and harness. It connects model reas
 **Authorization binding**: The frozen configuration, permissions and budgets under which a task may execute or resume.
 
 **Unknown effect**: A dispatched operation whose result cannot be established. It does not authorize a retry.
+
+## Platform status
+
+macOS stage 1 targets native Apple Silicon: LLVM 22.1.8 with a matching timezone-enabled libc++, XMake, ordinary process execution, CLI/stdio service, model/MCP transports, and explicit recovery. Build the runtime with `scripts/build-macos-libcxx.py`, then use `scripts/verify-macos.sh` with `CODESTUDIO_LLVM_ROOT` and `CODESTUDIO_LIBCXX_ROOT`. The deployment target is macOS 15.0; native Debug/Release validation passed on macOS 26.5.2; older systems were not runtime-tested. See [macOS](docs/macos.md) and [validation](docs/validation.md) for the actual evidence.
+
+macOS does not yet provide native OAuth/Keychain storage, detached workers, supervision, LaunchAgent, OS isolation, isolated workspace builds, resource reclamation, or signed/notarized distribution. Capability declarations and rejected requests retain those boundaries. Schema 7 and protocol/checkpoint/config version 2 remain unchanged.

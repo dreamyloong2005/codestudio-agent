@@ -1,10 +1,10 @@
 # MCP 工具扩展
 
-CodeStudio-Agent 通过 MCP stdio 加载独立进程插件，也可通过 Streamable HTTP 连接显式授权的远程服务。两种传输共用工具授权、模型循环和 SQLite 动作回执。
+CodeStudioAgent 通过 MCP stdio 加载独立进程插件，也可通过 Streamable HTTP 连接显式授权的远程服务。两种传输共用工具授权、模型循环和 SQLite 动作回执。
 
 ## 配置与运行
 
-参考 [示例清单](../examples/mcp.example.json)，将 executable 和脚本路径替换为本机的绝对路径。本地 MCP 配置只接受 `version: 2`；其他版本会在服务器启动前拒绝，不进行格式转换。该版本号描述 CodeStudio-Agent 的本地配置格式，与 MCP 握手中的日期协议版本无关。`command` 必须指向已存在的可执行文件，`args` 是独立参数数组，不经过隐式 shell。`tools` 是允许暴露的工具名称列表，不支持自动授权全部工具。
+参考 [示例清单](../examples/mcp.example.json)，将 executable 和脚本路径替换为本机的绝对路径。本地 MCP 配置只接受 `version: 2`；其他版本会在服务器启动前拒绝，不进行格式转换。该版本号描述 CodeStudioAgent 的本地配置格式，与 MCP 握手中的日期协议版本无关。`command` 必须指向已存在的可执行文件，`args` 是独立参数数组，不经过隐式 shell。`tools` 是允许暴露的工具名称列表，不支持自动授权全部工具。
 
 ```json
 {

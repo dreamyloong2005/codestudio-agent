@@ -107,6 +107,10 @@ class CredentialTests(unittest.TestCase):
         result = self.capture("credential-set", "--name", self.name, "--stdin",
                               input=(secret or self.first).encode() + b"\n")
         data = json.loads(result.stdout)
+        if sys.platform == "darwin":
+            self.assertEqual((result.returncode, data["state"], data["backend"]), (2, "unavailable", "unsupported"))
+            self.assertFalse(self.database.exists())
+            self.skipTest("macOS Keychain backend belongs to stage 2")
         if data.get("state") in ("locked", "unavailable") and os.name != "nt":
             self.assertEqual(result.returncode, 2)
             self.assertFalse(self.database.exists())
@@ -241,6 +245,7 @@ class CredentialTests(unittest.TestCase):
             self.assertNotIn("-credential", "\n".join(database.iterdump()))
         self.assert_secrets_absent()
 
+    @unittest.skipUnless(os.name == "nt" or sys.platform.startswith("linux"), "native isolated workspace execution")
     def test_approved_build_output_uses_source_credential_redaction_before_persistence(self):
         build_fixture = fixture.EXE.parent / ("build-fixture.exe" if os.name == "nt" else "build-fixture")
         self.assertTrue(build_fixture.is_file())

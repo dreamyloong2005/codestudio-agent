@@ -1,8 +1,8 @@
-# CodeStudio-Agent 后续路线
+# CodeStudioAgent 后续路线
 
 这是一份按依赖关系排列的实施路线，不是工期承诺。核心继续使用 C++26 + XMake；mcpp 等生态成熟后再评估迁移。
 
-CodeStudio-Agent 专注无界面的 Agent/Harness、CLI 和服务接口。桌面 UI 属于独立项目 **CodeStudio Next**，界面实现和技术选型由该项目负责；Agent 提供接入契约并执行权限、审批、隔离、恢复和调度规则。
+CodeStudioAgent 专注无界面的 Agent/Harness、CLI 和服务接口。桌面 UI 属于独立项目 **CodeStudio Next**，界面实现和技术选型由该项目负责；Agent 提供接入契约并执行权限、审批、隔离、恢复和调度规则。
 
 | 阶段 | 交付内容 | 验收条件 | 状态 |
 |---|---|---|---|
@@ -27,14 +27,14 @@ CodeStudio-Agent 专注无界面的 Agent/Harness、CLI 和服务接口。桌面
 | 插件生态 | OAuth 登录/刷新、精确版本锁定、可验证包与本地/HTTPS 分发 | 认证与内容绑定、显式换锁，活动调用不被静默替换 | 已实现；验证范围见 validation.md；动态客户端注册、签名信任与托管市场留待后续 |
 | 构建与交付 | 统一原生验证、机器回执、CI 定义、标准包、用户级安装/升级/卸载 | 失败不标通过；文件被修改时保留数据；安装后程序实际验证 | 工具已实现；实际验证范围以 delivery.md 和回执为准，干净机器及真实登录仍需单独验收 |
 
-## 下一阶段：macOS 原生适配
+## 当前阶段：macOS 原生适配
 
-下一实施里程碑为 **macOS arm64 基础运行与原生验证**。Apple Silicon 优先；macOS 当前尚未完成原生构建和运行验收。详细缺口、阶段范围、环境要求与验收条件见 [macOS 适配计划](macos.md)。
+本轮已加入 **macOS arm64 基础运行与原生验证** 的实现，原生 Debug/Release 验收通过。Apple Silicon 优先；详细工具链、能力边界和四阶段验收条件见 [macOS 指南](macos.md)，实际结论见 [验证记录](validation.md)。
 
 | 顺序 | 交付范围 | 验收目标 | 当前状态 |
 |---|---|---|---|
-| 1. 基础运行 | C++26/XMake 工具链与标准库、依赖、进程执行与出生身份、CLI/stdio 服务、模型协议、MCP、任务恢复、原生 CI | arm64 Debug/Release 原生构建和基础套件通过，产生准确记录能力与跳过项的回执 | 未开始；下一轮实施范围 |
-| 2. 系统集成 | Keychain、后台 worker、有界监督、cron、LaunchAgent 当前用户登录自启 | 凭据轮换、后台续跑、监督与真实登录启动通过验证，权限和预算不扩张 | 待阶段 1 完成 |
+| 1. 基础运行 | C++26/XMake 工具链与标准库、依赖、进程执行与出生身份、CLI/stdio 服务、模型协议、MCP、任务恢复、原生 CI | arm64 Debug/Release 原生构建和基础套件通过，产生准确记录能力与跳过项的回执 | 已实现，本机原生验收通过；托管 CI 待实际运行 |
+| 2. 系统集成 | Keychain、后台 worker、有界监督、cron、LaunchAgent 当前用户登录自启 | 凭据轮换、后台续跑、监督与真实登录启动通过验证，权限和预算不扩张 | 下一阶段，待实现 |
 | 3. 隔离能力 | 先验证隔离技术方案，再实现插件/工作区隔离、资源限制、归属登记和崩溃回收 | 文件/网络限制、取消、资源回收及不重放未知效果通过实际验证 | 待方案验证和基础运行完成 |
 | 4. 正式交付 | 用户级安装/升级/卸载、签名、公证、干净 Mac 验收；按需求增加 Intel 或 Universal 包 | 已声明架构和能力在独立 Mac 上验收，交付产物与验证记录对应 | 待目标能力完成 |
 
@@ -58,6 +58,6 @@ Windows 首版使用 `--sandbox appcontainer` 选择 LPAC；默认 `none` 仍以
 
 [构建提案](build-proposals.md) 使模型提出完整 v2 清单后暂停为 `waiting_approval`，由宿主通过精确摘要批准或拒绝。默认审批只处理决定及独立构建；显式 `resume`、携带原授权的 `--continue-task` / `continue_options`，或已单独登记的 worker，可以将决定和明确的执行回执交给原工具调用并继续会话。消费事件与检查点推进原子提交，重复审批不会推进后续任务。后台授权不包含自动审批，每个新提案仍需明确决定。Agent 提供完整清单、步骤、输入/挂载、资源限制、队列与继续执行接口，供 CodeStudio Next 等可信客户端展示并收集用户决定；摘要仍不代表源码及工具链的历史字节快照。
 
-当前 [本地任务服务](task-service.md) 已提供 stdio JSON-RPC、查询分页、事件重放、流式文本、启动/续跑/取消、持久队列、cron、worker、监督诊断和平台自启控制，并共用 CLI 执行入口。CodeStudio Next 作为独立客户端接入，Agent 继续负责执行侧的授权校验和恢复约束。[机器可读协议](../protocol/task-service.schema.json)、结构化错误和有界会话回执查询明确了断连后的处理规则；请求 ID 不是幂等键，临时文本不能断线重放。`worker_supervision`、`supervised_autostart`、`supervisor_diagnostics` 对应的显式监督、监督自启和诊断接口均纳入 43 个方法的契约。[凭据管理](credentials.md) 已提供环境/系统引用、当前用户系统存储、CLI 管理及操作边界轮换；本轮未增加凭据管理 RPC。Streamable HTTP MCP 已提供独立 Bearer 引用和有界 GET 响应恢复，服务通过 `mcp_streamable_http` 声明能力。统一验证入口、Windows/Linux CI 定义及用户级安装交付工具已提供；macOS 阶段 1 将扩展原生验证与 CI，后续阶段逐步覆盖系统集成、隔离和正式交付。各平台仍需按实际 runner 日志及独立干净机器上的真实登录结果验收。OAuth 登录与插件包通过异步操作接入，定义见 [OAuth](mcp-oauth.md)、[插件分发](plugins.md)；托管市场、发布者签名和动态客户端注册后续设计。跨重启请求幂等性须单独设计持久授权与动作关联。
+当前 [本地任务服务](task-service.md) 已提供 stdio JSON-RPC、查询分页、事件重放、流式文本、启动/续跑/取消、持久队列、cron、worker、监督诊断和平台自启控制，并共用 CLI 执行入口。CodeStudio Next 作为独立客户端接入，Agent 继续负责执行侧的授权校验和恢复约束。[机器可读协议](../protocol/task-service.schema.json)、结构化错误和有界会话回执查询明确了断连后的处理规则；请求 ID 不是幂等键，临时文本不能断线重放。`worker_supervision`、`supervised_autostart`、`supervisor_diagnostics` 对应的显式监督、监督自启和诊断接口均纳入 43 个方法的契约。[凭据管理](credentials.md) 已提供环境/系统引用、当前用户系统存储、CLI 管理及操作边界轮换；本轮未增加凭据管理 RPC。Streamable HTTP MCP 已提供独立 Bearer 引用和有界 GET 响应恢复，服务通过 `mcp_streamable_http` 声明能力。统一验证入口、Windows/Linux CI 定义及用户级安装交付工具已提供；macOS 阶段 1 已扩展原生验证与 CI 定义，实际通过范围以回执为准，后续阶段逐步覆盖系统集成、隔离和正式交付。各平台仍需按实际 runner 日志及独立干净机器上的真实登录结果验收。OAuth 登录与插件包通过异步操作接入，定义见 [OAuth](mcp-oauth.md)、[插件分发](plugins.md)；托管市场、发布者签名和动态客户端注册后续设计。跨重启请求幂等性须单独设计持久授权与动作关联。
 
 本地模型分成两层：当前通过本地 HTTP 服务推理；后续管理服务、模型资源与配置。嵌入 llama.cpp 是可选方向，尚未决定；不会因为核心使用 C++ 就默认绑定某个推理引擎。

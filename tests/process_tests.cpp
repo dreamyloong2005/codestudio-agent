@@ -1,4 +1,5 @@
 #include "codestudio/types.hpp"
+#include "darwin_launch_state.hpp"
 
 #include <chrono>
 #include <cstdlib>
@@ -85,6 +86,17 @@ void run_process_tests(const std::filesystem::path& fixture_path) {
 #endif
     check(result.exit_code == 0 && result.output == expected, "Unicode/quoting/empty arguments round trip");
     check(!result.timed_out && !result.cancelled && !result.output_truncated, "normal completion flags");
+#ifdef __APPLE__
+    {
+        DarwinLaunchState host_state;
+        request.arguments = {"launch-state", std::to_string(host_state.sentinel)};
+        result = run_process(request, cancelled);
+    }
+    check(result.exit_code == 0 && result.output ==
+          "descriptor-closed\nstdin-open\nsigpipe-default\nsignal-unblocked\n",
+          "Darwin launch closes inherited descriptors, supplies stdin, and resets child signals");
+#endif
+
 
     request.arguments = {"streams"};
     result = run_process(request, cancelled);

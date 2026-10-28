@@ -70,6 +70,11 @@ void socket_start() {}
 void nonblock(Socket value) {
     require(fcntl(value, F_SETFL, fcntl(value, F_GETFL) | O_NONBLOCK) == 0 &&
             fcntl(value, F_SETFD, FD_CLOEXEC) == 0, "callback socket setup failed");
+#ifdef __APPLE__
+    const int enabled = 1;
+    require(setsockopt(value, SOL_SOCKET, SO_NOSIGPIPE, &enabled, sizeof enabled) == 0,
+            "callback socket signal setup failed");
+#endif
 }
 bool would_block() { return errno == EAGAIN || errno == EWOULDBLOCK || errno == EINTR; }
 #endif
@@ -141,7 +146,7 @@ CredentialLock::CredentialLock(const std::string& name, Deadline deadline, const
         if (result == WAIT_OBJECT_0 || result == WAIT_ABANDONED) { impl_->held = true; break; }
         require(result == WAIT_TIMEOUT, "credential lock failed");
     }
-#else
+#elif defined(__linux__)
     // Linux abstract sockets provide kernel-owned lifetime and cross-process
     // exclusion without stale filesystem lock files. This is coordination, not
     // an access-control boundary; secure-store ownership remains authoritative.
@@ -156,6 +161,8 @@ CredentialLock::CredentialLock(const std::string& name, Deadline deadline, const
         require(errno == EADDRINUSE, "credential lock failed"); idle(deadline, cancelled);
     }
     check(deadline, cancelled);
+#else
+    fail("native OAuth credentials and locking are unsupported on this platform");
 #endif
 }
 CredentialLock::~CredentialLock() = default;
@@ -250,7 +257,7 @@ std::string Callback::wait(const std::string& state, const std::string& issuer, 
         const std::string body = success ? "Authorization received. You may close this window." : "Invalid authorization callback.";
         const auto response = std::string(success ? "HTTP/1.1 200 OK\r\n" : "HTTP/1.1 400 Bad Request\r\n") +
             "Content-Type: text/plain; charset=utf-8\r\nCache-Control: no-store\r\nReferrer-Policy: no-referrer\r\nConnection: close\r\nContent-Length: " + std::to_string(body.size()) + "\r\n\r\n" + body;
-#ifdef _WIN32
+#if defined(_WIN32) || defined(__APPLE__)
         (void)send(accepted, response.data(), static_cast<int>(response.size()), 0);
 #else
         (void)send(accepted, response.data(), response.size(), MSG_NOSIGNAL);

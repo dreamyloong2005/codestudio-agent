@@ -387,6 +387,7 @@ void write_manifest(const fs::path& path, const Json& value, std::size_t max_byt
 }
 
 #ifndef __linux__
+#ifndef __APPLE__
 std::string read_build_manifest_snapshot(const fs::path& manifest, std::size_t max_bytes) {
 #ifdef _WIN32
     const auto path = checked_absolute(manifest);
@@ -417,6 +418,7 @@ std::string read_build_manifest_snapshot(const fs::path& manifest, std::size_t m
     fail("safe build manifests currently require Windows");
 #endif
 }
+#endif
 
 BuildCopyStats import_build_tree(const fs::path& source_root, const fs::path& destination,
     const BuildImportOptions& options, const std::atomic_bool& cancelled) {

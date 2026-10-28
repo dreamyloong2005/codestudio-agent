@@ -1,8 +1,8 @@
-# CodeStudio-Agent 0.1.0 implementation boundary
+# CodeStudioAgent 0.1.0 implementation boundary
 
-Decision: C++26 + XMake; mcpp is a future candidate. Public product name is CodeStudio-Agent; executable/namespace identifiers use codestudio-agent/codestudio.
+Decision: C++26 + XMake; mcpp is a future candidate. Public product name is CodeStudioAgent; executable/namespace identifiers use codestudio-agent/codestudio.
 
-CodeStudio-Agent owns the headless runtime/harness, CLI, task service, authorization, isolation and scheduling. Desktop UI belongs to the separate CodeStudio Next project, including its UI technology choices. Next can consume the task-service protocol as a trusted client; execution policy, approval validation and recovery remain enforced by Agent.
+CodeStudioAgent owns the headless runtime/harness, CLI, task service, authorization, isolation and scheduling. Desktop UI belongs to the separate CodeStudio Next project, including its UI technology choices. Next can consume the task-service protocol as a trusted client; execution policy, approval validation and recovery remain enforced by Agent.
 
 The application module owns configuration and explicit grants through execute_command. Both the CLI adapter and parent-owned stdio task service call this entry point; the CLI retains terminal presentation, signals and argument encoding. A workspace lock and database lock admit one active runner. The kernel owns the bounded model/tool loop. ToolBroker validates each call before intent persistence and again immediately before execution. Store records action intent and dispatch in durable transactions before effects, followed by result/effect receipts. ModelProvider only proposes operations; it never executes tools directly.
 

@@ -7,7 +7,7 @@
 #ifdef _WIN32
 #include <windows.h>
 #include <winioctl.h>
-#elif defined(__linux__)
+#elif defined(__linux__) || defined(__APPLE__)
 #include <sys/stat.h>
 #include <unistd.h>
 #endif
@@ -350,6 +350,43 @@ void run_build_workspace_tests() {
     check(!fs::exists(cleanup) && read(outside / "sentinel") == "untouched" && mode(outside / "sentinel") == outside_mode,
         "recursive cleanup escaped or changed external permissions");
     rejects([&] { safe_remove_owned_tree("/"); }, "cleanup accepted filesystem root");
+#elif defined(__APPLE__)
+    using namespace codestudio;
+    struct SnapshotFixture {
+        fs::path root;
+        SnapshotFixture() {
+            root = fs::temp_directory_path() / ("codestudio-manifest-tests-" + new_id());
+            fs::create_directory(root); root = fs::canonical(root);
+        }
+        ~SnapshotFixture() { std::error_code ignored; fs::remove_all(root, ignored); }
+    } fixture;
+    const auto file = fixture.root / "manifest.json";
+    const std::string bytes{"A\0\xff\x01Z", 5};
+    { std::ofstream output(file, std::ios::binary); output.write(bytes.data(), bytes.size()); }
+    check(read_build_manifest_snapshot(file) == bytes, "snapshot did not preserve raw bytes");
+    check(read_build_manifest_snapshot(file, bytes.size()) == bytes, "exact byte limit rejected");
+    rejects([&] { read_build_manifest_snapshot(file, bytes.size() - 1); }, "oversize snapshot accepted");
+    rejects([&] { read_build_manifest_snapshot(fixture.root); }, "directory accepted as a manifest");
+    rejects([&] { read_build_manifest_snapshot("manifest.json"); }, "relative manifest accepted");
+    rejects([&] { read_build_manifest_snapshot(fixture.root / ".." / fixture.root.filename() / file.filename()); },
+            "parent traversal accepted");
+    const auto link = fixture.root / "linked.json";
+    fs::create_symlink(file, link);
+    rejects([&] { read_build_manifest_snapshot(link); }, "symlink manifest followed");
+    const auto alias = fixture.root / "alias";
+    fs::create_directory_symlink(fixture.root, alias);
+    rejects([&] { read_build_manifest_snapshot(alias / file.filename()); }, "symlink ancestor followed");
+    const auto hardlink = fixture.root / "hardlink.json";
+    fs::create_hard_link(file, hardlink);
+    rejects([&] { read_build_manifest_snapshot(file); }, "hard-linked source accepted");
+    rejects([&] { read_build_manifest_snapshot(hardlink); }, "hard-linked manifest accepted");
+    fs::remove(hardlink);
+    const auto fifo = fixture.root / "fifo.json";
+    check(mkfifo(fifo.c_str(), 0600) == 0, "create FIFO fixture");
+    rejects([&] { read_build_manifest_snapshot(fifo); }, "FIFO accepted as a manifest");
+    check(read_build_manifest_snapshot(file) == bytes, "failed reads changed the source");
+    std::atomic_bool cancelled{false};
+    rejects([&] { import_build_tree("/source", "/destination", {}, cancelled); }, "unsupported import must fail closed");
 #else
     std::atomic_bool cancelled{false};
     rejects([&] { codestudio::import_build_tree("/source", "/destination", {}, cancelled); }, "unsupported platform must fail closed");

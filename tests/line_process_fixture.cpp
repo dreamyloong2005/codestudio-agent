@@ -16,6 +16,12 @@
 #include <io.h>
 #else
 #include <unistd.h>
+#ifdef __APPLE__
+#include <cerrno>
+#include <fcntl.h>
+#include <pthread.h>
+#include <signal.h>
+#endif
 #endif
 
 namespace {
@@ -41,6 +47,28 @@ int run(const std::vector<std::string>& arguments) {
     using namespace std::chrono_literals;
     if (arguments.size() < 2) return 2;
     const auto& mode = arguments[1];
+#ifdef __APPLE__
+    if (mode == "launch-state") {
+        const auto descriptor = std::stoi(arguments.at(2));
+        const bool descriptor_closed = fcntl(descriptor, F_GETFD) == -1 && errno == EBADF;
+        struct sigaction action{};
+        sigset_t mask;
+        if (sigaction(SIGPIPE, nullptr, &action) || pthread_sigmask(SIG_BLOCK, nullptr, &mask)) return 7;
+        std::cout << (descriptor_closed ? "descriptor-closed" : "descriptor-leaked") << '\n'
+                  << (fcntl(STDIN_FILENO, F_GETFD) >= 0 ? "stdin-open" : "stdin-closed") << '\n'
+                  << (action.sa_handler == SIG_DFL ? "sigpipe-default" : "sigpipe-inherited") << '\n'
+                  << (sigismember(&mask, SIGUSR1) == 0 ? "signal-unblocked" : "signal-blocked") << '\n';
+        return 0;
+    }
+#endif
+#ifndef _WIN32
+    if (mode == "closed-input") {
+        close(STDIN_FILENO);
+        std::cout << "input-closed\n" << std::flush;
+        std::this_thread::sleep_for(30s);
+        return 0;
+    }
+#endif
     if (mode == "hang") { std::this_thread::sleep_for(30s); return 0; }
     if (mode == "exit") return 17;
     if (mode == "partial") { std::cout << "unfinished" << std::flush; return 0; }

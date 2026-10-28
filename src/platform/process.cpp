@@ -24,6 +24,9 @@
 #include <signal.h>
 #include <sys/wait.h>
 #include <unistd.h>
+#ifdef __APPLE__
+#include "darwin_spawn.hpp"
+#endif
 #ifdef __linux__
 #include "linux_sandbox.hpp"
 #include <sys/prctl.h>
@@ -218,7 +221,6 @@ private:
 
 void make_pipe(int (&fds)[2]) {
     if (pipe(fds) != 0) fail_posix("pipe");
-#ifdef __linux__
     for (auto& fd : fds) if (fd < 3) {
         const auto duplicate = fcntl(fd, F_DUPFD_CLOEXEC, 3);
         if (duplicate < 0) {
@@ -228,7 +230,6 @@ void make_pipe(int (&fds)[2]) {
         }
         close(fd); fd = duplicate;
     }
-#endif
     if (fcntl(fds[0], F_SETFD, FD_CLOEXEC) == -1 || fcntl(fds[1], F_SETFD, FD_CLOEXEC) == -1) {
         const auto error = errno;
         close(fds[0]); close(fds[1]);
@@ -389,25 +390,32 @@ static ProcessResult run_process_impl(const ProcessRequest& request, const std::
     std::vector<char*> envp;
     for (auto& entry : environment) envp.push_back(entry.data());
     envp.push_back(nullptr);
-    int output_fds[2], error_fds[2];
+    int output_fds[2];
     make_pipe(output_fds);
     Descriptor output_read(output_fds[0]), output_write(output_fds[1]);
+#ifndef __APPLE__
+    int error_fds[2];
     make_pipe(error_fds);
     Descriptor error_read(error_fds[0]), error_write(error_fds[1]);
+#endif
     Descriptor input(open("/dev/null", O_RDONLY | O_CLOEXEC));
     if (input.get() < 0) fail_posix("open(/dev/null)");
-#ifdef __linux__
     if (input.get() < 3) {
         const auto duplicate = fcntl(input.get(), F_DUPFD_CLOEXEC, 3);
         if (duplicate < 0) fail_posix("fcntl(F_DUPFD_CLOEXEC input)");
         input.reset(duplicate);
     }
-#endif
     if (fcntl(output_read.get(), F_SETFL, O_NONBLOCK) == -1) fail_posix("fcntl(O_NONBLOCK)");
     result.cancelled = cancelled.load();
     result.timed_out = !result.cancelled && Clock::now() - started >= request.timeout;
     if (result.cancelled || result.timed_out) return result;
+#ifdef __APPLE__
+    const auto pid = darwin_spawn(arguments.front().c_str(), argv.data(), envp.data(),
+        request.working_directory.c_str(), input.get(), output_write.get(), output_write.get());
+#else
+#ifdef __linux__
     const auto parent_pid = getpid();
+#endif
     const auto pid = fork();
     if (pid < 0) fail_posix("fork");
     if (pid == 0) {
@@ -433,6 +441,7 @@ static ProcessResult run_process_impl(const ProcessRequest& request, const std::
         execve(arguments.front().c_str(), argv.data(), envp.data());
         child_error(errno);
     }
+#endif
     struct ChildGuard {
         pid_t pid;
 #ifdef __linux__
@@ -456,11 +465,10 @@ static ProcessResult run_process_impl(const ProcessRequest& request, const std::
         ,sandbox
 #endif
     };
+#ifndef __APPLE__
     // Both parent and child set the group to remove the fork/exec race.
     if (setpgid(pid, pid) != 0 && errno != EACCES && errno != ESRCH) fail_posix("setpgid");
     error_write.reset();
-    output_write.reset();
-    input.reset();
     int launch_error = 0;
     ssize_t error_count;
     do { error_count = read(error_read.get(), &launch_error, sizeof(launch_error)); }
@@ -468,6 +476,9 @@ static ProcessResult run_process_impl(const ProcessRequest& request, const std::
     if (error_count < 0) fail_posix("read(exec status)");
     if (error_count > 0) throw std::system_error(launch_error, std::generic_category(), "execve");
     error_read.reset();
+#endif
+    output_write.reset();
+    input.reset();
     std::array<char, 8192> buffer{};
     bool terminated = false, pipe_closed = false;
     int status = 0;

@@ -1,0 +1,448 @@
+{
+  "format": 2,
+  "product": "CodeStudio-Agent",
+  "platform": "macosx",
+  "arch": "arm64",
+  "mode": "debug",
+  "started_at": "2026-10-28T01:16:05.972806+00:00",
+  "status": "succeeded",
+  "selected_suites": [
+    "toolchain",
+    "native",
+    "schema",
+    "provider",
+    "streaming",
+    "contract",
+    "service",
+    "credentials",
+    "cli",
+    "local_models",
+    "mcp",
+    "mcp_http",
+    "plugins",
+    "resume",
+    "scheduler",
+    "cron",
+    "package",
+    "verification"
+  ],
+  "omitted_suites": [],
+  "unsupported_suites": {
+    "mcp_oauth": "macOS native OAuth storage and refresh locking belong to stage 2",
+    "plugin_sandbox": "macOS OS isolation belongs to stage 3",
+    "sandbox": "macOS OS sandbox execution belongs to stage 3; refusal is covered by native/CLI tests",
+    "autostart": "macOS LaunchAgent integration belongs to stage 2; refusal is covered by native/CLI tests",
+    "sandbox_resources": "macOS isolated resource ownership and reclamation belong to stage 3",
+    "supervisor": "macOS background worker supervision belongs to stage 2",
+    "real_build": "macOS isolated workspace execution belongs to stage 3",
+    "delivery": "macOS installation, signing and notarization belong to stage 4"
+  },
+  "build_requested": true,
+  "steps": [
+    {
+      "name": "configure",
+      "command": [
+        "xmake",
+        "f",
+        "-p",
+        "macosx",
+        "-a",
+        "arm64",
+        "--toolchain=llvm",
+        "-m",
+        "debug",
+        "--sdk=/Users/taosiyuan/codestudio-agent/build/toolchains/LLVM-22.1.8-macOS-ARM64",
+        "--macos_libcxx=/Users/taosiyuan/codestudio-agent/build/toolchains/libcxx-22.1.8-tzdb",
+        "--target_minver=15.0",
+        "-y"
+      ],
+      "log": "configure.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 0.242
+    },
+    {
+      "name": "xmake-build",
+      "command": [
+        "xmake",
+        "build",
+        "-a",
+        "-j",
+        "6"
+      ],
+      "log": "xmake-build.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 1.484
+    },
+    {
+      "name": "toolchain",
+      "command": [
+        "/Users/taosiyuan/codestudio-agent/build/macosx/arm64/debug/toolchain-probe"
+      ],
+      "log": "toolchain.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 0.02,
+      "capabilities": {
+        "cplusplus": 202400,
+        "current_zone": "Asia/Shanghai",
+        "cxx26": true,
+        "dependencies": {
+          "curl": "libcurl/8.7.1 SecureTransport (LibreSSL/3.3.6) zlib/1.2.12 nghttp2/1.68.1",
+          "json": "3.12.0",
+          "openssl": "OpenSSL 3.6.5 29 Sep 2026",
+          "sqlite": "3.50.4"
+        },
+        "format": "probe:07",
+        "libcpp_version": 220108,
+        "timezone_dst": true,
+        "timezone_offsets": true,
+        "tzdb_version": "2026c-rearguard"
+      }
+    },
+    {
+      "name": "native",
+      "command": [
+        "/Users/taosiyuan/codestudio-agent/build/macosx/arm64/debug/agent-tests"
+      ],
+      "log": "native.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 7.363,
+      "native_groups": 22
+    },
+    {
+      "name": "schema",
+      "command": [
+        "/Users/taosiyuan/codestudio-agent/build/contract-python/bin/python",
+        "tests/contract_schema.py"
+      ],
+      "log": "schema.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 0.351,
+      "cases": 13,
+      "skipped": 0,
+      "passed": 13
+    },
+    {
+      "name": "provider",
+      "command": [
+        "/Users/taosiyuan/codestudio-agent/build/contract-python/bin/python",
+        "tests/provider_integration.py",
+        "/Users/taosiyuan/codestudio-agent/build/macosx/arm64/debug/provider-fixture"
+      ],
+      "log": "provider.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 1.831,
+      "cases": 15,
+      "skipped": 0,
+      "passed": 15
+    },
+    {
+      "name": "streaming",
+      "command": [
+        "/Users/taosiyuan/codestudio-agent/build/contract-python/bin/python",
+        "tests/streaming_integration.py",
+        "/Users/taosiyuan/codestudio-agent/build/macosx/arm64/debug/provider-fixture",
+        "/Users/taosiyuan/codestudio-agent/build/macosx/arm64/debug/codestudio-agent"
+      ],
+      "log": "streaming.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 4.493,
+      "cases": 18,
+      "skipped": 0,
+      "passed": 18
+    },
+    {
+      "name": "contract",
+      "command": [
+        "/Users/taosiyuan/codestudio-agent/build/contract-python/bin/python",
+        "tests/client_contract_integration.py",
+        "/Users/taosiyuan/codestudio-agent/build/macosx/arm64/debug/codestudio-agent"
+      ],
+      "log": "contract.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 3.403,
+      "cases": 16,
+      "skipped": 3,
+      "passed": 13
+    },
+    {
+      "name": "service",
+      "command": [
+        "/Users/taosiyuan/codestudio-agent/build/contract-python/bin/python",
+        "tests/client_contract_integration.py",
+        "/Users/taosiyuan/codestudio-agent/build/macosx/arm64/debug/codestudio-agent",
+        "--service-suite"
+      ],
+      "log": "service.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 17.766,
+      "cases": 28,
+      "skipped": 0,
+      "passed": 28
+    },
+    {
+      "name": "credentials",
+      "command": [
+        "/Users/taosiyuan/codestudio-agent/build/contract-python/bin/python",
+        "tests/credentials_integration.py",
+        "/Users/taosiyuan/codestudio-agent/build/macosx/arm64/debug/codestudio-agent"
+      ],
+      "log": "credentials.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 0.837,
+      "cases": 17,
+      "skipped": 6,
+      "passed": 11
+    },
+    {
+      "name": "cli",
+      "command": [
+        "/Users/taosiyuan/codestudio-agent/build/contract-python/bin/python",
+        "tests/cli_integration.py",
+        "/Users/taosiyuan/codestudio-agent/build/macosx/arm64/debug/codestudio-agent"
+      ],
+      "log": "cli.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 1.1,
+      "cases": 15,
+      "skipped": 0,
+      "passed": 15
+    },
+    {
+      "name": "local_models",
+      "command": [
+        "/Users/taosiyuan/codestudio-agent/build/contract-python/bin/python",
+        "tests/local_models_integration.py",
+        "/Users/taosiyuan/codestudio-agent/build/macosx/arm64/debug/codestudio-agent"
+      ],
+      "log": "local_models.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 1.052,
+      "cases": 15,
+      "skipped": 0,
+      "passed": 15
+    },
+    {
+      "name": "mcp",
+      "command": [
+        "/Users/taosiyuan/codestudio-agent/build/contract-python/bin/python",
+        "tests/mcp_integration.py",
+        "/Users/taosiyuan/codestudio-agent/build/macosx/arm64/debug/codestudio-agent"
+      ],
+      "log": "mcp.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 2.396,
+      "cases": 13,
+      "skipped": 0,
+      "passed": 13
+    },
+    {
+      "name": "mcp_http",
+      "command": [
+        "/Users/taosiyuan/codestudio-agent/build/contract-python/bin/python",
+        "tests/mcp_http_integration.py",
+        "/Users/taosiyuan/codestudio-agent/build/macosx/arm64/debug/codestudio-agent"
+      ],
+      "log": "mcp_http.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 7.213,
+      "cases": 39,
+      "skipped": 1,
+      "passed": 38
+    },
+    {
+      "name": "plugins",
+      "command": [
+        "/Users/taosiyuan/codestudio-agent/build/contract-python/bin/python",
+        "tests/plugins_integration.py",
+        "/Users/taosiyuan/codestudio-agent/build/macosx/arm64/debug/codestudio-agent"
+      ],
+      "log": "plugins.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 13.762,
+      "cases": 23,
+      "skipped": 0,
+      "passed": 23
+    },
+    {
+      "name": "resume",
+      "command": [
+        "/Users/taosiyuan/codestudio-agent/build/contract-python/bin/python",
+        "tests/resume_integration.py",
+        "/Users/taosiyuan/codestudio-agent/build/macosx/arm64/debug/codestudio-agent"
+      ],
+      "log": "resume.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 1.704,
+      "cases": 18,
+      "skipped": 0,
+      "passed": 18
+    },
+    {
+      "name": "scheduler",
+      "command": [
+        "/Users/taosiyuan/codestudio-agent/build/contract-python/bin/python",
+        "tests/scheduler_integration.py",
+        "/Users/taosiyuan/codestudio-agent/build/macosx/arm64/debug/codestudio-agent"
+      ],
+      "log": "scheduler.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 15.114,
+      "cases": 19,
+      "skipped": 1,
+      "passed": 18
+    },
+    {
+      "name": "cron",
+      "command": [
+        "/Users/taosiyuan/codestudio-agent/build/contract-python/bin/python",
+        "tests/cron_integration.py",
+        "/Users/taosiyuan/codestudio-agent/build/macosx/arm64/debug/codestudio-agent"
+      ],
+      "log": "cron.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 6.555,
+      "cases": 12,
+      "skipped": 0,
+      "passed": 12
+    },
+    {
+      "name": "package",
+      "command": [
+        "/Users/taosiyuan/codestudio-agent/build/contract-python/bin/python",
+        "tests/package_tests.py"
+      ],
+      "log": "package.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 0.069,
+      "cases": 11,
+      "skipped": 0,
+      "passed": 11
+    },
+    {
+      "name": "verification",
+      "command": [
+        "/Users/taosiyuan/codestudio-agent/build/contract-python/bin/python",
+        "tests/verification_tests.py"
+      ],
+      "log": "verification.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 1.405,
+      "cases": 19,
+      "skipped": 0,
+      "passed": 19
+    }
+  ],
+  "test_environment": {
+    "temporary_directory": "/private/var/folders/wh/lj7xnlsd4ssdrgpwkw3vnsj40000gn/T"
+  },
+  "source": {
+    "sha256": "daaffe35b09b34c74d7a785d9d4fe91a42a3f5e603ab6608623b48c1ce8d19ec",
+    "files": 205
+  },
+  "toolchain": {
+    "python": "3.13.14",
+    "requirements": {
+      "format": 2,
+      "python_minimum": "3.11.0",
+      "xmake_minimum": "3.0.5",
+      "jsonschema": "4.23.0",
+      "windows": {
+        "arch": "x64",
+        "toolchain": "clang-cl",
+        "compiler_minimum": "22.0.0",
+        "requirements": [
+          "Visual Studio 2022 C++ build tools and Windows SDK",
+          "LLVM clang-cl 22 or newer"
+        ]
+      },
+      "linux": {
+        "arch": "x86_64",
+        "toolchain": "gcc",
+        "compiler_minimum": "16.0.0",
+        "pkg_config_minimum": {
+          "nlohmann_json": "3.12.0",
+          "sqlite3": "3.50.4",
+          "libcurl": "8.15.0",
+          "openssl": "3.0.0",
+          "libsecret-1": "0.21.0"
+        },
+        "requirements": [
+          "bubblewrap at /usr/bin/bwrap",
+          "tzdata",
+          "cgroup v2 delegation with cpu/memory/pids",
+          "user namespaces and seccomp"
+        ]
+      },
+      "macosx": {
+        "arch": "arm64",
+        "toolchain": "llvm",
+        "compiler_minimum": "22.1.8",
+        "llvm_environment": "CODESTUDIO_LLVM_ROOT",
+        "requirements": [
+          "Native Apple Silicon Mac (arm64)",
+          "Xcode command line tools and macOS SDK",
+          "LLVM 22.1.8 or newer and matching standalone libc++/libc++abi built with timezone support; bundled Apple and LLVM macOS libc++ disable timezones",
+          "Runtime C++26, std::format and IANA timezone/DST probe must pass",
+          "No Linux libsecret, namespace or cgroup dependency"
+        ],
+        "macos_minimum": "15.0",
+        "libcxx_environment": "CODESTUDIO_LIBCXX_ROOT"
+      }
+    },
+    "libcxx_root": "/Users/taosiyuan/codestudio-agent/build/toolchains/libcxx-22.1.8-tzdb",
+    "libcxx_sha256": {
+      "libc++.1.dylib": "37a40e084b7f1d1b68f509cd48cb6baf269e95c4a5109408f2215e5e33521a90",
+      "libc++abi.1.dylib": "e1b798f6ac9514e5b32ee4b7b066d472d060090bd7d87f5c964942ded35453e7",
+      "libc++experimental.a": "581e44feb2571570c90e857f1109097593e3890d5b48ff71590dbd1bd9a9543b"
+    },
+    "macos": "26.5.2",
+    "deployment_target": "15.0",
+    "jsonschema": "4.23.0",
+    "xmake": "xmake v3.0.9+HEAD.2b184e178, A cross-platform build utility based on Lua",
+    "compiler": "clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)",
+    "llvm_root": "/Users/taosiyuan/codestudio-agent/build/toolchains/LLVM-22.1.8-macOS-ARM64",
+    "sdk": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk",
+    "sdk_version": "26.5"
+  },
+  "tested_artifacts": {
+    "codestudio-agent": "e56b1c6802bd58534ad4cd948e08c597dd839a0b71a2c45c3a26d34cecc10e59",
+    "agent-tests": "6082540263a0e53265d26dfa8c738ce61bceeab5899ae3172be4b65a96e25345",
+    "provider-fixture": "8679b0692b72cc8fb3345e631d29f14982ce17f7b6d8dadab846f36fa0ae7f9d",
+    "process-fixture": "a11e6c7e883d6eddcb6289036394bca9d259def7f5d77895ba05fe316ba56274",
+    "line-process-fixture": "23eb25837ec9a976b371cb5539b5b5f9ad13a10765bddfc19f2a3fba9eca5c98",
+    "mcp-fixture": "b2d40eb2ddd97d87781da36274d355ff1d10fab1404454a3f7adc9a1a69cffe5",
+    "sandbox-fixture": "a47ee6701941831c1c1dd22820a624b967fcf39fb5fa5e747c22f8fe167b0f72",
+    "build-fixture": "e3afbe84ac78e6b2d141fce6ac5a0dc67e0813da282855b51050fe62f32b49fe",
+    "sandbox-resource-fixture": "1c014c34c9cd7c08c267ab373ab518a9cc92230d58897a609daf1420e861b155",
+    "plugin-sandbox-fixture": "b39a0d4ac4fed2ea1ae790c03b1ff3a0ca703cdb21fa4858cfd0a0140ec0bd32",
+    "libplugin-sandbox-library.dylib": "266f66c5d06d58a884f5b25b8788554fa501ea70d17326add7b331a26bc20fbb",
+    "libplugin-sandbox-dependency.dylib": "f2b7715e692258272bfbb072d674ff6a14d0e32a2c54437d7d0b3f9ea54c4e8c",
+    "toolchain-probe": "fd52bd46795b095cc048a71d696669c0bdd7c6ff8479c53426c9863062ca37fc"
+  },
+  "artifact": {
+    "path": "build/macosx/arm64/debug/codestudio-agent",
+    "size": 14180512,
+    "sha256": "e56b1c6802bd58534ad4cd948e08c597dd839a0b71a2c45c3a26d34cecc10e59"
+  },
+  "finished_at": "2026-10-28T01:17:34.280881+00:00"
+}

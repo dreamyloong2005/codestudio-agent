@@ -1,0 +1,23 @@
+test_all_apis_stream_text_and_usage (__main__.StreamingTests.test_all_apis_stream_text_and_usage) ... ok
+test_cancel_and_timeout_during_stream (__main__.StreamingTests.test_cancel_and_timeout_during_stream) ... ok
+test_chat_tool_deltas_accept_optional_null_fields (__main__.StreamingTests.test_chat_tool_deltas_accept_optional_null_fields) ... ok
+test_cli_incomplete_stream_never_executes_tool (__main__.StreamingTests.test_cli_incomplete_stream_never_executes_tool) ... ok
+test_cli_short_text_is_displayed_before_terminal (__main__.StreamingTests.test_cli_short_text_is_displayed_before_terminal) ... ok
+test_cli_stream_redacts_split_key_and_preserves_json_stdout (__main__.StreamingTests.test_cli_stream_redacts_split_key_and_preserves_json_stdout) ... ok
+test_cli_streaming_tools_are_persisted_and_replayed (__main__.StreamingTests.test_cli_streaming_tools_are_persisted_and_replayed) ... ok
+test_content_type_malformed_json_and_size_limit (__main__.StreamingTests.test_content_type_malformed_json_and_size_limit) ... ok
+test_http_chunked_transfer_and_transport_truncation (__main__.StreamingTests.test_http_chunked_transfer_and_transport_truncation) ... ok
+test_http_failure_body_is_never_streamed (__main__.StreamingTests.test_http_failure_body_is_never_streamed) ... ok
+test_in_stream_error_never_echoes_response_body (__main__.StreamingTests.test_in_stream_error_never_echoes_response_body) ... ok
+test_missing_terminal_rejects_complete_looking_tool (__main__.StreamingTests.test_missing_terminal_rejects_complete_looking_tool) ... ok
+test_multiline_sse_data_is_one_json_event (__main__.StreamingTests.test_multiline_sse_data_is_one_json_event) ... ok
+test_non_stream_responses_and_messages (__main__.StreamingTests.test_non_stream_responses_and_messages) ... ok
+test_post_terminal_and_duplicate_key_rejected (__main__.StreamingTests.test_post_terminal_and_duplicate_key_rejected) ... ok
+test_selected_full_endpoint_and_conflicting_endpoint (__main__.StreamingTests.test_selected_full_endpoint_and_conflicting_endpoint) ... ok
+test_text_arrives_before_server_releases_terminal (__main__.StreamingTests.test_text_arrives_before_server_releases_terminal) ... ok
+test_three_turn_tool_roundtrip_for_each_api (__main__.StreamingTests.test_three_turn_tool_roundtrip_for_each_api) ... ok
+
+----------------------------------------------------------------------
+Ran 18 tests in 4.115s
+
+OK

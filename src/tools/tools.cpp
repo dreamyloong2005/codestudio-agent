@@ -22,6 +22,9 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#ifdef __APPLE__
+#include <CoreFoundation/CoreFoundation.h>
+#endif
 #endif
 
 namespace codestudio {
@@ -146,9 +149,38 @@ void require_string(const Json& value, std::string_view key) {
 void check_protected(const ToolPolicy& policy, const fs::path& path) {
     for (const auto& protected_path : policy.protected_paths) {
         if (within(path, protected_path)) fail("The requested path is protected application state.");
-        // A hard link to a specifically protected file must not bypass policy.
+        // Check ancestor identities as well as spelling: on a case-insensitive
+        // volume, .STATE/new.db can alias a protected .state directory even
+        // before the final file exists. This also covers Unicode aliases.
         std::error_code error;
-        if (fs::equivalent(path, protected_path, error) && !error) fail("The requested file aliases protected application state.");
+        for (auto ancestor = path; !ancestor.empty();) {
+            if (fs::equivalent(ancestor, protected_path, error) && !error)
+                fail("The requested path aliases protected application state.");
+#ifdef __APPLE__
+            // Protected SQLite sidecars may not exist yet. Match their basename
+            // with Unicode normalization and the volume case policy after binding
+            // the parent. Invalid UTF-8 is refused rather than guessed.
+            error.clear();
+            if (fs::equivalent(ancestor.parent_path(), protected_path.parent_path(), error) && !error) {
+                const auto left = ancestor.filename().native();
+                const auto right = protected_path.filename().native();
+                const auto first = CFStringCreateWithBytes(kCFAllocatorDefault,
+                    reinterpret_cast<const UInt8*>(left.data()), left.size(), kCFStringEncodingUTF8, false);
+                const auto second = CFStringCreateWithBytes(kCFAllocatorDefault,
+                    reinterpret_cast<const UInt8*>(right.data()), right.size(), kCFStringEncodingUTF8, false);
+                CFOptionFlags flags = kCFCompareNonliteral;
+                if (pathconf(ancestor.parent_path().c_str(), _PC_CASE_SENSITIVE) != 1) flags |= kCFCompareCaseInsensitive;
+                const bool aliases = !first || !second || CFStringCompare(first, second, flags) == kCFCompareEqualTo;
+                if (first) CFRelease(first);
+                if (second) CFRelease(second);
+                if (aliases) fail("The requested path aliases protected application state.");
+            }
+#endif
+            const auto parent = ancestor.parent_path();
+            if (parent == ancestor) break;
+            ancestor = parent;
+            error.clear();
+        }
     }
 }
 

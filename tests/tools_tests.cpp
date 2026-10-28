@@ -109,6 +109,20 @@ void run_tools_tests() {
     denied(readonly, read_call("../outside.txt"), "reading outside workspace rejected");
     denied(readonly, read_call(".state/tasks.db"), "protected state cannot be read");
     denied(writable, write_call(".state/new.txt", "no"), "new protected state cannot be written");
+    std::error_code case_error;
+    if (fs::equivalent(workspace / ".STATE", workspace / ".state", case_error) && !case_error) {
+        denied(readonly, read_call(".STATE/tasks.db"), "case aliases of protected directory cannot be read");
+        denied(writable, write_call(".STATE/new.txt", "no"), "case aliases of protected directory cannot be written");
+        ToolPolicy sidecar_policy = policy;
+        sidecar_policy.protected_paths = {workspace / "state.sqlite3-wal"};
+        ToolBroker sidecars(sidecar_policy);
+        denied(sidecars, write_call("STATE.SQLITE3-WAL", "no"), "absent protected sidecar case alias rejected");
+        ToolPolicy absent_directory = policy;
+        absent_directory.protected_paths = {workspace / ".missing-state"};
+        ToolBroker directories(absent_directory);
+        denied(directories, write_call(".MISSING-STATE/new.txt", "no"),
+               "absent protected directory case alias rejected");
+    }
     denied(writable, write_call("large.txt", std::string(33, 'x')), "oversized write rejected");
     denied(writable, {"write", "write_file", {{"path", "bad.txt"}, {"content", 1}}}, "non-string content rejected");
     put_file(workspace / "large.txt", std::string(33, 'x'));
@@ -149,6 +163,14 @@ void run_tools_tests() {
     link_error.clear();
     fs::create_hard_link(workspace / ".state" / "tasks.db", workspace / "state-alias.db", link_error);
     if (!link_error) denied(protect_file, read_call("state-alias.db"), "hard links to explicitly protected files rejected");
+
+#ifdef __APPLE__
+    ToolPolicy unicode_state = policy;
+    unicode_state.protected_paths = {workspace / fs::path(u8"état.sqlite3-wal")};
+    ToolBroker unicode_sidecars(unicode_state);
+    denied(unicode_sidecars, write_call("e\xcc\x81tat.sqlite3-wal", "no"),
+           "absent protected sidecar Unicode normalization alias rejected");
+#endif
 
     const auto schemas = readonly.schemas();
     expect(schemas.is_array() && schemas.size() == 1 && schemas[0].at("type") == "function", "denied capabilities are omitted from model schemas");
