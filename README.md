@@ -41,7 +41,7 @@ xmake run codestudio-agent doctor
 
 构建时检查 C++26 模式，工具链不支持时明确失败。暂未依赖 reflection、contracts 或 `std::execution`，这些能力将分别验证后启用。
 
-`set_xmakever("3.0.5")` 是最低版本要求；实际开发/CI 应固定通过验证的 XMake 精确版本。`xmake-requires.lock` 记录 Windows x64 依赖；默认 SQLite、JSON 库采用固定版本。Linux 已在 Arch WSL2、GCC 16、XMake 3.1.0 下构建运行，`--system_deps=y` 可使用发行版 pkg-config 开发包；HTTP 使用 libcurl，摘要使用 OpenSSL，系统凭据使用 libsecret；Linux 始终需要系统 libsecret-1 开发包和运行库。WSL 独立镜像、构建和验证命令见 [Linux 指南](docs/linux.md)。macOS 尚未验证。
+`set_xmakever("3.0.5")` 是最低版本要求；实际开发/CI 应固定通过验证的 XMake 精确版本。`xmake-requires.lock` 记录 Windows x64 依赖；默认 SQLite、JSON 库采用固定版本。Linux 已在 Arch WSL2、GCC 16、XMake 3.1.0 下构建运行，`--system_deps=y` 可使用发行版 pkg-config 开发包；HTTP 使用 libcurl，摘要使用 OpenSSL，系统凭据使用 libsecret；Linux 始终需要系统 libsecret-1 开发包和运行库。WSL 独立镜像、构建和验证命令见 [Linux 指南](docs/linux.md)。macOS 尚未验证；下一里程碑为 Apple Silicon 基础运行与原生验证，详见 [macOS 适配计划](docs/macos.md)。
 
 ## 无需密钥体验
 
@@ -278,6 +278,8 @@ tests/               C++ 行为测试与本地 HTTP/CLI 集成测试
 构建通过通用 v2 显式清单执行，清单与内部执行计划使用同一格式，宿主不生成工具专用命令或默认环境。通用宿主负责清单校验、授权、沙箱、资源限制、产物校验与账本。构建绑定和提案回执不包含插件标记；MCP 插件独立提供工具扩展能力，尚无外部 MCP 调用宿主隔离执行的接口。
 
 Windows/Linux 工作区导入/导出和 CPU/内存限制已实现，后续仍需 OS 磁盘配额、工具链自动打包、macOS 后端与跨平台 CI。其他构建工具的清单仍需分别验证依赖和沙箱兼容性。CodeStudio Next 通过本地任务 API 复用核心。本地模型后续工作已按要求暂停。Windows/Linux 持久续跑、cron、各自平台自启、显式有界 worker 监督、持久监督诊断和模型凭据引用/系统存储已实现，自启也可显式选择监督模式；远程 MCP 的 Streamable HTTP 和显式 Bearer 凭据已实现；公开客户端 OAuth、插件精确版本锁定和本地/HTTPS 分发已实现；多代理、费用估算、任务数据库加密和托管插件市场尚未实现。具体依赖与验收条件见 [开发路线](docs/roadmap.md)。
+
+下一阶段优先实施 **macOS arm64 基础运行与原生验证**，随后依次完成 Keychain/后台调度/LaunchAgent 系统集成、隔离后端和正式交付。原生 CI 从第一阶段接入；Intel/Universal 包按需求扩展。当前缺口、四阶段验收标准和真实 Mac 环境要求见 [macOS 适配计划](docs/macos.md)。
 
 MCP 扩展管理：[OAuth 登录与刷新](docs/mcp-oauth.md) · [插件版本锁定与分发](docs/plugins.md)。
 

@@ -30,7 +30,9 @@ python scripts/verify.py --mode release --skip-build --suite schema --suite mcp_
 
 [native.yml](../.github/workflows/native.yml) 提供 Windows/Linux 两个自托管 runner 作业，要求标签 `codestudio-agent` 及对应系统/架构。作业复用统一入口运行两种配置，打包并验证临时安装，最后上传报告和包作为 CI artifacts。它不发布 Release、不推送代码、不永久安装 Agent。runner 需要预先满足工具链、OS 隔离、网络依赖获取与测试会话条件。
 
-工作流只配置手动触发及 main 分支 push，未为不可信 PR 启用自托管执行。仓库当前没有 Git 元数据或远端；文件已交付不代表托管 CI 已经运行。接入仓库和配置 runner 后，CI 的实际状态以该次作业日志为准。
+工作流只配置手动触发及 main 分支 push，未为不可信 PR 启用自托管执行。仓库已建立 Git 远端；提交或推送工作流不代表托管 CI 已经通过。CI 的实际状态以对应 runner 的作业日志为准。
+
+macOS 当前尚无验证、打包或 CI 后端。[macOS 适配计划](macos.md)将原生 arm64 Debug/Release CI 列入阶段 1，将用户级安装/升级/卸载、签名、公证和干净 Mac 验收列入阶段 4；Intel/Universal 包按需求增加。各阶段回执必须明确覆盖范围，未实现的隔离或系统集成能力不得标为通过。
 
 ## 创建发布包
 
