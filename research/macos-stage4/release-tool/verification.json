@@ -1,0 +1,31 @@
+{
+  "scope": "Preliminary local release-tool verification, before final native stage 4 source freeze. Uses the prior native Release receipt in the integration probe package; not final delivery acceptance.",
+  "tests": {
+    "cases": 20,
+    "passed": 20,
+    "log": "tests.log",
+    "includes_real_native_ad_hoc_codesign": true,
+    "includes_real_native_dmg_mount_and_payload_validation": true,
+    "apple_notarization_calls": "mocked only",
+    "developer_id_private_key_used": false
+  },
+  "actual_bundled_package": {
+    "status": "development_only",
+    "receipt": "development-release.json",
+    "runtime": "development-runtime.json",
+    "prepare_log": "prepare-development.log",
+    "hardened_runtime": false,
+    "publisher_verified": false,
+    "notarized": false,
+    "source_note": "Actual package probe preceded the final README-only standalone-validation command addition; final native/delivery receipts are produced by the parent task."
+  },
+  "negative_probe": {
+    "log": "negative-ad-hoc-hardened-runtime.log",
+    "result": "Real macOS dyld refused bundled ad-hoc libraries when the executable enabled hardened runtime (no Team ID). Final development path omits hardened runtime, never weakens entitlements. Formal Developer ID requires same-Team signatures and hardened runtime."
+  },
+  "source_sha256": {
+    "scripts/release-macos.py": "5c3f918815c275c03c4645ff224c37a870eb75475ad7f1cefe3282b94eb67082",
+    "tests/macos_release_tests.py": "03548e1b643e33cb6bce40859219380f378aefc697d8ce844306c90e68d1c45d"
+  },
+  "stage4_accepted": false
+}

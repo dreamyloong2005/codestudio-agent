@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Package an already built native Release binary without building or publishing.
 
-Python 3.10+ is used only by release/installation tooling. The C++ Agent does
+Python 3.11+ is used only by release/installation tooling. The C++ Agent does
 not require Python. Only an empty output or an intact output from this tool may
 be replaced; repository data and previous milestone receipts are never touched.
 """
@@ -11,6 +11,7 @@ import argparse
 from contextlib import contextmanager
 import gzip
 import hashlib
+import importlib.util
 import json
 import os
 from pathlib import Path, PurePosixPath
@@ -33,7 +34,7 @@ TOTAL_LIMIT = 512 * 1024 * 1024
 COUNT_LIMIT = 512
 OUTPUT_MARKER = ".codestudio-package-output.json"
 ROOT = Path(__file__).resolve().parents[1]
-PATH_COMPONENT = re.compile(r"[A-Za-z0-9_][A-Za-z0-9_.-]*\Z")
+PATH_COMPONENT = re.compile(r"[A-Za-z0-9_][A-Za-z0-9_.+-]*\Z")
 RESERVED = {"con", "prn", "aux", "nul", *(f"com{i}" for i in range(1, 10)), *(f"lpt{i}" for i in range(1, 10))}
 
 
@@ -55,11 +56,22 @@ def digest(data):
 
 
 def native_target():
+    if sys.platform == "darwin":
+        require(platform.machine().lower() == "arm64", "macOS packages require native Apple Silicon arm64")
+        return "macosx", "arm64", ""
     require(platform.machine().lower() in ("amd64", "x86_64"), "Only native x86-64 packages are supported")
     if os.name == "nt":
         return "windows", "x64", ".exe"
-    require(sys.platform == "linux", "Packaging is supported only on Windows and Linux")
+    require(sys.platform == "linux", "Packaging requires Windows, Linux or macOS")
     return "linux", "x86_64", ""
+
+
+def macos_backend():
+    spec = importlib.util.spec_from_file_location("codestudio_macos_bundle", ROOT / "scripts/macos_bundle.py")
+    require(spec is not None and spec.loader is not None, "macOS bundle support is unavailable")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
 
 
 def safe_name(value):
@@ -167,9 +179,13 @@ def output_lock(output):
 
 
 def command(argv):
+    env = None
+    if sys.platform == "darwin":
+        env = {name: value for name, value in os.environ.items()
+               if not name.startswith(("DYLD_", "LD_"))}
     try:
         result = subprocess.run(argv, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                                timeout=30, check=False)
+                                timeout=30, check=False, env=env)
     except (OSError, subprocess.TimeoutExpired) as error:
         raise PackageError("Required build metadata command could not complete") from error
     require(result.returncode == 0 and len(result.stdout) <= 1024 * 1024,
@@ -177,7 +193,18 @@ def command(argv):
     return re.sub(r"\x1b\[[0-9;]*[A-Za-z]", "", result.stdout.decode("utf-8", errors="replace")).strip()
 
 
-def dependency_metadata(binary, target):
+def dependency_metadata(binary, target, macos=None):
+    if target == "macosx":
+        require(macos is not None, "macOS dependencies were not relocated and inspected")
+        libraries = sorted({item for info in macos["images"].values() for item in info["dependencies"]})
+        return {"inspection": "bounded Mach-O load commands; copied payload codesign --verify --strict",
+                "libraries": libraries,
+                "notes": ["Private libc++/libc++abi are bundled in lib/ using loader-relative dependencies.",
+                          "System libraries and frameworks are provided by macOS and are not bundled.",
+                          "Minimum deployment target is macOS 15.0 arm64; another OS version needs separate validation.",
+                          "The relocated development payload has ad-hoc signatures, not a verified publisher or notarization.",
+                          "Timezone data remains the macOS /usr/share/zoneinfo database.",
+                          "OS sandbox execution remains unavailable; no Linux virtual machine is included."]}
     if target == "linux":
         # The source is our already validated native build, never an arbitrary
         # downloaded ELF. ldd is not suitable for inspecting untrusted binaries.
@@ -223,7 +250,7 @@ def validate_verification(data, target, arch, binary_data):
             all(isinstance(value, str) for value in report["selected_suites"]), "Verification report has no declared suite scope")
     require(isinstance(report.get("omitted_suites"), list), "Verification report has no omitted suite scope")
     return {"state": "supplied", "sha256": digest(data), "selected_suites": report["selected_suites"],
-            "omitted_suites": report["omitted_suites"]}
+            "omitted_suites": report["omitted_suites"], "unsupported_suites": report.get("unsupported_suites", {})}
 
 
 def adapted_document(data, relative, shipped):
@@ -345,29 +372,63 @@ def package_locked(args):
         pe = int.from_bytes(binary_data[60:64], "little")
         require(binary_data[pe:pe + 4] == b"PE\0\0" and binary_data[pe + 4:pe + 6] == b"\x64\x86",
                 "Release binary is not a Windows x86-64 executable")
-    else:
+    elif target == "linux":
         require(binary_data[:6] == b"\x7fELF\x02\x01" and binary_data[18:20] == b"\x3e\x00",
                 "Release binary is not a Linux x86-64 executable")
+    else:
+        backend = macos_backend()
+        try:
+            backend.inspect_macho(binary_data, 2)
+        except backend.BundleError as error:
+            raise PackageError(str(error)) from error
+    report, report_data, verification = None, None, {"state": "not_supplied"}
+    if args.verification:
+        report_data = read_file(checked_path(args.verification), 4 * 1024 * 1024)
+        verification = validate_verification(report_data, target, arch, binary_data)
+        report = json.loads(report_data)
     xmake_source = read_file(ROOT / "xmake.lua").decode("utf-8")
     version_match = re.search(r'^set_version\("(\d+\.\d+\.\d+)"\)', xmake_source, re.MULTILINE)
     require(version_match is not None, "Cannot read project version")
     version = version_match[1]
-    require(command([str(binary), "version"]) == f"{PRODUCT} {version}", "Release binary version does not match project")
-    try:
-        doctor = json.loads(command([str(binary), "doctor"]))
-    except ValueError as error:
-        raise PackageError("Release binary has invalid diagnostics") from error
-    require(doctor.get("product") == PRODUCT and doctor.get("version") == version and
+    macos = None
+    images = {binary.name: binary_data}
+    if target == "macosx":
+        require(report is None or isinstance(report.get("toolchain"), dict),
+                "Verification report has no macOS runtime metadata")
+        runtime = (getattr(args, "macos_libcxx", None) or os.environ.get("CODESTUDIO_LIBCXX_ROOT") or
+                   (report or {}).get("toolchain", {}).get("libcxx_root"))
+        require(isinstance(runtime, (str, Path)) and bool(runtime),
+                "macOS packaging requires --macos-libcxx, CODESTUDIO_LIBCXX_ROOT, or a matching verification runtime")
+        runtime = checked_path(runtime)
+        (ROOT / "build").mkdir(exist_ok=True)
+        try:
+            images, macos = backend.prepare(binary_data, runtime, read_file, command, ROOT / "build", report)
+        except backend.BundleError as error:
+            raise PackageError(str(error)) from error
+        # The verified runtime bytes must be checked before executing anything
+        # that loads them. Run only the copied, inspected closure on macOS.
+        version_output = macos["relocated_smoke"]["version"]
+        doctor = macos["relocated_smoke"]["doctor"]
+    else:
+        version_output = command([str(binary), "version"])
+        try:
+            doctor = json.loads(command([str(binary), "doctor"]))
+        except ValueError as error:
+            raise PackageError("Release binary has invalid diagnostics") from error
+    require(version_output == f"{PRODUCT} {version}", "Release binary version does not match project")
+    require(isinstance(doctor, dict) and doctor.get("product") == PRODUCT and doctor.get("version") == version and
             isinstance(doctor.get("compiler"), str), "Release binary identity mismatch")
     xmake = command(["xmake", "--version"])
     xmake_match = re.search(r"\bxmake v?(\d+\.\d+\.\d+[^\s,]*)", xmake, re.IGNORECASE)
     require(xmake_match is not None, "Cannot determine XMake version")
-    dependencies = dependency_metadata(binary, target)
+    dependencies = dependency_metadata(binary, target, macos)
     metadata = {"format": FORMAT, "product": PRODUCT, "version": version, "platform": target, "arch": arch,
                 "mode": "release", "language": "c++26", "compiler": doctor["compiler"], "xmake": xmake_match[1],
-                "binary_sha256": digest(binary_data), "dependencies": dependencies,
-                "verification": {"state": "not_supplied"}}
-    contents = {binary.name: (binary_data, True)}
+                "source_binary_sha256": digest(binary_data), "binary_sha256": digest(images[binary.name]),
+                "dependencies": dependencies, "verification": verification}
+    if macos is not None:
+        metadata["macos_bundle"] = macos
+    contents = {name: (data, True) for name, data in images.items()}
     for name in ("install.py", "install.ps1", "install.sh"):
         contents[name] = (read_file(ROOT / "scripts" / name), name == "install.sh")
     files = [ROOT / "README.md", *sorted((ROOT / "docs").glob("*.md")),
@@ -376,20 +437,23 @@ def package_locked(args):
     require((ROOT / "docs/delivery.md") in files, "Delivery documentation is missing")
     for source in files:
         contents[source.relative_to(ROOT).as_posix()] = (read_file(source), False)
-    if args.verification:
-        report = read_file(checked_path(args.verification), 4 * 1024 * 1024)
-        metadata["verification"] = validate_verification(report, target, arch, binary_data)
-        contents["verification.json"] = (report, False)
+    if target == "macosx":
+        contents["verify-delivery.py"] = (read_file(ROOT / "tests/delivery_integration.py"), False)
+        for license in sorted((ROOT / "scripts/licenses").iterdir()):
+            require(license.is_file(), "Unexpected entry in dependency notices")
+            contents["licenses/" + license.name] = (read_file(license), False)
+    if report_data is not None:
+        contents["verification.json"] = (report_data, False)
     else:
         print("No verification report supplied; this package makes no test-pass claim.", file=sys.stderr)
     dependency_text = "Native runtime dependencies\n\n" + "\n".join(dependencies["libraries"]) + "\n\n" + "\n".join(dependencies["notes"]) + "\n"
     contents["runtime-dependencies.txt"] = (dependency_text.encode(), False)
     contents["build-metadata.json"] = (encoded(metadata), False)
-    readme = f"""{PRODUCT} {version} - {target} {arch}
+    readme = f"""CodeStudio Agent {version} - {target} {arch}
 
 This native C++26 Release package does not install or update system components.
 Read docs/delivery.md before using the user-level install/upgrade/uninstall tool.
-The Agent binary has no Python dependency; the installation tool requires Python 3.10+.
+The Agent binary has no Python dependency; the installation tool requires Python 3.11+.
 
   python install.py install --package .
   python install.py status
@@ -398,14 +462,21 @@ The Agent binary has no Python dependency; the installation tool requires Python
 
 An explicit --prefix selects a different application directory. The default is
 LOCALAPPDATA/Programs/CodeStudio-Agent on Windows and ~/.local/share/codestudio-agent
-on Linux. Installation never changes PATH, startup registration, workspaces or
+on Linux, or ~/Library/Application Support/CodeStudio Agent on macOS.
+Installation never changes PATH, startup registration, workspaces or
 credential stores. Use the installed executable by its full path; enable startup
 separately only after checking docs/scheduler.md. Stop running instances before
 upgrading or uninstalling. Unknown or modified installation files are preserved
 by refusing the operation, not by deleting them.
 
-package.json and SHA256SUMS cover the payload. They detect corruption, not a
-malicious publisher: obtain this unsigned package from a trusted source.
+package.json and SHA256SUMS cover the payload. They detect corruption but do
+not establish publisher identity: obtain packages from a trusted source.
+For macOS, consult build-metadata.json and the separate distribution receipt
+for the actual signature and notarization status. A checksum does not establish
+either status. Private runtimes and dependency license notices are included.
+source_binary_sha256 refers to the original build
+(matching verification.json when supplied); binary_sha256 refers to the relocated
+payload actually shipped.
 No historical state conversion or database migration is included.
 
 Runtime libraries are listed in runtime-dependencies.txt. Linux binary compatibility
@@ -413,6 +484,11 @@ depends on its build distribution and library versions; this is not a universal
 Linux executable. Build details and supplied test scope are in build-metadata.json.
 If verification.json is absent, no verification receipt was supplied for this package.
 No packaging result establishes real login/reboot or clean-machine validation.
+For the macOS bundle, run the included standard-library-only delivery checks:
+
+  python3 verify-delivery.py --standalone --package . --receipt /outside/new-report.json
+
+The receipt records this host and does not automatically attest that it is clean.
 
 Bundled Markdown documents retain links to bundled files. References to source-only
 test fixtures and research receipts are labeled 'source repository' and need the
@@ -491,6 +567,7 @@ def main(argv=None):
     parser.add_argument("--mode", choices=("release",), default="release")
     parser.add_argument("--output", type=Path, help="Owned output directory, not the extracted package directory")
     parser.add_argument("--verification", type=Path, help="Successful matching native Release verification.json")
+    parser.add_argument("--macos-libcxx", type=Path, help="Verified macOS libc++/libc++abi runtime root")
     args = parser.parse_args(argv)
     try:
         print(json.dumps(package(args), indent=2))

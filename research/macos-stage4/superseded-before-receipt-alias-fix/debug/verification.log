@@ -1,0 +1,90 @@
+Verification failed: C++ runtime changed while tests were running
+Report: /private/var/folders/wh/lj7xnlsd4ssdrgpwkw3vnsj40000gn/T/codestudio-verification-kb_qlcxb/release-20261028T030513Z-5e6beb7a/verification.json
+.Verification failed: Source changed during verification; the receipt is not valid for a single snapshot
+Report: /private/var/folders/wh/lj7xnlsd4ssdrgpwkw3vnsj40000gn/T/codestudio-verification-jn48xyim/source/release-20261028T030513Z-0679fcd1/verification.json
+Verification failed: Built executables changed while tests were running
+Report: /private/var/folders/wh/lj7xnlsd4ssdrgpwkw3vnsj40000gn/T/codestudio-verification-jn48xyim/binary/release-20261028T030513Z-8eed50d0/verification.json
+..Verification failed: Delivery package changed while tests were running
+Report: /private/var/folders/wh/lj7xnlsd4ssdrgpwkw3vnsj40000gn/T/codestudio-verification-b5dnfjwl/release-20261028T030513Z-afe282e5/verification.json
+.macosx/release schema: failed
+Ran 2 tests in 0.1s
+
+OK
+
+.Report: /private/var/folders/wh/lj7xnlsd4ssdrgpwkw3vnsj40000gn/T/codestudio-verification-zds2oh5l/release-20261028T030513Z-5850d360/verification.json
+......Verification failed: missing tool
+Report: /private/var/folders/wh/lj7xnlsd4ssdrgpwkw3vnsj40000gn/T/codestudio-verification-m5f41f0h/release-20261028T030513Z-346f562d/verification.json
+.Report: /private/var/folders/wh/lj7xnlsd4ssdrgpwkw3vnsj40000gn/T/codestudio-verification-ra137cv1/debug-20261028T030513Z-e2ec2080/verification.json
+.macosx/release toolchain: succeeded
+macosx/release toolchain: failed
+{}
+
+macosx/release toolchain: failed
+{"cxx26": true, "cplusplus": 202400, "format": "probe:07", "timezone_offsets": true, "timezone_dst": false, "tzdb_version": "2026a", "current_zone": "Asia/Shanghai"}
+
+macosx/release toolchain: failed
+{"cxx26": true, "cplusplus": 202302, "format": "probe:07", "timezone_offsets": true, "timezone_dst": true, "tzdb_version": "2026a", "current_zone": "Asia/Shanghai"}
+
+..macosx/release schema: failed
+
+.macosx/release schema: succeeded
+.windows/release real_build: succeeded
+windows/release real_build: failed
+PASS 2 real isolated XMake builds: explicit-v2 and custom-cache-v2
+windows/release real_build: failed
+PASS real isolated XMake / explicit-v2 / C++26 pack indexing / compile / link / execute / atomic export
+  steps=3, bytes=1024, sha256=fixture
+PASS real isolated XMake / explicit-v2 / C++26 pack indexing / compile / link / execute / atomic export
+PASS 2 real isolated XMake builds: explicit-v2 and custom-cache-v2
+
+windows/release real_build: failed
+PASS real isolated XMake / explicit-v2 / C++26 pack indexing / compile / link / execute / atomic export
+  steps=3, bytes=1024, sha256=fixture
+
+PASS 2 real isolated XMake builds: explicit-v2 and custom-cache-v2
+
+windows/release real_build: failed
+PASS real isolated XMake / explicit-v2 / C++26 pack indexing / compile / link / execute / atomic export
+  steps=3, bytes=1024, sha256=fixture
+PASS real isolated XMake / custom-cache-v2 / C++26 pack indexing / compile / link / execute / atomic export
+
+
+windows/release real_build: failed
+PASS real isolated XMake / explicit-v2 / C++26 pack indexing / compile / link / execute / atomic export
+  steps=3, bytes=1024, sha256=fixture
+PASS real isolated XMake / custom-cache-v2 / C++26 pack indexing / compile / link / execute / atomic export
+PASS 2 real isolated XMake builds: explicit-v2 and custom-cache-v2
+unfinished
+
+windows/release real_build: failed
+FAIL earlier operation
+PASS real isolated XMake / explicit-v2 / C++26 pack indexing / compile / link / execute / atomic export
+  steps=3, bytes=1024, sha256=fixture
+PASS real isolated XMake / custom-cache-v2 / C++26 pack indexing / compile / link / execute / atomic export
+PASS 2 real isolated XMake builds: explicit-v2 and custom-cache-v2
+
+windows/release real_build: failed
+PASS real isolated XMake / explicit-v2 / C++26 pack indexing / compile / link / execute / atomic export
+  steps=3, bytes=1024, sha256=fixture
+PASS real isolated XMake / custom-cache-v2 / C++26 pack indexing / compile / link / execute / atomic export
+PASS 2 real isolated XMake builds: explicit-v2 and custom-cache-v2
+
+.macosx/release schema: failed
+Ran 0 tests in 0.1s
+
+OK
+
+macosx/release schema: failed
+Ran 1 test in 0.1s
+
+OK
+not a complete test run
+
+.macosx/release schema: failed
+just a message
+
+.
+----------------------------------------------------------------------
+Ran 20 tests in 1.309s
+
+OK

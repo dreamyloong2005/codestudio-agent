@@ -1,0 +1,342 @@
+{
+  "format": 2,
+  "product": "CodeStudio Agent",
+  "scope": "native extracted-package delivery regression",
+  "started_at": "2026-10-28T03:17:08.567330+00:00",
+  "finished_at": "2026-10-28T03:17:22.647096+00:00",
+  "status": "succeeded",
+  "standalone": true,
+  "source_binary_matched": false,
+  "clean_machine_verified": false,
+  "clean_machine_requirement": "An operator must independently establish this is a separate clean Mac; this script cannot prove host history.",
+  "host": {
+    "platform": "darwin",
+    "architecture": "arm64",
+    "system": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+    "macos": "26.5.2",
+    "python": "3.13.14"
+  },
+  "package": {
+    "path": "/Users/taosiyuan/codestudio-agent/build/macos-stage4-final/mounted-dmg-bcwbzdg0/codestudio-agent-macosx-arm64",
+    "inspection": "recorded",
+    "manifest_sha256": "da2277ee1423483f54ec2c1b37fbe755a0128019ba97ec1c8e88127ae0ab61e6",
+    "metadata_sha256": "9d025c76bba4a1eb0cd0ba107f1a7c427ec704664c51a2c2fded202c553298cb",
+    "payload_sha256": "82ba6970777138ab3cc1c0c4392fa04be6b7261f87f9557ed9025f457e936130",
+    "declared_source_binary_sha256": "376d1f2f5a303283f182d4046d6369487eee10676e8ed32b29ff54710759fdea",
+    "initial_snapshot": {
+      "files": {
+        "build-metadata.json": {
+          "sha256": "9d025c76bba4a1eb0cd0ba107f1a7c427ec704664c51a2c2fded202c553298cb",
+          "size": 7126,
+          "executable": false
+        },
+        "codestudio-agent": {
+          "sha256": "82ba6970777138ab3cc1c0c4392fa04be6b7261f87f9557ed9025f457e936130",
+          "size": 7520192,
+          "executable": true
+        },
+        "install.ps1": {
+          "sha256": "7cea4047eedfed937554849cc9ed59d3c7b23c01c4ce9c8bf27868ff355b9622",
+          "size": 202,
+          "executable": false
+        },
+        "install.py": {
+          "sha256": "770d453ffb8d7047f79f7850f2327ab7b43d2880d82fa678933cbb2209d3dd35",
+          "size": 39483,
+          "executable": false
+        },
+        "install.sh": {
+          "sha256": "8e32bdada2aea55d9152440893ce0019bf042774b4565340d4f00e91b6210ba5",
+          "size": 208,
+          "executable": true
+        },
+        "package.json": {
+          "sha256": "da2277ee1423483f54ec2c1b37fbe755a0128019ba97ec1c8e88127ae0ab61e6",
+          "size": 9066,
+          "executable": false
+        },
+        "README.md": {
+          "sha256": "c3dae3a5f5328ca5b82a5dfaa5e69e7880122b627e8bb74254fa119f0d9f7f13",
+          "size": 30807,
+          "executable": false
+        },
+        "README.txt": {
+          "sha256": "94ee2215bcb676cc3bdd2bc0a26b0eb74061efdff956e6fabbed0f3743c1faa0",
+          "size": 1250,
+          "executable": false
+        },
+        "runtime-dependencies.txt": {
+          "sha256": "06626447c75bd4618a06e07c27a6d9c85516f270b3fe497ef765179ddcf1f00f",
+          "size": 868,
+          "executable": false
+        },
+        "SHA256SUMS": {
+          "sha256": "5d1e74f426c2e4127d4ffc6b9be8c1d1a2a2ed50a959cef3827cc4f64b0c0f1c",
+          "size": 4392,
+          "executable": false
+        },
+        "verification.json": {
+          "sha256": "69a1bb2abbd9beb18873a03d809fa34fee6907630e59be5424982710c4da7707",
+          "size": 15724,
+          "executable": false
+        },
+        "verify-delivery.py": {
+          "sha256": "a65086ea0c7459edc9d51989a87e0ebf4b218b3fec6891febb9fa03320c61724",
+          "size": 54185,
+          "executable": false
+        },
+        "protocol/README.md": {
+          "sha256": "87e5f85fb56a3ae62f9dbd07fb649093a2d1f5457ee2ece6f5859f87e20db646",
+          "size": 5265,
+          "executable": false
+        },
+        "protocol/task-service.schema.json": {
+          "sha256": "dccf1d4b872c8ee11e224ad51dcd7de017b90206e2112072c3e2f38c5fe14b2b",
+          "size": 134017,
+          "executable": false
+        },
+        "licenses/libcxx-LICENSE.TXT": {
+          "sha256": "539dd7aed86e8a4f12cbdd0e6c50c189c7d74847e4fecc64ce2c6ee3a01da38b",
+          "size": 16703,
+          "executable": false
+        },
+        "licenses/libcxxabi-LICENSE.TXT": {
+          "sha256": "e2b35be49f7284a45b7baca8fc7b3ab7440e7902392b2528a457816b5bb2a15c",
+          "size": 16706,
+          "executable": false
+        },
+        "licenses/nlohmann-json-Hedley-NOTICE.txt": {
+          "sha256": "eb27f4190f8427f0565ab075b8359782e3f3f8bd2b592124a7cfb1bd476bbd94",
+          "size": 383,
+          "executable": false
+        },
+        "licenses/nlohmann-json-LICENSE.MIT": {
+          "sha256": "c0d068392ea65358b798b8c165103560f06e9e3b38c4ab4e2d8810a7b931af86",
+          "size": 1075,
+          "executable": false
+        },
+        "licenses/OpenSSL-LICENSE.txt": {
+          "sha256": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a",
+          "size": 10175,
+          "executable": false
+        },
+        "licenses/sources.json": {
+          "sha256": "0c064c48407fd5569dfe2c822c499492356ec4e186f42566ab3d901872475613",
+          "size": 2919,
+          "executable": false
+        },
+        "licenses/SQLite-PUBLIC-DOMAIN.txt": {
+          "sha256": "7b8578a074f9ddd01b7554b58b4db2793943a1f8cba2caa29f87a636868ec755",
+          "size": 297,
+          "executable": false
+        },
+        "lib/libc++.1.dylib": {
+          "sha256": "fd69888a0998c6603c87c49460ffd6ea5a90106ae118fa75647f04518d75cf78",
+          "size": 1172512,
+          "executable": true
+        },
+        "lib/libc++abi.1.dylib": {
+          "sha256": "e26d1f67dcbe4a849e77fcaf10239cfc366559e033935933c4361091b3c4b5f0",
+          "size": 365792,
+          "executable": true
+        },
+        "examples/mcp-http.example.json": {
+          "sha256": "93292aba9cb5f02a53151bdac468dfbb711a109b8f278b1ff26bec23a38508da",
+          "size": 251,
+          "executable": false
+        },
+        "examples/mcp-oauth.example.json": {
+          "sha256": "5ebb7a6fb1ac8dc700fac73f86c2cf39c941b7ba398297c98e7d38cb79e38720",
+          "size": 378,
+          "executable": false
+        },
+        "examples/mcp-plugin-sandbox.example.json": {
+          "sha256": "1e254a6dd657e5e6b900b45855cb07b1c16fee8f2dc3ce763ecef1cdd527ed41",
+          "size": 238,
+          "executable": false
+        },
+        "examples/mcp-plugin.example.json": {
+          "sha256": "cbfe8e551208a6ea67ab59fd67c694d58e58d71171332bfd603b77eea19072ad",
+          "size": 180,
+          "executable": false
+        },
+        "examples/mcp.example.json": {
+          "sha256": "1351776bdd19ed98649cab36d0802e47b87c006a29b582f36a1f2c32134628b8",
+          "size": 232,
+          "executable": false
+        },
+        "examples/mcp_echo.py": {
+          "sha256": "8850336896b6724be261363282b99432793cef8d484c8ad491ffe5c9744eaf74",
+          "size": 2046,
+          "executable": false
+        },
+        "examples/task_client.py": {
+          "sha256": "5a23c43e77b5c523280f001db6acecf9ed7ab808c71c8e79812d355e176082c5",
+          "size": 13139,
+          "executable": false
+        },
+        "docs/architecture.md": {
+          "sha256": "36d8c45d3da90ce5e3352979dae990b0f85675c1ad39b1ef39adc557f3794c54",
+          "size": 31110,
+          "executable": false
+        },
+        "docs/build-proposals.md": {
+          "sha256": "af23e407ce81106977e104d16114e6e6f95627188a0354b2a346656a750eafd9",
+          "size": 16432,
+          "executable": false
+        },
+        "docs/credentials.md": {
+          "sha256": "697b2d43bd2cd8db3ad4823b06f2894d7007e078ed4be0849563a637e327267b",
+          "size": 9474,
+          "executable": false
+        },
+        "docs/delivery.md": {
+          "sha256": "2074a006e0be36d7dfe81c509ecc1bd02c47c014e2d0ee6bc4ba4c455cb51855",
+          "size": 15295,
+          "executable": false
+        },
+        "docs/linux.md": {
+          "sha256": "98d14ea9c67b8553d0b55b6ca28d2875d5be38e561c1f645ba6014abfd12fc77",
+          "size": 9741,
+          "executable": false
+        },
+        "docs/local-models.md": {
+          "sha256": "92575c134d7ccd41052daaf150c7108df53df1d29479386d27aa4acd8e9b59a8",
+          "size": 4810,
+          "executable": false
+        },
+        "docs/macos.md": {
+          "sha256": "97319a2184ce59b70181b90f3444f16f28daefced1ea848fb5829988dd40676c",
+          "size": 22964,
+          "executable": false
+        },
+        "docs/mcp-oauth.md": {
+          "sha256": "34f626ee786aefb6afe247faeeb4f82bc42fca4932070ec14fc5c8f3c60e99e2",
+          "size": 6754,
+          "executable": false
+        },
+        "docs/mcp.md": {
+          "sha256": "d6e66a5da95b9fefd8b197b20fc04f89d8f6d08a68dcbf090f83d9205ba6bdd3",
+          "size": 9627,
+          "executable": false
+        },
+        "docs/plugin-sandbox.md": {
+          "sha256": "2c632206d31c8ef06876dfc6a484627f994af721de46a51e15494a6014b1c974",
+          "size": 5130,
+          "executable": false
+        },
+        "docs/plugins.md": {
+          "sha256": "b27a60821a27435381f88b7fb5231fc6c034fbb258e26eb79fb80992c7dcc841",
+          "size": 7808,
+          "executable": false
+        },
+        "docs/resume-contract.md": {
+          "sha256": "6756c7df289166a9c4f60d7d0a6b439b7e4151dcf28fff0161fa735f6d0faf3b",
+          "size": 11124,
+          "executable": false
+        },
+        "docs/resume.md": {
+          "sha256": "95aa60eb9ae1a0a198742f572aeb0be5456aa7f9e4572a8653255f0def67a39d",
+          "size": 9375,
+          "executable": false
+        },
+        "docs/roadmap.md": {
+          "sha256": "93aade2fa29763641e6aad0009b254375ca9c51c4d8f3e43856eeeb8593c990c",
+          "size": 16027,
+          "executable": false
+        },
+        "docs/sandbox-resources.md": {
+          "sha256": "b8498341506b51dd1f233bd4f2473d30062aec4d32746b62927739f73cab51ac",
+          "size": 5509,
+          "executable": false
+        },
+        "docs/sandbox.md": {
+          "sha256": "0beda2a9eaabe4953829d4a804fe147bfab0dfbb9d35864fcb2ec7e1173e1bb5",
+          "size": 8455,
+          "executable": false
+        },
+        "docs/scheduler.md": {
+          "sha256": "2785cba50f213f4e14eb29111a3c6e5239f78cfa7d8f85cd53566cebc488df26",
+          "size": 40528,
+          "executable": false
+        },
+        "docs/streaming-apis.md": {
+          "sha256": "c4dee17f3710091d10e2fbb916fac03ab4c2e48cc95c22442501e3d44bac162e",
+          "size": 2918,
+          "executable": false
+        },
+        "docs/task-service.md": {
+          "sha256": "818391432756bc360b48b3c7b72b0693cb100a05709c94f69272ef1de7718577",
+          "size": 41358,
+          "executable": false
+        },
+        "docs/validation.md": {
+          "sha256": "e59cfd9a3c5d84f91671e16dde62192fded9cb1573a6e15ae18a54516ed2028e",
+          "size": 68430,
+          "executable": false
+        },
+        "docs/workspace-builds.md": {
+          "sha256": "016696fa494bdb5dccdc476a6212fa937ee7241c2e0a5453026731277b470128",
+          "size": 11912,
+          "executable": false
+        }
+      },
+      "directories": [
+        "docs",
+        "examples",
+        "lib",
+        "licenses",
+        "protocol"
+      ]
+    },
+    "unchanged_after_tests": true
+  },
+  "tests": {
+    "total": 33,
+    "passed": 33,
+    "selected_test_ids": [
+      "__main__.DeliveryTests.test_changed_missing_and_extra_installed_data_never_deleted",
+      "__main__.DeliveryTests.test_corrupt_checksum_inventory_rejected_without_destination",
+      "__main__.DeliveryTests.test_corrupt_package_payload_rejected_before_install_and_upgrade",
+      "__main__.DeliveryTests.test_downgrade_refused_without_modifying_installed_files",
+      "__main__.DeliveryTests.test_extra_package_file_cannot_bypass_manifest",
+      "__main__.DeliveryTests.test_firmlink_and_unicode_aliases_share_installation_ownership",
+      "__main__.DeliveryTests.test_firmlink_source_destination_overlap_is_refused_before_mutation",
+      "__main__.DeliveryTests.test_hardlinked_package_payload_is_rejected",
+      "__main__.DeliveryTests.test_install_different_package_and_upgrade_absent_refused",
+      "__main__.DeliveryTests.test_installation_preserves_package_quarantine_attributes",
+      "__main__.DeliveryTests.test_installed_background_worker_start_stop_or_verified_job_refusal",
+      "__main__.DeliveryTests.test_installed_doctor_demo_service_and_environment_credential",
+      "__main__.DeliveryTests.test_installed_private_runtime_and_iana_dst",
+      "__main__.DeliveryTests.test_interrupted_installer_lock_requires_inspection_without_mutation",
+      "__main__.DeliveryTests.test_linked_destination_is_rejected_without_following_it",
+      "__main__.DeliveryTests.test_manifest_paths_cannot_escape_or_use_aliases",
+      "__main__.DeliveryTests.test_missing_parent_alias_is_rechecked_after_lock_acquisition",
+      "__main__.DeliveryTests.test_modified_ownership_receipt_cannot_redirect_uninstall",
+      "__main__.DeliveryTests.test_native_installer_wrapper_forwards_arguments_and_exit_status",
+      "__main__.DeliveryTests.test_new_installation_removes_inherited_acl_without_changing_parent",
+      "__main__.DeliveryTests.test_occupied_unowned_prefix_never_overwritten_or_removed",
+      "__main__.DeliveryTests.test_package_inventory_hashes_and_native_identity_match",
+      "__main__.DeliveryTests.test_partial_staging_failure_retains_stage_and_previous_installation",
+      "__main__.DeliveryTests.test_partial_uninstall_failure_keeps_quarantine_without_restoring_broken_prefix",
+      "__main__.DeliveryTests.test_process_mapping_identity_does_not_follow_reused_executable_path",
+      "__main__.DeliveryTests.test_publication_and_rollback_preserve_an_unexpected_empty_destination",
+      "__main__.DeliveryTests.test_receipt_destination_rejects_package_alias_and_replaced_parent",
+      "__main__.DeliveryTests.test_running_installed_service_refuses_upgrade_and_uninstall",
+      "__main__.DeliveryTests.test_status_absent_install_and_same_package_are_idempotent",
+      "__main__.DeliveryTests.test_symlinked_parent_cannot_redirect_new_installation",
+      "__main__.DeliveryTests.test_uninstall_via_installed_script_preserves_user_state_and_environment",
+      "__main__.DeliveryTests.test_unsupported_format_foreign_platform_and_duplicate_paths_rejected",
+      "__main__.DeliveryTests.test_upgrade_replaces_owned_files_and_preserves_sibling_workspace"
+    ],
+    "skipped": 0,
+    "failures": 0,
+    "errors": 0,
+    "failed_ids": [],
+    "skipped_cases": []
+  },
+  "limits": [
+    "No default installation, actual login, reboot, or credential mutation is performed.",
+    "A local success is not notarization, Gatekeeper download acceptance, or a clean-machine claim."
+  ]
+}

@@ -94,8 +94,8 @@ jobs:
     # The runner owner supplies Python >= 3.11, XMake and a matching LLVM/libc++
     # installation through CODESTUDIO_LLVM_ROOT / CODESTUDIO_LIBCXX_ROOT.
     # The latter must have timezone support. Stage 2 also requires an unlocked
-    # default Keychain in the runner user session. This is a native test artifact,
-    # not a signed/notarized package or evidence of actual login-triggered startup.
+    # default Keychain in the runner user session. Packages use ad-hoc signatures;
+    # Developer ID, notarization and actual login acceptance remain separate.
     steps:
       - uses: actions/checkout@v4
         with:
@@ -106,9 +106,23 @@ jobs:
           build/contract-python/bin/python -m pip install -r tests/requirements.txt
       - name: Verify both configurations
         run: build/contract-python/bin/python scripts/verify.py --mode all
+      - name: Package and verify macOS installation
+        run: |
+          receipt=$(find build/verification/macosx -path '*/release-*/verification.json' -print | sort | tail -n 1)
+          test -n "$receipt"
+          build/contract-python/bin/python scripts/package.py --mode release --verification "$receipt"
+          extracted=$(mktemp -d "$PWD/build/macos-delivery.XXXXXX")
+          tar -xzf build/packages/macosx-arm64/codestudio-agent-macosx-arm64.tar.gz -C "$extracted"
+          build/contract-python/bin/python scripts/verify.py --mode release --skip-build --suite delivery --package "$extracted"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: codestudio-agent-macos-arm64-verification
           path: build/verification/macosx/
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: codestudio-agent-macos-arm64-test-package
+          path: build/packages/macosx-arm64/
           if-no-files-found: error

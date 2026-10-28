@@ -138,11 +138,11 @@ class VerificationTests(unittest.TestCase):
             unsupported = verification.unsupported_suites()
             for name in ("toolchain", "native", "credentials", "provider", "streaming", "cli",
                          "mcp", "mcp_http", "mcp_oauth", "plugins", "resume", "contract", "service",
-                         "scheduler", "supervisor", "autostart", "cron"):
+                         "scheduler", "supervisor", "autostart", "cron", "delivery", "macos_release"):
                 self.assertIn(name, commands)
             self.assertFalse(set(commands).intersection(unsupported))
             self.assertIn("real_build", unsupported)
-            self.assertIn("delivery", unsupported)
+            self.assertNotIn("delivery", unsupported)
             self.assertTrue(all(unsupported.values()))
             self.assertEqual(Path(commands["native"][0]).parts[-4:],
                              ("macosx", "arm64", "debug", "agent-tests"))
@@ -200,6 +200,25 @@ class VerificationTests(unittest.TestCase):
         report = json.loads(next(self.root.glob("*/verification.json")).read_text())
         self.assertEqual(report["status"], "failed")
         self.assertIn("runtime changed", report["error"])
+
+    def test_delivery_package_mutation_invalidates_otherwise_successful_tests(self):
+        binary = self.root / "build" / verification.PLATFORM / verification.ARCH / "release" / ("codestudio-agent" + verification.SUFFIX)
+        binary.parent.mkdir(parents=True)
+        binary.write_bytes(b"source-build")
+        self.args.suite = ["delivery"]
+        self.args.package = self.root / "package"
+        with patch.object(verification, "ROOT", self.root), \
+             patch.object(verification, "source_fingerprint", return_value={"sha256": "a", "files": 1}), \
+             patch.object(verification, "artifact_fingerprint", return_value={"agent": "source-build"}), \
+             patch.object(verification, "delivery_fingerprint", side_effect=[{"files": {"agent": "packaged"}},
+                                                                          {"files": {"agent": "changed"}}]), \
+             patch.object(verification, "preflight", return_value={}), \
+             patch.object(verification, "step", return_value={"name": "delivery", "status": "succeeded", "returncode": 0}):
+            self.assertEqual(verification.verify(self.args, "release"), 2)
+        report = json.loads(next(self.root.glob("*/verification.json")).read_text())
+        self.assertEqual(report["status"], "failed")
+        self.assertEqual(report["delivery_package"]["files"]["agent"], "packaged")
+        self.assertIn("Delivery package changed", report["error"])
 
     def test_runtime_probe_requires_executed_format_and_timezone_evidence(self):
         valid = dict(cxx26=True, cplusplus=202400, format="probe:07", timezone_offsets=True,

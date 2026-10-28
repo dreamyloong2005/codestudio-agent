@@ -1,0 +1,6 @@
+test_receipt_destination_rejects_package_alias_and_replaced_parent (__main__.DeliveryTests.test_receipt_destination_rejects_package_alias_and_replaced_parent) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.029s
+
+OK

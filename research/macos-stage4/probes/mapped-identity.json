@@ -1,0 +1,20 @@
+{
+  "before": {
+    "returncode": 0,
+    "stdout": "sizes region=96 vstat=136 vnode=152 vip=1176 result=1272 offsets vnode=96 path=248\npidpath result=102 errno=0 path=/Users/taosiyuan/codestudio-agent/build/macos-stage4-package-probes/identity-dmccylmx/codestudio-agent\npathstat dev=16777233 ino=9444155\nregion index=0 addr=4363157504 size=16384 prot=5 maxprot=5 offset=0 dev=16777233 ino=9444155 path=/Users/taosiyuan/codestudio-agent/build/macos-stage4-package-probes/identity-dmccylmx/codestudio-agent\nregion index=2 addr=4363190272 size=16384 prot=1 maxprot=1 offset=32768 dev=16777233 ino=9444155 path=/Users/taosiyuan/codestudio-agent/build/macos-stage4-package-probes/identity-dmccylmx/codestudio-agent\nregion index=8 addr=4367564800 size=393216 prot=0 maxprot=0 offset=1982464 dev=16777233 ino=1152921500312573276 path=/usr/lib/dyld\nend index=53 ret=0 errno=22\n",
+    "stderr": ""
+  },
+  "after_path_reuse": {
+    "returncode": 0,
+    "stdout": "sizes region=96 vstat=136 vnode=152 vip=1176 result=1272 offsets vnode=96 path=248\npidpath result=102 errno=0 path=/Users/taosiyuan/codestudio-agent/build/macos-stage4-package-probes/identity-dmccylmx/renamed-original\npathstat dev=16777233 ino=9444155\nregion index=0 addr=4363157504 size=16384 prot=5 maxprot=5 offset=0 dev=16777233 ino=9444155 path=/Users/taosiyuan/codestudio-agent/build/macos-stage4-package-probes/identity-dmccylmx/renamed-original\nregion index=2 addr=4363190272 size=16384 prot=1 maxprot=1 offset=32768 dev=16777233 ino=9444155 path=/Users/taosiyuan/codestudio-agent/build/macos-stage4-package-probes/identity-dmccylmx/renamed-original\nregion index=8 addr=4367564800 size=393216 prot=0 maxprot=0 offset=1982464 dev=16777233 ino=1152921500312573276 path=/usr/lib/dyld\nend index=53 ret=0 errno=22\n",
+    "stderr": ""
+  },
+  "original": {
+    "dev": 16777233,
+    "ino": 9444155
+  },
+  "replacement": {
+    "dev": 16777233,
+    "ino": 9444156
+  }
+}

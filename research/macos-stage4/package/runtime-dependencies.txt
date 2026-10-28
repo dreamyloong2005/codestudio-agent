@@ -1,0 +1,17 @@
+Native runtime dependencies
+
+/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation
+/System/Library/Frameworks/Security.framework/Versions/A/Security
+/usr/lib/libSystem.B.dylib
+/usr/lib/libcurl.4.dylib
+/usr/lib/libz.1.dylib
+@loader_path/lib/libc++.1.dylib
+@loader_path/lib/libc++abi.1.dylib
+@loader_path/libc++abi.1.dylib
+
+Private libc++/libc++abi are bundled in lib/ using loader-relative dependencies.
+System libraries and frameworks are provided by macOS and are not bundled.
+Minimum deployment target is macOS 15.0 arm64; another OS version needs separate validation.
+The relocated development payload has ad-hoc signatures, not a verified publisher or notarization.
+Timezone data remains the macOS /usr/share/zoneinfo database.
+OS sandbox execution remains unavailable; no Linux virtual machine is included.

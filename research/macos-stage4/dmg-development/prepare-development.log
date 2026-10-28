@@ -1,0 +1,6 @@
+{
+  "product": "CodeStudio-Agent",
+  "status": "development_only",
+  "receipt": "/Users/taosiyuan/codestudio-agent/build/macos-stage4-final/dmg-development/release.json",
+  "stage4_accepted": false
+}

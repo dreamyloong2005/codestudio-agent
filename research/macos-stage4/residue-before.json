@@ -1,0 +1,18 @@
+{
+  "captured_at_utc": "2026-10-28T02:59:33.343164+00:00",
+  "scope": "Limited fixture directories and task-owned stage 4 disk image mounts before final regression; no signals or cleanup.",
+  "parents": [
+    "/private/var/folders/wh/lj7xnlsd4ssdrgpwkw3vnsj40000gn/T",
+    "/Users/taosiyuan"
+  ],
+  "prefixes": [
+    "codestudio-build-copy-tests-",
+    "codestudio-package-interface-",
+    "codestudio-manifest-tests-",
+    "codestudio-delivery-",
+    "codestudio-macos-release-"
+  ],
+  "fixture_entries": [],
+  "owned_image_mounts": [],
+  "historical_total_residue": "unknown_not_audited"
+}

@@ -1,0 +1,13 @@
+{
+  "status": "failed",
+  "started_at": "2026-10-28T03:16:33.267895+00:00",
+  "scope": "Actual final development DMG on current build host; not independent clean Mac",
+  "clean_machine_verified": false,
+  "image": "/Users/taosiyuan/codestudio-agent/build/macos-stage4-final/dmg-development/codestudio-agent-macosx-arm64.dmg",
+  "image_sha256": "d8147909785c9c7f458bf99fe0279b1706dce97f568d5cdb9179b1194865d4ba",
+  "mount": "/Users/taosiyuan/codestudio-agent/build/macos-stage4-final/mounted-dmg-4k_2u39e",
+  "cwd": "/private/var/folders/wh/lj7xnlsd4ssdrgpwkw3vnsj40000gn/T/standalone-cwd-864mel4z",
+  "detached": true,
+  "finished_at": "2026-10-28T03:16:33.442634+00:00",
+  "reason": "Research harness incorrectly compared full attach/info dictionaries, whose optional content-hint fields differ; no delivery tests ran. Exact image/device/mount were subsequently bound and detached."
+}

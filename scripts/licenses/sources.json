@@ -1,0 +1,45 @@
+{
+  "scope": "Dependency licenses/notices included in macOS arm64 packages. LLVM runtime source contains the documented Darwin timezone-directory patch; source license text is unchanged. SQLite notice is the copyright disclaimer excerpt from sqlite3.h. System libraries are not redistributed. License text retains its words; line endings, trailing whitespace and terminal blank lines are normalized. source_file_sha256 records the original source bytes (or cited notice excerpt), sha256 records the bundled notice.",
+  "records": [
+    {
+      "file": "libcxx-LICENSE.TXT",
+      "source": "https://github.com/llvm/llvm-project/blob/llvmorg-22.1.8/libcxx/LICENSE.TXT",
+      "sha256": "539dd7aed86e8a4f12cbdd0e6c50c189c7d74847e4fecc64ce2c6ee3a01da38b",
+      "source_archive_sha256": "922f1817a0df7b1489272d18134ee0087a8b068828f87ac63b9861b1a9965888",
+      "source_file_sha256": "539dd7aed86e8a4f12cbdd0e6c50c189c7d74847e4fecc64ce2c6ee3a01da38b"
+    },
+    {
+      "file": "libcxxabi-LICENSE.TXT",
+      "source": "https://github.com/llvm/llvm-project/blob/llvmorg-22.1.8/libcxxabi/LICENSE.TXT",
+      "sha256": "e2b35be49f7284a45b7baca8fc7b3ab7440e7902392b2528a457816b5bb2a15c",
+      "source_archive_sha256": "922f1817a0df7b1489272d18134ee0087a8b068828f87ac63b9861b1a9965888",
+      "source_file_sha256": "e2b35be49f7284a45b7baca8fc7b3ab7440e7902392b2528a457816b5bb2a15c"
+    },
+    {
+      "file": "nlohmann-json-LICENSE.MIT",
+      "source": "https://github.com/nlohmann/json/blob/v3.12.0/LICENSE.MIT",
+      "sha256": "c0d068392ea65358b798b8c165103560f06e9e3b38c4ab4e2d8810a7b931af86",
+      "source_archive_sha256": "4b92eb0c06d10683f7447ce9406cb97cd4b453be18d7279320f7b2f025c10187",
+      "source_file_sha256": "46a65cffd1ea955132d95a8dd921640714a8d6b537d2e4e482d31145ae95b603"
+    },
+    {
+      "file": "nlohmann-json-Hedley-NOTICE.txt",
+      "source": "https://github.com/nlohmann/json/blob/v3.12.0/include/nlohmann/thirdparty/hedley/hedley.hpp",
+      "sha256": "eb27f4190f8427f0565ab075b8359782e3f3f8bd2b592124a7cfb1bd476bbd94",
+      "source_file_sha256": "43a1b44130aa92bdb45cbfc82fcce917bd0e46e5fe91854d52128af37e9a898d"
+    },
+    {
+      "file": "OpenSSL-LICENSE.txt",
+      "source": "https://github.com/openssl/openssl/blob/openssl-3.6.5/LICENSE.txt",
+      "sha256": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a",
+      "source_file_sha256": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a"
+    },
+    {
+      "file": "SQLite-PUBLIC-DOMAIN.txt",
+      "source": "https://www.sqlite.org/2025/sqlite-autoconf-3500400.tar.gz (opening copyright disclaimer in sqlite3.h)",
+      "sha256": "7b8578a074f9ddd01b7554b58b4db2793943a1f8cba2caa29f87a636868ec755",
+      "source_archive_sha256": "a3db587a1b92ee5ddac2f66b3edb41b26f9c867275782d46c3a088977d6a5b18",
+      "source_file_sha256": "7b8578a074f9ddd01b7554b58b4db2793943a1f8cba2caa29f87a636868ec755"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+test_package_inventory_hashes_and_native_identity_match (__main__.DeliveryTests.test_package_inventory_hashes_and_native_identity_match) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.038s
+
+OK
+Delivery evidence refused: package changed or no initial snapshot was captured.

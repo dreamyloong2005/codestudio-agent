@@ -1,0 +1,170 @@
+{
+  "format": 1,
+  "product": "CodeStudio Agent",
+  "stage": 4,
+  "recorded_at_utc": "2026-10-28T03:19:38.344961+00:00",
+  "status": "local_delivery_complete_formal_release_deferred_by_user",
+  "implementation": "macOS arm64 packaging, private runtime, user installation, standalone delivery verification, Developer ID/notarization/DMG tooling",
+  "stage4_accepted": false,
+  "source": {
+    "sha256": "d2c0e1600daf2b8d1addb61e563a5ea2643c371356cfdc383f76ccaa2194eb8a",
+    "files": 223
+  },
+  "base_commit_before_stage4": "7875e003631a12aea7b9bf02eeae5bed12c2afc4",
+  "host": {
+    "platform": "darwin",
+    "architecture": "arm64",
+    "system": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+    "macos": "26.5.2",
+    "python": "3.13.14"
+  },
+  "deployment_target": "15.0",
+  "runtime_coverage": "Only macOS 26.5.2 native arm64 executed; no macOS 15, Intel, Rosetta, Universal, or hosted CI result claimed",
+  "native": {
+    "debug": {
+      "status": "succeeded",
+      "receipt": "debug/verification.json",
+      "selected_suites": 22,
+      "native_groups": 22,
+      "python_passed": 376,
+      "python_skipped": 11,
+      "omitted_suites": [
+        "delivery"
+      ],
+      "unsupported_suites": {
+        "plugin_sandbox": "macOS OS isolation belongs to stage 3",
+        "sandbox": "macOS OS sandbox execution belongs to stage 3; refusal is covered by native/CLI tests",
+        "sandbox_resources": "macOS isolated resource ownership and reclamation belong to stage 3",
+        "real_build": "macOS isolated workspace execution belongs to stage 3"
+      },
+      "artifact": {
+        "path": "build/macosx/arm64/debug/codestudio-agent",
+        "size": 14585232,
+        "sha256": "eafe4fd6496374f82417e4be90f4b5439a6373fd82da72da74bf013763f13e69"
+      }
+    },
+    "release": {
+      "status": "succeeded",
+      "receipt": "release/verification.json",
+      "selected_suites": 22,
+      "native_groups": 22,
+      "python_passed": 376,
+      "python_skipped": 11,
+      "omitted_suites": [
+        "delivery"
+      ],
+      "unsupported_suites": {
+        "plugin_sandbox": "macOS OS isolation belongs to stage 3",
+        "sandbox": "macOS OS sandbox execution belongs to stage 3; refusal is covered by native/CLI tests",
+        "sandbox_resources": "macOS isolated resource ownership and reclamation belong to stage 3",
+        "real_build": "macOS isolated workspace execution belongs to stage 3"
+      },
+      "artifact": {
+        "path": "build/macosx/arm64/release/codestudio-agent",
+        "size": 7545952,
+        "sha256": "376d1f2f5a303283f182d4046d6369487eee10676e8ed32b29ff54710759fdea"
+      }
+    }
+  },
+  "development_archive": {
+    "status": "succeeded",
+    "receipt": "package/packaging.json",
+    "archive": "/Users/taosiyuan/codestudio-agent/build/macos-stage4-final/package-1/codestudio-agent-macosx-arm64.tar.gz",
+    "sha256": "cde8d87a003ce4c2b93da9c9a8e98db2c9fd37e1deb5e3e4ccc22fe2542a73d4",
+    "size": 4024323,
+    "repeated_archive_byte_identical": true,
+    "source_binary_sha256": "376d1f2f5a303283f182d4046d6369487eee10676e8ed32b29ff54710759fdea",
+    "relocated_binary_sha256": "82ba6970777138ab3cc1c0c4392fa04be6b7261f87f9557ed9025f457e936130",
+    "runtime_records": [
+      {
+        "path": "lib/libc++.1.dylib",
+        "sha256": "857976a6b026db8a82a9b653b246b6ea4963147386d426a2cb550ff079a1e865",
+        "size": 1172528,
+        "source_sha256": "37a40e084b7f1d1b68f509cd48cb6baf269e95c4a5109408f2215e5e33521a90"
+      },
+      {
+        "path": "lib/libc++abi.1.dylib",
+        "sha256": "a98662a8e64d08a402fd204fed794168ccc8b8ecf4fafb14d36887d99c7cfaea",
+        "size": 365808,
+        "source_sha256": "e1b798f6ac9514e5b32ee4b7b066d472d060090bd7d87f5c964942ded35453e7"
+      }
+    ],
+    "manifest_sha256": "68cb4a77820406a8c680cb6de6689a10828ea7bb0767d40a7be7661d7fd288b6",
+    "extracted_archive_delivery": {
+      "status": "succeeded",
+      "passed": 33,
+      "skipped": 0,
+      "receipt": "delivery/verification.json"
+    }
+  },
+  "development_dmg": {
+    "status": "development_only",
+    "receipt": "dmg-development/release.json",
+    "artifact": {
+      "path": "codestudio-agent-macosx-arm64.dmg",
+      "sha256": "d8147909785c9c7f458bf99fe0279b1706dce97f568d5cdb9179b1194865d4ba",
+      "size": 4421502
+    },
+    "path": "/Users/taosiyuan/codestudio-agent/build/macos-stage4-final/dmg-development/codestudio-agent-macosx-arm64.dmg",
+    "signature": {
+      "identity_sha1": null,
+      "kind": "ad_hoc_not_publisher_verified",
+      "publisher": null,
+      "team_id": null
+    },
+    "notarized": false,
+    "resigned_binary_sha256": "82ba6970777138ab3cc1c0c4392fa04be6b7261f87f9557ed9025f457e936130",
+    "runtime_records": [
+      {
+        "path": "lib/libc++.1.dylib",
+        "sha256": "fd69888a0998c6603c87c49460ffd6ea5a90106ae118fa75647f04518d75cf78",
+        "size": 1172512,
+        "source_sha256": "37a40e084b7f1d1b68f509cd48cb6baf269e95c4a5109408f2215e5e33521a90"
+      },
+      {
+        "path": "lib/libc++abi.1.dylib",
+        "sha256": "e26d1f67dcbe4a849e77fcaf10239cfc366559e033935933c4361091b3c4b5f0",
+        "size": 365792,
+        "source_sha256": "e1b798f6ac9514e5b32ee4b7b066d472d060090bd7d87f5c964942ded35453e7"
+      }
+    ],
+    "manifest_sha256": "da2277ee1423483f54ec2c1b37fbe755a0128019ba97ec1c8e88127ae0ab61e6",
+    "mounted_standalone_delivery": {
+      "status": "succeeded",
+      "passed": 33,
+      "skipped": 0,
+      "receipt": "dmg-development/dmg-delivery.json",
+      "mount_receipt": "dmg-development/dmg-mounted-verification.json",
+      "clean_machine_verified": false,
+      "detached": true
+    }
+  },
+  "formal_acceptance": {
+    "user_scope": "Complete local delivery; do not use the observed Developer ID; no notary profile or independent Mac available",
+    "developer_id_signing": "not_performed_deferred_by_user",
+    "developer_id_private_key_used": false,
+    "apple_notarization": "not_performed_profile_not_supplied",
+    "apple_upload_performed": false,
+    "gatekeeper_notarized_delivery": "not_performed",
+    "independent_clean_mac": "not_provided_not_performed"
+  },
+  "prior_stages": {
+    "stage2_real_login": "pending_separate_acceptance",
+    "stage2_login_fixture_preserved_sha256": "d8c3a1b2efeb0f27f59eb530d7e625ab9b3484ba7a487347f3e30e47599972e2",
+    "stage3_isolation": "disabled_by_user_choice_keep_native_macos_no_linux_vm"
+  },
+  "residue": {
+    "before": "residue-before.json",
+    "after": "residue-after.json",
+    "fixture_entries_after": 0,
+    "owned_image_mounts_after": 0,
+    "process_candidates_after": 0,
+    "global_or_historical_cleanup": "not_claimed"
+  },
+  "preliminary_evidence": [
+    "probes/",
+    "release-tool/",
+    "superseded-before-receipt-alias-fix/"
+  ],
+  "research_harness_correction": "dmg-development/dmg-mount-harness-initial-failure.json records an initial harness-only comparison failure before any delivery tests; the owned mount was detached and corrected final run passed."
+}

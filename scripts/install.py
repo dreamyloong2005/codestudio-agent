@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 from contextlib import contextmanager
 import ctypes
+import errno
 import hashlib
 import json
 import os
@@ -19,6 +20,7 @@ import platform
 import re
 import stat
 import sys
+import unicodedata
 import uuid
 
 PRODUCT = "CodeStudio-Agent"
@@ -46,6 +48,9 @@ def require(condition, message):
 
 def native_target():
     machine = platform.machine().lower()
+    if sys.platform == "darwin":
+        require(machine == "arm64", "Only native macOS arm64 installations are supported")
+        return "macosx", "arm64", "codestudio-agent"
     require(machine in {"amd64", "x86_64"}, "Only native x86-64 installations are supported")
     if os.name == "nt":
         return "windows", "x64", "codestudio-agent.exe"
@@ -58,6 +63,8 @@ def default_prefix():
         local = os.environ.get("LOCALAPPDATA", "")
         require(bool(local) and Path(local).is_absolute(), "LOCALAPPDATA is unavailable; provide an explicit prefix")
         return Path(local) / "Programs" / PRODUCT
+    if sys.platform == "darwin":
+        return Path.home() / "Library" / "Application Support" / "CodeStudio Agent"
     return Path.home() / ".local" / "share" / "codestudio-agent"
 
 
@@ -67,11 +74,52 @@ def linked(info):
 
 def absolute_path(value):
     # Do not resolve first: that would hide a symlink or Windows junction.
+    if sys.platform == "darwin":
+        require(".." not in Path(value).parts, "Parent traversal is not permitted in installation paths")
     return Path(os.path.abspath(os.fspath(value)))
+
+
+def darwin_path(path, physical=False):
+    """Resolve native spelling only after every existing component is pinned.
+
+    F_GETPATH_NOFIRMLINK also exposes physical ancestors hidden by APFS
+    firmlinks. Missing destination tails remain explicit and need not exist.
+    """
+    import fcntl
+    path = absolute_path(path)
+    descriptors = [os.open("/", os.O_RDONLY | os.O_DIRECTORY | os.O_CLOEXEC)]
+    names = []
+    tail = []
+    try:
+        parts = path.parts[1:]
+        for index, name in enumerate(parts):
+            try:
+                child = os.open(name, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW | os.O_CLOEXEC,
+                                dir_fd=descriptors[-1])
+            except FileNotFoundError:
+                tail = [unicodedata.normalize("NFC", part) for part in parts[index:]]
+                break
+            descriptors.append(child)
+            names.append(name)
+        raw = fcntl.fcntl(descriptors[-1], 102 if physical else 50, bytes(1024))
+        native = Path(unicodedata.normalize("NFC", os.fsdecode(raw.split(b"\0", 1)[0])))
+        require(native.is_absolute(), "Cannot resolve native installation path")
+        for index, name in enumerate(names):
+            named = os.stat(name, dir_fd=descriptors[index], follow_symlinks=False)
+            opened = os.fstat(descriptors[index + 1])
+            require(stat.S_ISDIR(named.st_mode) and
+                    (named.st_dev, named.st_ino) == (opened.st_dev, opened.st_ino),
+                    "Installation path changed during inspection")
+        return native.joinpath(*tail)
+    finally:
+        for descriptor in reversed(descriptors):
+            os.close(descriptor)
 
 
 def check_chain(path):
     path = absolute_path(path)
+    if sys.platform == "darwin":
+        return darwin_path(path)
     for part in reversed((path, *path.parents)):
         try:
             info = part.lstat()
@@ -82,9 +130,19 @@ def check_chain(path):
     return path
 
 
+def paths_overlap(left, right):
+    if sys.platform == "darwin":
+        def key(path):
+            return tuple(unicodedata.normalize("NFD", part).casefold()
+                         for part in darwin_path(path, physical=True).parts)
+        a, b = key(left), key(right)
+        return a[:len(b)] == b or b[:len(a)] == a
+    return left == right or left in right.parents or right in left.parents
+
+
 def checked_prefix(value):
     path = check_chain(value)
-    require(path != Path(path.anchor) and path != absolute_path(Path.home()), "Refusing an unsafe installation prefix")
+    require(path != Path(path.anchor) and path != check_chain(Path.home()), "Refusing an unsafe installation prefix")
     # Refuse commonly selected container directories even when they are empty.
     forbidden = {absolute_path(Path(sys.prefix))}
     if os.name == "nt":
@@ -93,6 +151,17 @@ def checked_prefix(value):
                 forbidden.add(absolute_path(os.environ[variable]))
     else:
         forbidden.update(Path(item) for item in ("/usr", "/usr/local", "/opt", "/etc", "/var", "/tmp", "/home"))
+    if sys.platform == "darwin":
+        forbidden.update(Path(item) for item in ("/Applications", "/Library", "/System", "/Users"))
+        forbidden.update(Path.home() / item for item in ("Library", "Library/Application Support", "Applications"))
+        native_forbidden = set()
+        for candidate in forbidden:
+            try:
+                native_forbidden.add(check_chain(candidate))
+            except OSError:
+                # A symlink container is already refused by check_chain.
+                pass
+        forbidden |= native_forbidden
     require(path not in forbidden, "Refusing an unsafe installation prefix")
     require(path.name not in {".", "..", ""}, "Invalid installation prefix")
     return path
@@ -101,7 +170,7 @@ def checked_prefix(value):
 def path_name(value):
     require(isinstance(value, str) and 0 < len(value) <= 240, "Invalid package path")
     parts = value.split("/")
-    require(all(re.fullmatch(r"[A-Za-z0-9_.-]+", part) and part not in {".", ".."}
+    require(all(re.fullmatch(r"[A-Za-z0-9_.+-]+", part) and part not in {".", ".."}
                 and not part.endswith((".", " ")) for part in parts), "Invalid package path")
     # Apply Windows's alias rules on both platforms so one manifest has one name.
     devices = {"CON", "PRN", "AUX", "NUL", *("COM" + str(i) for i in range(1, 10)),
@@ -275,7 +344,126 @@ def verify_install(root, expected_prefix=None):
     return package
 
 
+class DarwinRegionInfo(ctypes.Structure):
+    _fields_=[(name,ctypes.c_uint32) for name in ('protection','max_protection','inheritance','flags')]
+    _fields_ += [('offset',ctypes.c_uint64)]
+    _fields_ += [(name,ctypes.c_uint32) for name in ('behavior','user_wired_count','user_tag','pages_resident','pages_shared_now_private','pages_swapped_out','pages_dirtied','ref_count','shadow_depth','share_mode','private_pages_resident','shared_pages_resident','obj_id','depth')]
+    _fields_ += [('address',ctypes.c_uint64),('size',ctypes.c_uint64)]
+class DarwinVinfoStat(ctypes.Structure):
+    _fields_=[('dev',ctypes.c_uint32),('mode',ctypes.c_uint16),('nlink',ctypes.c_uint16),('ino',ctypes.c_uint64),('uid',ctypes.c_uint32),('gid',ctypes.c_uint32)]
+    _fields_ += [(name,ctypes.c_int64) for name in ('atime','atimensec','mtime','mtimensec','ctime','ctimensec','birthtime','birthtimensec','size','blocks')]
+    _fields_ += [('blksize',ctypes.c_int32),('flags',ctypes.c_uint32),('gen',ctypes.c_uint32),('rdev',ctypes.c_uint32),('qspare',ctypes.c_int64*2)]
+class DarwinVnodeInfo(ctypes.Structure):
+    _fields_=[('stat',DarwinVinfoStat),('type',ctypes.c_int),('pad',ctypes.c_int),('fsid',ctypes.c_int32*2)]
+class DarwinVnodePath(ctypes.Structure):
+    _fields_=[('vnode',DarwinVnodeInfo),('path',ctypes.c_char*1024)]
+class DarwinRegionPath(ctypes.Structure):
+    _fields_=[('region',DarwinRegionInfo),('vnodepath',DarwinVnodePath)]
+
+
+def darwin_mapped_file(pid, identity):
+    """Compare kernel-reported mapped vnodes, never stat a process pathname."""
+    import select
+    import time
+    library = ctypes.CDLL("/usr/lib/libproc.dylib", use_errno=True)
+    library.proc_pidinfo.argtypes = [ctypes.c_int, ctypes.c_int, ctypes.c_uint64, ctypes.c_void_p, ctypes.c_int]
+    library.proc_pidinfo.restype = ctypes.c_int
+    require(ctypes.sizeof(DarwinRegionPath) == 1272, "Unexpected native process-region ABI")
+    queue = select.kqueue()
+    try:
+        try:
+            queue.control([select.kevent(pid, filter=select.KQ_FILTER_PROC, flags=select.KQ_EV_ADD,
+                           fflags=select.KQ_NOTE_EXIT | select.KQ_NOTE_EXEC)], 0)
+        except ProcessLookupError:
+            return False
+        address, deadline = 0, time.monotonic() + 2
+        matched = False
+        for _ in range(16384):
+            require(time.monotonic() < deadline, "Process mapping inspection exceeded its deadline")
+            region = DarwinRegionPath()
+            ctypes.set_errno(0)
+            size = library.proc_pidinfo(pid, 8, address, ctypes.byref(region), ctypes.sizeof(region))
+            error = ctypes.get_errno()
+            if size != ctypes.sizeof(region):
+                if error in (errno.EINVAL, errno.ESRCH):
+                    break
+                raise InstallError("Cannot inspect mapped Agent image identity")
+            observed = region.vnodepath.vnode.stat
+            if observed.ino and (observed.dev, observed.ino) == identity:
+                matched = True
+                break
+            following = region.region.address + region.region.size
+            require(address < following < 2**64, "Invalid native process mapping range")
+            address = following
+        else:
+            raise InstallError("Process mapping inspection exceeded its region bound")
+        events = queue.control([], 8, 0)
+        if any(event.fflags & select.KQ_NOTE_EXIT for event in events):
+            return False
+        require(not any(event.fflags & select.KQ_NOTE_EXEC for event in events),
+                "Agent executable changed during process inspection")
+        return matched
+    finally:
+        queue.close()
+
+
+def darwin_running_executable(binary):
+    # Name/path selects native Agent candidates; the actual mapped vnode is
+    # compared below. This is read-only and not a lock against later exec.
+    expected = binary.stat()
+    library = ctypes.CDLL("/usr/lib/libproc.dylib", use_errno=True)
+    library.proc_listpids.argtypes = [ctypes.c_uint32, ctypes.c_uint32, ctypes.c_void_p, ctypes.c_int]
+    library.proc_listpids.restype = ctypes.c_int
+    library.proc_pidpath.argtypes = [ctypes.c_int, ctypes.c_void_p, ctypes.c_uint32]
+    library.proc_pidpath.restype = ctypes.c_int
+    library.proc_name.argtypes = [ctypes.c_int, ctypes.c_void_p, ctypes.c_uint32]
+    library.proc_name.restype = ctypes.c_int
+    count = library.proc_listpids(4, os.getuid(), None, 0)  # PROC_UID_ONLY
+    require(0 < count < 4 * 1024 * 1024, "Cannot inspect running Agent processes")
+    for _ in range(3):
+        processes = (ctypes.c_int * (count // ctypes.sizeof(ctypes.c_int) + 128))()
+        size = ctypes.sizeof(processes)
+        returned = library.proc_listpids(4, os.getuid(), processes, size)
+        require(returned >= 0, "Cannot inspect running Agent processes")
+        if returned < size:
+            break
+        count = size * 2
+        require(count < 4 * 1024 * 1024, "Process observation exceeds its bound")
+    else:
+        raise InstallError("Process list changed too quickly to inspect safely")
+    for pid in processes[:returned // ctypes.sizeof(ctypes.c_int)]:
+        if pid <= 0:
+            continue
+        buffer = ctypes.create_string_buffer(4096)
+        ctypes.set_errno(0)
+        length = library.proc_pidpath(pid, buffer, len(buffer))
+        error = ctypes.get_errno()
+        if length <= 0:
+            if error == errno.ESRCH:
+                continue
+            name = ctypes.create_string_buffer(1024)
+            ctypes.set_errno(0)
+            length = library.proc_name(pid, name, len(name))
+            if length <= 0 and ctypes.get_errno() == errno.ESRCH:
+                continue
+            require(length > 0 and os.fsdecode(name.value).casefold() != binary.name.casefold(),
+                    "Cannot verify whether an Agent process uses this installation")
+            continue
+        image = Path(os.fsdecode(buffer.value))
+        # Package inventory forbids linked/renamed payload files. Include every
+        # standard Agent name, and unusual names still within this installation.
+        parts = lambda path: tuple(unicodedata.normalize("NFD", part).casefold() for part in path.parts)
+        installation = parts(binary.parent)
+        if image.name.casefold() != binary.name.casefold() and parts(image)[:len(installation)] != installation:
+            continue
+        if darwin_mapped_file(pid, (expected.st_dev, expected.st_ino)):
+            return True
+    return False
+
+
 def running_installed_executable(binary):
+    if sys.platform == "darwin":
+        return darwin_running_executable(binary)
     if os.name != "nt":
         expected = binary.stat()
         for process in Path("/proc").iterdir():
@@ -334,11 +522,78 @@ def running_installed_executable(binary):
         kernel.CloseHandle(snapshot)
 
 
+def private_new_descriptor(descriptor, mode):
+    if sys.platform == "darwin":
+        library = ctypes.CDLL(None, use_errno=True)
+        library.acl_init.argtypes = [ctypes.c_int]
+        library.acl_init.restype = ctypes.c_void_p
+        library.acl_set_fd.argtypes = [ctypes.c_int, ctypes.c_void_p]
+        library.acl_set_fd.restype = ctypes.c_int
+        library.acl_free.argtypes = [ctypes.c_void_p]
+        library.acl_free.restype = ctypes.c_int
+        acl = library.acl_init(0)
+        require(bool(acl), "Cannot create a private installation ACL")
+        try:
+            require(library.acl_set_fd(descriptor, acl) == 0, "Cannot clear inherited installation ACL")
+        finally:
+            library.acl_free(acl)
+        os.fchmod(descriptor, mode)
+
+
+def create_directories(path):
+    if sys.platform != "darwin":
+        path.mkdir(parents=True, exist_ok=True)
+        return
+    # Existing user directories are never chmod'ed or stripped of their ACLs.
+    for directory in reversed((path, *path.parents)):
+        try:
+            directory.mkdir(mode=0o700)
+        except FileExistsError:
+            check_chain(directory)
+            continue
+        descriptor = os.open(directory, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+        try:
+            private_new_descriptor(descriptor, 0o700)
+        finally:
+            os.close(descriptor)
+
+
+def quarantine_value(path):
+    if sys.platform != "darwin":
+        return None
+    library = ctypes.CDLL(None, use_errno=True)
+    library.getxattr.argtypes = [ctypes.c_char_p, ctypes.c_char_p, ctypes.c_void_p,
+                                ctypes.c_size_t, ctypes.c_uint32, ctypes.c_int]
+    library.getxattr.restype = ctypes.c_ssize_t
+    encoded_path, name = os.fsencode(path), b"com.apple.quarantine"
+    size = library.getxattr(encoded_path, name, None, 0, 0, 1)  # XATTR_NOFOLLOW
+    if size < 0:
+        error = ctypes.get_errno()
+        if error in (getattr(errno, "ENOATTR", 93), errno.ENOTSUP):
+            return None
+        raise OSError(error, "Cannot inspect package quarantine")
+    require(size <= 4096, "Package quarantine attribute exceeds its limit")
+    value = ctypes.create_string_buffer(max(size, 1))
+    returned = library.getxattr(encoded_path, name, value, size, 0, 1)
+    require(returned == size, "Package quarantine changed during inspection")
+    return value.raw[:size]
+
+
+def set_quarantine(path, value):
+    library = ctypes.CDLL(None, use_errno=True)
+    library.setxattr.argtypes = [ctypes.c_char_p, ctypes.c_char_p, ctypes.c_void_p,
+                                ctypes.c_size_t, ctypes.c_uint32, ctypes.c_int]
+    library.setxattr.restype = ctypes.c_int
+    buffer = ctypes.create_string_buffer(value)
+    require(library.setxattr(os.fsencode(path), b"com.apple.quarantine", buffer, len(value), 0, 1) == 0,
+            "Cannot preserve package quarantine")
+
+
 @contextmanager
 def mutation_lock(prefix):
     # This coordinates installer invocations only, not new Agent launches.
-    prefix.parent.mkdir(parents=True, exist_ok=True)
-    check_chain(prefix.parent)
+    create_directories(prefix.parent)
+    prefix = check_chain(prefix)
     lock = prefix.with_name("." + prefix.name + ".codestudio-install.lock")
     try:
         descriptor = os.open(lock, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
@@ -347,10 +602,11 @@ def mutation_lock(prefix):
     token = uuid.uuid4().hex.encode("ascii")
     try:
         with os.fdopen(descriptor, "wb") as stream:
+            private_new_descriptor(stream.fileno(), 0o600)
             stream.write(token)
             stream.flush()
             os.fsync(stream.fileno())
-        yield
+        yield check_chain(prefix)
     finally:
         if lock.exists() and read_bounded(lock, 128) == token:
             lock.unlink()
@@ -358,15 +614,23 @@ def mutation_lock(prefix):
 
 def copy_verified(source, destination, package):
     destination.mkdir(mode=0o700)
+    if sys.platform == "darwin":
+        descriptor = os.open(destination, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+        try:
+            private_new_descriptor(descriptor, 0o700)
+        finally:
+            os.close(descriptor)
+    root_quarantine = quarantine_value(source)
     for record in package["records"]:
         source_path = source / record["path"]
         target = destination / record["path"]
-        target.parent.mkdir(parents=True, exist_ok=True)
+        create_directories(target.parent)
         regular_info(source_path)
         digest = hashlib.sha256()
         total = 0
         flags = os.O_RDONLY | getattr(os, "O_BINARY", 0) | getattr(os, "O_NOFOLLOW", 0)
         with os.fdopen(os.open(source_path, flags), "rb") as incoming, target.open("xb") as outgoing:
+            private_new_descriptor(outgoing.fileno(), 0o600)
             for chunk in iter(lambda: incoming.read(1024 * 1024), b""):
                 total += len(chunk)
                 require(total <= record["size"], "Package changed while staging")
@@ -376,6 +640,11 @@ def copy_verified(source, destination, package):
             os.fsync(outgoing.fileno())
         require(total == record["size"] and digest.hexdigest() == record["sha256"], "Package changed while staging")
         target.chmod(0o755 if record["executable"] else 0o644)
+        quarantine = quarantine_value(source_path)
+        if quarantine is None:
+            quarantine = root_quarantine
+        if quarantine is not None:
+            set_quarantine(target, quarantine)
 
 
 def remove_verified_tree(root, records):
@@ -405,13 +674,25 @@ def response(operation, status, prefix, package=None, **extra):
     return result
 
 
+def publish_new_path(source, target):
+    if sys.platform != "darwin":
+        source.rename(target)
+        return
+    library = ctypes.CDLL(None, use_errno=True)
+    library.renameatx_np.argtypes = [ctypes.c_int, ctypes.c_char_p, ctypes.c_int,
+                                    ctypes.c_char_p, ctypes.c_uint]
+    library.renameatx_np.restype = ctypes.c_int
+    # RENAME_EXCL also refuses an empty directory created after preflight.
+    if library.renameatx_np(-2, os.fsencode(source), -2, os.fsencode(target), 4) != 0:
+        raise OSError(ctypes.get_errno(), "Exclusive installation publication failed")
+
+
 def install(operation, source, prefix):
     source = check_chain(source)
-    require(source != prefix and source not in prefix.parents and prefix not in source.parents,
+    require(not paths_overlap(source, prefix),
             "Package source and installation prefix must not overlap")
     package = verify_package(source)
-    with mutation_lock(prefix):
-        check_chain(prefix)
+    with mutation_lock(prefix) as prefix:
         previous = verify_install(prefix) if prefix.exists() else None
         if previous and previous["package_sha256"] == package["package_sha256"]:
             return response(operation, "unchanged", prefix, previous)
@@ -430,6 +711,7 @@ def install(operation, source, prefix):
             receipt = {"format": FORMAT, "product": PRODUCT, "prefix": str(prefix),
                        "package_sha256": staged["package_sha256"], "files": staged["records"]}
             with (stage / RECEIPT).open("x", encoding="utf-8", newline="\n") as output:
+                private_new_descriptor(output.fileno(), 0o600)
                 json.dump(receipt, output, sort_keys=True, indent=2)
                 output.write("\n")
                 output.flush()
@@ -439,13 +721,13 @@ def install(operation, source, prefix):
             if previous:
                 verify_install(prefix)
                 require(not running_installed_executable(prefix / native_target()[2]), "Stop installed Agent processes before upgrade")
-                prefix.rename(backup)
+                publish_new_path(prefix, backup)
             try:
-                stage.rename(prefix)
+                publish_new_path(stage, prefix)
             except BaseException:
                 if previous:
                     try:
-                        backup.rename(prefix)
+                        publish_new_path(backup, prefix)
                     except OSError:
                         raise InstallError("Package publication and rollback failed; the previous installation is retained for recovery",
                                            status="publication_incomplete", retained_path=str(backup), prefix=str(prefix)) from None
@@ -474,11 +756,11 @@ def install(operation, source, prefix):
 def uninstall(prefix):
     if not prefix.exists():
         return response("uninstall", "absent", prefix)
-    with mutation_lock(prefix):
+    with mutation_lock(prefix) as prefix:
         package = verify_install(prefix)
         require(not running_installed_executable(prefix / native_target()[2]), "Stop installed Agent processes before uninstall")
         removal = prefix.with_name("." + prefix.name + ".remove-" + uuid.uuid4().hex)
-        prefix.rename(removal)
+        publish_new_path(prefix, removal)
         try:
             # Recheck after the atomic rename. Unknown content is never deleted.
             verify_install(removal, prefix)

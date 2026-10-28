@@ -6,7 +6,7 @@
 
 长期架构见 [研究报告](Agent与Harness研究及新产品架构建议.md)。未来随着 mcpp 生态成熟再评估迁移；当前工程使用 XMake。
 
-用户级安装、升级、卸载、Windows/Linux 标准发布包与统一验证入口见 [构建与交付](docs/delivery.md)。`python scripts/verify.py --mode all` 顺序验证 Debug/Release 并生成独立 JSON 回执；发布工具只打包已构建程序。安装不改 PATH、自启、用户工作区或凭据。CI 定义已提供，托管执行需要另行配置符合要求的 runner。
+用户级安装、升级、卸载、Windows/Linux 标准包、macOS arm64 可搬移测试包与统一验证入口见 [构建与交付](docs/delivery.md)。`python scripts/verify.py --mode all` 顺序验证 Debug/Release 并生成独立 JSON 回执；发布工具只打包已构建程序。安装不改 PATH、自启、用户工作区或凭据。CI 定义已提供，托管执行需要另行配置符合要求的 runner。
 
 ## 当前能力
 
@@ -52,7 +52,7 @@ export CODESTUDIO_CONTRACT_PYTHON=/absolute/path/to/python3
 bash scripts/verify-macos.sh all
 ```
 
-验证会实际编译和运行 C++26、`std::format`、时区与 DST 探针，并生成 `build/verification/macosx/` 下的独立回执。macOS 支持环境与 Keychain 凭据、OAuth 原生存储、后台启动与有界监督及 LaunchAgent 登记。真实登录触发须按 [macOS 验收步骤](docs/macos.md) 单独验证；阶段 3 已实现安全文件导入/原子导出前置层并完成原生机制探针；完整资源限额和进程生命周期仍有缺口，隔离执行继续不可用，使用 `--sandbox none`。构建提案可创建、审阅、拒绝并续跑；批准请求因隔离后端缺失而在提交决定前拒绝。安装与签名公证属于后续阶段。
+验证会实际编译和运行 C++26、`std::format`、时区与 DST 探针，并生成 `build/verification/macosx/` 下的独立回执。macOS 支持环境与 Keychain 凭据、OAuth 原生存储、后台启动与有界监督及 LaunchAgent 登记。真实登录触发须按 [macOS 验收步骤](docs/macos.md) 单独验证；阶段 3 已实现安全文件导入/原子导出前置层并完成原生机制探针；完整资源限额和进程生命周期仍有缺口，隔离执行继续不可用，使用 `--sandbox none`。构建提案可创建、审阅、拒绝并续跑；批准请求因隔离后端缺失而在提交决定前拒绝。阶段 4 已提供随包运行库、用户级安装与签名公证工具；正式发布以签名、公证及独立 Mac 验收回执为准，见 [交付说明](docs/delivery.md)。
 
 ## 无需密钥体验
 

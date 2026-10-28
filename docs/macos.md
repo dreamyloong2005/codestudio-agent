@@ -1,6 +1,6 @@
 # macOS 适配路线
 
-CodeStudio Agent 的 macOS 首个目标是 Apple Silicon（arm64）基础运行版。阶段 1 已完成本机 Debug/Release 验收；阶段 2 已实现 Keychain、后台监督和 LaunchAgent 登记，真实登录触发的验收单独记录。隔离能力和正式交付属于后续阶段。实现状态、测试通过和托管 CI 运行结果分别记录。
+CodeStudio Agent 的 macOS 首个目标是 Apple Silicon（arm64）基础运行版。阶段 1 已完成本机 Debug/Release 验收；阶段 2 已实现 Keychain、后台监督和 LaunchAgent 登记，真实登录触发的验收单独记录。隔离能力按当前选择暂不启用；阶段 4 提供可搬移包、用户级安装与签名公证工具。实现状态、测试通过和托管 CI 运行结果分别记录。
 
 核心继续使用 **C++26 + XMake**，mcpp 等生态成熟后再评估迁移。CodeStudio Agent 负责无界面的 Agent/Harness、CLI 和服务接口；桌面 UI 属于 **CodeStudio Next**。本地模型后续开发继续暂停，macOS 适配不包含模型下载、服务管理或内嵌推理。
 
@@ -10,14 +10,14 @@ CodeStudio Agent 的 macOS 首个目标是 Apple Silicon（arm64）基础运行�
 
 | 能力 | 当前实现或后续缺口 | 主要代码与文档入口 |
 |---|---|---|
-| 原生构建与验证 | 已增加 macosx/arm64 配置、C++26/格式化/时区运行探针和 Debug/Release 回执；本机 Debug/Release 验收通过，打包留在阶段 4 | [XMake 配置](../xmake.lua)、[工具链要求](../scripts/toolchains.json)、[验证入口](../scripts/verify.py)、[打包入口](../scripts/package.py) |
+| 原生构建与验证 | 已增加 macosx/arm64 配置、C++26/格式化/时区运行探针和 Debug/Release 回执；本机 Debug/Release 验收通过，打包与发布验收见阶段 4 | [XMake 配置](../xmake.lua)、[工具链要求](../scripts/toolchains.json)、[验证入口](../scripts/verify.py)、[打包入口](../scripts/package.py) |
 | 普通进程与身份 | Darwin 使用 posix_spawn、明确继承标准流与进程组；出生身份绑定系统启动 UUID 和微秒级启动时间，使用 kqueue 检查查询中的退出 | [进程执行](../src/platform/process.cpp)、[stdio 子进程](../src/platform/line_process.cpp)、[身份观测](../src/platform/process_observation.cpp) |
 | 后台 worker 与监督 | 支持独立会话后台启动、绑定父身份的受管 worker、有限重启和停止代数；复用持久队列与 cron | [后台启动](../src/platform/scheduler_process.cpp)、[监督子进程](../src/platform/scheduler_child.cpp)、[调度语义](scheduler.md) |
 | 系统凭据与 OAuth | 环境与非交互 Keychain 凭据可用；OAuth 使用独立记录域及跨进程刷新锁，保留崩溃不可重试标记 | [凭据后端](../src/platform/credentials.cpp)、[OAuth 原生能力](../src/mcp/oauth_native.cpp)、[凭据语义](credentials.md)、[OAuth](mcp-oauth.md) |
 | 当前用户登录自启 | 当前用户 LaunchAgent enable/status/disable 已实现；不立即执行、不无限重启，真实登录证据单列 | [自启入口](../src/platform/autostart.cpp)、[后台调度](scheduler.md) |
 | OS 隔离与工作区执行 | 只读清单快照及安全导入/原子导出前置层已适配，含大小写、Unicode 和 APFS 卷别名保护；隔离执行仍不支持，无宿主回退 | [沙箱入口](../src/platform/sandbox.cpp)、[Darwin 工作区操作](../src/platform/build_workspace_macos.cpp)、[隔离构建](workspace-builds.md) |
 | 资源登记与回收 | 非 Windows/Linux 平台使用不支持存根，缺少本机资源身份和回收实现 | [资源接口实现](../src/platform/sandbox_resources.cpp)、[资源生命周期](sandbox-resources.md) |
-| CI 与发布交付 | 已定义 macOS ARM64 自托管原生验证作业；尚无本轮托管运行结论，安装验收及签名公证留在阶段 4 | [CI 定义](../.github/workflows/native.yml)、[交付说明](delivery.md) |
+| CI 与发布交付 | 已定义 macOS ARM64 自托管原生验证、打包和临时安装作业；提供发布签名公证工具，正式验收状态单列，尚无本轮托管运行结论 | [CI 定义](../.github/workflows/native.yml)、[交付说明](delivery.md) |
 
 ## 阶段与依赖
 
@@ -26,13 +26,13 @@ CodeStudio Agent 的 macOS 首个目标是 Apple Silicon（arm64）基础运行�
 | 1 | macOS arm64 基础运行与原生验证 | 代码已落地，本机原生验收通过 | 原生 Debug/Release 构建与基础功能测试通过，产生对应源码和产物的机器回执 |
 | 2 | Keychain、后台监督与登录自启 | 代码已实现；真实登录验收待完成 | 凭据生命周期、后台续跑、cron 和 LaunchAgent 的真实运行场景通过 |
 | 3 | 插件、工作区与资源生命周期隔离 | 文件准备层已实现；原生资源和生命周期保证存在实测缺口，整体验收未完成 | 后端方案确认，隔离拒绝、资源限额、取消和崩溃回收得到实际验证 |
-| 4 | 安装、签名公证与正式交付 | 待实现，依赖拟发布能力的验收 | 干净 Mac 完成安装、升级、卸载及发布包运行验收 |
+| 4 | 安装、签名公证与正式交付 | 工具已实现；本机安装与正式发布验收分别记录 | 干净 Mac 完成安装、升级、卸载及发布包运行验收 |
 
 原生 CI 从阶段 1 开始接入，持续复用统一验证入口；阶段 4 才完成正式分发验收。隔离方案可提前调查，但阶段 1、2 的通过不能代替阶段 3 的验证。
 
 ## 阶段 1：macOS arm64 基础运行与原生验证
 
-本阶段是本轮开发范围，在真实 Apple Silicon Mac 上建立可重复的基础运行与测试路径。
+该阶段在真实 Apple Silicon Mac 上建立可重复的基础运行与测试路径。
 
 实施内容：
 
@@ -163,7 +163,11 @@ prepare 仅登记独立的普通/监督两种 fixture，记录可执行文件与
 
 ## 阶段 4：正式交付
 
-基础 CI 继续运行，本阶段补齐面向用户的发布链路。
+基础 CI 继续运行，本阶段补齐面向用户的发布链路。当前提供 macOS arm64 可搬移包、用户级安装/升级/卸载，以及显式 Developer ID 签名、公证和 DMG ticket 装订工具。开发测试包使用 ad-hoc 签名以运行重定位后的 Mach-O，不属于正式签名或公证发布。
+
+包内带时区可用的 libc++/libc++abi 和对应许可，仅加载相对私有运行库及系统依赖；原构建摘要、重定位摘要、最终签名字节及归档摘要分别记录。包内 `verify-delivery.py --standalone` 可在没有源码和编译器的 Mac 上验证临时安装、实际运行、升级及卸载；其机器回执不会仅凭命令参数宣称环境干净。
+
+复现命令见[交付说明](delivery.md)，本轮原生、包字节、临时安装及正式发布各自的实际状态见[阶段 4 回执](../research/macos-stage4/README.md)。阶段 2 真实登录、阶段 3 完整隔离、独立干净 Mac 和 Apple 公证结果均不可由本机包测试替代。
 
 - 扩展用户级安装、升级、卸载和包清单校验；保留用户数据及被修改的文件，并检查升级后的程序实际可运行。
 - 完成应用代码签名、公证及分发包验证，明确签名身份、依赖、最低系统版本和架构；摘要校验不等于发布者身份验证。

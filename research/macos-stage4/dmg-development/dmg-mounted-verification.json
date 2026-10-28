@@ -1,0 +1,24 @@
+{
+  "status": "succeeded",
+  "started_at": "2026-10-28T03:17:08.350983+00:00",
+  "scope": "Actual final development DMG on current build host; not independent clean Mac",
+  "clean_machine_verified": false,
+  "image": "/Users/taosiyuan/codestudio-agent/build/macos-stage4-final/dmg-development/codestudio-agent-macosx-arm64.dmg",
+  "image_sha256": "d8147909785c9c7f458bf99fe0279b1706dce97f568d5cdb9179b1194865d4ba",
+  "mount": "/Users/taosiyuan/codestudio-agent/build/macos-stage4-final/mounted-dmg-bcwbzdg0",
+  "cwd": "/private/var/folders/wh/lj7xnlsd4ssdrgpwkw3vnsj40000gn/T/standalone-cwd-g7fz8226",
+  "detached": true,
+  "device": "/dev/disk14s1",
+  "command": [
+    "/Users/taosiyuan/codestudio-agent/build/contract-python/bin/python",
+    "-B",
+    "/Users/taosiyuan/codestudio-agent/build/macos-stage4-final/mounted-dmg-bcwbzdg0/codestudio-agent-macosx-arm64/verify-delivery.py",
+    "--standalone",
+    "--package",
+    "/Users/taosiyuan/codestudio-agent/build/macos-stage4-final/mounted-dmg-bcwbzdg0/codestudio-agent-macosx-arm64",
+    "--receipt",
+    "/Users/taosiyuan/codestudio-agent/build/macos-stage4-final/dmg-delivery.json"
+  ],
+  "returncode": 0,
+  "finished_at": "2026-10-28T03:17:22.783580+00:00"
+}

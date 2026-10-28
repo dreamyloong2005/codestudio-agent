@@ -1,0 +1,101 @@
+{
+  "status": "passed",
+  "scope": "Current host development runtime relocation, not clean-machine or publisher verification",
+  "source_binary_sha256": "376d1f2f5a303283f182d4046d6369487eee10676e8ed32b29ff54710759fdea",
+  "source_verification": "research/macos-stage3/release/verification.json",
+  "two_relocations_byte_identical": true,
+  "source_executable_unchanged": true,
+  "images": {
+    "codestudio-agent": "82ba6970777138ab3cc1c0c4392fa04be6b7261f87f9557ed9025f457e936130",
+    "lib/libc++.1.dylib": "857976a6b026db8a82a9b653b246b6ea4963147386d426a2cb550ff079a1e865",
+    "lib/libc++abi.1.dylib": "a98662a8e64d08a402fd204fed794168ccc8b8ecf4fafb14d36887d99c7cfaea"
+  },
+  "relocated_smoke": {
+    "version": "CodeStudio-Agent 0.1.0",
+    "product": "CodeStudio-Agent",
+    "cplusplus": 202400,
+    "doctor": {
+      "approval_continuation": true,
+      "automatic_resume": true,
+      "background_scheduler": true,
+      "build_manifest_versions": [
+        2
+      ],
+      "build_proposals": true,
+      "build_system": "XMake",
+      "checkpoint_resume": true,
+      "compiler": "Clang 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)",
+      "cplusplus": 202400,
+      "credentials": {
+        "references": [
+          "env",
+          "system"
+        ],
+        "resolution": "per-operation",
+        "runtime_probe": "not-run",
+        "system_backend": "macos-keychain"
+      },
+      "cron": true,
+      "local_model_discovery": true,
+      "login_autostart": true,
+      "mcp_oauth": {
+        "available": true,
+        "client_registration": "explicit",
+        "grant": "authorization_code",
+        "pkce": "S256",
+        "refresh": "before-operation",
+        "token_store": "system"
+      },
+      "mcp_transports": [
+        "stdio",
+        "streamable-http"
+      ],
+      "os_sandbox": false,
+      "plugin_distribution": true,
+      "plugin_locks": true,
+      "plugin_sandbox": {
+        "available": false,
+        "runtime_probe": "not-run"
+      },
+      "product": "CodeStudio-Agent",
+      "provider_apis": [
+        "chat-completions",
+        "responses",
+        "messages"
+      ],
+      "sandbox_backends": [],
+      "sandbox_default": "none",
+      "sandbox_resources": {
+        "available": false,
+        "reclaim": "explicit-id",
+        "runtime_probe": "not-run"
+      },
+      "sandbox_runtime_probe": "not-run",
+      "sandbox_scope": "process-and-mcp-children",
+      "sandbox_support": "compiled-backends",
+      "state_schema": 7,
+      "streaming": true,
+      "supervised_autostart": true,
+      "supervisor_diagnostics": true,
+      "task_service": {
+        "event_replay": true,
+        "protocol_version": 2,
+        "transport": "stdio"
+      },
+      "version": "0.1.0",
+      "worker_supervision": true,
+      "workspace_build": {
+        "available": false,
+        "backend": null,
+        "runtime_probe": "not-run"
+      }
+    }
+  },
+  "missing_library": {
+    "returncode": -6,
+    "stdout": "",
+    "stderr": "dyld[77462]: Library not loaded: @loader_path/lib/libc++.1.dylib\n  Referenced from: <92CF257F-D963-3256-B168-4C48FDE76279> /Users/taosiyuan/codestudio-agent/build/codestudio-runtime-missing-he2zfo4v/codestudio-agent\n  Reason: tried: '/Users/taosiyuan/codestudio-agent/build/codestudio-runtime-missing-he2zfo4v/lib/libc++.1.dylib' (no such file)\n",
+    "core_dump_disabled": true,
+    "interpretation": "The owned copy with its private libc++ removed failed before emitting version; the source toolchain was not changed."
+  }
+}

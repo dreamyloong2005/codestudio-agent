@@ -1,0 +1,207 @@
+{
+  "arch": "arm64",
+  "binary_sha256": "82ba6970777138ab3cc1c0c4392fa04be6b7261f87f9557ed9025f457e936130",
+  "compiler": "Clang 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)",
+  "dependencies": {
+    "inspection": "bounded Mach-O load commands; copied payload codesign --verify --strict",
+    "libraries": [
+      "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation",
+      "/System/Library/Frameworks/Security.framework/Versions/A/Security",
+      "/usr/lib/libSystem.B.dylib",
+      "/usr/lib/libcurl.4.dylib",
+      "/usr/lib/libz.1.dylib",
+      "@loader_path/lib/libc++.1.dylib",
+      "@loader_path/lib/libc++abi.1.dylib",
+      "@loader_path/libc++abi.1.dylib"
+    ],
+    "notes": [
+      "Private libc++/libc++abi are bundled in lib/ using loader-relative dependencies.",
+      "System libraries and frameworks are provided by macOS and are not bundled.",
+      "Minimum deployment target is macOS 15.0 arm64; another OS version needs separate validation.",
+      "The relocated development payload has ad-hoc signatures, not a verified publisher or notarization.",
+      "Timezone data remains the macOS /usr/share/zoneinfo database.",
+      "OS sandbox execution remains unavailable; no Linux virtual machine is included."
+    ]
+  },
+  "format": 2,
+  "language": "c++26",
+  "macos_bundle": {
+    "deployment_target": "15.0",
+    "images": {
+      "codestudio-agent": {
+        "dependencies": [
+          "/usr/lib/libz.1.dylib",
+          "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation",
+          "/System/Library/Frameworks/Security.framework/Versions/A/Security",
+          "/usr/lib/libcurl.4.dylib",
+          "/usr/lib/libSystem.B.dylib",
+          "@loader_path/lib/libc++.1.dylib",
+          "@loader_path/lib/libc++abi.1.dylib"
+        ],
+        "filetype": 2,
+        "install_id": null,
+        "minimum_os": "15.0",
+        "rpaths": []
+      },
+      "lib/libc++.1.dylib": {
+        "dependencies": [
+          "@loader_path/libc++abi.1.dylib",
+          "/usr/lib/libSystem.B.dylib"
+        ],
+        "filetype": 6,
+        "install_id": "@rpath/libc++.1.dylib",
+        "minimum_os": "15.0",
+        "rpaths": []
+      },
+      "lib/libc++abi.1.dylib": {
+        "dependencies": [
+          "/usr/lib/libSystem.B.dylib"
+        ],
+        "filetype": 6,
+        "install_id": "@rpath/libc++abi.1.dylib",
+        "minimum_os": "15.0",
+        "rpaths": []
+      }
+    },
+    "relocated_smoke": {
+      "cplusplus": 202400,
+      "doctor": {
+        "approval_continuation": true,
+        "automatic_resume": true,
+        "background_scheduler": true,
+        "build_manifest_versions": [
+          2
+        ],
+        "build_proposals": true,
+        "build_system": "XMake",
+        "checkpoint_resume": true,
+        "compiler": "Clang 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)",
+        "cplusplus": 202400,
+        "credentials": {
+          "references": [
+            "env",
+            "system"
+          ],
+          "resolution": "per-operation",
+          "runtime_probe": "not-run",
+          "system_backend": "macos-keychain"
+        },
+        "cron": true,
+        "local_model_discovery": true,
+        "login_autostart": true,
+        "mcp_oauth": {
+          "available": true,
+          "client_registration": "explicit",
+          "grant": "authorization_code",
+          "pkce": "S256",
+          "refresh": "before-operation",
+          "token_store": "system"
+        },
+        "mcp_transports": [
+          "stdio",
+          "streamable-http"
+        ],
+        "os_sandbox": false,
+        "plugin_distribution": true,
+        "plugin_locks": true,
+        "plugin_sandbox": {
+          "available": false,
+          "runtime_probe": "not-run"
+        },
+        "product": "CodeStudio-Agent",
+        "provider_apis": [
+          "chat-completions",
+          "responses",
+          "messages"
+        ],
+        "sandbox_backends": [],
+        "sandbox_default": "none",
+        "sandbox_resources": {
+          "available": false,
+          "reclaim": "explicit-id",
+          "runtime_probe": "not-run"
+        },
+        "sandbox_runtime_probe": "not-run",
+        "sandbox_scope": "process-and-mcp-children",
+        "sandbox_support": "compiled-backends",
+        "state_schema": 7,
+        "streaming": true,
+        "supervised_autostart": true,
+        "supervisor_diagnostics": true,
+        "task_service": {
+          "event_replay": true,
+          "protocol_version": 2,
+          "transport": "stdio"
+        },
+        "version": "0.1.0",
+        "worker_supervision": true,
+        "workspace_build": {
+          "available": false,
+          "backend": null,
+          "runtime_probe": "not-run"
+        }
+      },
+      "product": "CodeStudio-Agent",
+      "version": "CodeStudio-Agent 0.1.0"
+    },
+    "runtime_records": [
+      {
+        "path": "lib/libc++.1.dylib",
+        "sha256": "857976a6b026db8a82a9b653b246b6ea4963147386d426a2cb550ff079a1e865",
+        "size": 1172528,
+        "source_sha256": "37a40e084b7f1d1b68f509cd48cb6baf269e95c4a5109408f2215e5e33521a90"
+      },
+      {
+        "path": "lib/libc++abi.1.dylib",
+        "sha256": "a98662a8e64d08a402fd204fed794168ccc8b8ecf4fafb14d36887d99c7cfaea",
+        "size": 365808,
+        "source_sha256": "e1b798f6ac9514e5b32ee4b7b066d472d060090bd7d87f5c964942ded35453e7"
+      }
+    ],
+    "signature": "ad_hoc_not_publisher_verified",
+    "source_runtime_root": "/Users/taosiyuan/codestudio-agent/build/toolchains/libcxx-22.1.8-tzdb"
+  },
+  "mode": "release",
+  "platform": "macosx",
+  "product": "CodeStudio-Agent",
+  "source_binary_sha256": "376d1f2f5a303283f182d4046d6369487eee10676e8ed32b29ff54710759fdea",
+  "verification": {
+    "omitted_suites": [
+      "delivery"
+    ],
+    "selected_suites": [
+      "toolchain",
+      "native",
+      "schema",
+      "provider",
+      "streaming",
+      "contract",
+      "service",
+      "credentials",
+      "cli",
+      "local_models",
+      "mcp",
+      "mcp_http",
+      "mcp_oauth",
+      "plugins",
+      "resume",
+      "scheduler",
+      "supervisor",
+      "cron",
+      "autostart",
+      "package",
+      "macos_release",
+      "verification"
+    ],
+    "sha256": "69a1bb2abbd9beb18873a03d809fa34fee6907630e59be5424982710c4da7707",
+    "state": "supplied",
+    "unsupported_suites": {
+      "plugin_sandbox": "macOS OS isolation belongs to stage 3",
+      "real_build": "macOS isolated workspace execution belongs to stage 3",
+      "sandbox": "macOS OS sandbox execution belongs to stage 3; refusal is covered by native/CLI tests",
+      "sandbox_resources": "macOS isolated resource ownership and reclamation belong to stage 3"
+    }
+  },
+  "version": "0.1.0",
+  "xmake": "3.0.9+HEAD.2b184e178"
+}

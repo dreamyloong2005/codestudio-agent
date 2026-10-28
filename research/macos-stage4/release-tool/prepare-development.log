@@ -1,0 +1,6 @@
+{
+  "product": "CodeStudio-Agent",
+  "status": "development_only",
+  "receipt": "build/macos-stage4-release-probe-fixed/release.json",
+  "stage4_accepted": false
+}

@@ -1,0 +1,16 @@
+{
+  "version": {
+    "returncode": 0,
+    "stdout": "CodeStudio-Agent 0.1.0\n",
+    "stderr": ""
+  },
+  "doctor": {
+    "returncode": 0,
+    "stdout": "{\n  \"approval_continuation\": true,\n  \"automatic_resume\": true,\n  \"background_scheduler\": true,\n  \"build_manifest_versions\": [\n    2\n  ],\n  \"build_proposals\": true,\n  \"build_system\": \"XMake\",\n  \"checkpoint_resume\": true,\n  \"compiler\": \"Clang 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)\",\n  \"cplusplus\": 202400,\n  \"credentials\": {\n    \"references\": [\n      \"env\",\n      \"system\"\n    ],\n    \"resolution\": \"per-operation\",\n    \"runtime_probe\": \"not-run\",\n    \"system_backend\": \"macos-keychain\"\n  },\n  \"cron\": true,\n  \"local_model_discovery\": true,\n  \"login_autostart\": true,\n  \"mcp_oauth\": {\n    \"available\": true,\n    \"client_registration\": \"explicit\",\n    \"grant\": \"authorization_code\",\n    \"pkce\": \"S256\",\n    \"refresh\": \"before-operation\",\n    \"token_store\": \"system\"\n  },\n  \"mcp_transports\": [\n    \"stdio\",\n    \"streamable-http\"\n  ],\n  \"os_sandbox\": false,\n  \"plugin_distribution\": true,\n  \"plugin_locks\": true,\n  \"plugin_sandbox\": {\n    \"available\": false,\n    \"runtime_probe\": \"not-run\"\n  },\n  \"product\": \"CodeStudio-Agent\",\n  \"provider_apis\": [\n    \"chat-completions\",\n    \"responses\",\n    \"messages\"\n  ],\n  \"sandbox_backends\": [],\n  \"sandbox_default\": \"none\",\n  \"sandbox_resources\": {\n    \"available\": false,\n    \"reclaim\": \"explicit-id\",\n    \"runtime_probe\": \"not-run\"\n  },\n  \"sandbox_runtime_probe\": \"not-run\",\n  \"sandbox_scope\": \"process-and-mcp-children\",\n  \"sandbox_support\": \"compiled-backends\",\n  \"state_schema\": 7,\n  \"streaming\": true,\n  \"supervised_autostart\": true,\n  \"supervisor_diagnostics\": true,\n  \"task_service\": {\n    \"event_replay\": true,\n    \"protocol_version\": 2,\n    \"transport\": \"stdio\"\n  },\n  \"version\": \"0.1.0\",\n  \"worker_supervision\": true,\n  \"workspace_build\": {\n    \"available\": false,\n    \"backend\": null,\n    \"runtime_probe\": \"not-run\"\n  }\n}\n",
+    "stderr": ""
+  },
+  "scope": "Actual bundled executable after ad-hoc re-signing without hardened runtime. Not Developer ID, notarization, or clean-machine acceptance.",
+  "release_receipt": "/Users/taosiyuan/codestudio-agent/build/macos-stage4-release-probe-fixed/release.json",
+  "binary_sha256": "82ba6970777138ab3cc1c0c4392fa04be6b7261f87f9557ed9025f457e936130",
+  "owned_mountpoint_residue": []
+}

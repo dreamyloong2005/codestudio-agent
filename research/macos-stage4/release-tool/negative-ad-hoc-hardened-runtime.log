@@ -1,0 +1,3 @@
+dyld[78136]: Library not loaded: @loader_path/lib/libc++.1.dylib
+  Referenced from: <92CF257F-D963-3256-B168-4C48FDE76279> /Users/taosiyuan/codestudio-agent/build/macos-stage4-release-probe/payload/codestudio-agent-macosx-arm64/codestudio-agent
+  Reason: tried: '/Users/taosiyuan/codestudio-agent/build/macos-stage4-release-probe/payload/codestudio-agent-macosx-arm64/lib/libc++.1.dylib' (code signature in <8A30F6BD-88A0-3F6C-80B1-F0BA3B8B5018> '/Users/taosiyuan/codestudio-agent/build/macos-stage4-release-probe/payload/codestudio-agent-macosx-arm64/lib/libc++.1.dylib' not valid for use in process: mapping process and mapped file (non-platform) have different Team IDs)

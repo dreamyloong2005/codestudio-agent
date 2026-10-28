@@ -1,0 +1,27 @@
+{
+  "arch": "arm64",
+  "artifact": {
+    "path": "codestudio-agent-macosx-arm64.dmg",
+    "sha256": "d8147909785c9c7f458bf99fe0279b1706dce97f568d5cdb9179b1194865d4ba",
+    "size": 4421502
+  },
+  "clean_machine_acceptance": "not_claimed",
+  "created_at": "2026-10-28T03:15:54.162750+00:00",
+  "format": 1,
+  "package": "payload/codestudio-agent-macosx-arm64",
+  "package_sha256": "da2277ee1423483f54ec2c1b37fbe755a0128019ba97ec1c8e88127ae0ab61e6",
+  "platform": "macosx",
+  "prepared_at": "2026-10-28T03:16:03.370307+00:00",
+  "product": "CodeStudio-Agent",
+  "real_login_acceptance": "not_claimed",
+  "signature": {
+    "identity_sha1": null,
+    "kind": "ad_hoc_not_publisher_verified",
+    "publisher": null,
+    "team_id": null
+  },
+  "source_binary_sha256": "376d1f2f5a303283f182d4046d6369487eee10676e8ed32b29ff54710759fdea",
+  "source_package_sha256": "68cb4a77820406a8c680cb6de6689a10828ea7bb0767d40a7be7661d7fd288b6",
+  "stage4_accepted": false,
+  "status": "development_only"
+}

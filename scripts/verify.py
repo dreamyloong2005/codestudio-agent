@@ -8,6 +8,7 @@ from contextlib import contextmanager
 from datetime import datetime, timezone
 import hashlib
 import importlib.metadata
+import importlib.util
 import json
 import os
 from pathlib import Path
@@ -37,7 +38,6 @@ def unsupported_suites():
         "sandbox": "macOS OS sandbox execution belongs to stage 3; refusal is covered by native/CLI tests",
         "sandbox_resources": "macOS isolated resource ownership and reclamation belong to stage 3",
         "real_build": "macOS isolated workspace execution belongs to stage 3",
-        "delivery": "macOS installation, signing and notarization belong to stage 4",
     }
 
 
@@ -234,9 +234,23 @@ def commands(mode, package):
     elif PLATFORM == "linux":
         result["real_build"] = [sys.executable, "tests/linux_build_integration.py", agent]
     result["package"] = [sys.executable, "tests/package_tests.py"]
+    if PLATFORM == "macosx":
+        result["macos_release"] = [sys.executable, "tests/macos_release_tests.py"]
     result["verification"] = [sys.executable, "tests/verification_tests.py"]
     result["delivery"] = [sys.executable, "tests/delivery_integration.py", agent, "--package", str(package)]
     return {name: command for name, command in result.items() if name not in unsupported_suites()}
+
+
+def delivery_fingerprint(path):
+    # Verify with the repository's installer, never import code from the
+    # supplied package. Relocated/signed macOS payloads differ from build bytes.
+    spec = importlib.util.spec_from_file_location("verification_installer", ROOT / "scripts/install.py")
+    installer = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(installer)
+    root = installer.check_chain(path)
+    package = installer.verify_package(root)
+    return {"path": str(root), "manifest_sha256": package["package_sha256"],
+            "files": {record["path"]: record["sha256"] for record in package["records"]}}
 
 
 def terminate(process):
@@ -345,6 +359,8 @@ def verify(args, mode):
         if args.preflight_only:
             report["status"] = "preflight"
             return 0
+        if "delivery" in selected:
+            report["delivery_package"] = delivery_fingerprint(args.package)
         schedule = []
         if not args.skip_build:
             schedule += [("configure", configure_command(mode, env)),
@@ -364,6 +380,8 @@ def verify(args, mode):
                               "sha256": digest(binary)}
         if artifact_fingerprint(mode) != tested:
             raise RuntimeError("Built executables changed while tests were running")
+        if "delivery" in selected and delivery_fingerprint(args.package) != report["delivery_package"]:
+            raise RuntimeError("Delivery package changed while tests were running")
         if "libcxx_sha256" in report["toolchain"] and runtime_fingerprint(env) != report["toolchain"]["libcxx_sha256"]:
             raise RuntimeError("C++ runtime changed while tests were running")
         if source_fingerprint() != report["source"]:

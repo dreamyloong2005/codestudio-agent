@@ -1,0 +1,9 @@
+{
+  "status": "alias_refused_before_tests",
+  "returncode": 2,
+  "package": "/Users/taosiyuan/codestudio-agent/build/macos-stage4-installer-probe/codestudio-agent-macosx-arm64",
+  "receipt_requested": "/System/Volumes/Data/Users/taosiyuan/codestudio-agent/build/macos-stage4-installer-probe/codestudio-agent-macosx-arm64/docs/alias-receipt-must-not-exist.json",
+  "receipt_exists": false,
+  "stdout": "",
+  "stderr": "usage: delivery_integration.py --package PACKAGE [--standalone]\n                               [--receipt RECEIPT]\ndelivery_integration.py: error: --receipt must be a new file in an existing directory outside the package\n"
+}
