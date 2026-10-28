@@ -1,0 +1,105 @@
+{
+  "format": 2,
+  "product": "CodeStudio-Agent",
+  "generated_at": "2026-10-25T17:56:34.637900+00:00",
+  "status": "verified",
+  "source": {
+    "sha256": "33c069cad493bd4996c82cc1bda86c82ef951e9d0bbb8cdd9fb2bf3805f97aaa",
+    "files": 198
+  },
+  "native_mirror_file_set_and_bytes_match": true,
+  "full_verification": {
+    "windows-debug": "windows/debug-20261025T174419Z-7f78d393/verification.json",
+    "windows-release": "windows/release-20261025T174920Z-c7b632b9/verification.json",
+    "linux-debug": "linux/debug-20261025T174137Z-e7288730/verification.json",
+    "linux-release": "linux/release-20261025T174449Z-d4b599f2/verification.json"
+  },
+  "packages": {
+    "windows": {
+      "archive": {
+        "path": "build/packages/windows-x64/codestudio-agent-windows-x64.zip",
+        "sha256": "9a0c6080421eea25cd2dcb00ee6ff4b0b13a5acf5fd3cbcb198f1977095bd060",
+        "bytes": 2153509
+      },
+      "binary": {
+        "path": "build/packages/windows-x64/codestudio-agent-windows-x64/codestudio-agent.exe",
+        "sha256": "26f052d7a4bd29dc340bccb45853aa52496a62f8a9b3b1ed740cfb3eebbcf98e",
+        "bytes": 5323264
+      },
+      "package_manifest_sha256": "daf9235707bba9cba78228753761e2d58ed8f58b34c5b23f6b91c54459d72aee",
+      "payload_files": 40,
+      "archive_bytes_and_modes_match": true,
+      "manifest_and_checksums_match": true,
+      "embedded_full_release_receipt": "windows/release-20261025T174920Z-c7b632b9/verification.json",
+      "deterministic_archive_receipt": "package-repro-windows.json",
+      "archive_repeated_runs": 2
+    },
+    "linux": {
+      "archive": {
+        "path": "/var/tmp/codestudio-agent-linux/build/packages/linux-x86_64/codestudio-agent-linux-x86_64.tar.gz",
+        "sha256": "6e139ffe4da24ee82a6b85fd056de546f2118807ef68e039722533fcd6fde55b",
+        "bytes": 1697674
+      },
+      "binary": {
+        "path": "/var/tmp/codestudio-agent-linux/build/packages/linux-x86_64/codestudio-agent-linux-x86_64/codestudio-agent",
+        "sha256": "a33923fd6abdbeac3564b61a7e0a8ab652b09b39dff7da7423551cb5315e627b",
+        "bytes": 3503464
+      },
+      "package_manifest_sha256": "a5a641a26f6e23b3f7a503dd26ab37a6828eaf83bd6bdb8a8ea9a9a3df61a3cf",
+      "payload_files": 40,
+      "archive_bytes_and_modes_match": true,
+      "manifest_and_checksums_match": true,
+      "embedded_full_release_receipt": "linux/release-20261025T174449Z-d4b599f2/verification.json",
+      "deterministic_archive_receipt": "package-repro-linux.json",
+      "archive_repeated_runs": 2,
+      "delivered_archive": {
+        "path": "build/linux/x86_64/release/codestudio-agent-linux-x86_64.tar.gz",
+        "sha256": "6e139ffe4da24ee82a6b85fd056de546f2118807ef68e039722533fcd6fde55b",
+        "bytes": 1697674
+      },
+      "delivered_binary": {
+        "path": "build/linux/x86_64/release/codestudio-agent",
+        "sha256": "a33923fd6abdbeac3564b61a7e0a8ab652b09b39dff7da7423551cb5315e627b",
+        "bytes": 3503464
+      }
+    }
+  },
+  "installed_verification": {
+    "windows": {
+      "receipt": "installed-windows/release-20261025T175438Z-41274bcf/verification.json",
+      "archive_check": "archive-check-windows.json",
+      "cases": 24,
+      "passed": 23,
+      "skipped": 1,
+      "from_fresh_archive_extraction": true,
+      "temporary_extraction_cleaned": true
+    },
+    "linux": {
+      "receipt": "installed-linux/release-20261025T174830Z-44bb00bd/verification.json",
+      "archive_check": "archive-check-linux.json",
+      "cases": 24,
+      "passed": 24,
+      "skipped": 0,
+      "from_fresh_archive_extraction": true,
+      "temporary_extraction_cleaned": true
+    }
+  },
+  "linux_private_native_credential_cleanup": {
+    "linux/debug-20261025T174137Z-e7288730/verification.json": "credential-cleanup-linux-20261025T174137Z-4b83c78a.json",
+    "linux/release-20261025T174449Z-d4b599f2/verification.json": "credential-cleanup-linux-20261025T174137Z-4b83c78a.json",
+    "installed-linux/release-20261025T174830Z-44bb00bd/verification.json": "credential-cleanup-linux-20261025T174829Z-19cb2dd5.json"
+  },
+  "linux_payload_copied_without_deletion": true,
+  "boundaries": [
+    "Windows and Arch Linux WSL are the existing test hosts, not clean machines.",
+    "The enclosing Windows Job limits detached background-success verification; receipt skips remain explicit.",
+    "Archive extraction and user-level install/upgrade/uninstall tests ran in temporary owned prefixes.",
+    "No hosted CI execution, Git publication, signing, real login/reboot or permanent installation is claimed.",
+    "OAuth was verified against synthetic authorization servers and owned native-store entries, not real provider login.",
+    "Plugin distribution tests used owned fixtures and temporary stores; no remote registry or third-party plugin was published.",
+    "Resource recovery is limited to journaled identities; historical unregistered residue is neither adopted nor deleted.",
+    "Delivery verification confirms tested bytes; final-static.json reports current and historical resource residue separately.",
+    "SHA256 verifies bytes and does not establish publisher identity; packages are unsigned.",
+    "Linux extracted payload mode checks occurred on the native filesystem; the archive preserves executable modes."
+  ]
+}

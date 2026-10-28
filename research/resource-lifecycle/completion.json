@@ -1,0 +1,79 @@
+{
+  "format": 2,
+  "generated_at": "2026-10-25T18:03:51.042246+00:00",
+  "status": "completed",
+  "source": {
+    "sha256": "33c069cad493bd4996c82cc1bda86c82ef951e9d0bbb8cdd9fb2bf3805f97aaa",
+    "files": 198
+  },
+  "implemented": [
+    "private native sandbox resource journals and leases",
+    "task correlation",
+    "read-only bounded pagination",
+    "exact-id preview and explicit reclaim",
+    "CLI and asynchronous task-service interfaces",
+    "native identity and liveness refusal",
+    "ordinary Windows child assignment at process creation"
+  ],
+  "configurations": {
+    "windows-debug": {
+      "native_groups": 22,
+      "python_passed": 417,
+      "python_skipped": 8,
+      "receipt": "windows\\debug-20261025T174419Z-7f78d393\\verification.json"
+    },
+    "windows-release": {
+      "native_groups": 22,
+      "python_passed": 417,
+      "python_skipped": 8,
+      "receipt": "windows\\release-20261025T174920Z-c7b632b9\\verification.json"
+    },
+    "linux-debug": {
+      "native_groups": 22,
+      "python_passed": 386,
+      "python_skipped": 3,
+      "receipt": "linux\\debug-20261025T174137Z-e7288730\\verification.json"
+    },
+    "linux-release": {
+      "native_groups": 22,
+      "python_passed": 386,
+      "python_skipped": 3,
+      "receipt": "linux\\release-20261025T174449Z-d4b599f2\\verification.json"
+    }
+  },
+  "installed_verification": {
+    "windows": {
+      "receipt": "installed-windows/release-20261025T175438Z-41274bcf/verification.json",
+      "archive_check": "archive-check-windows.json",
+      "cases": 24,
+      "passed": 23,
+      "skipped": 1,
+      "from_fresh_archive_extraction": true,
+      "temporary_extraction_cleaned": true
+    },
+    "linux": {
+      "receipt": "installed-linux/release-20261025T174830Z-44bb00bd/verification.json",
+      "archive_check": "archive-check-linux.json",
+      "cases": 24,
+      "passed": 24,
+      "skipped": 0,
+      "from_fresh_archive_extraction": true,
+      "temporary_extraction_cleaned": true
+    }
+  },
+  "delivery": "delivery.json",
+  "resource_checks": "final-static.json",
+  "no_new_residue_gate": "passed",
+  "zero_total_residue_gate": "failed",
+  "historical_cleanup_block": "../plugin-isolation/cleanup-blocked.json",
+  "initial_fixture_metadata_archive": "retained-journals/d7d5c4e8a70fd4237381bfff8903480f/archive-receipt.json",
+  "boundaries": [
+    "Historical unregistered directories and the previously policy-blocked fixture remain untouched.",
+    "One initial Linux test journal from a prior WSL boot was archived as evidence after lease/identity/hash/absence checks; this was metadata maintenance, not successful product reclamation.",
+    "Uncaptured resource identities and interrupted final journal removal are refused rather than inferred.",
+    "Resource cleanup preserves task database/checkpoint contents and does not replay unknown effects.",
+    "The early Windows Job membership test is supplemental; it does not deterministically reproduce the former admission gap.",
+    "Existing Windows and WSL hosts were tested; no clean VM, real login/reboot, live model or permanent installation acceptance.",
+    "This milestone has not been committed or pushed."
+  ]
+}

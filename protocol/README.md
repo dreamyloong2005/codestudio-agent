@@ -82,3 +82,12 @@ The new operations are explicit host requests, never model tools or scheduler
 authorization. Installation does not execute package hooks or grant MCP access.
 Cancellation does not undo a published package/lock or completed token exchange;
 inspect status after an interrupted operation rather than replaying it blindly.
+
+## Sandbox resources
+
+`sandboxes/list` is a read-only current-user resource query with optional `after`
+and `limit`. `sandboxes/reclaim` is a foreground operation with an exact registered
+`id` and optional boolean `dry_run`. Both use the host's private registry, rather
+than service-workspace task state. They do not accept arbitrary cleanup paths,
+adopt historical directories, signal processes, or change unknown task effects.
+See [resource lifecycle](../docs/sandbox-resources.md) for states and limits.

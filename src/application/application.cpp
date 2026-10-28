@@ -363,6 +363,8 @@ std::string help_text() {
 
 Usage:
   codestudio-agent doctor
+  codestudio-agent sandbox-resources [--after <id>] [--limit 50]
+  codestudio-agent sandbox-reclaim --id <id> [--dry-run]
   codestudio-agent credential-set --name <id> --stdin
   codestudio-agent credential-delete --name <id>
   codestudio-agent credential-status --credential env:<variable>|system:<id>
@@ -654,6 +656,13 @@ static CommandResult execute_impl(const std::vector<std::string>& argv,
                {"os_sandbox",false},{"sandbox_backends",Json::array()},
                {"workspace_build",{{"available",false},{"backend",nullptr},{"runtime_probe","not-run"}}},
 #endif
+               {"sandbox_resources",{{"available",
+#if defined(_WIN32) || defined(__linux__)
+                    true
+#else
+                    false
+#endif
+                    },{"reclaim","explicit-id"},{"runtime_probe","not-run"}}},
                {"sandbox_default","none"},{"sandbox_support","compiled-backends"},
                {"sandbox_runtime_probe","not-run"},{"sandbox_scope","process-and-mcp-children"},
                {"automatic_resume",true},{"background_scheduler",true},{"cron",true},{"state_schema",7},
@@ -1066,7 +1075,8 @@ static CommandResult execute_impl(const std::vector<std::string>& argv,
 CommandResult execute_command(const std::vector<std::string>& argv,const std::atomic_bool& cancelled,
                               const CommandCallbacks& callbacks) {
     return with_credential_scope([&]() -> CommandResult {
-        if (argv.size()>1 && (argv[1].starts_with("plugin-") || argv[1].starts_with("mcp-auth-")))
+        if (argv.size()>1 && (argv[1].starts_with("plugin-") || argv[1].starts_with("mcp-auth-") ||
+                             argv[1]=="sandbox-resources" || argv[1]=="sandbox-reclaim"))
             return extension_command(argv,cancelled,callbacks,[](const std::string& secret) { current_credentials->remember(secret); });
         if (argv.size()>1 && (argv[1].starts_with("scheduler-") ||
             (argv[1].starts_with("cron-") && argv[1]!="cron-create") || argv[1]=="schedule-list" ||

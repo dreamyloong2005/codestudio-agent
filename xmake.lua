@@ -119,6 +119,13 @@ target("plugin-sandbox-fixture")
     end
 target_end()
 
+target("sandbox-resource-fixture")
+    set_kind("binary")
+    set_default(false)
+    add_files("tests/sandbox_resource_fixture.cpp")
+    add_deps("agent-core", "sandbox-fixture")
+target_end()
+
 target("agent-tests")
     set_kind("binary")
     set_default(false)
@@ -132,7 +139,7 @@ target("agent-tests")
     add_files("tests/build_workspace_tests.cpp")
     add_files("tests/workspace_execution_tests.cpp")
     add_files("tests/build_proposal_tests.cpp", "tests/build_decision_tests.cpp")
-    add_deps("agent-core", "process-fixture", "line-process-fixture", "mcp-fixture", "sandbox-fixture", "build-fixture", "plugin-sandbox-fixture")
+    add_deps("agent-core", "process-fixture", "line-process-fixture", "mcp-fixture", "sandbox-fixture", "build-fixture", "plugin-sandbox-fixture", "sandbox-resource-fixture")
     if is_plat("windows") then
         add_syslinks("ws2_32")
     end

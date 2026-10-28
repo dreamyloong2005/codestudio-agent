@@ -1,0 +1,35 @@
+FF
+======================================================================
+FAIL: test_line_process_is_owned_before_create_returns (__main__.SpawnLifetimeTests.test_line_process_is_owned_before_create_returns)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\windows_spawn_lifetime.py", line 249, in test_line_process_is_owned_before_create_returns
+    self.check_spawn("plain-line")
+  File "D:\Dev\Projects\codestudio-agent\tests\windows_spawn_lifetime.py", line 211, in check_spawn
+    raise failure
+  File "D:\Dev\Projects\codestudio-agent\tests\windows_spawn_lifetime.py", line 183, in check_spawn
+    observed = private_job_membership(inspection, event.data.create.process)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\Projects\codestudio-agent\tests\windows_spawn_lifetime.py", line 138, in private_job_membership
+    raise AssertionError(f"No private Job found among {count} host handles; "
+AssertionError: No private Job found among 30 host handles; limit structure sizes=64/144; handle-type/query diagnostic counts={(8, 'query_error', 6): 1, (22, 'query_error', 6): 1, (21, 'query_error', 6): 6, (50, 'query_error', 6): 1, (41, 'query_error', 6): 4, (26, 'query_error', 6): 2, (35, 'query_error', 6): 1, (40, 'query_error', 6): 1, (56, 'duplicate_error', 50): 5, (3, 'query_error', 6): 1, (42, 'query_error', 6): 5, (17, 'query_error', 6): 1, (48, 'query_error', 6): 1}
+
+======================================================================
+FAIL: test_run_process_is_owned_before_create_returns (__main__.SpawnLifetimeTests.test_run_process_is_owned_before_create_returns)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\windows_spawn_lifetime.py", line 246, in test_run_process_is_owned_before_create_returns
+    self.check_spawn("plain-run")
+  File "D:\Dev\Projects\codestudio-agent\tests\windows_spawn_lifetime.py", line 211, in check_spawn
+    raise failure
+  File "D:\Dev\Projects\codestudio-agent\tests\windows_spawn_lifetime.py", line 183, in check_spawn
+    observed = private_job_membership(inspection, event.data.create.process)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\Projects\codestudio-agent\tests\windows_spawn_lifetime.py", line 138, in private_job_membership
+    raise AssertionError(f"No private Job found among {count} host handles; "
+AssertionError: No private Job found among 30 host handles; limit structure sizes=64/144; handle-type/query diagnostic counts={(8, 'query_error', 6): 1, (22, 'query_error', 6): 1, (21, 'query_error', 6): 6, (50, 'query_error', 6): 1, (41, 'query_error', 6): 4, (26, 'query_error', 6): 2, (35, 'query_error', 6): 1, (40, 'query_error', 6): 1, (56, 'duplicate_error', 50): 5, (3, 'query_error', 6): 1, (42, 'query_error', 6): 5, (17, 'query_error', 6): 1, (48, 'query_error', 6): 1}
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.027s
+
+FAILED (failures=2)

@@ -1,0 +1,645 @@
+{
+  "generated_at": "2026-10-25T17:54:15.057990+00:00",
+  "format": 2,
+  "configurations": {
+    "windows-debug": {
+      "receipt": "windows\\debug-20261025T174419Z-7f78d393\\verification.json",
+      "source": {
+        "sha256": "33c069cad493bd4996c82cc1bda86c82ef951e9d0bbb8cdd9fb2bf3805f97aaa",
+        "files": 198
+      },
+      "artifact": {
+        "path": "build/windows/x64/debug/codestudio-agent.exe",
+        "size": 6938112,
+        "sha256": "af93e7cd6f7859d039614c7743172e87e8f06eaf0b76f0795ed279425950f760"
+      },
+      "tested_artifacts": {
+        "codestudio-agent.exe": "af93e7cd6f7859d039614c7743172e87e8f06eaf0b76f0795ed279425950f760",
+        "agent-tests.exe": "68cef3bfb3451445cba1725eea5019fc546769b3ecea77acda1c2e2c8fcd50b3",
+        "provider-fixture.exe": "10c426f7f0ca7a1a95b938506920e9099c59cfd15e838a07fc238f8560e81dd6",
+        "process-fixture.exe": "ea591d34d5b762cedb6941fb24c2d879b73cb5353039fb6becef11f1fd26ffec",
+        "line-process-fixture.exe": "0d0e10b154680be861166d55c38b0b8aeed6f1fe5a02a39c5ecba2fd86ba7685",
+        "mcp-fixture.exe": "1421828a08e507b01f73d27e26e0bbdd0c3ce6e9717d93c4eda86e61628edc6b",
+        "sandbox-fixture.exe": "93021a69e3d3740a1fe2f4246cec982fd266f34fff66f821f1a4a5764042ab8a",
+        "build-fixture.exe": "a8838b8bfd8d06f35c88e71aada27840a2de49b0fd65e37e31d48ee4d7a9fb34",
+        "sandbox-resource-fixture.exe": "a56e345a66760ad0e208e72900b240703ad3c861e6f4e71a4e5c15731f578325",
+        "plugin-sandbox-fixture.exe": "83e5dce06598a06328b5d120a73a2027a21ddb72881a0318207726d183b425e4",
+        "plugin-sandbox-library.dll": "4943d50ff8781e4654331d9a191fb78fb810c3e571c295cf27eed422d782c85d",
+        "plugin-sandbox-dependency.dll": "13ea0791d90ab7474526babbde9124fe83159b61e9425d0e2ad29d8eba51cd61"
+      },
+      "native_groups": 22,
+      "python_cases": 425,
+      "python_passed": 417,
+      "python_skipped": 8,
+      "suite_results": {
+        "native": {
+          "native_groups": 22
+        },
+        "schema": {
+          "cases": 13,
+          "skipped": 0,
+          "passed": 13
+        },
+        "provider": {
+          "cases": 15,
+          "skipped": 0,
+          "passed": 15
+        },
+        "streaming": {
+          "cases": 18,
+          "skipped": 0,
+          "passed": 18
+        },
+        "contract": {
+          "cases": 16,
+          "skipped": 0,
+          "passed": 16
+        },
+        "service": {
+          "cases": 28,
+          "skipped": 0,
+          "passed": 28
+        },
+        "credentials": {
+          "cases": 17,
+          "skipped": 2,
+          "passed": 15
+        },
+        "cli": {
+          "cases": 11,
+          "skipped": 0,
+          "passed": 11
+        },
+        "local_models": {
+          "cases": 15,
+          "skipped": 0,
+          "passed": 15
+        },
+        "mcp": {
+          "cases": 13,
+          "skipped": 0,
+          "passed": 13
+        },
+        "mcp_http": {
+          "cases": 39,
+          "skipped": 0,
+          "passed": 39
+        },
+        "mcp_oauth": {
+          "cases": 26,
+          "skipped": 0,
+          "passed": 26
+        },
+        "plugins": {
+          "cases": 23,
+          "skipped": 0,
+          "passed": 23
+        },
+        "plugin_sandbox": {
+          "cases": 17,
+          "skipped": 0,
+          "passed": 17
+        },
+        "resume": {
+          "cases": 18,
+          "skipped": 0,
+          "passed": 18
+        },
+        "sandbox": {
+          "cases": 5,
+          "skipped": 0,
+          "passed": 5
+        },
+        "sandbox_resources": {
+          "cases": 19,
+          "skipped": 1,
+          "passed": 18
+        },
+        "scheduler": {
+          "cases": 19,
+          "skipped": 1,
+          "passed": 18
+        },
+        "supervisor": {
+          "cases": 16,
+          "skipped": 0,
+          "passed": 16
+        },
+        "cron": {
+          "cases": 12,
+          "skipped": 0,
+          "passed": 12
+        },
+        "autostart": {
+          "cases": 14,
+          "skipped": 4,
+          "passed": 10
+        },
+        "spawn_lifetime": {
+          "cases": 2,
+          "skipped": 0,
+          "passed": 2
+        },
+        "build": {
+          "cases": 19,
+          "skipped": 0,
+          "passed": 19
+        },
+        "build_proposals": {
+          "cases": 25,
+          "skipped": 0,
+          "passed": 25
+        },
+        "real_build": {
+          "native_groups": 2
+        },
+        "package": {
+          "cases": 11,
+          "skipped": 0,
+          "passed": 11
+        },
+        "verification": {
+          "cases": 14,
+          "skipped": 0,
+          "passed": 14
+        }
+      }
+    },
+    "windows-release": {
+      "receipt": "windows\\release-20261025T174920Z-c7b632b9\\verification.json",
+      "source": {
+        "sha256": "33c069cad493bd4996c82cc1bda86c82ef951e9d0bbb8cdd9fb2bf3805f97aaa",
+        "files": 198
+      },
+      "artifact": {
+        "path": "build/windows/x64/release/codestudio-agent.exe",
+        "size": 5323264,
+        "sha256": "26f052d7a4bd29dc340bccb45853aa52496a62f8a9b3b1ed740cfb3eebbcf98e"
+      },
+      "tested_artifacts": {
+        "codestudio-agent.exe": "26f052d7a4bd29dc340bccb45853aa52496a62f8a9b3b1ed740cfb3eebbcf98e",
+        "agent-tests.exe": "c5de0cf8c6769bdb039b0f0d5eedae55446ed0d45a50dc28dc9e16c2ecf48465",
+        "provider-fixture.exe": "4af030ef23bf110d50a0731bc72934d8153971cccf871c77049187e9781b4043",
+        "process-fixture.exe": "1fc71eb7d10a032aeb269a6f527d79acd745722cb0918fbfac349ebecf8f5e45",
+        "line-process-fixture.exe": "d7d63b56b61041f37a65e61bf4a86f55b469f0db71333dd19c85c9ee86175229",
+        "mcp-fixture.exe": "3975ce00b6cd631adce25362e0608870731c87189ccd2fa171fbfcbc12f80745",
+        "sandbox-fixture.exe": "348958dd70c31f1753e7e7318e8dbe7f11a1ad6e46a4786cc4fe4768bd9da237",
+        "build-fixture.exe": "5666a8f6c87ed5279e8b91313ef0127b4ffa0b0ab192a4a6e055e19bc928f7aa",
+        "sandbox-resource-fixture.exe": "5b80ddc11097ad9c30bc91b2b5c4e8b0cc7cb58cdb2d11907ee192e0f9793580",
+        "plugin-sandbox-fixture.exe": "49963de375135022aa3dcee38dc287e51afa7abbbeeaa40464587ad6f63873ab",
+        "plugin-sandbox-library.dll": "acfa58ba9dabd5467970cc4c317f3726f8f0b28aac4a5f6d18a91dcd91a8b464",
+        "plugin-sandbox-dependency.dll": "d74f54dbe4389e9027e9687ef1196960697130f71a504b98ca1c5c672368b94b"
+      },
+      "native_groups": 22,
+      "python_cases": 425,
+      "python_passed": 417,
+      "python_skipped": 8,
+      "suite_results": {
+        "native": {
+          "native_groups": 22
+        },
+        "schema": {
+          "cases": 13,
+          "skipped": 0,
+          "passed": 13
+        },
+        "provider": {
+          "cases": 15,
+          "skipped": 0,
+          "passed": 15
+        },
+        "streaming": {
+          "cases": 18,
+          "skipped": 0,
+          "passed": 18
+        },
+        "contract": {
+          "cases": 16,
+          "skipped": 0,
+          "passed": 16
+        },
+        "service": {
+          "cases": 28,
+          "skipped": 0,
+          "passed": 28
+        },
+        "credentials": {
+          "cases": 17,
+          "skipped": 2,
+          "passed": 15
+        },
+        "cli": {
+          "cases": 11,
+          "skipped": 0,
+          "passed": 11
+        },
+        "local_models": {
+          "cases": 15,
+          "skipped": 0,
+          "passed": 15
+        },
+        "mcp": {
+          "cases": 13,
+          "skipped": 0,
+          "passed": 13
+        },
+        "mcp_http": {
+          "cases": 39,
+          "skipped": 0,
+          "passed": 39
+        },
+        "mcp_oauth": {
+          "cases": 26,
+          "skipped": 0,
+          "passed": 26
+        },
+        "plugins": {
+          "cases": 23,
+          "skipped": 0,
+          "passed": 23
+        },
+        "plugin_sandbox": {
+          "cases": 17,
+          "skipped": 0,
+          "passed": 17
+        },
+        "resume": {
+          "cases": 18,
+          "skipped": 0,
+          "passed": 18
+        },
+        "sandbox": {
+          "cases": 5,
+          "skipped": 0,
+          "passed": 5
+        },
+        "sandbox_resources": {
+          "cases": 19,
+          "skipped": 1,
+          "passed": 18
+        },
+        "scheduler": {
+          "cases": 19,
+          "skipped": 1,
+          "passed": 18
+        },
+        "supervisor": {
+          "cases": 16,
+          "skipped": 0,
+          "passed": 16
+        },
+        "cron": {
+          "cases": 12,
+          "skipped": 0,
+          "passed": 12
+        },
+        "autostart": {
+          "cases": 14,
+          "skipped": 4,
+          "passed": 10
+        },
+        "spawn_lifetime": {
+          "cases": 2,
+          "skipped": 0,
+          "passed": 2
+        },
+        "build": {
+          "cases": 19,
+          "skipped": 0,
+          "passed": 19
+        },
+        "build_proposals": {
+          "cases": 25,
+          "skipped": 0,
+          "passed": 25
+        },
+        "real_build": {
+          "native_groups": 2
+        },
+        "package": {
+          "cases": 11,
+          "skipped": 0,
+          "passed": 11
+        },
+        "verification": {
+          "cases": 14,
+          "skipped": 0,
+          "passed": 14
+        }
+      }
+    },
+    "linux-debug": {
+      "receipt": "linux\\debug-20261025T174137Z-e7288730\\verification.json",
+      "source": {
+        "sha256": "33c069cad493bd4996c82cc1bda86c82ef951e9d0bbb8cdd9fb2bf3805f97aaa",
+        "files": 198
+      },
+      "artifact": {
+        "path": "build/linux/x86_64/debug/codestudio-agent",
+        "size": 36960016,
+        "sha256": "33c69c6133ea93651642f9d50e99b981a7b35212dd2d0dfb162164a686e2ecbf"
+      },
+      "tested_artifacts": {
+        "codestudio-agent": "33c69c6133ea93651642f9d50e99b981a7b35212dd2d0dfb162164a686e2ecbf",
+        "agent-tests": "e0b6c595f442eb10e73554388eccc7bcd718292e6902d77f74c897097f97bfb2",
+        "provider-fixture": "05e719938892ef7ddd7d66ca0b64ff5d282f89b1451e349769ed427822b1d42c",
+        "process-fixture": "5da5d79c8985a0db8158169348303784c01e5786e6365c6e22cbd621e2710b30",
+        "line-process-fixture": "74d6efb137e6bd369c140ed69967ad0e883ca58d04798ee53b3e56805dce432d",
+        "mcp-fixture": "23df5e97340a13a2e47dc1101ab56bdcc6b421770f5c9ab7261d19bb5a83b098",
+        "sandbox-fixture": "79c627f4d1d66f79d4862eaa4999ef5a1f573c02c2ff0511eebaf49b3397b36a",
+        "build-fixture": "4fff16bab121c8a852f5e22d3de7c22e3548f84ac04aacfde275cdc6c301d893",
+        "sandbox-resource-fixture": "876515301bff50cebc73205dd816443eb4128d392cb4743d659006305125a6fa",
+        "plugin-sandbox-fixture": "737130ca3d1fab7ce6663503312c5b96ce807320e78746d0e9cb2f2adff01245",
+        "libplugin-sandbox-library.so": "0b467ab8a794e6df3b56bdd80ca9dabd0d93f352e0495fbf6e068b415fc88dde",
+        "libplugin-sandbox-dependency.so": "47cab4f726a94cacf47318bffcdf8e83d5421a27ac125b486884d844b42a3a2d"
+      },
+      "native_groups": 22,
+      "python_cases": 389,
+      "python_passed": 386,
+      "python_skipped": 3,
+      "suite_results": {
+        "native": {
+          "native_groups": 22
+        },
+        "schema": {
+          "cases": 13,
+          "skipped": 0,
+          "passed": 13
+        },
+        "provider": {
+          "cases": 15,
+          "skipped": 0,
+          "passed": 15
+        },
+        "streaming": {
+          "cases": 18,
+          "skipped": 0,
+          "passed": 18
+        },
+        "contract": {
+          "cases": 16,
+          "skipped": 0,
+          "passed": 16
+        },
+        "service": {
+          "cases": 28,
+          "skipped": 0,
+          "passed": 28
+        },
+        "credentials": {
+          "cases": 17,
+          "skipped": 0,
+          "passed": 17
+        },
+        "cli": {
+          "cases": 11,
+          "skipped": 0,
+          "passed": 11
+        },
+        "local_models": {
+          "cases": 15,
+          "skipped": 0,
+          "passed": 15
+        },
+        "mcp": {
+          "cases": 13,
+          "skipped": 0,
+          "passed": 13
+        },
+        "mcp_http": {
+          "cases": 39,
+          "skipped": 0,
+          "passed": 39
+        },
+        "mcp_oauth": {
+          "cases": 26,
+          "skipped": 0,
+          "passed": 26
+        },
+        "plugins": {
+          "cases": 23,
+          "skipped": 0,
+          "passed": 23
+        },
+        "plugin_sandbox": {
+          "cases": 17,
+          "skipped": 0,
+          "passed": 17
+        },
+        "resume": {
+          "cases": 18,
+          "skipped": 0,
+          "passed": 18
+        },
+        "sandbox": {
+          "cases": 5,
+          "skipped": 0,
+          "passed": 5
+        },
+        "sandbox_resources": {
+          "cases": 19,
+          "skipped": 2,
+          "passed": 17
+        },
+        "scheduler": {
+          "cases": 19,
+          "skipped": 0,
+          "passed": 19
+        },
+        "supervisor": {
+          "cases": 18,
+          "skipped": 0,
+          "passed": 18
+        },
+        "cron": {
+          "cases": 12,
+          "skipped": 0,
+          "passed": 12
+        },
+        "autostart": {
+          "cases": 14,
+          "skipped": 1,
+          "passed": 13
+        },
+        "real_build": {
+          "cases": 8,
+          "skipped": 0,
+          "passed": 8
+        },
+        "package": {
+          "cases": 11,
+          "skipped": 0,
+          "passed": 11
+        },
+        "verification": {
+          "cases": 14,
+          "skipped": 0,
+          "passed": 14
+        }
+      }
+    },
+    "linux-release": {
+      "receipt": "linux\\release-20261025T174449Z-d4b599f2\\verification.json",
+      "source": {
+        "sha256": "33c069cad493bd4996c82cc1bda86c82ef951e9d0bbb8cdd9fb2bf3805f97aaa",
+        "files": 198
+      },
+      "artifact": {
+        "path": "build/linux/x86_64/release/codestudio-agent",
+        "size": 3503464,
+        "sha256": "a33923fd6abdbeac3564b61a7e0a8ab652b09b39dff7da7423551cb5315e627b"
+      },
+      "tested_artifacts": {
+        "codestudio-agent": "a33923fd6abdbeac3564b61a7e0a8ab652b09b39dff7da7423551cb5315e627b",
+        "agent-tests": "0fcdb987a633472112570123bb268f97ac15fe5e173ded870f06be947c46ae5a",
+        "provider-fixture": "e1479f80c96c849d6dbb6c71aefef95a6a6313760138c3c4f716973cdf342d0f",
+        "process-fixture": "e85b42302dd91e44de6fc323bb4f71f65b1c9ef1ee4c22023e6853eb4a42c7ce",
+        "line-process-fixture": "7886f923737f2dc47fb563260c94ee8852b66aab337a29aba97bbf3b889a9391",
+        "mcp-fixture": "a27de5411cb042ae7ab66531c56c94f7246e5082e8f5297ced74539999dabe58",
+        "sandbox-fixture": "1ecdee953818803a1cac02fd43d3fbce97f078ed3e8711a794e3d1944278d2b6",
+        "build-fixture": "488c84a6ecfd590c85eb9951fd3f85dc5d7d4d5d9e0f7e943f5a1aa0cd707d90",
+        "sandbox-resource-fixture": "fb2dc1962b7ab66c1258c4a671793ff64449dffbdc6e47cf444edae617ba713d",
+        "plugin-sandbox-fixture": "dc43cc18dc994b2546a8896e2c6a5ccc900102d43d2b61393b80ba644bdeb483",
+        "libplugin-sandbox-library.so": "f3c1ea5f64b5192fc4f118f52712e78e56a573eb13d8c63e1ce58bf4043e4b56",
+        "libplugin-sandbox-dependency.so": "c958349b63de00b4c1b6abb3643a3c6f96dbc38076d7e10de0bfee7818bd37ed"
+      },
+      "native_groups": 22,
+      "python_cases": 389,
+      "python_passed": 386,
+      "python_skipped": 3,
+      "suite_results": {
+        "native": {
+          "native_groups": 22
+        },
+        "schema": {
+          "cases": 13,
+          "skipped": 0,
+          "passed": 13
+        },
+        "provider": {
+          "cases": 15,
+          "skipped": 0,
+          "passed": 15
+        },
+        "streaming": {
+          "cases": 18,
+          "skipped": 0,
+          "passed": 18
+        },
+        "contract": {
+          "cases": 16,
+          "skipped": 0,
+          "passed": 16
+        },
+        "service": {
+          "cases": 28,
+          "skipped": 0,
+          "passed": 28
+        },
+        "credentials": {
+          "cases": 17,
+          "skipped": 0,
+          "passed": 17
+        },
+        "cli": {
+          "cases": 11,
+          "skipped": 0,
+          "passed": 11
+        },
+        "local_models": {
+          "cases": 15,
+          "skipped": 0,
+          "passed": 15
+        },
+        "mcp": {
+          "cases": 13,
+          "skipped": 0,
+          "passed": 13
+        },
+        "mcp_http": {
+          "cases": 39,
+          "skipped": 0,
+          "passed": 39
+        },
+        "mcp_oauth": {
+          "cases": 26,
+          "skipped": 0,
+          "passed": 26
+        },
+        "plugins": {
+          "cases": 23,
+          "skipped": 0,
+          "passed": 23
+        },
+        "plugin_sandbox": {
+          "cases": 17,
+          "skipped": 0,
+          "passed": 17
+        },
+        "resume": {
+          "cases": 18,
+          "skipped": 0,
+          "passed": 18
+        },
+        "sandbox": {
+          "cases": 5,
+          "skipped": 0,
+          "passed": 5
+        },
+        "sandbox_resources": {
+          "cases": 19,
+          "skipped": 2,
+          "passed": 17
+        },
+        "scheduler": {
+          "cases": 19,
+          "skipped": 0,
+          "passed": 19
+        },
+        "supervisor": {
+          "cases": 18,
+          "skipped": 0,
+          "passed": 18
+        },
+        "cron": {
+          "cases": 12,
+          "skipped": 0,
+          "passed": 12
+        },
+        "autostart": {
+          "cases": 14,
+          "skipped": 1,
+          "passed": 13
+        },
+        "real_build": {
+          "cases": 8,
+          "skipped": 0,
+          "passed": 8
+        },
+        "package": {
+          "cases": 11,
+          "skipped": 0,
+          "passed": 11
+        },
+        "verification": {
+          "cases": 14,
+          "skipped": 0,
+          "passed": 14
+        }
+      }
+    }
+  },
+  "boundaries": [
+    "Whole-package sandbox tests use owned native multi-file fixture packages; external plugin compatibility is not inferred.",
+    "Each native platform ran Debug then Release with the same unified entrypoint; all default suites selected.",
+    "Python totals include static schema, packaging and verification-tool tests; Windows real XMake builds have separate PASS-group records.",
+    "Local model tests use only synthetic HTTP fixtures; live inference remains paused.",
+    "Linux tests use an existing WSL host plus temporary cgroup and private Secret Service wrappers, not a clean machine or login session.",
+    "Prepared-runner CI definition was locally checked but no hosted workflow, Git publication, real login/reboot or signing was performed.",
+    "Installation validation runs separately against actual release packages; unknown/changed files are preserved by refusal.",
+    "OAuth uses synthetic loopback authorization servers and owned native-store entries; no real provider login is claimed.",
+    "Plugin tests use owned fixture bundles, pinned content and temporary stores; no external plugin publication is claimed.",
+    "Resource lifecycle tests use owned journals, real sandbox fixtures and deliberate crash/reclaim cases; unknown effects are never replayed.",
+    "Historical unregistered Windows resource residue remains visible in static receipts and is excluded only from the separate no-new-residue gate."
+  ]
+}

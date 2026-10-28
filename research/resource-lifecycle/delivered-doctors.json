@@ -1,0 +1,176 @@
+{
+  "format": 2,
+  "status": "succeeded",
+  "scope": "Compiled capability declarations; runtime tests are in verification.json",
+  "executables": {
+    "windows": {
+      "path": "D:\\Dev\\Projects\\codestudio-agent\\build\\packages\\windows-x64\\codestudio-agent-windows-x64\\codestudio-agent.exe",
+      "sha256": "26f052d7a4bd29dc340bccb45853aa52496a62f8a9b3b1ed740cfb3eebbcf98e",
+      "doctor": {
+        "approval_continuation": true,
+        "automatic_resume": true,
+        "background_scheduler": true,
+        "build_manifest_versions": [
+          2
+        ],
+        "build_proposals": true,
+        "build_system": "XMake",
+        "checkpoint_resume": true,
+        "compiler": "Clang 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)",
+        "cplusplus": 202400,
+        "credentials": {
+          "references": [
+            "env",
+            "system"
+          ],
+          "resolution": "per-operation",
+          "runtime_probe": "not-run",
+          "system_backend": "windows-credential-manager"
+        },
+        "cron": true,
+        "local_model_discovery": true,
+        "login_autostart": true,
+        "mcp_oauth": {
+          "client_registration": "explicit",
+          "grant": "authorization_code",
+          "pkce": "S256",
+          "refresh": "before-operation",
+          "token_store": "system"
+        },
+        "mcp_transports": [
+          "stdio",
+          "streamable-http"
+        ],
+        "msvc_language_mode": 202400,
+        "os_sandbox": true,
+        "plugin_distribution": true,
+        "plugin_locks": true,
+        "plugin_sandbox": {
+          "available": true,
+          "network": false,
+          "payload": "whole-package",
+          "runtime_probe": "not-run",
+          "workspace_access": "none"
+        },
+        "product": "CodeStudio-Agent",
+        "provider_apis": [
+          "chat-completions",
+          "responses",
+          "messages"
+        ],
+        "sandbox_backends": [
+          "appcontainer"
+        ],
+        "sandbox_default": "none",
+        "sandbox_resources": {
+          "available": true,
+          "reclaim": "explicit-id",
+          "runtime_probe": "not-run"
+        },
+        "sandbox_runtime_probe": "not-run",
+        "sandbox_scope": "process-and-mcp-children",
+        "sandbox_support": "compiled-backends",
+        "state_schema": 7,
+        "streaming": true,
+        "supervised_autostart": true,
+        "supervisor_diagnostics": true,
+        "task_service": {
+          "event_replay": true,
+          "protocol_version": 2,
+          "transport": "stdio"
+        },
+        "version": "0.1.0",
+        "worker_supervision": true,
+        "workspace_build": {
+          "available": true,
+          "backend": "appcontainer",
+          "runtime_probe": "not-run"
+        }
+      }
+    },
+    "linux": {
+      "path": "D:\\Dev\\Projects\\codestudio-agent\\build\\linux\\x86_64\\release\\codestudio-agent",
+      "sha256": "a33923fd6abdbeac3564b61a7e0a8ab652b09b39dff7da7423551cb5315e627b",
+      "doctor": {
+        "approval_continuation": true,
+        "automatic_resume": true,
+        "background_scheduler": true,
+        "build_manifest_versions": [
+          2
+        ],
+        "build_proposals": true,
+        "build_system": "XMake",
+        "checkpoint_resume": true,
+        "compiler": "16.2.1 20260810",
+        "cplusplus": 202400,
+        "credentials": {
+          "references": [
+            "env",
+            "system"
+          ],
+          "resolution": "per-operation",
+          "runtime_probe": "not-run",
+          "system_backend": "linux-secret-service"
+        },
+        "cron": true,
+        "local_model_discovery": true,
+        "login_autostart": true,
+        "mcp_oauth": {
+          "client_registration": "explicit",
+          "grant": "authorization_code",
+          "pkce": "S256",
+          "refresh": "before-operation",
+          "token_store": "system"
+        },
+        "mcp_transports": [
+          "stdio",
+          "streamable-http"
+        ],
+        "os_sandbox": true,
+        "plugin_distribution": true,
+        "plugin_locks": true,
+        "plugin_sandbox": {
+          "available": true,
+          "network": false,
+          "payload": "whole-package",
+          "runtime_probe": "not-run",
+          "workspace_access": "none"
+        },
+        "product": "CodeStudio-Agent",
+        "provider_apis": [
+          "chat-completions",
+          "responses",
+          "messages"
+        ],
+        "sandbox_backends": [
+          "linux-namespace"
+        ],
+        "sandbox_default": "none",
+        "sandbox_resources": {
+          "available": true,
+          "reclaim": "explicit-id",
+          "runtime_probe": "not-run"
+        },
+        "sandbox_runtime_probe": "not-run",
+        "sandbox_scope": "process-and-mcp-children",
+        "sandbox_support": "compiled-backends",
+        "state_schema": 7,
+        "streaming": true,
+        "supervised_autostart": true,
+        "supervisor_diagnostics": true,
+        "task_service": {
+          "event_replay": true,
+          "protocol_version": 2,
+          "transport": "stdio"
+        },
+        "version": "0.1.0",
+        "worker_supervision": true,
+        "workspace_build": {
+          "available": true,
+          "backend": "linux-namespace",
+          "runtime_probe": "not-run"
+        }
+      }
+    }
+  }
+}

@@ -54,6 +54,7 @@ class ProposalTests(unittest.TestCase):
     verify_identity = fixture.BuildTests.verify_identity
     live_tree = fixture.BuildTests.live_tree
     assert_tree_cleaned = fixture.BuildTests.assert_tree_cleaned
+    reclaim_crash_stage = fixture.BuildTests.reclaim_crash_stage
 
     def arguments(self, mode="write"):
         manifest = self.recipe(mode, timeout=20000 if "sleep" in mode else 10000)
@@ -777,7 +778,7 @@ class ProposalTests(unittest.TestCase):
             self.assertEqual(self.bundles(), [])
             self.assertEqual(self.requests(), requests)
             self.assertEqual((self.workspace / "input.txt").read_text(), fixture.SOURCE)
-            print(f"Retained approval crash staging evidence: {stage}", file=sys.stderr)
+            self.reclaim_crash_stage(stage, execution_id)
         finally:
             if process.poll() is None:
                 process.kill()

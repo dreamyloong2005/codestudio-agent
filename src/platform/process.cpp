@@ -265,7 +265,7 @@ static ProcessResult run_process_impl(const ProcessRequest& request, const std::
         return result.cancelled || result.timed_out;
     };
     if (interrupted()) return result;
-    Handle job(CreateJobObjectW(nullptr, nullptr));
+    Handle job(sandbox ? sandbox->create_job() : CreateJobObjectW(nullptr, nullptr));
     if (!job.get()) fail_windows("CreateJobObjectW");
     JOBOBJECT_EXTENDED_LIMIT_INFORMATION job_limits{};
     job_limits.BasicLimitInformation.LimitFlags = JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE;
@@ -281,8 +281,11 @@ static ProcessResult run_process_impl(const ProcessRequest& request, const std::
     Handle input(CreateFileW(L"NUL", GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE,
                              &security, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr));
     if (input.get() == INVALID_HANDLE_VALUE) fail_windows("CreateFileW(NUL)");
-    Attributes attributes(1 + (sandbox ? WindowsSandbox::extra_attribute_count : 0));
+    HANDLE launch_job=job.get();
+    Attributes attributes(1 + (sandbox ? WindowsSandbox::extra_attribute_count : 1));
     if (sandbox) sandbox->apply_attributes(attributes.get());
+    else if (!UpdateProcThreadAttribute(attributes.get(),0,PROC_THREAD_ATTRIBUTE_JOB_LIST,
+        &launch_job,sizeof(launch_job),nullptr,nullptr)) fail_windows("UpdateProcThreadAttribute(process job)");
     std::array<HANDLE, 2> inherited{input.get(), output_write.get()};
     if (!UpdateProcThreadAttribute(attributes.get(), 0, PROC_THREAD_ATTRIBUTE_HANDLE_LIST,
                                    inherited.data(), sizeof(inherited), nullptr, nullptr)) {
@@ -309,12 +312,6 @@ static ProcessResult run_process_impl(const ProcessRequest& request, const std::
         fail_windows("CreateProcessW");
     }
     Handle process(info.hProcess), thread(info.hThread);
-    if (!sandbox && !AssignProcessToJobObject(job.get(), process.get())) {
-        const auto error = GetLastError();
-        TerminateProcess(process.get(), 1);
-        WaitForSingleObject(process.get(), INFINITE);
-        throw std::system_error(static_cast<int>(error), std::system_category(), "AssignProcessToJobObject");
-    }
     if (sandbox) sandbox->verify(process.get());
     if (interrupted()) return result; // The suspended child is reclaimed without running user code.
     if (ResumeThread(thread.get()) == static_cast<DWORD>(-1)) fail_windows("ResumeThread");

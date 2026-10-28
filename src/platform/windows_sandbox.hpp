@@ -34,6 +34,9 @@ public:
                          const std::filesystem::path& directory,
                          const std::map<std::string, std::string>& environment);
     void apply_attributes(LPPROC_THREAD_ATTRIBUTE_LIST attributes);
+    // Persist a unique observable Job identity before creation. Caller owns the
+    // returned handle; existing names are never adopted.
+    HANDLE create_job();
     // Retains a job reference; cleanup first terminates and drains its processes.
     void supervise_job(HANDLE job);
     // JOB_LIST assigns the process atomically during CreateProcess. Call while suspended.

@@ -1,4 +1,5 @@
 #include "codestudio/workspace_execution.hpp"
+#include "codestudio/sandbox_resources.hpp"
 #include "codestudio/build_workspace.hpp"
 #include "codestudio/store.hpp"
 #include <algorithm>
@@ -128,6 +129,8 @@ WorkspaceExecution::WorkspaceExecution(const Json& data, const fs::path& workspa
     auto& plan = *impl_;
     plan.workspace = fs::canonical(workspace);
     plan.protected_paths = protected_paths;
+    const auto resources=sandbox_resource_registry_path();
+    if (!resources.empty()) plan.protected_paths.push_back(resources);
     if (data.dump().size() > 1024 * 1024)
         throw std::invalid_argument("Expanded execution recipe exceeds size limit");
     fields(data, {"version","inputs","exclude","mounts","steps","environment","outputs","artifact_directory","limits"});
@@ -226,6 +229,8 @@ ToolResult WorkspaceExecution::execute(const std::atomic_bool& cancelled) const 
     });
     try {
         ProcessRequest initial;
+        initial.working_directory=plan.workspace;
+        initial.task_id=sandbox_task_id();
 #ifdef _WIN32
         initial.sandbox = SandboxMode::appcontainer;
         WindowsBuildLimits limits{plan.process_limit,static_cast<SIZE_T>(plan.memory_bytes),plan.cpu_percent};

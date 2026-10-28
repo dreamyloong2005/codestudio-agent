@@ -145,10 +145,10 @@ class StaticContractTests(unittest.TestCase):
         queries = {"tasks/list", "tasks/get", "builds/review", "events/list",
                    "operations/status", "operations/get", "schedules/list", "schedules/get",
                    "scheduler/status", "crons/list", "crons/get", "crons/preview",
-                   "scheduler/autostart/status", "scheduler/supervisor/status", "scheduler/supervisor/events"}
+                   "scheduler/autostart/status", "scheduler/supervisor/status", "scheduler/supervisor/events", "sandboxes/list"}
         operations = {"tasks/start", "tasks/resume", "crons/create", "builds/approve", "builds/reject",
                       "mcp/auth/discover", "mcp/auth/status", "mcp/auth/login", "mcp/auth/logout",
-                      "plugins/pack", "plugins/install", "plugins/lock", "plugins/inspect"}
+                      "plugins/pack", "plugins/install", "plugins/lock", "plugins/inspect", "sandboxes/reclaim"}
         for name, spec in self.contract.methods.items():
             self.assertEqual(spec["retry"], "query_only" if name in queries else "never", name)
             expected = "query" if name in queries else "operation" if name in operations else "control"

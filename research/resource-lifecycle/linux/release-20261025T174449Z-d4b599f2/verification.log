@@ -1,0 +1,76 @@
+Verification failed: Source changed during verification; the receipt is not valid for a single snapshot
+Report: /tmp/codestudio-verification-apghrv37/source/release-20261025T174721Z-7c449f57/verification.json
+Verification failed: Built executables changed while tests were running
+Report: /tmp/codestudio-verification-apghrv37/binary/release-20261025T174721Z-833b7466/verification.json
+..linux/release schema: failed
+Ran 2 tests in 0.1s
+
+OK
+
+.Report: /tmp/codestudio-verification-vx_qmwls/release-20261025T174721Z-5f4d8015/verification.json
+...Verification failed: missing tool
+Report: /tmp/codestudio-verification-vm2yhkod/release-20261025T174721Z-d8219d97/verification.json
+.Report: /tmp/codestudio-verification-6_wp7bvt/debug-20261025T174721Z-3d070e3c/verification.json
+..linux/release schema: failed
+
+.linux/release schema: succeeded
+.windows/release real_build: succeeded
+windows/release real_build: failed
+PASS 2 real isolated XMake builds: explicit-v2 and custom-cache-v2
+windows/release real_build: failed
+PASS real isolated XMake / explicit-v2 / C++26 pack indexing / compile / link / execute / atomic export
+  steps=3, bytes=1024, sha256=fixture
+PASS real isolated XMake / explicit-v2 / C++26 pack indexing / compile / link / execute / atomic export
+PASS 2 real isolated XMake builds: explicit-v2 and custom-cache-v2
+
+windows/release real_build: failed
+PASS real isolated XMake / explicit-v2 / C++26 pack indexing / compile / link / execute / atomic export
+  steps=3, bytes=1024, sha256=fixture
+
+PASS 2 real isolated XMake builds: explicit-v2 and custom-cache-v2
+
+windows/release real_build: failed
+PASS real isolated XMake / explicit-v2 / C++26 pack indexing / compile / link / execute / atomic export
+  steps=3, bytes=1024, sha256=fixture
+PASS real isolated XMake / custom-cache-v2 / C++26 pack indexing / compile / link / execute / atomic export
+
+
+windows/release real_build: failed
+PASS real isolated XMake / explicit-v2 / C++26 pack indexing / compile / link / execute / atomic export
+  steps=3, bytes=1024, sha256=fixture
+PASS real isolated XMake / custom-cache-v2 / C++26 pack indexing / compile / link / execute / atomic export
+PASS 2 real isolated XMake builds: explicit-v2 and custom-cache-v2
+unfinished
+
+windows/release real_build: failed
+FAIL earlier operation
+PASS real isolated XMake / explicit-v2 / C++26 pack indexing / compile / link / execute / atomic export
+  steps=3, bytes=1024, sha256=fixture
+PASS real isolated XMake / custom-cache-v2 / C++26 pack indexing / compile / link / execute / atomic export
+PASS 2 real isolated XMake builds: explicit-v2 and custom-cache-v2
+
+windows/release real_build: failed
+PASS real isolated XMake / explicit-v2 / C++26 pack indexing / compile / link / execute / atomic export
+  steps=3, bytes=1024, sha256=fixture
+PASS real isolated XMake / custom-cache-v2 / C++26 pack indexing / compile / link / execute / atomic export
+PASS 2 real isolated XMake builds: explicit-v2 and custom-cache-v2
+
+.linux/release schema: failed
+Ran 0 tests in 0.1s
+
+OK
+
+linux/release schema: failed
+Ran 1 test in 0.1s
+
+OK
+not a complete test run
+
+.linux/release schema: failed
+just a message
+
+.
+----------------------------------------------------------------------
+Ran 14 tests in 1.140s
+
+OK

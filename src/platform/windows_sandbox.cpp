@@ -1,11 +1,14 @@
 #include "windows_sandbox.hpp"
 #include "codestudio/build_workspace.hpp"
 #include "codestudio/process_package.hpp"
+#include "codestudio/sandbox_resources.hpp"
+#include "codestudio/store.hpp"
 
 #ifdef _WIN32
 #include <sddl.h>
 #include <aclapi.h>
 #include <userenv.h>
+#include <shlobj.h>
 #include <bcrypt.h>
 #include <combaseapi.h>
 #include <winternl.h>
@@ -168,15 +171,12 @@ void copy_executable(const fs::path& source, const fs::path& target) {
 // Hold each directory without FILE_SHARE_DELETE while enumerating it. Reparse
 // entries are removed by handle, never traversed. A failed cleanup leaves the
 // private tree behind rather than following an untrusted target or widening ACLs.
-void remove_entry(const fs::path& path, unsigned depth, std::size_t& budget) {
+void remove_entry(const fs::path& path, unsigned depth, std::size_t& budget);
+void remove_open_entry(const fs::path& path,HANDLE handle,unsigned depth,std::size_t& budget) {
     if (!budget || depth > 64) return;
     --budget;
-    Handle handle(CreateFileW(path.c_str(), DELETE | FILE_READ_ATTRIBUTES | FILE_WRITE_ATTRIBUTES | FILE_LIST_DIRECTORY,
-        FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, OPEN_EXISTING,
-        FILE_FLAG_OPEN_REPARSE_POINT | FILE_FLAG_BACKUP_SEMANTICS, nullptr));
-    if (handle.value == INVALID_HANDLE_VALUE) return;
     BY_HANDLE_FILE_INFORMATION information{};
-    if (!GetFileInformationByHandle(handle.value, &information)) return;
+    if (!GetFileInformationByHandle(handle, &information)) return;
     if ((information.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
         !(information.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT)) {
         WIN32_FIND_DATAW data{};
@@ -193,10 +193,41 @@ void remove_entry(const fs::path& path, unsigned depth, std::size_t& budget) {
         FILE_BASIC_INFO basic{};
         basic.FileAttributes = information.dwFileAttributes & ~FILE_ATTRIBUTE_READONLY;
         if (!basic.FileAttributes) basic.FileAttributes = FILE_ATTRIBUTE_NORMAL;
-        SetFileInformationByHandle(handle.value, FileBasicInfo, &basic, sizeof(basic));
+        SetFileInformationByHandle(handle, FileBasicInfo, &basic, sizeof(basic));
     }
     FILE_DISPOSITION_INFO disposition{TRUE};
-    SetFileInformationByHandle(handle.value, FileDispositionInfo, &disposition, sizeof(disposition));
+    SetFileInformationByHandle(handle, FileDispositionInfo, &disposition, sizeof(disposition));
+}
+void remove_entry(const fs::path& path,unsigned depth,std::size_t& budget) {
+    Handle handle(CreateFileW(path.c_str(),DELETE|FILE_READ_ATTRIBUTES|FILE_WRITE_ATTRIBUTES|FILE_LIST_DIRECTORY,
+        FILE_SHARE_READ|FILE_SHARE_WRITE,nullptr,OPEN_EXISTING,FILE_FLAG_OPEN_REPARSE_POINT|FILE_FLAG_BACKUP_SEMANTICS,nullptr));
+    if(handle.value!=INVALID_HANDLE_VALUE)remove_open_entry(path,handle.value,depth,budget);
+}
+bool same_directory(const BY_HANDLE_FILE_INFORMATION& left,const BY_HANDLE_FILE_INFORMATION& right) {
+    return (right.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY) && !(right.dwFileAttributes&FILE_ATTRIBUTE_REPARSE_POINT) &&
+        left.dwVolumeSerialNumber==right.dwVolumeSerialNumber && left.nFileIndexHigh==right.nFileIndexHigh && left.nFileIndexLow==right.nFileIndexLow &&
+        left.ftCreationTime.dwHighDateTime==right.ftCreationTime.dwHighDateTime && left.ftCreationTime.dwLowDateTime==right.ftCreationTime.dwLowDateTime;
+}
+void remove_owned_root(const fs::path& root,const BY_HANDLE_FILE_INFORMATION& expected,std::size_t& budget) {
+    // A retained path is not authority to remove a replacement directory. Pin
+    // each ancestor for this cleanup, then compare the deletion handle to the
+    // native identity captured immediately after exclusive creation.
+    std::vector<std::unique_ptr<Handle>> parents;
+    fs::path current=root.root_path();std::vector<fs::path> paths{current};
+    for(const auto& component:root.parent_path().relative_path()){current/=component;paths.push_back(current);}
+    for(const auto& path:paths){
+        auto handle=std::make_unique<Handle>(CreateFileW(path.c_str(),FILE_READ_ATTRIBUTES|FILE_LIST_DIRECTORY,
+            FILE_SHARE_READ|FILE_SHARE_WRITE,nullptr,OPEN_EXISTING,FILE_FLAG_OPEN_REPARSE_POINT|FILE_FLAG_BACKUP_SEMANTICS,nullptr));
+        BY_HANDLE_FILE_INFORMATION state{};
+        if(handle->value==INVALID_HANDLE_VALUE || !GetFileInformationByHandle(handle->value,&state) ||
+            !(state.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY) || (state.dwFileAttributes&FILE_ATTRIBUTE_REPARSE_POINT))return;
+        parents.push_back(std::move(handle));
+    }
+    Handle handle(CreateFileW(root.c_str(),DELETE|FILE_READ_ATTRIBUTES|FILE_WRITE_ATTRIBUTES|FILE_LIST_DIRECTORY,
+        FILE_SHARE_READ|FILE_SHARE_WRITE,nullptr,OPEN_EXISTING,FILE_FLAG_OPEN_REPARSE_POINT|FILE_FLAG_BACKUP_SEMANTICS,nullptr));
+    BY_HANDLE_FILE_INFORMATION state{};
+    if(handle.value!=INVALID_HANDLE_VALUE && GetFileInformationByHandle(handle.value,&state) && same_directory(expected,state))
+        remove_open_entry(root,handle.value,0,budget);
 }
 
 // The caller keeps an open, non-reparse directory handle without SHARE_DELETE.
@@ -245,6 +276,10 @@ struct WindowsSandbox::Impl {
     SID_AND_ATTRIBUTES registry_capability{};
     HANDLE path_alias = nullptr;
     fs::path alias_root;
+    std::unique_ptr<SandboxResourceLease> resources;
+    std::string resource_id;
+    BY_HANDLE_FILE_INFORMATION root_identity{};
+    bool root_identity_captured=false;
 
     ~Impl() {
         bool stopped = true;
@@ -261,9 +296,9 @@ struct WindowsSandbox::Impl {
             CloseHandle(job);
         }
         if (path_alias) CloseHandle(path_alias);
-        if (stopped && !root.empty()) {
+        if (stopped && !root.empty() && root_identity_captured) {
             std::size_t budget = build ? 1000000 : 65536;
-            try { remove_entry(root, 0, budget); } catch (...) { /* Best-effort cleanup never follows unsafe paths. */ }
+            try { remove_owned_root(root,root_identity,budget); } catch (...) { /* Failed identity checks preserve the replacement and journal. */ }
         }
         bool profile_empty = false;
         if (stopped && profile_anchor != INVALID_HANDLE_VALUE && !profile_root.empty()) {
@@ -272,7 +307,9 @@ struct WindowsSandbox::Impl {
         if (profile_anchor != INVALID_HANDLE_VALUE) CloseHandle(profile_anchor);
         // No child remains and no untrusted filesystem content is handed to the
         // profile API. Failed/partial cleanup deliberately preserves the profile.
-        if (profile_empty && !profile_name.empty()) DeleteAppContainerProfile(profile_name.c_str());
+        bool profile_removed=profile_name.empty();
+        if (profile_empty && !profile_name.empty()) profile_removed=SUCCEEDED(DeleteAppContainerProfile(profile_name.c_str()));
+        if (stopped && profile_removed && resources) {try {resources->finish();} catch (...) {}}
         if (sid) FreeSid(sid);
     }
 };
@@ -310,6 +347,17 @@ WindowsSandbox::WindowsSandbox(const ProcessRequest& request, const WindowsBuild
     }
 
     const auto name = unique_name();
+    constexpr auto prefix_size=std::wstring_view(L"codestudio-sandbox-").size();
+    impl_->resource_id=std::string(name.begin()+prefix_size,name.end());
+    impl_->resources=std::make_unique<SandboxResourceLease>(impl_->resource_id,
+        build?"build":request.package?"package":"process",request.working_directory,request.task_id);
+    // The profile API uses this current user's LocalAppData Packages path.
+    // Record intent before creation; a crash before native identity capture is
+    // deliberately not reclaimable while the ambiguous directory exists.
+    TaskMemory local_data;
+    const auto local_status=SHGetKnownFolderPath(FOLDERID_LocalAppData,0,nullptr,&local_data.value);
+    if(FAILED(local_status))throw std::system_error(static_cast<int>(local_status),std::system_category(),"Locate sandbox profile parent");
+    impl_->resources->expect("profile",fs::path(local_data.value)/L"Packages"/name);
     const auto derived = CreateAppContainerProfile(name.c_str(), L"CodeStudio temporary sandbox", L"CodeStudio isolated child", nullptr, 0, &impl_->sid);
     if (FAILED(derived)) throw std::system_error(static_cast<int>(derived), std::system_category(), "CreateAppContainerProfile");
     impl_->profile_name = name;
@@ -361,6 +409,7 @@ WindowsSandbox::WindowsSandbox(const ProcessRequest& request, const WindowsBuild
         (profile_information.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT))
         throw std::runtime_error("Sandbox profile root must be a non-reparse directory");
     impl_->profile_root = profile_root;
+    impl_->resources->track("profile",profile_root);
 
     HANDLE raw_token = nullptr;
     if (!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &raw_token)) fail("OpenProcessToken(sandbox owner)");
@@ -380,8 +429,18 @@ WindowsSandbox::WindowsSandbox(const ProcessRequest& request, const WindowsBuild
     const fs::path temporary(long_temporary);
     validate_local_path(temporary);
     const auto root = temporary / name;
+    impl_->resources->expect("staging",root);
     create_directory(root, read_acl);
     impl_->root = root; // Cleanup owns only a successfully, exclusively created tree.
+    {
+        Handle created(CreateFileW(root.c_str(),FILE_READ_ATTRIBUTES|FILE_LIST_DIRECTORY,FILE_SHARE_READ|FILE_SHARE_WRITE,
+            nullptr,OPEN_EXISTING,FILE_FLAG_OPEN_REPARSE_POINT|FILE_FLAG_BACKUP_SEMANTICS,nullptr));
+        if(created.value==INVALID_HANDLE_VALUE || !GetFileInformationByHandle(created.value,&impl_->root_identity))fail("Capture sandbox root identity");
+        if(!(impl_->root_identity.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY) || (impl_->root_identity.dwFileAttributes&FILE_ATTRIBUTE_REPARSE_POINT))
+            throw std::runtime_error("Sandbox root was replaced before identity capture");
+        impl_->root_identity_captured=true;
+    }
+    impl_->resources->track("staging",root);
     verify_directory_acl(root, impl_->sid, FILE_GENERIC_READ | FILE_GENERIC_EXECUTE);
     if (build) {
         // LLVM's GetLongPathNameW walks every ancestor, even for long paths.
@@ -459,6 +518,7 @@ WindowsSandbox::WindowsSandbox(const ProcessRequest& request, const WindowsBuild
         impl_->environment.push_back(L'\0');
     }
     impl_->environment.push_back(L'\0');
+    impl_->resources->mark_ready();
 }
 
 WindowsSandbox::~WindowsSandbox() = default;
@@ -526,6 +586,20 @@ void WindowsSandbox::apply_attributes(LPPROC_THREAD_ATTRIBUTE_LIST attributes) {
         &impl_->job, sizeof(impl_->job), nullptr, nullptr)) fail("UpdateProcThreadAttribute(sandbox job)");
 }
 
+HANDLE WindowsSandbox::create_job() {
+    const auto name="Global\\CodeStudio-Agent-Sandbox-"+impl_->resource_id+"-"+new_id();
+    impl_->resources->record_job(name);
+    HANDLE raw_token=nullptr;if(!OpenProcessToken(GetCurrentProcess(),TOKEN_QUERY,&raw_token))fail("Open sandbox Job owner");Handle token(raw_token);
+    const auto user=token_information(token.value,TokenUser);
+    const auto owner=sid_string(reinterpret_cast<const TOKEN_USER*>(user.data())->User.Sid);
+    const auto acl=L"D:P(A;;GA;;;SY)(A;;GA;;;"+owner+L")";LocalMemory descriptor;
+    if(!ConvertStringSecurityDescriptorToSecurityDescriptorW(acl.c_str(),SDDL_REVISION_1,reinterpret_cast<PSECURITY_DESCRIPTOR*>(&descriptor.value),nullptr))fail("Build sandbox Job ACL");
+    SECURITY_ATTRIBUTES security{sizeof(security),descriptor.value,FALSE};
+    const std::wstring wide(name.begin(),name.end());const auto result=CreateJobObjectW(&security,wide.c_str());const auto error=GetLastError();
+    if(!result){SetLastError(error);fail("Create owned sandbox Job");}
+    if(error==ERROR_ALREADY_EXISTS){CloseHandle(result);throw std::runtime_error("Sandbox Job identity collision");}
+    return result;
+}
 void WindowsSandbox::supervise_job(HANDLE job) {
     if (impl_->job) {
         JOBOBJECT_BASIC_ACCOUNTING_INFORMATION previous{};

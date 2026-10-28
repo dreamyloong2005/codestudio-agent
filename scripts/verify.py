@@ -25,7 +25,7 @@ PLATFORM = "windows" if sys.platform == "win32" else "linux" if sys.platform.sta
 ARCH = "x64" if PLATFORM == "windows" else "x86_64"
 SUFFIX = ".exe" if PLATFORM == "windows" else ""
 COMMON = ("native", "schema", "credentials", "provider", "streaming", "cli", "local_models", "mcp", "mcp_http", "mcp_oauth", "plugins", "plugin_sandbox",
-          "resume", "sandbox", "contract", "service", "scheduler", "supervisor", "cron", "autostart")
+          "resume", "sandbox", "sandbox_resources", "contract", "service", "scheduler", "supervisor", "cron", "autostart")
 
 
 def now():
@@ -60,7 +60,7 @@ def source_fingerprint():
 def artifact_fingerprint(mode):
     directory = ROOT / "build" / PLATFORM / ARCH / mode
     names = ("codestudio-agent", "agent-tests", "provider-fixture", "process-fixture", "line-process-fixture",
-             "mcp-fixture", "sandbox-fixture", "build-fixture")
+             "mcp-fixture", "sandbox-fixture", "build-fixture", "sandbox-resource-fixture")
     result = {name + SUFFIX: digest(directory / (name + SUFFIX)) for name in names}
     for name in ("plugin-sandbox-fixture" + SUFFIX,
                  "plugin-sandbox-library.dll" if PLATFORM == "windows" else "libplugin-sandbox-library.so",
@@ -121,7 +121,7 @@ def preflight(env, build, suites):
                 if version(actual) < version(minimum):
                     raise RuntimeError("A Linux system dependency is below scripts/toolchains.json requirements")
                 observed["system_dependencies"][name] = actual
-    isolated = {"native", "credentials", "mcp_http", "plugin_sandbox", "sandbox", "build", "build_proposals", "real_build", "delivery"}
+    isolated = {"native", "credentials", "mcp_http", "plugin_sandbox", "sandbox", "sandbox_resources", "build", "build_proposals", "real_build", "delivery"}
     if PLATFORM == "linux" and isolated.intersection(suites):
         delegation = env.get("CODESTUDIO_CGROUP_ROOT", "")
         if not delegation or not Path(delegation).is_dir() or not Path("/usr/bin/bwrap").is_file():
@@ -146,6 +146,7 @@ def commands(mode, package):
         if name not in result:
             result[name] = [sys.executable, f"tests/{name}_integration.py", agent]
     if PLATFORM == "windows":
+        result["spawn_lifetime"] = [sys.executable, "tests/windows_spawn_lifetime.py", agent]
         for name in ("build", "build_proposals"):
             result[name] = [sys.executable, f"tests/{name}_integration.py", agent]
         result["real_build"] = [sys.executable, "tests/xmake_build_integration.py", agent]

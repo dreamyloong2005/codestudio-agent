@@ -1,0 +1,22 @@
+PASS persistence/recovery/transitions/schema
+PASS credential references/validation/environment isolation
+PASS task loop/policy/budgets/redaction
+PASS current checkpoint format/atomicity/resume guards
+PASS scheduler persistence/fencing/budgets/atomic recovery
+PASS cron syntax/time zones/DST boundaries
+PASS cron atomic occurrences/overlap/recovery/controls
+PASS read-only process identity observation
+PASS login autostart identity/ownership/argument boundaries
+PASS durable conversation resume/budgets/no replay
+PASS read-only state queries/pagination/commit visibility
+PASS Responses protocol and continuation
+PASS Messages protocol and continuation
+PASS workspace tool boundaries
+PASS isolated workspace import/export/hash/link boundaries
+PASS generic execution/manifest compatibility/frozen recipes
+PASS build proposals/digests/no execution/receipt validation
+PASS build decisions/atomic claims/no replay/current schema
+PASS process lifecycle/quoting/cancellation
+PASS persistent process transport/deadlines/environment
+PASS MCP grants/lifecycle/schemas/receipts
+PASS OS sandbox boundaries/stdio/descendants/cleanup

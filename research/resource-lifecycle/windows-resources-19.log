@@ -1,0 +1,15 @@
+...........sE......
+======================================================================
+ERROR: test_normal_destruction_preserves_replaced_staging_and_journal (__main__.ResourceTests.test_normal_destruction_preserves_replaced_staging_and_journal)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\sandbox_resources_integration.py", line 291, in test_normal_destruction_preserves_replaced_staging_and_journal
+    stage.rename(saved)
+  File "D:\Python\3.12.11\Lib\pathlib.py", line 1363, in rename
+    os.rename(self, target)
+PermissionError: [WinError 5] 拒绝访问。: 'C:\\Users\\dreamyloong\\AppData\\Local\\Temp\\codestudio-sandbox-b7071d88ec831b3aa5bda6c17cd889a9' -> 'C:\\Users\\dreamyloong\\AppData\\Local\\Temp\\codestudio-sandbox-b7071d88ec831b3aa5bda6c17cd889a9-owned-saved'
+
+----------------------------------------------------------------------
+Ran 19 tests in 7.180s
+
+FAILED (errors=1, skipped=1)

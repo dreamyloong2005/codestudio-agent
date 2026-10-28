@@ -1,4 +1,5 @@
 #include "codestudio/kernel.hpp"
+#include "codestudio/sandbox_resources.hpp"
 #include <algorithm>
 #include <map>
 #include <set>
@@ -223,6 +224,9 @@ std::map<std::string,Json> validate_checkpoint(const Json& state,const Json& row
 Json policy_binding(const ToolPolicy& policy) {
     validate_sandbox_mode(policy.sandbox);
     auto protected_paths=policy.protected_paths;
+    // Bind the same mandatory protection before and after ToolBroker construction.
+    const auto resources=sandbox_resource_registry_path();
+    if (!resources.empty()) protected_paths.push_back(resources);
     for (auto& path : protected_paths) if (!path.is_absolute()) path=policy.workspace/path;
     Json result = {{"workspace",canonical_path(policy.workspace)},{"allow_write",policy.allow_write},
         {"allowed_executables",canonical_paths(policy.allowed_executables)},
@@ -375,7 +379,7 @@ Json run_agent(Store& store, ModelProvider& provider, const ToolBroker& tools,
                     }
                     const auto action=store.prepare_action(id,safe_call);
                     store.dispatch_action(action);
-                    try { result=tools.execute(call,cancelled); }
+                    try { SandboxTaskScope scope(id); result=tools.execute(call,cancelled); }
                     catch (const std::exception& e) { result={false,Json::object(),e.what(),"unknown"}; }
                     const auto body=clean(tool_result_json(result));
                     if (body!=tool_result_json(result)) {

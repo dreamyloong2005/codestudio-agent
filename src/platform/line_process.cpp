@@ -415,7 +415,7 @@ LineProcess::LineProcess(const ProcessRequest& request, const std::atomic_bool* 
 #ifdef _WIN32
     if (request.sandbox == SandboxMode::appcontainer) impl_->sandbox = std::make_unique<WindowsSandbox>(request,nullptr,cancelled);
     auto* sandbox = impl_->sandbox.get();
-    impl_->job.reset(CreateJobObjectW(nullptr, nullptr));
+    impl_->job.reset(sandbox ? sandbox->create_job() : CreateJobObjectW(nullptr, nullptr));
     if (!impl_->job.get()) windows_error("CreateJobObjectW(RPC)");
     JOBOBJECT_EXTENDED_LIMIT_INFORMATION limits{};
     limits.BasicLimitInformation.LimitFlags = JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE;
@@ -439,8 +439,11 @@ LineProcess::LineProcess(const ProcessRequest& request, const std::atomic_bool* 
     Handle child_output, child_errors;
     output_pipe(impl_->output, child_output);
     output_pipe(impl_->errors, child_errors);
-    Attributes attributes(1 + (sandbox ? WindowsSandbox::extra_attribute_count : 0));
+    HANDLE launch_job=impl_->job.get();
+    Attributes attributes(1 + (sandbox ? WindowsSandbox::extra_attribute_count : 1));
     if (sandbox) sandbox->apply_attributes(attributes.get());
+    else if (!UpdateProcThreadAttribute(attributes.get(),0,PROC_THREAD_ATTRIBUTE_JOB_LIST,
+        &launch_job,sizeof(launch_job),nullptr,nullptr)) windows_error("UpdateProcThreadAttribute(RPC job)");
     std::array<HANDLE, 3> inherited{child_input.get(), child_output.get(), child_errors.get()};
     if (!UpdateProcThreadAttribute(attributes.get(), 0, PROC_THREAD_ATTRIBUTE_HANDLE_LIST,
         inherited.data(), sizeof(inherited), nullptr, nullptr)) windows_error("UpdateProcThreadAttribute(RPC)");
@@ -467,11 +470,6 @@ LineProcess::LineProcess(const ProcessRequest& request, const std::atomic_bool* 
         windows_error("CreateProcessW(RPC)");
     impl_->process.reset(info.hProcess);
     Handle thread(info.hThread);
-    if (!sandbox && !AssignProcessToJobObject(impl_->job.get(), impl_->process.get())) {
-        const auto error = GetLastError();
-        TerminateProcess(impl_->process.get(), 1);
-        throw std::system_error(static_cast<int>(error), std::system_category(), "AssignProcessToJobObject(RPC)");
-    }
     if (sandbox) sandbox->verify(impl_->process.get());
     check_cancelled();
     if (Clock::now() >= startup_deadline) throw std::runtime_error("RPC process startup timed out");

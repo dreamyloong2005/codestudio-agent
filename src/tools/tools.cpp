@@ -1,4 +1,5 @@
 #include "codestudio/tools.hpp"
+#include "codestudio/sandbox_resources.hpp"
 
 #include <algorithm>
 #include <array>
@@ -392,6 +393,8 @@ ToolBroker::ToolBroker(ToolPolicy policy, std::vector<std::shared_ptr<ToolExtens
     policy_.workspace = fs::absolute(policy_.workspace).lexically_normal();
     check_components(policy_.workspace);
     if (!fs::is_directory(policy_.workspace)) fail("workspace must be an existing directory.");
+    const auto resources=sandbox_resource_registry_path();
+    if (!resources.empty()) policy_.protected_paths.push_back(resources);
     for (auto& path : policy_.protected_paths) {
         if (path.empty()) fail("Protected paths must not be empty.");
         path = (path.is_absolute() ? path : policy_.workspace / path).lexically_normal();
@@ -511,6 +514,7 @@ ToolResult ToolBroker::execute(const ToolCall& call, const std::atomic_bool& can
             request.timeout = policy_.process_timeout;
             request.max_output_bytes = policy_.max_process_output_bytes;
             request.sandbox = policy_.sandbox;
+            request.task_id = sandbox_task_id();
             check_cancelled(cancelled);
             process_started = true;
             const auto process = run_process(request, cancelled);

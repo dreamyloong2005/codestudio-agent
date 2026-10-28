@@ -1,0 +1,501 @@
+{
+  "format": 2,
+  "product": "CodeStudio-Agent",
+  "platform": "linux",
+  "arch": "x86_64",
+  "mode": "debug",
+  "started_at": "2026-10-25T17:41:37.449362+00:00",
+  "status": "succeeded",
+  "selected_suites": [
+    "native",
+    "schema",
+    "provider",
+    "streaming",
+    "contract",
+    "service",
+    "credentials",
+    "cli",
+    "local_models",
+    "mcp",
+    "mcp_http",
+    "mcp_oauth",
+    "plugins",
+    "plugin_sandbox",
+    "resume",
+    "sandbox",
+    "sandbox_resources",
+    "scheduler",
+    "supervisor",
+    "cron",
+    "autostart",
+    "real_build",
+    "package",
+    "verification"
+  ],
+  "omitted_suites": [
+    "delivery"
+  ],
+  "build_requested": true,
+  "steps": [
+    {
+      "name": "configure",
+      "command": [
+        "xmake",
+        "f",
+        "-p",
+        "linux",
+        "-a",
+        "x86_64",
+        "--toolchain=gcc",
+        "-m",
+        "debug",
+        "--system_deps=y",
+        "-y"
+      ],
+      "log": "configure.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 2.274
+    },
+    {
+      "name": "xmake-build",
+      "command": [
+        "xmake",
+        "build",
+        "-a",
+        "-j",
+        "6"
+      ],
+      "log": "xmake-build.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 7.089
+    },
+    {
+      "name": "native",
+      "command": [
+        "/var/tmp/codestudio-agent-linux/build/linux/x86_64/debug/agent-tests"
+      ],
+      "log": "native.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 10.548,
+      "native_groups": 22
+    },
+    {
+      "name": "schema",
+      "command": [
+        "/var/tmp/codestudio-agent-linux/build/contract-python/bin/python",
+        "tests/contract_schema.py"
+      ],
+      "log": "schema.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 0.72,
+      "cases": 13,
+      "skipped": 0,
+      "passed": 13
+    },
+    {
+      "name": "provider",
+      "command": [
+        "/var/tmp/codestudio-agent-linux/build/contract-python/bin/python",
+        "tests/provider_integration.py",
+        "/var/tmp/codestudio-agent-linux/build/linux/x86_64/debug/provider-fixture"
+      ],
+      "log": "provider.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 1.623,
+      "cases": 15,
+      "skipped": 0,
+      "passed": 15
+    },
+    {
+      "name": "streaming",
+      "command": [
+        "/var/tmp/codestudio-agent-linux/build/contract-python/bin/python",
+        "tests/streaming_integration.py",
+        "/var/tmp/codestudio-agent-linux/build/linux/x86_64/debug/provider-fixture",
+        "/var/tmp/codestudio-agent-linux/build/linux/x86_64/debug/codestudio-agent"
+      ],
+      "log": "streaming.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 4.03,
+      "cases": 18,
+      "skipped": 0,
+      "passed": 18
+    },
+    {
+      "name": "contract",
+      "command": [
+        "/var/tmp/codestudio-agent-linux/build/contract-python/bin/python",
+        "tests/client_contract_integration.py",
+        "/var/tmp/codestudio-agent-linux/build/linux/x86_64/debug/codestudio-agent"
+      ],
+      "log": "contract.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 3.884,
+      "cases": 16,
+      "skipped": 0,
+      "passed": 16
+    },
+    {
+      "name": "service",
+      "command": [
+        "/var/tmp/codestudio-agent-linux/build/contract-python/bin/python",
+        "tests/client_contract_integration.py",
+        "/var/tmp/codestudio-agent-linux/build/linux/x86_64/debug/codestudio-agent",
+        "--service-suite"
+      ],
+      "log": "service.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 16.461,
+      "cases": 28,
+      "skipped": 0,
+      "passed": 28
+    },
+    {
+      "name": "credentials",
+      "command": [
+        "/var/tmp/codestudio-agent-linux/build/contract-python/bin/python",
+        "tests/credentials_integration.py",
+        "/var/tmp/codestudio-agent-linux/build/linux/x86_64/debug/codestudio-agent"
+      ],
+      "log": "credentials.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 4.38,
+      "cases": 17,
+      "skipped": 0,
+      "passed": 17
+    },
+    {
+      "name": "cli",
+      "command": [
+        "/var/tmp/codestudio-agent-linux/build/contract-python/bin/python",
+        "tests/cli_integration.py",
+        "/var/tmp/codestudio-agent-linux/build/linux/x86_64/debug/codestudio-agent"
+      ],
+      "log": "cli.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 0.821,
+      "cases": 11,
+      "skipped": 0,
+      "passed": 11
+    },
+    {
+      "name": "local_models",
+      "command": [
+        "/var/tmp/codestudio-agent-linux/build/contract-python/bin/python",
+        "tests/local_models_integration.py",
+        "/var/tmp/codestudio-agent-linux/build/linux/x86_64/debug/codestudio-agent"
+      ],
+      "log": "local_models.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 0.721,
+      "cases": 15,
+      "skipped": 0,
+      "passed": 15
+    },
+    {
+      "name": "mcp",
+      "command": [
+        "/var/tmp/codestudio-agent-linux/build/contract-python/bin/python",
+        "tests/mcp_integration.py",
+        "/var/tmp/codestudio-agent-linux/build/linux/x86_64/debug/codestudio-agent"
+      ],
+      "log": "mcp.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 2.126,
+      "cases": 13,
+      "skipped": 0,
+      "passed": 13
+    },
+    {
+      "name": "mcp_http",
+      "command": [
+        "/var/tmp/codestudio-agent-linux/build/contract-python/bin/python",
+        "tests/mcp_http_integration.py",
+        "/var/tmp/codestudio-agent-linux/build/linux/x86_64/debug/codestudio-agent"
+      ],
+      "log": "mcp_http.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 6.285,
+      "cases": 39,
+      "skipped": 0,
+      "passed": 39
+    },
+    {
+      "name": "mcp_oauth",
+      "command": [
+        "/var/tmp/codestudio-agent-linux/build/contract-python/bin/python",
+        "tests/mcp_oauth_integration.py",
+        "/var/tmp/codestudio-agent-linux/build/linux/x86_64/debug/codestudio-agent"
+      ],
+      "log": "mcp_oauth.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 5.481,
+      "cases": 26,
+      "skipped": 0,
+      "passed": 26
+    },
+    {
+      "name": "plugins",
+      "command": [
+        "/var/tmp/codestudio-agent-linux/build/contract-python/bin/python",
+        "tests/plugins_integration.py",
+        "/var/tmp/codestudio-agent-linux/build/linux/x86_64/debug/codestudio-agent"
+      ],
+      "log": "plugins.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 48.507,
+      "cases": 23,
+      "skipped": 0,
+      "passed": 23
+    },
+    {
+      "name": "plugin_sandbox",
+      "command": [
+        "/var/tmp/codestudio-agent-linux/build/contract-python/bin/python",
+        "tests/plugin_sandbox_integration.py",
+        "/var/tmp/codestudio-agent-linux/build/linux/x86_64/debug/codestudio-agent"
+      ],
+      "log": "plugin_sandbox.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 38.173,
+      "cases": 17,
+      "skipped": 0,
+      "passed": 17
+    },
+    {
+      "name": "resume",
+      "command": [
+        "/var/tmp/codestudio-agent-linux/build/contract-python/bin/python",
+        "tests/resume_integration.py",
+        "/var/tmp/codestudio-agent-linux/build/linux/x86_64/debug/codestudio-agent"
+      ],
+      "log": "resume.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 1.121,
+      "cases": 18,
+      "skipped": 0,
+      "passed": 18
+    },
+    {
+      "name": "sandbox",
+      "command": [
+        "/var/tmp/codestudio-agent-linux/build/contract-python/bin/python",
+        "tests/sandbox_integration.py",
+        "/var/tmp/codestudio-agent-linux/build/linux/x86_64/debug/codestudio-agent"
+      ],
+      "log": "sandbox.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 0.519,
+      "cases": 5,
+      "skipped": 0,
+      "passed": 5
+    },
+    {
+      "name": "sandbox_resources",
+      "command": [
+        "/var/tmp/codestudio-agent-linux/build/contract-python/bin/python",
+        "tests/sandbox_resources_integration.py",
+        "/var/tmp/codestudio-agent-linux/build/linux/x86_64/debug/codestudio-agent"
+      ],
+      "log": "sandbox_resources.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 1.371,
+      "cases": 19,
+      "skipped": 2,
+      "passed": 17
+    },
+    {
+      "name": "scheduler",
+      "command": [
+        "/var/tmp/codestudio-agent-linux/build/contract-python/bin/python",
+        "tests/scheduler_integration.py",
+        "/var/tmp/codestudio-agent-linux/build/linux/x86_64/debug/codestudio-agent"
+      ],
+      "log": "scheduler.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 13.456,
+      "cases": 19,
+      "skipped": 0,
+      "passed": 19
+    },
+    {
+      "name": "supervisor",
+      "command": [
+        "/var/tmp/codestudio-agent-linux/build/contract-python/bin/python",
+        "tests/supervisor_integration.py",
+        "/var/tmp/codestudio-agent-linux/build/linux/x86_64/debug/codestudio-agent"
+      ],
+      "log": "supervisor.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 7.237,
+      "cases": 18,
+      "skipped": 0,
+      "passed": 18
+    },
+    {
+      "name": "cron",
+      "command": [
+        "/var/tmp/codestudio-agent-linux/build/contract-python/bin/python",
+        "tests/cron_integration.py",
+        "/var/tmp/codestudio-agent-linux/build/linux/x86_64/debug/codestudio-agent"
+      ],
+      "log": "cron.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 5.231,
+      "cases": 12,
+      "skipped": 0,
+      "passed": 12
+    },
+    {
+      "name": "autostart",
+      "command": [
+        "/var/tmp/codestudio-agent-linux/build/contract-python/bin/python",
+        "tests/autostart_integration.py",
+        "/var/tmp/codestudio-agent-linux/build/linux/x86_64/debug/codestudio-agent"
+      ],
+      "log": "autostart.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 1.02,
+      "cases": 14,
+      "skipped": 1,
+      "passed": 13
+    },
+    {
+      "name": "real_build",
+      "command": [
+        "/var/tmp/codestudio-agent-linux/build/contract-python/bin/python",
+        "tests/linux_build_integration.py",
+        "/var/tmp/codestudio-agent-linux/build/linux/x86_64/debug/codestudio-agent"
+      ],
+      "log": "real_build.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 7.237,
+      "cases": 8,
+      "skipped": 0,
+      "passed": 8
+    },
+    {
+      "name": "package",
+      "command": [
+        "/var/tmp/codestudio-agent-linux/build/contract-python/bin/python",
+        "tests/package_tests.py"
+      ],
+      "log": "package.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 0.068,
+      "cases": 11,
+      "skipped": 0,
+      "passed": 11
+    },
+    {
+      "name": "verification",
+      "command": [
+        "/var/tmp/codestudio-agent-linux/build/contract-python/bin/python",
+        "tests/verification_tests.py"
+      ],
+      "log": "verification.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 1.271,
+      "cases": 14,
+      "skipped": 0,
+      "passed": 14
+    }
+  ],
+  "source": {
+    "sha256": "33c069cad493bd4996c82cc1bda86c82ef951e9d0bbb8cdd9fb2bf3805f97aaa",
+    "files": 198
+  },
+  "toolchain": {
+    "python": "3.14.6",
+    "requirements": {
+      "format": 2,
+      "python_minimum": "3.11.0",
+      "xmake_minimum": "3.0.5",
+      "jsonschema": "4.23.0",
+      "windows": {
+        "arch": "x64",
+        "toolchain": "clang-cl",
+        "compiler_minimum": "22.0.0",
+        "requirements": [
+          "Visual Studio 2022 C++ build tools and Windows SDK",
+          "LLVM clang-cl 22 or newer"
+        ]
+      },
+      "linux": {
+        "arch": "x86_64",
+        "toolchain": "gcc",
+        "compiler_minimum": "16.0.0",
+        "pkg_config_minimum": {
+          "nlohmann_json": "3.12.0",
+          "sqlite3": "3.50.4",
+          "libcurl": "8.15.0",
+          "openssl": "3.0.0",
+          "libsecret-1": "0.21.0"
+        },
+        "requirements": [
+          "bubblewrap at /usr/bin/bwrap",
+          "tzdata",
+          "cgroup v2 delegation with cpu/memory/pids",
+          "user namespaces and seccomp"
+        ]
+      }
+    },
+    "jsonschema": "4.23.0",
+    "xmake": "xmake v3.1.0+20260808, A cross-platform build utility based on Lua",
+    "compiler": "g++ (GCC) 16.2.1 20260810",
+    "system_dependencies": {
+      "nlohmann_json": "3.12.0",
+      "sqlite3": "3.53.4",
+      "libcurl": "8.21.0",
+      "openssl": "3.6.3",
+      "libsecret-1": "0.21.7"
+    },
+    "isolation_delegation": "provided"
+  },
+  "tested_artifacts": {
+    "codestudio-agent": "33c69c6133ea93651642f9d50e99b981a7b35212dd2d0dfb162164a686e2ecbf",
+    "agent-tests": "e0b6c595f442eb10e73554388eccc7bcd718292e6902d77f74c897097f97bfb2",
+    "provider-fixture": "05e719938892ef7ddd7d66ca0b64ff5d282f89b1451e349769ed427822b1d42c",
+    "process-fixture": "5da5d79c8985a0db8158169348303784c01e5786e6365c6e22cbd621e2710b30",
+    "line-process-fixture": "74d6efb137e6bd369c140ed69967ad0e883ca58d04798ee53b3e56805dce432d",
+    "mcp-fixture": "23df5e97340a13a2e47dc1101ab56bdcc6b421770f5c9ab7261d19bb5a83b098",
+    "sandbox-fixture": "79c627f4d1d66f79d4862eaa4999ef5a1f573c02c2ff0511eebaf49b3397b36a",
+    "build-fixture": "4fff16bab121c8a852f5e22d3de7c22e3548f84ac04aacfde275cdc6c301d893",
+    "sandbox-resource-fixture": "876515301bff50cebc73205dd816443eb4128d392cb4743d659006305125a6fa",
+    "plugin-sandbox-fixture": "737130ca3d1fab7ce6663503312c5b96ce807320e78746d0e9cb2f2adff01245",
+    "libplugin-sandbox-library.so": "0b467ab8a794e6df3b56bdd80ca9dabd0d93f352e0495fbf6e068b415fc88dde",
+    "libplugin-sandbox-dependency.so": "47cab4f726a94cacf47318bffcdf8e83d5421a27ac125b486884d844b42a3a2d"
+  },
+  "artifact": {
+    "path": "build/linux/x86_64/debug/codestudio-agent",
+    "size": 36960016,
+    "sha256": "33c69c6133ea93651642f9d50e99b981a7b35212dd2d0dfb162164a686e2ecbf"
+  },
+  "finished_at": "2026-10-25T17:44:49.447274+00:00"
+}

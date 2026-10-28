@@ -1,0 +1,14 @@
+[0mchecking for LLVM Clang C/C++ Compiler (x64) ... [32;1mok[0m
+[0mchecking for Microsoft Visual Studio (x64) version ... [32;1m2022[0m
+[0m[32;1m[ 25%]:[0m [36;1m<agent-core>[0m cache compiling.debug src\core\kernel.cpp[0m
+[0m[32;1m[ 37%]:[0m [36;1m<agent-core>[0m cache compiling.debug src\platform\line_process.cpp[0m
+[0m[32;1m[ 39%]:[0m [36;1m<agent-core>[0m cache compiling.debug src\platform\process.cpp[0m
+[0m[32;1m[ 52%]:[0m [36;1m<agent-core>[0m cache compiling.debug src\application\application.cpp[0m
+[0m[32;1m[ 55%]:[0m [36;1m<agent-core>[0m cache compiling.debug src\application\service.cpp[0m
+[0m[32;1m[ 57%]:[0m [36;1m<agent-core>[0m cache compiling.debug src\execution\workspace_execution.cpp[0m
+[0m[32;1m[ 86%]:[0m [36;1m<agent-core>[0m [36;1marchiving.debug agent-core.lib[0m
+[0m[32;1m[ 87%]:[0m [36;1m<sandbox-resource-fixture>[0m [36;1mlinking.debug sandbox-resource-fixture.exe[0m
+[0m[32;1m[ 87%]:[0m [36;1m<codestudio-agent>[0m [36;1mlinking.debug codestudio-agent.exe[0m
+[0m[32;1m[ 87%]:[0m [36;1m<provider-fixture>[0m [36;1mlinking.debug provider-fixture.exe[0m
+[0m[32;1m[ 90%]:[0m [36;1m<agent-tests>[0m [36;1mlinking.debug agent-tests.exe[0m
+[0m[32;1m[100%]:[0m [32;1mbuild ok, spent 4.672s[0m

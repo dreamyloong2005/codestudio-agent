@@ -4,6 +4,7 @@
 #include "codestudio/state_reader.hpp"
 #include "codestudio/store.hpp"
 #include "codestudio/scheduler.hpp"
+#include "codestudio/sandbox_resources.hpp"
 #include "../provider/protocol.hpp"
 #include <algorithm>
 #include <chrono>
@@ -362,6 +363,18 @@ void append_scheduler_launch_options(std::vector<std::string>& args, const Json&
     }
 }
 std::vector<std::string> command(const Configuration& config, const std::string& method, const Json& params) {
+    if (method=="sandboxes/reclaim") {
+        fields(params,{"id","dry_run"});
+        const auto resource=string_value(params,"id",32);
+        if (resource.size()!=32 || !std::ranges::all_of(resource,[](char c) {
+            return (c>='0' && c<='9') || (c>='a' && c<='f'); }))
+            throw RpcError(-32602,"Sandbox id must contain 32 lowercase hex characters");
+        if (params.contains("dry_run") && !params["dry_run"].is_boolean())
+            throw RpcError(-32602,"dry_run must be boolean");
+        std::vector<std::string> args{"codestudio-agent","sandbox-reclaim","--id",resource};
+        if (params.value("dry_run",false)) args.push_back("--dry-run");
+        return args;
+    }
     const std::map<std::string,std::string> extensions{
         {"mcp/auth/discover","mcp-auth-discover"},{"mcp/auth/status","mcp-auth-status"},
         {"mcp/auth/login","mcp-auth-login"},{"mcp/auth/logout","mcp-auth-logout"},
@@ -573,11 +586,11 @@ int serve(const Configuration& config, const std::atomic_bool& shutdown) {
                         {"background_scheduler",true},{"cron",true},{"operation_lookup",true},{"structured_errors",true},
                         {"mcp_streamable_http",true},{"mcp_oauth",true},{"plugin_locks",true},{"plugin_distribution",true},
 #if defined(_WIN32) || defined(__linux__)
-                        {"plugin_sandbox",true},
+                        {"plugin_sandbox",true},{"sandbox_resources",true},
                         {"worker_supervision",true},{"supervised_autostart",true},{"supervisor_diagnostics",true},
                         {"login_autostart",true},
 #else
-                        {"plugin_sandbox",false},
+                        {"plugin_sandbox",false},{"sandbox_resources",false},
                         {"worker_supervision",false},{"supervised_autostart",false},{"supervisor_diagnostics",false},
                         {"login_autostart",false},
 #endif
@@ -587,6 +600,16 @@ int serve(const Configuration& config, const std::atomic_bool& shutdown) {
                 return;
             }
             if (!initialized) throw RpcError(-32002, "Initialize the service first");
+            if (method=="sandboxes/list") {
+                fields(params,{"after","limit"});
+                const auto after=params.contains("after") ? string_value(params,"after",32) : std::string();
+                if (!after.empty() && (after.size()!=32 || !std::ranges::all_of(after,[](char c) {
+                    return (c>='0' && c<='9') || (c>='a' && c<='f'); })))
+                    throw RpcError(-32602,"after must be a sandbox resource id");
+                const auto limit=number(params,"limit",50);
+                if (limit<1 || limit>100) throw RpcError(-32602,"limit must be 1..100");
+                response(io,id,application_redact(list_sandbox_resources(after,static_cast<unsigned>(limit)))); return;
+            }
             if (method == "tasks/list" || method == "events/list") {
                 const bool tasks = method == "tasks/list";
                 fields(params,tasks ? std::initializer_list<std::string_view>{"before","limit"} :
@@ -687,7 +710,8 @@ int serve(const Configuration& config, const std::atomic_bool& shutdown) {
             if (method == "tasks/start" || method == "tasks/resume" || method == "crons/create" ||
                 method == "builds/approve" || method == "builds/reject" ||
                 method == "mcp/auth/discover" || method == "mcp/auth/status" || method == "mcp/auth/login" || method == "mcp/auth/logout" ||
-                method == "plugins/pack" || method == "plugins/install" || method == "plugins/lock" || method == "plugins/inspect") {
+                method == "plugins/pack" || method == "plugins/install" || method == "plugins/lock" || method == "plugins/inspect" ||
+                method == "sandboxes/reclaim") {
                 idle(); auto args = command(config,method,params);
                 operation = std::make_unique<Operation>(); operation->id = new_id(); operation->method = method;
                 auto* current = operation.get();

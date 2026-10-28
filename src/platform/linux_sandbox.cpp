@@ -2,6 +2,7 @@
 #ifdef __linux__
 #include "codestudio/build_workspace.hpp"
 #include "codestudio/process_package.hpp"
+#include "codestudio/sandbox_resources.hpp"
 #include "codestudio/store.hpp"
 #include <algorithm>
 #include <array>
@@ -173,17 +174,22 @@ struct LinuxSandbox::Impl {
     int filter_fd=-1,group_fd=-1;
     bool build=false, tools_prepared=false, package=false;
     const std::atomic_bool* preparing_cancelled=nullptr;
+    std::unique_ptr<SandboxResourceLease> resources;
     ~Impl() {
         if (group_fd>=0) close(group_fd);
         if (filter_fd>=0) close(filter_fd);
+        bool stopped=group.empty();
         if (!group.empty()) {
             try { write_file(group/"cgroup.kill","1"); } catch (...) {}
             for (int i=0;i<100;++i) {
-                std::error_code error; if (fs::remove(group,error)) break;
+                std::error_code error;
+                if (fs::remove(group,error)) {stopped=true;break;}
+                if (!error && !fs::exists(group,error) && !error) {stopped=true;break;}
                 std::this_thread::sleep_for(std::chrono::milliseconds(10));
             }
         }
-        if (!root.empty()) try {safe_remove_owned_tree(root);} catch (...) {}
+        if (stopped && !root.empty()) try {safe_remove_owned_tree(root);} catch (...) {}
+        if (resources) try {resources->finish();} catch (...) { /* Durable record remains for explicit recovery. */ }
     }
     void check_preparation() const {
         if (preparing_cancelled && preparing_cancelled->load())
@@ -295,10 +301,15 @@ LinuxSandbox::LinuxSandbox(const ProcessRequest& request,const LinuxBuildLimits*
     validate_available(); auto& value=*impl_; value.build=build!=nullptr;
     value.package=static_cast<bool>(request.package); value.preparing_cancelled=cancelled;
     if (build && build->processes<3) throw std::runtime_error("Linux build process limit must include Bubblewrap supervisors and be at least 3");
-    const auto identifier="codestudio-isolation-"+new_id();
+    const auto resource_id=new_id();
+    const auto identifier="codestudio-isolation-"+resource_id;
+    value.resources=std::make_unique<SandboxResourceLease>(resource_id,build?"build":request.package?"package":"process",
+        request.working_directory,request.task_id);
     const auto group=cgroup_parent()/identifier;
+    value.resources->expect("cgroup",group);
     if (!fs::create_directory(group)) throw std::runtime_error("Cannot create owned isolation cgroup");
     value.group=group;
+    value.resources->track("cgroup",group);
     write_file(value.group/"pids.max",std::to_string(build ? build->processes : value.package ? request.package_limits.processes+2 : 3));
     write_file(value.group/"memory.max",std::to_string(build ? build->memory_bytes : value.package ? request.package_limits.memory_bytes : 512ULL*1024*1024));
     write_file(value.group/"memory.swap.max","0");
@@ -307,9 +318,11 @@ LinuxSandbox::LinuxSandbox(const ProcessRequest& request,const LinuxBuildLimits*
     value.group_fd=above_stdio(open((value.group/"cgroup.procs").c_str(),O_WRONLY|O_CLOEXEC|O_NOFOLLOW));
     if (value.group_fd<0) failure("Open owned cgroup membership");
     const auto root=fs::temp_directory_path()/identifier;
+    value.resources->expect("staging",root);
     if (!fs::create_directory(root)) throw std::runtime_error("Cannot create private Linux isolation directory");
     value.root=root;
     directory(value.root); value.readonly=value.root/"tools"; value.writable=value.root/"work"; value.runtime=value.root/"runtime";
+    value.resources->track("staging",root);
     for (const auto& path:{value.readonly,value.writable,value.runtime}) directory(path);
     for (const auto* name:{"proc","dev","work","tools","tmp"}) directory(value.runtime/name);
     const auto rules=filter(!build && (!value.package || request.package_limits.processes==1));
@@ -331,7 +344,7 @@ LinuxSandbox::LinuxSandbox(const ProcessRequest& request,const LinuxBuildLimits*
             value.dependencies(value.readonly/request.executable.filename());
         }
     }
-    value.check_preparation(); value.preparing_cancelled=nullptr;
+    value.check_preparation();value.resources->mark_ready();value.preparing_cancelled=nullptr;
 }
 LinuxSandbox::~LinuxSandbox()=default;
 const fs::path& LinuxSandbox::readonly_root() const {return impl_->readonly;}

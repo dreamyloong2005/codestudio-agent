@@ -1,0 +1,7 @@
+[0m[32;1m[ 48%]:[0m [36;1m<agent-core>[0m cache compiling.debug src\platform\sandbox_resources_windows.cpp[0m
+[0m[32;1m[ 86%]:[0m [36;1m<agent-core>[0m [36;1marchiving.debug agent-core.lib[0m
+[0m[32;1m[ 87%]:[0m [36;1m<sandbox-resource-fixture>[0m [36;1mlinking.debug sandbox-resource-fixture.exe[0m
+[0m[32;1m[ 87%]:[0m [36;1m<codestudio-agent>[0m [36;1mlinking.debug codestudio-agent.exe[0m
+[0m[32;1m[ 87%]:[0m [36;1m<provider-fixture>[0m [36;1mlinking.debug provider-fixture.exe[0m
+[0m[32;1m[ 90%]:[0m [36;1m<agent-tests>[0m [36;1mlinking.debug agent-tests.exe[0m
+[0m[32;1m[100%]:[0m [32;1mbuild ok, spent 3.812s[0m

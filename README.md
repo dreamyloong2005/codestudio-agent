@@ -10,6 +10,7 @@
 
 ## 当前能力
 
+- **隔离资源管理**：新沙箱记录所有权和进程出生身份，支持只读列表、回收预览与单 ID 显式回收；不认领未登记的历史目录，不重放未知动作。见[资源登记与回收](docs/sandbox-resources.md)。
 - 可配置的 **Chat Completions、OpenAI Responses、Anthropic Messages** 接口：默认 SSE 流式响应，支持非流式回退、函数工具调用、有限轮次、超时、响应限长和 Ctrl+C 取消。
 - 无需密钥的离线演示：脚本化 provider 写入文件、读回并核对内容。
 - `read_file`、`write_file`、`run_process` 三种工具；写入和进程执行分别授权。

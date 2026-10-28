@@ -47,6 +47,9 @@ struct ProcessRequest {
     SandboxMode sandbox = SandboxMode::none;
     std::shared_ptr<const ProcessPackage> package;
     ProcessPackageLimits package_limits;
+    // Host task correlation only; empty for pre-task discovery. Never exposed
+    // in the sandbox environment or used as cleanup authorization.
+    std::string task_id;
 };
 
 struct ProcessResult {

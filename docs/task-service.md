@@ -298,3 +298,9 @@ RPC 错误保留 JSON-RPC 的 `code` 和可读 `message`，新增 `data.kind`、
 交换、发布或换锁不会因取消而回滚。断连后先查询当前操作或显式检查连接/插件状态。
 
 `capabilities.plugin_sandbox` 声明编译的完整插件包隔离支持，不代表当前主机运行探测成功。通过已有 `options.sandbox` 与 MCP 清单中的 `sandbox_limits` 使用；未新增运行方法或自动工具授权，详见[插件隔离](plugin-sandbox.md)。
+
+## 隔离资源管理
+
+`sandboxes/list` 接受可选 `after` 资源 ID 与 1–100 的 `limit`，同步返回当前用户登记目录的分页观察，可在前台操作活动期间调用。`sandboxes/reclaim` 接受必填 `id` 与可选布尔 `dry_run`，按已有异步操作协议返回并支持取消。输入不能指定任意待删除路径；不带请求 ID 的通知无回收效果。
+
+`capabilities.sandbox_resources` 仅表示编译支持。接口覆盖当前用户登记资源，不局限于服务工作区，属于可信客户端管理能力，不向模型暴露。回收失败或取消保留登记供后续检查，断连后先查询当前资源状态。它不修改任务数据库，也不改变未知工具效果。状态字段与平台限制见[隔离资源登记与回收](sandbox-resources.md)。

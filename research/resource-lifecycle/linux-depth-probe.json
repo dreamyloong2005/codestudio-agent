@@ -1,0 +1,8 @@
+{
+  "format": 2,
+  "status": "succeeded",
+  "case": "deep_staging_path_refused_before_creation",
+  "registry_empty": true,
+  "owned_cgroups_released": true,
+  "temporary_root_removed": true
+}

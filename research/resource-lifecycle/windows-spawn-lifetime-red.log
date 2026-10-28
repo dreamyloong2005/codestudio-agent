@@ -1,0 +1,35 @@
+EE
+======================================================================
+ERROR: test_line_process_is_owned_before_create_returns (__main__.SpawnLifetimeTests.test_line_process_is_owned_before_create_returns)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\windows_spawn_lifetime.py", line 219, in test_line_process_is_owned_before_create_returns
+    self.check_spawn("plain-line")
+  File "D:\Dev\Projects\codestudio-agent\tests\windows_spawn_lifetime.py", line 184, in check_spawn
+    raise failure
+  File "D:\Dev\Projects\codestudio-agent\tests\windows_spawn_lifetime.py", line 159, in check_spawn
+    observed = private_job_membership(inspection, event.data.create.process)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\Projects\codestudio-agent\tests\windows_spawn_lifetime.py", line 109, in private_job_membership
+    raise ctypes.WinError(ctypes.get_last_error())
+OSError: [WinError 50] 不支持该请求。
+
+======================================================================
+ERROR: test_run_process_is_owned_before_create_returns (__main__.SpawnLifetimeTests.test_run_process_is_owned_before_create_returns)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\windows_spawn_lifetime.py", line 216, in test_run_process_is_owned_before_create_returns
+    self.check_spawn("plain-run")
+  File "D:\Dev\Projects\codestudio-agent\tests\windows_spawn_lifetime.py", line 184, in check_spawn
+    raise failure
+  File "D:\Dev\Projects\codestudio-agent\tests\windows_spawn_lifetime.py", line 159, in check_spawn
+    observed = private_job_membership(inspection, event.data.create.process)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\Projects\codestudio-agent\tests\windows_spawn_lifetime.py", line 109, in private_job_membership
+    raise ctypes.WinError(ctypes.get_last_error())
+OSError: [WinError 50] 不支持该请求。
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.035s
+
+FAILED (errors=2)

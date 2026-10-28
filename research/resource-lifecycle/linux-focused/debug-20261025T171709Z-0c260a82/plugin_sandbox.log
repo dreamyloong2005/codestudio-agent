@@ -1,0 +1,16 @@
+F................
+======================================================================
+FAIL: test_changed_process_limits_block_resume_until_original_binding_is_restored (__main__.PluginSandboxTests.test_changed_process_limits_block_resume_until_original_binding_is_restored)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/var/tmp/codestudio-agent-linux/tests/plugin_sandbox_integration.py", line 360, in test_changed_process_limits_block_resume_until_original_binding_is_restored
+    result = self.invoke(*self.resume_args(task, *self.grants()))
+  File "/var/tmp/codestudio-agent-linux/tests/plugin_sandbox_integration.py", line 139, in invoke
+    self.assertEqual(result.returncode, expected, result.stdout + result.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 2 != 0 : b'{\n  "error": "Resume configuration or grants differ from the saved binding; repeat the original settings",\n  "product": "CodeStudio-Agent"\n}\n'
+
+----------------------------------------------------------------------
+Ran 17 tests in 38.405s
+
+FAILED (failures=1)

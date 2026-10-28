@@ -251,6 +251,7 @@ class BuildTests(unittest.TestCase):
         self.manifest = self.workspace / "build.json"
         self.env = {key: value for key, value in os.environ.items() if not key.startswith("CODESTUDIO_")}
         self.env.update(CODESTUDIO_API_KEY=TOKEN, CODESTUDIO_BUILD_TEST_SECRET=SECRET)
+        self.env["CODESTUDIO_SANDBOX_REGISTRY"] = str(pathlib.Path(self.temp.name) / "sandbox registry")
         self.clients = []
         self.handles = []
         self.server = ThreadingHTTPServer(("127.0.0.1", 0), Handler)
@@ -315,6 +316,30 @@ class BuildTests(unittest.TestCase):
         self.assertEqual(len(actions), 1)
         self.assertEqual(actions[0]["tool"], "build_workspace")
         return actions[0]
+
+    def reclaim_crash_stage(self, stage, task):
+        # Select only the exact resource observed in this test's own child tree.
+        # The private registry is never shared with historical crash evidence.
+        records = self.invoke("sandbox-resources")["items"]
+        matches = [item for item in records if any(resource["kind"] == "staging" and
+                   pathlib.Path(resource["path"]).resolve() == stage.resolve()
+                   for resource in item["resources"])]
+        self.assertEqual(len(matches), 1, records)
+        record = matches[0]
+        self.assertEqual(record["task_id"], task)
+        with closing(sqlite3.connect(self.database)) as database:
+            before = "\n".join(database.iterdump())
+        preview = self.invoke("sandbox-reclaim", "--id", record["id"], "--dry-run")
+        self.assertEqual(preview["state"], "reclaimable", preview)
+        self.assertTrue(stage.is_dir())
+        reclaimed = self.invoke("sandbox-reclaim", "--id", record["id"])
+        self.assertEqual(reclaimed["state"], "reclaimed", reclaimed)
+        self.assertFalse(stage.exists())
+        self.assertEqual(self.invoke("sandbox-reclaim", "--id", record["id"])["state"], "absent")
+        with closing(sqlite3.connect(self.database)) as database:
+            self.assertEqual("\n".join(database.iterdump()), before,
+                             "Resource cleanup must not change unknown effects, checkpoints or task events")
+        print(f"Reclaimed owned crash resource: {record['id']} ({stage})", file=sys.stderr)
 
     def bundles(self):
         root = self.workspace / "artifacts"
@@ -793,10 +818,7 @@ class BuildTests(unittest.TestCase):
             self.assertEqual(self.bundles(), [])
             self.assertEqual((self.workspace / "input.txt").read_text(), SOURCE)
             self.assertEqual(self.requests(), [])
-            # The production host was killed before its filesystem cleanup.
-            # Retain this exact stage as crash evidence; do not recursively walk
-            # or remove a tree whose cleanup requires the native safe helper.
-            print(f"Retained crash staging evidence: {stage}", file=sys.stderr)
+            self.reclaim_crash_stage(stage, task)
         finally:
             if process.poll() is None:
                 process.kill()

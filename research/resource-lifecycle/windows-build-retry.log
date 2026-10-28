@@ -1,0 +1,11 @@
+[0m[32;1m[ 42%]:[0m [36;1m<agent-core>[0m cache compiling.debug src\platform\linux_sandbox.cpp[0m
+[0m[32;1m[ 46%]:[0m [36;1m<agent-core>[0m cache compiling.debug src\platform\sandbox_resources_linux.cpp[0m
+[0m[32;1m[ 46%]:[0m [36;1m<agent-core>[0m cache compiling.debug src\platform\sandbox_resources_windows.cpp[0m
+[0m[32;1m[ 66%]:[0m [36;1m<plugin-sandbox-fixture>[0m cache compiling.debug tests\plugin_sandbox_fixture.cpp[0m
+[0m[32;1m[ 67%]:[0m [36;1m<sandbox-resource-fixture>[0m cache compiling.debug tests\sandbox_resource_fixture.cpp[0m
+[0m[32;1m[ 67%]:[0m [36;1m<codestudio-agent>[0m cache compiling.debug src\cli\credentials_cli.cpp[0m
+[0m[32;1m[ 68%]:[0m [36;1m<codestudio-agent>[0m cache compiling.debug src\cli\main.cpp[0m
+[0m[32;1m[ 69%]:[0m [36;1m<provider-fixture>[0m cache compiling.debug tests\provider_fixture.cpp[0m
+[0m[32;1m[ 70%]:[0m [36;1m<process-fixture>[0m [36;1mlinking.debug process-fixture.exe[0m
+[0m[1;31;1merror: [0mLINK : fatal error LNK1168: 无法打开 build\windows\x64\debug\process-fixture.exe 进行写入
+[0m

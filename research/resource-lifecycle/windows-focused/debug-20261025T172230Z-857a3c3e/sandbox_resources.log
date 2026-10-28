@@ -1,0 +1,23 @@
+E..........s......
+======================================================================
+ERROR: test_active_real_sandbox_cannot_be_reclaimed (__main__.ResourceTests.test_active_real_sandbox_cannot_be_reclaimed)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\sandbox_resources_integration.py", line 207, in test_active_real_sandbox_cannot_be_reclaimed
+    before = self.snapshot(self.registry)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\Projects\codestudio-agent\tests\sandbox_resources_integration.py", line 162, in snapshot
+    "sha256": hashlib.sha256(item.read_bytes()).hexdigest() if item.is_file() else None}
+                             ^^^^^^^^^^^^^^^^^
+  File "D:\Python\3.12.11\Lib\pathlib.py", line 1019, in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+  File "D:\Python\3.12.11\Lib\pathlib.py", line 1013, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 13] Permission denied: 'C:\\Users\\dreamyloong\\AppData\\Local\\Temp\\codestudio-resource-test-jm0_wzm3\\private registry\\d8dc9ec3e8f961982e09efa530953d36\\lease.lock'
+
+----------------------------------------------------------------------
+Ran 18 tests in 8.074s
+
+FAILED (errors=1, skipped=1)

@@ -1,0 +1,22 @@
+{
+  "format": 2,
+  "status": "reviewed",
+  "scope": [
+    "ownership journals and native path identities",
+    "task scope, binding and protection",
+    "CLI and service/schema consistency",
+    "atomic Job admission and bounded pages"
+  ],
+  "repairs": [
+    "consistent mandatory registry path in authorization binding",
+    "stable Windows Profile registry path across MSIX and unpackaged hosts",
+    "Linux ancestry limits checked before resource creation",
+    "Windows captured profile completion and staging identity checks"
+  ],
+  "limits": [
+    "uncaptured resources after creation crash are refused",
+    "final journal file deletion interruption may leave invalid metadata",
+    "supplemental early Job membership test does not prove atomic admission",
+    "no historical resource adoption or policy-blocked cleanup attempted"
+  ]
+}

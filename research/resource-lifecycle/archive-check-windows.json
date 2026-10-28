@@ -1,0 +1,14 @@
+{
+  "format": 2,
+  "platform": "windows",
+  "archive": "D:\\Dev\\Projects\\codestudio-agent\\build\\packages\\windows-x64\\codestudio-agent-windows-x64.zip",
+  "archive_sha256": "9a0c6080421eea25cd2dcb00ee6ff4b0b13a5acf5fd3cbcb198f1977095bd060",
+  "payload_files": 40,
+  "manifest_and_checksums": "verified",
+  "native_extraction_modes": "verified",
+  "tested_from_fresh_archive_extraction": true,
+  "extraction_cleaned": true,
+  "verification_receipt": "installed-windows/release-20261025T175438Z-41274bcf/verification.json",
+  "status": "succeeded",
+  "returncode": 0
+}

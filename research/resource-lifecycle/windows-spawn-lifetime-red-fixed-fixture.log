@@ -1,0 +1,39 @@
+FF
+======================================================================
+FAIL: test_line_process_is_owned_before_create_returns (__main__.SpawnLifetimeTests.test_line_process_is_owned_before_create_returns)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\windows_spawn_lifetime.py", line 232, in test_line_process_is_owned_before_create_returns
+    self.check_spawn("plain-line")
+  File "D:\Dev\Projects\codestudio-agent\tests\windows_spawn_lifetime.py", line 195, in check_spawn
+    self.assertEqual(observed, [True],
+AssertionError: Lists differ: [] != [True]
+
+Second list contains 1 additional elements.
+First extra element 0:
+True
+
+- []
++ [True] : plain-line: child must belong to the host's single private KILL_ON_JOB_CLOSE Job at its creation debug event
+
+======================================================================
+FAIL: test_run_process_is_owned_before_create_returns (__main__.SpawnLifetimeTests.test_run_process_is_owned_before_create_returns)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\windows_spawn_lifetime.py", line 229, in test_run_process_is_owned_before_create_returns
+    self.check_spawn("plain-run")
+  File "D:\Dev\Projects\codestudio-agent\tests\windows_spawn_lifetime.py", line 195, in check_spawn
+    self.assertEqual(observed, [True],
+AssertionError: Lists differ: [] != [True]
+
+Second list contains 1 additional elements.
+First extra element 0:
+True
+
+- []
++ [True] : plain-run: child must belong to the host's single private KILL_ON_JOB_CLOSE Job at its creation debug event
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.027s
+
+FAILED (failures=2)

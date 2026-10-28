@@ -1,0 +1,111 @@
+{
+  "format": 2,
+  "product": "CodeStudio-Agent",
+  "platform": "windows",
+  "arch": "x64",
+  "mode": "debug",
+  "started_at": "2026-10-25T17:22:30.382653+00:00",
+  "status": "failed",
+  "selected_suites": [
+    "sandbox_resources",
+    "plugin_sandbox",
+    "native",
+    "schema"
+  ],
+  "omitted_suites": [
+    "provider",
+    "streaming",
+    "contract",
+    "service",
+    "credentials",
+    "cli",
+    "local_models",
+    "mcp",
+    "mcp_http",
+    "mcp_oauth",
+    "plugins",
+    "resume",
+    "sandbox",
+    "scheduler",
+    "supervisor",
+    "cron",
+    "autostart",
+    "build",
+    "build_proposals",
+    "real_build",
+    "package",
+    "verification",
+    "delivery"
+  ],
+  "build_requested": false,
+  "steps": [
+    {
+      "name": "sandbox_resources",
+      "command": [
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\contract-python\\Scripts\\python.exe",
+        "tests/sandbox_resources_integration.py",
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\windows\\x64\\debug\\codestudio-agent.exe"
+      ],
+      "log": "sandbox_resources.log",
+      "status": "failed",
+      "returncode": 1,
+      "seconds": 8.343
+    }
+  ],
+  "source": {
+    "sha256": "7d4c10c522ed02b72a71dd305888d38369e9181f2827bc827d28135774191f7c",
+    "files": 197
+  },
+  "toolchain": {
+    "python": "3.12.11",
+    "requirements": {
+      "format": 2,
+      "python_minimum": "3.11.0",
+      "xmake_minimum": "3.0.5",
+      "jsonschema": "4.23.0",
+      "windows": {
+        "arch": "x64",
+        "toolchain": "clang-cl",
+        "compiler_minimum": "22.0.0",
+        "requirements": [
+          "Visual Studio 2022 C++ build tools and Windows SDK",
+          "LLVM clang-cl 22 or newer"
+        ]
+      },
+      "linux": {
+        "arch": "x86_64",
+        "toolchain": "gcc",
+        "compiler_minimum": "16.0.0",
+        "pkg_config_minimum": {
+          "nlohmann_json": "3.12.0",
+          "sqlite3": "3.50.4",
+          "libcurl": "8.15.0",
+          "openssl": "3.0.0",
+          "libsecret-1": "0.21.0"
+        },
+        "requirements": [
+          "bubblewrap at /usr/bin/bwrap",
+          "tzdata",
+          "cgroup v2 delegation with cpu/memory/pids",
+          "user namespaces and seccomp"
+        ]
+      }
+    },
+    "jsonschema": "4.23.0"
+  },
+  "tested_artifacts": {
+    "codestudio-agent.exe": "8a5085664b948c9b7b221ca0c159a58a16844d0c728e47b533a315ebf1d8a329",
+    "agent-tests.exe": "c851ad5215b12bacca72b70b617e7283ee189a844d27b2528407c04c37ac4bde",
+    "provider-fixture.exe": "b84eea0d3fc39dd235b7afa8c1f2a7eb27ef705b41c5925ab04e671c88a68cdc",
+    "process-fixture.exe": "ea591d34d5b762cedb6941fb24c2d879b73cb5353039fb6becef11f1fd26ffec",
+    "line-process-fixture.exe": "0d0e10b154680be861166d55c38b0b8aeed6f1fe5a02a39c5ecba2fd86ba7685",
+    "mcp-fixture.exe": "1421828a08e507b01f73d27e26e0bbdd0c3ce6e9717d93c4eda86e61628edc6b",
+    "sandbox-fixture.exe": "93021a69e3d3740a1fe2f4246cec982fd266f34fff66f821f1a4a5764042ab8a",
+    "build-fixture.exe": "a8838b8bfd8d06f35c88e71aada27840a2de49b0fd65e37e31d48ee4d7a9fb34",
+    "sandbox-resource-fixture.exe": "13e91eba1ce783af62ca7e904b7bd15fa3e72190bb4336e0e37a4914362a2811",
+    "plugin-sandbox-fixture.exe": "83e5dce06598a06328b5d120a73a2027a21ddb72881a0318207726d183b425e4",
+    "plugin-sandbox-library.dll": "4943d50ff8781e4654331d9a191fb78fb810c3e571c295cf27eed422d782c85d",
+    "plugin-sandbox-dependency.dll": "13ea0791d90ab7474526babbde9124fe83159b61e9425d0e2ad29d8eba51cd61"
+  },
+  "finished_at": "2026-10-25T17:22:38.879207+00:00"
+}

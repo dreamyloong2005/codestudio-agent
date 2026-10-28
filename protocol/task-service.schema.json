@@ -488,6 +488,29 @@
       "completion_result": {
         "$ref": "#/$defs/extensionResult"
       }
+    },
+    "sandboxes/list": {
+      "params": {
+        "$ref": "#/$defs/sandboxListParams"
+      },
+      "result": {
+        "$ref": "#/$defs/sandboxResourcePage"
+      },
+      "execution": "query",
+      "retry": "query_only"
+    },
+    "sandboxes/reclaim": {
+      "params": {
+        "$ref": "#/$defs/sandboxReclaimParams"
+      },
+      "result": {
+        "$ref": "#/$defs/operationAccepted"
+      },
+      "execution": "operation",
+      "retry": "never",
+      "completion_result": {
+        "$ref": "#/$defs/sandboxReclaimResult"
+      }
     }
   },
   "x-notifications": {
@@ -1279,6 +1302,9 @@
               "const": true
             },
             "plugin_sandbox": {
+              "type": "boolean"
+            },
+            "sandbox_resources": {
               "type": "boolean"
             }
           },
@@ -3349,6 +3375,9 @@
                 },
                 {
                   "$ref": "#/$defs/extensionResult"
+                },
+                {
+                  "$ref": "#/$defs/sandboxReclaimResult"
                 }
               ]
             },
@@ -3511,7 +3540,8 @@
             "plugins/pack",
             "plugins/install",
             "plugins/lock",
-            "plugins/inspect"
+            "plugins/inspect",
+            "sandboxes/reclaim"
           ]
         },
         "state": {
@@ -4588,6 +4618,53 @@
             "params"
           ],
           "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "id": {
+              "$ref": "#/$defs/requestId"
+            },
+            "method": {
+              "const": "sandboxes/list"
+            },
+            "params": {
+              "$ref": "#/$defs/sandboxListParams"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "id",
+            "method"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "id": {
+              "$ref": "#/$defs/requestId"
+            },
+            "method": {
+              "const": "sandboxes/reclaim"
+            },
+            "params": {
+              "$ref": "#/$defs/sandboxReclaimParams"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "id",
+            "method",
+            "params"
+          ],
+          "additionalProperties": false
         }
       ],
       "description": "Requests carry IDs. Client notifications are ignored, never an invocation mechanism. Omitted params means an empty object only where permitted."
@@ -5318,6 +5395,171 @@
         "redirect_uri"
       ],
       "additionalProperties": false
+    },
+    "sandboxResourceId": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{32}$",
+      "minLength": 32,
+      "maxLength": 32
+    },
+    "sandboxListParams": {
+      "type": "object",
+      "properties": {
+        "after": {
+          "$ref": "#/$defs/sandboxResourceId"
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        }
+      },
+      "additionalProperties": false
+    },
+    "sandboxReclaimParams": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/sandboxResourceId"
+        },
+        "dry_run": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "additionalProperties": false
+    },
+    "sandboxResourceRecord": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/sandboxResourceId"
+        },
+        "state": {
+          "enum": [
+            "active",
+            "reclaimable",
+            "blocked",
+            "invalid"
+          ]
+        },
+        "reason": {
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "process",
+            "package",
+            "build"
+          ]
+        },
+        "workspace": {
+          "type": "string"
+        },
+        "task_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "owner": {
+          "type": "object"
+        },
+        "phase": {
+          "type": "string"
+        },
+        "resources": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "state",
+        "reason"
+      ],
+      "additionalProperties": true
+    },
+    "sandboxResourcePage": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "const": 2
+        },
+        "registry": {
+          "type": "string"
+        },
+        "items": {
+          "type": "array",
+          "maxItems": 100,
+          "items": {
+            "$ref": "#/$defs/sandboxResourceRecord"
+          }
+        },
+        "next_after": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/sandboxResourceId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "format",
+        "registry",
+        "items",
+        "next_after"
+      ],
+      "additionalProperties": true
+    },
+    "sandboxReclaimResult": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "const": 2
+        },
+        "id": {
+          "$ref": "#/$defs/sandboxResourceId"
+        },
+        "dry_run": {
+          "type": "boolean"
+        },
+        "state": {
+          "enum": [
+            "reclaimable",
+            "reclaimed",
+            "absent",
+            "active",
+            "blocked",
+            "cancelled",
+            "incomplete"
+          ]
+        },
+        "reason": {
+          "type": "string"
+        },
+        "resources": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      },
+      "required": [
+        "format",
+        "id",
+        "dry_run",
+        "state",
+        "reason"
+      ],
+      "additionalProperties": true
     }
   }
 }

@@ -1,0 +1,10 @@
+[ 45%]: <agent-core> cache compiling.debug src/platform/sandbox_resources_linux.cpp
+[ 53%]: <agent-core> cache compiling.debug src/application/service.cpp
+[ 53%]: <agent-core> cache compiling.debug src/application/application.cpp
+[ 57%]: <agent-core> cache compiling.debug src/execution/workspace_execution.cpp
+[ 86%]: <agent-core> archiving.debug libagent-core.a
+[ 87%]: <sandbox-resource-fixture> linking.debug sandbox-resource-fixture
+[ 87%]: <codestudio-agent> linking.debug codestudio-agent
+[ 87%]: <provider-fixture> linking.debug provider-fixture
+[ 90%]: <agent-tests> linking.debug agent-tests
+[100%]: build ok, spent 6.933s

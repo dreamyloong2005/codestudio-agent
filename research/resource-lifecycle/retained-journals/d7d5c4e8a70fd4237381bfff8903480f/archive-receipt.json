@@ -1,0 +1,140 @@
+{
+  "format": 2,
+  "action": "initial_fixture_metadata_archived",
+  "product_reclaimed": false,
+  "resource_id": "d7d5c4e8a70fd4237381bfff8903480f",
+  "current_boot": "f3ada59d-22e9-49ac-831d-5403160ea439",
+  "record_sha256": "ca06b77c63a845c69d6da449d63b52630fd6a0f306cfdec0824e14316e51b8dc",
+  "product_preview": {
+    "backend": "linux-namespace",
+    "dry_run": true,
+    "format": 2,
+    "id": "d7d5c4e8a70fd4237381bfff8903480f",
+    "kind": "process",
+    "owner": {
+      "identity": "linux:fe95aa82-855a-4243-a87c-b07dccc2a96a:5645",
+      "pid": 826,
+      "uid": 0
+    },
+    "owner_observation": "not_running",
+    "phase": "ready",
+    "reason": "sandbox resources: resource directory identity changed",
+    "resources": [
+      {
+        "captured": true,
+        "chain": [
+          {
+            "identity": {
+              "birth_nanoseconds": 0,
+              "birth_seconds": 1782653278,
+              "dev": 2096,
+              "ino": 2,
+              "mount": 82
+            },
+            "path": "/"
+          },
+          {
+            "identity": {
+              "birth_nanoseconds": null,
+              "birth_seconds": null,
+              "dev": 24,
+              "ino": 1,
+              "mount": 113
+            },
+            "path": "/sys"
+          },
+          {
+            "identity": {
+              "birth_nanoseconds": null,
+              "birth_seconds": null,
+              "dev": 24,
+              "ino": 2,
+              "mount": 113
+            },
+            "path": "/sys/fs"
+          },
+          {
+            "identity": {
+              "birth_nanoseconds": null,
+              "birth_seconds": null,
+              "dev": 25,
+              "ino": 1,
+              "mount": 122
+            },
+            "path": "/sys/fs/cgroup"
+          },
+          {
+            "identity": {
+              "birth_nanoseconds": null,
+              "birth_seconds": null,
+              "dev": 25,
+              "ino": 2330,
+              "mount": 122
+            },
+            "path": "/sys/fs/cgroup/codestudio-test-7731618a371744c6a1cf50ee49459a4a"
+          },
+          {
+            "identity": {
+              "birth_nanoseconds": null,
+              "birth_seconds": null,
+              "dev": 25,
+              "ino": 4327,
+              "mount": 122
+            },
+            "path": "/sys/fs/cgroup/codestudio-test-7731618a371744c6a1cf50ee49459a4a/codestudio-isolation-d7d5c4e8a70fd4237381bfff8903480f"
+          }
+        ],
+        "kind": "cgroup",
+        "path": "/sys/fs/cgroup/codestudio-test-7731618a371744c6a1cf50ee49459a4a/codestudio-isolation-d7d5c4e8a70fd4237381bfff8903480f",
+        "state": "missing"
+      },
+      {
+        "captured": true,
+        "chain": [
+          {
+            "identity": {
+              "birth_nanoseconds": 0,
+              "birth_seconds": 1782653278,
+              "dev": 2096,
+              "ino": 2,
+              "mount": 82
+            },
+            "path": "/"
+          },
+          {
+            "identity": {
+              "birth_nanoseconds": 359144203,
+              "birth_seconds": 1792949045,
+              "dev": 72,
+              "ino": 1,
+              "mount": 136
+            },
+            "path": "/tmp"
+          },
+          {
+            "identity": {
+              "birth_nanoseconds": 612646294,
+              "birth_seconds": 1792949100,
+              "dev": 72,
+              "ino": 2338,
+              "mount": 136
+            },
+            "path": "/tmp/codestudio-isolation-d7d5c4e8a70fd4237381bfff8903480f"
+          }
+        ],
+        "kind": "staging",
+        "path": "/tmp/codestudio-isolation-d7d5c4e8a70fd4237381bfff8903480f"
+      }
+    ],
+    "state": "blocked",
+    "task_id": null,
+    "workspace": "/tmp/codestudio-linux-sandbox-tests-3921242775"
+  },
+  "payload_paths_observed_absent": [
+    "/sys/fs/cgroup/codestudio-test-7731618a371744c6a1cf50ee49459a4a/codestudio-isolation-d7d5c4e8a70fd4237381bfff8903480f",
+    "/tmp/codestudio-isolation-d7d5c4e8a70fd4237381bfff8903480f"
+  ],
+  "payload_paths_modified": [],
+  "source_registry": "/root/.local/state/CodeStudio-Agent/sandbox-resources",
+  "boundary": "Prior native identities do not match the current boot; this is not evidence of product reclamation across historical mounts."
+}

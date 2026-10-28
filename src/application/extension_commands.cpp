@@ -1,6 +1,7 @@
 #include "extension_commands.hpp"
 #include "codestudio/mcp.hpp"
 #include "codestudio/plugins.hpp"
+#include "codestudio/sandbox_resources.hpp"
 #include <charconv>
 #include <map>
 #include <set>
@@ -16,6 +17,8 @@ CommandResult extension_command(const std::vector<std::string>& argv,const std::
         const CommandCallbacks& callbacks,const std::function<void(const std::string&)>& remember) {
     const auto& command=argv.at(1);
     const std::map<std::string,std::set<std::string>> accepted{
+        {"sandbox-resources",{"--after","--limit"}},
+        {"sandbox-reclaim",{"--id","--dry-run"}},
         {"plugin-pack",{"--source","--output"}},
         {"plugin-install",{"--bundle","--url","--sha256","--store","--allow-http-loopback"}},
         {"plugin-lock",{"--directory","--output"}}, {"plugin-inspect",{"--lock"}},
@@ -28,7 +31,7 @@ CommandResult extension_command(const std::vector<std::string>& argv,const std::
     for (std::size_t i=2;i<argv.size();++i) {
         const auto& key=argv[i];
         if (!selected->second.contains(key) || values.contains(key)) throw std::runtime_error("Unknown or repeated extension option");
-        if (key=="--allow-http-loopback") { values.emplace(key,"true"); continue; }
+        if (key=="--allow-http-loopback" || key=="--dry-run") { values.emplace(key,"true"); continue; }
         if (i+1==argv.size() || argv[i+1].empty() || argv[i+1].starts_with("--"))
             throw std::runtime_error("Extension option requires a value");
         values.emplace(key,argv[++i]);
@@ -38,6 +41,22 @@ CommandResult extension_command(const std::vector<std::string>& argv,const std::
         if (found==values.end()) throw std::runtime_error(std::string("Missing extension option: ")+name);
         return found->second;
     };
+    if (command=="sandbox-resources") {
+        unsigned limit=50;
+        if (values.contains("--limit")) {
+            const auto& text=values.at("--limit");
+            const auto parsed=std::from_chars(text.data(),text.data()+text.size(),limit);
+            if (parsed.ec!=std::errc{} || parsed.ptr!=text.data()+text.size() || limit<1 || limit>100)
+                throw std::runtime_error("Sandbox resource limit must be 1..100");
+        }
+        return {list_sandbox_resources(values.contains("--after") ? values.at("--after") : "",limit),0};
+    }
+    if (command=="sandbox-reclaim") {
+        auto result=reclaim_sandbox_resource(required("--id"),values.contains("--dry-run"),cancelled);
+        const auto state=result.at("state").get<std::string>();
+        const bool ok=state=="reclaimed" || state=="absent" || state=="reclaimable";
+        return {std::move(result),ok ? 0 : 1};
+    }
     if (cancelled.load()) throw std::runtime_error("Extension operation cancelled");
     if (command=="plugin-pack") return {pack_plugin(utf8_path(required("--source")),utf8_path(required("--output"))),0};
     if (command=="plugin-install") {

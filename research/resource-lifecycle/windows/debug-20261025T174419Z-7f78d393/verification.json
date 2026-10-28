@@ -1,0 +1,538 @@
+{
+  "format": 2,
+  "product": "CodeStudio-Agent",
+  "platform": "windows",
+  "arch": "x64",
+  "mode": "debug",
+  "started_at": "2026-10-25T17:44:19.730242+00:00",
+  "status": "succeeded",
+  "selected_suites": [
+    "native",
+    "schema",
+    "provider",
+    "streaming",
+    "contract",
+    "service",
+    "credentials",
+    "cli",
+    "local_models",
+    "mcp",
+    "mcp_http",
+    "mcp_oauth",
+    "plugins",
+    "plugin_sandbox",
+    "resume",
+    "sandbox",
+    "sandbox_resources",
+    "scheduler",
+    "supervisor",
+    "cron",
+    "autostart",
+    "spawn_lifetime",
+    "build",
+    "build_proposals",
+    "real_build",
+    "package",
+    "verification"
+  ],
+  "omitted_suites": [
+    "delivery"
+  ],
+  "build_requested": true,
+  "steps": [
+    {
+      "name": "configure",
+      "command": [
+        "xmake",
+        "f",
+        "-p",
+        "windows",
+        "-a",
+        "x64",
+        "--toolchain=clang-cl",
+        "-m",
+        "debug",
+        "-y"
+      ],
+      "log": "configure.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 1.157
+    },
+    {
+      "name": "xmake-build",
+      "command": [
+        "xmake",
+        "build",
+        "-a",
+        "-j",
+        "6"
+      ],
+      "log": "xmake-build.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 5.062
+    },
+    {
+      "name": "native",
+      "command": [
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\windows\\x64\\debug\\agent-tests.exe"
+      ],
+      "log": "native.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 22.281,
+      "native_groups": 22
+    },
+    {
+      "name": "schema",
+      "command": [
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\contract-python\\Scripts\\python.exe",
+        "tests/contract_schema.py"
+      ],
+      "log": "schema.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 0.703,
+      "cases": 13,
+      "skipped": 0,
+      "passed": 13
+    },
+    {
+      "name": "provider",
+      "command": [
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\contract-python\\Scripts\\python.exe",
+        "tests/provider_integration.py",
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\windows\\x64\\debug\\provider-fixture.exe"
+      ],
+      "log": "provider.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 3.094,
+      "cases": 15,
+      "skipped": 0,
+      "passed": 15
+    },
+    {
+      "name": "streaming",
+      "command": [
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\contract-python\\Scripts\\python.exe",
+        "tests/streaming_integration.py",
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\windows\\x64\\debug\\provider-fixture.exe",
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\windows\\x64\\debug\\codestudio-agent.exe"
+      ],
+      "log": "streaming.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 5.703,
+      "cases": 18,
+      "skipped": 0,
+      "passed": 18
+    },
+    {
+      "name": "contract",
+      "command": [
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\contract-python\\Scripts\\python.exe",
+        "tests/client_contract_integration.py",
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\windows\\x64\\debug\\codestudio-agent.exe"
+      ],
+      "log": "contract.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 8.656,
+      "cases": 16,
+      "skipped": 0,
+      "passed": 16
+    },
+    {
+      "name": "service",
+      "command": [
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\contract-python\\Scripts\\python.exe",
+        "tests/client_contract_integration.py",
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\windows\\x64\\debug\\codestudio-agent.exe",
+        "--service-suite"
+      ],
+      "log": "service.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 16.797,
+      "cases": 28,
+      "skipped": 0,
+      "passed": 28
+    },
+    {
+      "name": "credentials",
+      "command": [
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\contract-python\\Scripts\\python.exe",
+        "tests/credentials_integration.py",
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\windows\\x64\\debug\\codestudio-agent.exe"
+      ],
+      "log": "credentials.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 9.031,
+      "cases": 17,
+      "skipped": 2,
+      "passed": 15
+    },
+    {
+      "name": "cli",
+      "command": [
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\contract-python\\Scripts\\python.exe",
+        "tests/cli_integration.py",
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\windows\\x64\\debug\\codestudio-agent.exe"
+      ],
+      "log": "cli.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 3.079,
+      "cases": 11,
+      "skipped": 0,
+      "passed": 11
+    },
+    {
+      "name": "local_models",
+      "command": [
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\contract-python\\Scripts\\python.exe",
+        "tests/local_models_integration.py",
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\windows\\x64\\debug\\codestudio-agent.exe"
+      ],
+      "log": "local_models.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 4.687,
+      "cases": 15,
+      "skipped": 0,
+      "passed": 15
+    },
+    {
+      "name": "mcp",
+      "command": [
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\contract-python\\Scripts\\python.exe",
+        "tests/mcp_integration.py",
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\windows\\x64\\debug\\codestudio-agent.exe"
+      ],
+      "log": "mcp.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 7.109,
+      "cases": 13,
+      "skipped": 0,
+      "passed": 13
+    },
+    {
+      "name": "mcp_http",
+      "command": [
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\contract-python\\Scripts\\python.exe",
+        "tests/mcp_http_integration.py",
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\windows\\x64\\debug\\codestudio-agent.exe"
+      ],
+      "log": "mcp_http.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 14.766,
+      "cases": 39,
+      "skipped": 0,
+      "passed": 39
+    },
+    {
+      "name": "mcp_oauth",
+      "command": [
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\contract-python\\Scripts\\python.exe",
+        "tests/mcp_oauth_integration.py",
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\windows\\x64\\debug\\codestudio-agent.exe"
+      ],
+      "log": "mcp_oauth.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 15.328,
+      "cases": 26,
+      "skipped": 0,
+      "passed": 26
+    },
+    {
+      "name": "plugins",
+      "command": [
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\contract-python\\Scripts\\python.exe",
+        "tests/plugins_integration.py",
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\windows\\x64\\debug\\codestudio-agent.exe"
+      ],
+      "log": "plugins.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 17.453,
+      "cases": 23,
+      "skipped": 0,
+      "passed": 23
+    },
+    {
+      "name": "plugin_sandbox",
+      "command": [
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\contract-python\\Scripts\\python.exe",
+        "tests/plugin_sandbox_integration.py",
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\windows\\x64\\debug\\codestudio-agent.exe"
+      ],
+      "log": "plugin_sandbox.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 43.532,
+      "cases": 17,
+      "skipped": 0,
+      "passed": 17
+    },
+    {
+      "name": "resume",
+      "command": [
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\contract-python\\Scripts\\python.exe",
+        "tests/resume_integration.py",
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\windows\\x64\\debug\\codestudio-agent.exe"
+      ],
+      "log": "resume.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 6.078,
+      "cases": 18,
+      "skipped": 0,
+      "passed": 18
+    },
+    {
+      "name": "sandbox",
+      "command": [
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\contract-python\\Scripts\\python.exe",
+        "tests/sandbox_integration.py",
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\windows\\x64\\debug\\codestudio-agent.exe"
+      ],
+      "log": "sandbox.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 2.437,
+      "cases": 5,
+      "skipped": 0,
+      "passed": 5
+    },
+    {
+      "name": "sandbox_resources",
+      "command": [
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\contract-python\\Scripts\\python.exe",
+        "tests/sandbox_resources_integration.py",
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\windows\\x64\\debug\\codestudio-agent.exe"
+      ],
+      "log": "sandbox_resources.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 7.844,
+      "cases": 19,
+      "skipped": 1,
+      "passed": 18
+    },
+    {
+      "name": "scheduler",
+      "command": [
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\contract-python\\Scripts\\python.exe",
+        "tests/scheduler_integration.py",
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\windows\\x64\\debug\\codestudio-agent.exe"
+      ],
+      "log": "scheduler.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 22.172,
+      "cases": 19,
+      "skipped": 1,
+      "passed": 18
+    },
+    {
+      "name": "supervisor",
+      "command": [
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\contract-python\\Scripts\\python.exe",
+        "tests/supervisor_integration.py",
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\windows\\x64\\debug\\codestudio-agent.exe"
+      ],
+      "log": "supervisor.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 15.015,
+      "cases": 16,
+      "skipped": 0,
+      "passed": 16
+    },
+    {
+      "name": "cron",
+      "command": [
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\contract-python\\Scripts\\python.exe",
+        "tests/cron_integration.py",
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\windows\\x64\\debug\\codestudio-agent.exe"
+      ],
+      "log": "cron.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 11.094,
+      "cases": 12,
+      "skipped": 0,
+      "passed": 12
+    },
+    {
+      "name": "autostart",
+      "command": [
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\contract-python\\Scripts\\python.exe",
+        "tests/autostart_integration.py",
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\windows\\x64\\debug\\codestudio-agent.exe"
+      ],
+      "log": "autostart.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 4.875,
+      "cases": 14,
+      "skipped": 4,
+      "passed": 10
+    },
+    {
+      "name": "spawn_lifetime",
+      "command": [
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\contract-python\\Scripts\\python.exe",
+        "tests/windows_spawn_lifetime.py",
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\windows\\x64\\debug\\codestudio-agent.exe"
+      ],
+      "log": "spawn_lifetime.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 0.281,
+      "cases": 2,
+      "skipped": 0,
+      "passed": 2
+    },
+    {
+      "name": "build",
+      "command": [
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\contract-python\\Scripts\\python.exe",
+        "tests/build_integration.py",
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\windows\\x64\\debug\\codestudio-agent.exe"
+      ],
+      "log": "build.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 15.188,
+      "cases": 19,
+      "skipped": 0,
+      "passed": 19
+    },
+    {
+      "name": "build_proposals",
+      "command": [
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\contract-python\\Scripts\\python.exe",
+        "tests/build_proposals_integration.py",
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\windows\\x64\\debug\\codestudio-agent.exe"
+      ],
+      "log": "build_proposals.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 23.578,
+      "cases": 25,
+      "skipped": 0,
+      "passed": 25
+    },
+    {
+      "name": "real_build",
+      "command": [
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\contract-python\\Scripts\\python.exe",
+        "tests/xmake_build_integration.py",
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\windows\\x64\\debug\\codestudio-agent.exe"
+      ],
+      "log": "real_build.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 8.656,
+      "native_groups": 2
+    },
+    {
+      "name": "package",
+      "command": [
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\contract-python\\Scripts\\python.exe",
+        "tests/package_tests.py"
+      ],
+      "log": "package.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 0.922,
+      "cases": 11,
+      "skipped": 0,
+      "passed": 11
+    },
+    {
+      "name": "verification",
+      "command": [
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\contract-python\\Scripts\\python.exe",
+        "tests/verification_tests.py"
+      ],
+      "log": "verification.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 3.453,
+      "cases": 14,
+      "skipped": 0,
+      "passed": 14
+    }
+  ],
+  "source": {
+    "sha256": "33c069cad493bd4996c82cc1bda86c82ef951e9d0bbb8cdd9fb2bf3805f97aaa",
+    "files": 198
+  },
+  "toolchain": {
+    "python": "3.12.11",
+    "requirements": {
+      "format": 2,
+      "python_minimum": "3.11.0",
+      "xmake_minimum": "3.0.5",
+      "jsonschema": "4.23.0",
+      "windows": {
+        "arch": "x64",
+        "toolchain": "clang-cl",
+        "compiler_minimum": "22.0.0",
+        "requirements": [
+          "Visual Studio 2022 C++ build tools and Windows SDK",
+          "LLVM clang-cl 22 or newer"
+        ]
+      },
+      "linux": {
+        "arch": "x86_64",
+        "toolchain": "gcc",
+        "compiler_minimum": "16.0.0",
+        "pkg_config_minimum": {
+          "nlohmann_json": "3.12.0",
+          "sqlite3": "3.50.4",
+          "libcurl": "8.15.0",
+          "openssl": "3.0.0",
+          "libsecret-1": "0.21.0"
+        },
+        "requirements": [
+          "bubblewrap at /usr/bin/bwrap",
+          "tzdata",
+          "cgroup v2 delegation with cpu/memory/pids",
+          "user namespaces and seccomp"
+        ]
+      }
+    },
+    "jsonschema": "4.23.0",
+    "xmake": "xmake v3.0.8+dev.1e431c685, A cross-platform build utility based on Lua",
+    "compiler": "clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)"
+  },
+  "tested_artifacts": {
+    "codestudio-agent.exe": "af93e7cd6f7859d039614c7743172e87e8f06eaf0b76f0795ed279425950f760",
+    "agent-tests.exe": "68cef3bfb3451445cba1725eea5019fc546769b3ecea77acda1c2e2c8fcd50b3",
+    "provider-fixture.exe": "10c426f7f0ca7a1a95b938506920e9099c59cfd15e838a07fc238f8560e81dd6",
+    "process-fixture.exe": "ea591d34d5b762cedb6941fb24c2d879b73cb5353039fb6becef11f1fd26ffec",
+    "line-process-fixture.exe": "0d0e10b154680be861166d55c38b0b8aeed6f1fe5a02a39c5ecba2fd86ba7685",
+    "mcp-fixture.exe": "1421828a08e507b01f73d27e26e0bbdd0c3ce6e9717d93c4eda86e61628edc6b",
+    "sandbox-fixture.exe": "93021a69e3d3740a1fe2f4246cec982fd266f34fff66f821f1a4a5764042ab8a",
+    "build-fixture.exe": "a8838b8bfd8d06f35c88e71aada27840a2de49b0fd65e37e31d48ee4d7a9fb34",
+    "sandbox-resource-fixture.exe": "a56e345a66760ad0e208e72900b240703ad3c861e6f4e71a4e5c15731f578325",
+    "plugin-sandbox-fixture.exe": "83e5dce06598a06328b5d120a73a2027a21ddb72881a0318207726d183b425e4",
+    "plugin-sandbox-library.dll": "4943d50ff8781e4654331d9a191fb78fb810c3e571c295cf27eed422d782c85d",
+    "plugin-sandbox-dependency.dll": "13ea0791d90ab7474526babbde9124fe83159b61e9425d0e2ad29d8eba51cd61"
+  },
+  "artifact": {
+    "path": "build/windows/x64/debug/codestudio-agent.exe",
+    "size": 6938112,
+    "sha256": "af93e7cd6f7859d039614c7743172e87e8f06eaf0b76f0795ed279425950f760"
+  },
+  "finished_at": "2026-10-25T17:49:20.230944+00:00"
+}

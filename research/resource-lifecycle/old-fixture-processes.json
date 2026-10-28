@@ -1,0 +1,44 @@
+[
+  {
+    "pid": 20708,
+    "birth": "2026-10-25T11:08:32.9161757Z",
+    "command": "\"D:\\Dev\\Projects\\codestudio-agent\\build\\windows\\x64\\debug\\process-fixture.exe\" \"sleep\" \"10000\"",
+    "state": "terminated",
+    "handle_identity_verified": true
+  },
+  {
+    "pid": 54728,
+    "birth": "2026-10-25T11:08:41.8780668Z",
+    "command": "\"D:\\Dev\\Projects\\codestudio-agent\\build\\windows\\x64\\debug\\process-fixture.exe\" \"sleep\" \"10000\"",
+    "state": "terminated",
+    "handle_identity_verified": true
+  },
+  {
+    "pid": 51892,
+    "birth": "2026-10-25T12:18:11.4863588Z",
+    "command": "\"D:\\Dev\\Projects\\codestudio-agent\\build\\windows\\x64\\debug\\process-fixture.exe\" \"sleep\" \"10000\"",
+    "state": "terminated",
+    "handle_identity_verified": true
+  },
+  {
+    "pid": 62928,
+    "birth": "2026-10-25T12:19:28.8124786Z",
+    "command": "\"D:\\Dev\\Projects\\codestudio-agent\\build\\windows\\x64\\debug\\process-fixture.exe\" \"sleep\" \"10000\"",
+    "state": "terminated",
+    "handle_identity_verified": true
+  },
+  {
+    "pid": 57068,
+    "birth": "2026-10-25T12:22:21.8547311Z",
+    "command": "\"D:\\Dev\\Projects\\codestudio-agent\\build\\windows\\x64\\release\\process-fixture.exe\" \"sleep\" \"10000\"",
+    "state": "terminated",
+    "handle_identity_verified": true
+  },
+  {
+    "pid": 59584,
+    "birth": "2026-10-25T12:23:54.5493726Z",
+    "command": "\"D:\\Dev\\Projects\\codestudio-agent\\build\\windows\\x64\\release\\process-fixture.exe\" \"sleep\" \"10000\"",
+    "state": "terminated",
+    "handle_identity_verified": true
+  }
+]

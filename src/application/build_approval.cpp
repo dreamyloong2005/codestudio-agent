@@ -1,4 +1,5 @@
 #include "codestudio/build_approval.hpp"
+#include "codestudio/sandbox_resources.hpp"
 #include "codestudio/build_proposal.hpp"
 #include "codestudio/workspace_execution.hpp"
 #include <stdexcept>
@@ -62,7 +63,7 @@ CommandResult decide_build_proposal(Store& store, const std::filesystem::path& w
         const auto execution_action = decision.at("execution_action_id").get<std::string>();
         store.dispatch_action(execution_action);
         ToolResult receipt;
-        try { receipt = execution.execute(cancelled); }
+        try { SandboxTaskScope scope(execution_task); receipt = execution.execute(cancelled); }
         catch (const std::exception& error) { receipt = {false,Json::object(),error.what(),"unknown"}; }
         auto body = application_redact({{"ok",receipt.ok},{"output",receipt.output},
                                        {"error",receipt.error},{"effect",receipt.effect}});

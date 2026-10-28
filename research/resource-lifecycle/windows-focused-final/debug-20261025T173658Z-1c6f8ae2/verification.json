@@ -1,0 +1,175 @@
+{
+  "format": 2,
+  "product": "CodeStudio-Agent",
+  "platform": "windows",
+  "arch": "x64",
+  "mode": "debug",
+  "started_at": "2026-10-25T17:36:58.370177+00:00",
+  "status": "succeeded",
+  "selected_suites": [
+    "sandbox_resources",
+    "spawn_lifetime",
+    "plugin_sandbox",
+    "native",
+    "schema"
+  ],
+  "omitted_suites": [
+    "provider",
+    "streaming",
+    "contract",
+    "service",
+    "credentials",
+    "cli",
+    "local_models",
+    "mcp",
+    "mcp_http",
+    "mcp_oauth",
+    "plugins",
+    "resume",
+    "sandbox",
+    "scheduler",
+    "supervisor",
+    "cron",
+    "autostart",
+    "build",
+    "build_proposals",
+    "real_build",
+    "package",
+    "verification",
+    "delivery"
+  ],
+  "build_requested": false,
+  "steps": [
+    {
+      "name": "sandbox_resources",
+      "command": [
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\contract-python\\Scripts\\python.exe",
+        "tests/sandbox_resources_integration.py",
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\windows\\x64\\debug\\codestudio-agent.exe"
+      ],
+      "log": "sandbox_resources.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 7.75,
+      "cases": 19,
+      "skipped": 1,
+      "passed": 18
+    },
+    {
+      "name": "spawn_lifetime",
+      "command": [
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\contract-python\\Scripts\\python.exe",
+        "tests/windows_spawn_lifetime.py",
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\windows\\x64\\debug\\codestudio-agent.exe"
+      ],
+      "log": "spawn_lifetime.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 0.265,
+      "cases": 2,
+      "skipped": 0,
+      "passed": 2
+    },
+    {
+      "name": "plugin_sandbox",
+      "command": [
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\contract-python\\Scripts\\python.exe",
+        "tests/plugin_sandbox_integration.py",
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\windows\\x64\\debug\\codestudio-agent.exe"
+      ],
+      "log": "plugin_sandbox.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 44.438,
+      "cases": 17,
+      "skipped": 0,
+      "passed": 17
+    },
+    {
+      "name": "native",
+      "command": [
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\windows\\x64\\debug\\agent-tests.exe"
+      ],
+      "log": "native.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 22.469,
+      "native_groups": 22
+    },
+    {
+      "name": "schema",
+      "command": [
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\contract-python\\Scripts\\python.exe",
+        "tests/contract_schema.py"
+      ],
+      "log": "schema.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 0.718,
+      "cases": 13,
+      "skipped": 0,
+      "passed": 13
+    }
+  ],
+  "source": {
+    "sha256": "8c8e32e9556653613f7f6e5997ba7ab88261fe191cfc0e7e1cf5017ee3d751fe",
+    "files": 198
+  },
+  "toolchain": {
+    "python": "3.12.11",
+    "requirements": {
+      "format": 2,
+      "python_minimum": "3.11.0",
+      "xmake_minimum": "3.0.5",
+      "jsonschema": "4.23.0",
+      "windows": {
+        "arch": "x64",
+        "toolchain": "clang-cl",
+        "compiler_minimum": "22.0.0",
+        "requirements": [
+          "Visual Studio 2022 C++ build tools and Windows SDK",
+          "LLVM clang-cl 22 or newer"
+        ]
+      },
+      "linux": {
+        "arch": "x86_64",
+        "toolchain": "gcc",
+        "compiler_minimum": "16.0.0",
+        "pkg_config_minimum": {
+          "nlohmann_json": "3.12.0",
+          "sqlite3": "3.50.4",
+          "libcurl": "8.15.0",
+          "openssl": "3.0.0",
+          "libsecret-1": "0.21.0"
+        },
+        "requirements": [
+          "bubblewrap at /usr/bin/bwrap",
+          "tzdata",
+          "cgroup v2 delegation with cpu/memory/pids",
+          "user namespaces and seccomp"
+        ]
+      }
+    },
+    "jsonschema": "4.23.0"
+  },
+  "tested_artifacts": {
+    "codestudio-agent.exe": "ae0a64a5c8eaf54b3d72a6f1c92d8ba653eaf6147a53f0c531067f4293b5c25e",
+    "agent-tests.exe": "9dc47a7942d344bce10aa717392433671e0b7e255df6c3f5b45c036fac63ec2d",
+    "provider-fixture.exe": "67a3216acf575e1e8816da862216c5304a6dc88a0fe2bdb2d9e61761ec46c943",
+    "process-fixture.exe": "ea591d34d5b762cedb6941fb24c2d879b73cb5353039fb6becef11f1fd26ffec",
+    "line-process-fixture.exe": "0d0e10b154680be861166d55c38b0b8aeed6f1fe5a02a39c5ecba2fd86ba7685",
+    "mcp-fixture.exe": "1421828a08e507b01f73d27e26e0bbdd0c3ce6e9717d93c4eda86e61628edc6b",
+    "sandbox-fixture.exe": "93021a69e3d3740a1fe2f4246cec982fd266f34fff66f821f1a4a5764042ab8a",
+    "build-fixture.exe": "a8838b8bfd8d06f35c88e71aada27840a2de49b0fd65e37e31d48ee4d7a9fb34",
+    "sandbox-resource-fixture.exe": "539e074ad919e54e8203c0c734e5c76973972052d6b7d189f0c32a55271b5344",
+    "plugin-sandbox-fixture.exe": "83e5dce06598a06328b5d120a73a2027a21ddb72881a0318207726d183b425e4",
+    "plugin-sandbox-library.dll": "4943d50ff8781e4654331d9a191fb78fb810c3e571c295cf27eed422d782c85d",
+    "plugin-sandbox-dependency.dll": "13ea0791d90ab7474526babbde9124fe83159b61e9425d0e2ad29d8eba51cd61"
+  },
+  "artifact": {
+    "path": "build/windows/x64/debug/codestudio-agent.exe",
+    "size": 6938112,
+    "sha256": "ae0a64a5c8eaf54b3d72a6f1c92d8ba653eaf6147a53f0c531067f4293b5c25e"
+  },
+  "finished_at": "2026-10-25T17:38:14.169551+00:00"
+}
