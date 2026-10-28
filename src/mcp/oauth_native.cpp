@@ -19,6 +19,10 @@
 #include <sys/un.h>
 #include <unistd.h>
 #include <openssl/rand.h>
+#ifdef __APPLE__
+#include <sys/file.h>
+#include <sys/stat.h>
+#endif
 #endif
 
 namespace codestudio::oauth_internal {
@@ -118,6 +122,9 @@ struct CredentialLock::Impl {
     HANDLE handle = nullptr;
     bool held = false;
     ~Impl() { if (held) ReleaseMutex(handle); if (handle) CloseHandle(handle); }
+#elif defined(__APPLE__)
+    int file = -1;
+    ~Impl() { if (file >= 0) close(file); }
 #else
     Socket socket = invalid_socket;
     ~Impl() { close_socket(socket); }
@@ -146,6 +153,49 @@ CredentialLock::CredentialLock(const std::string& name, Deadline deadline, const
         if (result == WAIT_OBJECT_0 || result == WAIT_ABANDONED) { impl_->held = true; break; }
         require(result == WAIT_TIMEOUT, "credential lock failed");
     }
+#elif defined(__APPLE__)
+    // Each process opens the same private, persistent inode. Never unlink a
+    // lock file on release: a waiter could otherwise lock an orphaned inode.
+    // Kernel flock ownership disappears on exit/crash, and files hold no data.
+    const auto length = confstr(_CS_DARWIN_USER_TEMP_DIR, nullptr, 0);
+    require(length > 1 && length < 65536, "credential lock directory unavailable");
+    std::vector<char> directory(length);
+    require(confstr(_CS_DARWIN_USER_TEMP_DIR, directory.data(), directory.size()) == length,
+            "credential lock directory unavailable");
+    while (directory.size() > 2 && directory[directory.size() - 2] == '/')
+        directory.erase(directory.end() - 2);
+    SocketGuard parent(open(directory.data(), O_RDONLY | O_DIRECTORY | O_NOFOLLOW | O_CLOEXEC));
+    struct stat parent_info{};
+    require(parent.value >= 0 && fstat(parent.value, &parent_info) == 0 &&
+            S_ISDIR(parent_info.st_mode) && parent_info.st_uid == geteuid() &&
+            (parent_info.st_mode & 077) == 0, "credential lock directory is not private");
+    constexpr auto folder = "org.codestudio.Agent.oauth-locks";
+    require(mkdirat(parent.value, folder, 0700) == 0 || errno == EEXIST,
+            "credential lock directory unavailable");
+    SocketGuard locks(openat(parent.value, folder, O_RDONLY | O_DIRECTORY | O_NOFOLLOW | O_CLOEXEC));
+    struct stat directory_info{};
+    require(locks.value >= 0 && fstat(locks.value, &directory_info) == 0 &&
+            S_ISDIR(directory_info.st_mode) && directory_info.st_uid == geteuid() &&
+            (directory_info.st_mode & 07777) == 0700, "credential lock directory is not private");
+    const auto key = sha256_bytes(name) + ".lock";
+    impl_->file = openat(locks.value, key.c_str(), O_RDWR | O_CREAT | O_NOFOLLOW | O_CLOEXEC, 0600);
+    struct stat file_info{};
+    require(impl_->file >= 0 && fstat(impl_->file, &file_info) == 0 &&
+            S_ISREG(file_info.st_mode) && file_info.st_uid == geteuid() &&
+            (file_info.st_mode & 07777) == 0600 && file_info.st_nlink == 1 && file_info.st_size == 0,
+            "credential lock file is not private");
+    while (flock(impl_->file, LOCK_EX | LOCK_NB) != 0) {
+        require(errno == EWOULDBLOCK || errno == EAGAIN || errno == EINTR, "credential lock failed");
+        idle(deadline, cancelled);
+    }
+    struct stat current_file{}, current_directory{};
+    require(fstatat(locks.value, key.c_str(), &current_file, AT_SYMLINK_NOFOLLOW) == 0 &&
+            current_file.st_dev == file_info.st_dev && current_file.st_ino == file_info.st_ino &&
+            current_file.st_nlink == 1 &&
+            fstatat(parent.value, folder, &current_directory, AT_SYMLINK_NOFOLLOW) == 0 &&
+            current_directory.st_dev == directory_info.st_dev && current_directory.st_ino == directory_info.st_ino,
+            "credential lock identity changed");
+    check(deadline, cancelled);
 #elif defined(__linux__)
     // Linux abstract sockets provide kernel-owned lifetime and cross-process
     // exclusion without stale filesystem lock files. This is coordination, not

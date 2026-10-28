@@ -137,10 +137,10 @@ class VerificationTests(unittest.TestCase):
             commands = verification.commands("debug", None)
             unsupported = verification.unsupported_suites()
             for name in ("toolchain", "native", "credentials", "provider", "streaming", "cli",
-                         "mcp", "mcp_http", "plugins", "resume", "contract", "service", "scheduler", "cron"):
+                         "mcp", "mcp_http", "mcp_oauth", "plugins", "resume", "contract", "service",
+                         "scheduler", "supervisor", "autostart", "cron"):
                 self.assertIn(name, commands)
             self.assertFalse(set(commands).intersection(unsupported))
-            self.assertIn("supervisor", unsupported)
             self.assertIn("real_build", unsupported)
             self.assertIn("delivery", unsupported)
             self.assertTrue(all(unsupported.values()))

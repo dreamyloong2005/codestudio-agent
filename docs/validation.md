@@ -18,6 +18,14 @@
 
 状态读取和写入均要求当前数据库格式；其他已初始化版本在修改数据库设置前被拒绝，不迁移数据库，也不逐任务过滤历史。需要新建任务时使用空的状态路径或新工作区。`none` 沙箱策略也明确保存为 `{"version":2,"mode":"none"}`。本地 MCP 配置版本独立于 MCP 日期协议；模型服务 URL 中的 `/v1` 是供应商现行接口路径。
 
+## macOS arm64 系统集成（阶段 2）
+
+阶段 2 新增非交互 Keychain、独立 OAuth 记录与刷新互斥、Darwin 后台启动/有界监督、当前用户 LaunchAgent 登记及真实后台 cron 联测。统一入口对 Debug/Release 运行完整的当前可用套件，逐项成功、失败、跳过、源码/产物/运行库摘要见 [阶段 2 机器回执](../research/macos-stage2/verification.json)。环境沿用下述阶段 1 的本机 macOS 26.5.2 arm64；本轮不推导 Windows/Linux、macOS 15.0 或 Intel 的新验收结论。
+
+Keychain 原生夹具覆盖缺失、设置、读取、轮换、锁定后读写/删除拒绝、归属冲突和模型/OAuth 域隔离，专用临时库清理前后核对默认库与搜索列表。CLI/OAuth 使用随机自有条目并删除，覆盖操作边界轮换、刷新串行、刷新派发后的崩溃阻断、取消与脱敏。后台生命周期覆盖客户端退出、无继承管道/锁、父身份不符、父退出发生在 exec 前后、有限重启与退避、停止代数及诊断。cron 联测覆盖时区、遗漏合并、审批不重叠、每轮独立预算和未知效果阻断，原有 DST 缺失/重复时刻探针继续运行。
+
+LaunchAgent 自动测试覆盖固定 plist、字面参数、路径/归属检查、不覆盖冲突、无即时启动、`KeepAlive=false`、禁用不停止运行 worker。**真实注销/登录触发仍待完成，因此阶段 2 的整体验收尚未完成。** 已提供 [可续接登录探针](../scripts/verify-macos-login.py)，步骤见 [macOS 指南](macos.md)。静态登记和普通后台启动结果不替代该证据。阶段 3 的隔离插件/资源、真实隔离构建及阶段 4 的交付套件继续明确跳过；不会降级为宿主隔离执行。托管 macOS CI 的实际执行同样未由本机回执证明。
+
 ## macOS arm64 基础运行（2026-10-28）
 
 阶段 1 代码与统一验证入口已加入，**本机 Debug/Release 原生验收均通过**。本轮环境为 macOS 26.5.2 arm64、SDK 26.5、LLVM 22.1.8、XMake 3.0.9（HEAD `2b184e178`）、Python 3.13.14。部署目标为 macOS 15.0，本轮仅验证 26.5.2。专用 libc++/libc++abi 22.1.8 由 `scripts/build-macos-libcxx.py` 启用实验性时区数据库并绑定系统 IANA 数据；系统 Apple libc++ 和官方 LLVM 包附带的运行库均不满足所需时区功能。依赖为 SQLite 3.50.4、nlohmann JSON 3.12.0、静态 OpenSSL 3.6.5 和系统 libcurl 8.7.1（SecureTransport）。详细复现命令见 [macOS 指南](macos.md)。

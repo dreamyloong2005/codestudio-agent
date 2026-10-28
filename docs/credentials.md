@@ -57,7 +57,7 @@ subprocess.run(
 |---|---|
 | `available` | 读到合法凭据，或设置操作成功 |
 | `missing` | 环境变量为空/不存在，或可用凭据库中没有该条目；删除不存在项也返回此值 |
-| `locked` | Linux 集合或条目处于锁定状态 |
+| `locked` | Linux 集合/条目或 macOS Keychain 处于锁定状态 |
 | `unavailable` | 后端、会话、默认集合、权限或记录格式等条件不满足，无法安全完成操作 |
 | `deleted` | 指定的自有系统条目已删除 |
 
@@ -70,6 +70,8 @@ Windows 使用当前用户的 Credential Manager Generic Credential，保存于 
 Linux 使用 `libsecret-1` 连接当前会话的 Secret Service。构建和运行需要 libsecret 及其 GLib/GIO 依赖；服务提供者和已有默认集合由用户管理。Agent 不创建或解锁集合，不显示解锁提示，也不保存解锁密码；已锁定时返回 `locked`，无服务或无默认集合时返回 `unavailable`。每次 native 操作共享 5 秒取消期限；没有明文文件回退。凭据条目按应用/schema/标识符及标签核对，重复或被修改的条目拒绝使用和修改。
 
 Linux worker 必须能连接正确用户的会话总线，且默认集合已可读取。终端、systemd 用户管理器和 WSL 会话的环境可能不同，终端查询成功不能证明登录自启进程也能访问该服务。Agent 不安装或配置 D-Bus 会话、密钥环服务，也不修改 linger 或唤醒关闭的 WSL。服务是否由会话总线自动激活取决于用户已有的系统配置。其他平台的系统凭据库暂不支持。
+
+macOS 使用 Security.framework，在当前用户的默认 Keychain 保存通用密码，backend 为 `macos-keychain`。模型/Bearer 与 OAuth 使用不同的固定 service 命名空间，读取、更新和删除均核对 account、标签、描述与归属标记。所有访问禁止交互提示；Keychain 锁定、缺失、权限不足或归属冲突时明确拒绝，不创建或解锁用户的 Keychain，不修改默认库或搜索列表。后台进程每次操作重新读取系统引用；能否读取取决于实际登录会话的 Keychain 状态。独立临时 Keychain 的锁定测试不会锁定用户的登录库。
 
 ## 续跑、后台任务和审批
 

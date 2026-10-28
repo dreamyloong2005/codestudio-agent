@@ -453,7 +453,7 @@ class SchedulerTests(unittest.TestCase):
         self.assertEqual(snapshot(), before, "The scheduler recovered a task outside its own claimed jobs")
         self.assertEqual(self.requests(), requests)
 
-    @unittest.skipUnless(os.name == "nt" or sys.platform.startswith("linux"), "native detached worker startup")
+    @unittest.skipUnless(os.name == "nt" or sys.platform.startswith(("linux", "darwin")), "native detached worker startup")
     def test_hidden_worker_survives_control_process_eof_and_stops_by_owned_control(self):
         task, action = self.waiting_task()
         queued = self.schedule(task, "--allow-build-proposals")
@@ -484,7 +484,13 @@ class SchedulerTests(unittest.TestCase):
         self.assertNotEqual(started["pid"], launcher.pid)
         control = self.invoke(*self.worker_args("scheduler-status"))
         self.assertEqual((control["state"], control["pid"], control["owner"]), ("running", started["pid"], started["owner"]))
-        if os.name != "nt":
+        if sys.platform == "darwin":
+            from darwin_process_fixture import vnode_paths
+            descriptors = vnode_paths(started["pid"])
+            for number in (0, 1, 2):
+                self.assertEqual(descriptors.get(number), "/dev/null")
+            self.assertNotIn(str(inherited), descriptors.values())
+        elif os.name != "nt":
             fd_root = pathlib.Path("/proc") / str(started["pid"]) / "fd"
             for number in (0, 1, 2):
                 self.assertEqual(os.readlink(fd_root / str(number)), "/dev/null")

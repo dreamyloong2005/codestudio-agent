@@ -1,8 +1,8 @@
 """Exercise opt-in worker supervision through real processes and durable state.
 
 Model replies and tool processes are local fixtures. Deliberate crashes target
-an OS process handle (Windows) or pidfd (Linux), after checking the worker's
-executable and parent, never a PID copied from an old ledger entry.
+an OS process handle (Windows), pidfd (Linux), or validated birth identity with
+a kernel exit watch (macOS), after checking the worker's executable and parent.
 """
 import ctypes
 import json
@@ -11,6 +11,7 @@ import pathlib
 import select
 import signal
 import subprocess
+import sys
 import threading
 import time
 import unittest
@@ -27,6 +28,7 @@ class OwnedProcess:
         self.pid = pid
         self.handle = None
         self.fd = None
+        self.darwin = None
         try:
             if os.name == "nt":
                 from ctypes import wintypes
@@ -80,6 +82,11 @@ class OwnedProcess:
                         available = kernel.Process32NextW(snapshot, ctypes.byref(entry))
                 finally:
                     kernel.CloseHandle(snapshot)
+            elif sys.platform == "darwin":
+                from darwin_process_fixture import ProcessWatch
+                self.darwin = ProcessWatch(pid)
+                executable = self.darwin.executable
+                observed_parent = self.darwin.info.ppid
             else:
                 self.fd = os.pidfd_open(pid)
                 proc = pathlib.Path("/proc") / str(pid)
@@ -100,6 +107,8 @@ class OwnedProcess:
     def alive(self):
         if os.name == "nt":
             return self.kernel.WaitForSingleObject(self.handle, 0) == 258
+        if self.darwin:
+            return self.darwin.alive()
         return not select.select([self.fd], [], [], 0)[0]
 
     def kill(self):
@@ -108,9 +117,18 @@ class OwnedProcess:
                 if not self.kernel.TerminateProcess(self.handle, 137):
                     raise ctypes.WinError(ctypes.get_last_error())
             else:
-                signal.pidfd_send_signal(self.fd, signal.SIGKILL)
+                self.send_signal(signal.SIGKILL)
+
+    def send_signal(self, value):
+        if self.darwin:
+            self.darwin.signal(value)
+        else:
+            signal.pidfd_send_signal(self.fd, value)
 
     def close(self):
+        if self.darwin:
+            self.darwin.close()
+            self.darwin = None
         if self.handle:
             self.kernel.CloseHandle(self.handle)
             self.handle = None
@@ -203,15 +221,25 @@ class SupervisorTests(unittest.TestCase):
 
     def start_supervisor(self, *extra):
         previous = self.status()
-        process = subprocess.Popen([str(fixture.EXE), *map(str, self.worker_args(
-            "scheduler-supervise", "--poll-ms", "20", *extra))], env=self.env,
-            stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        inherited = self.workspace / "supervisor-private-descriptor.txt"
+        inherited.write_text("must not reach supervised worker", encoding="utf-8")
+        with inherited.open("rb") as parent_handle:
+            process = subprocess.Popen([str(fixture.EXE), *map(str, self.worker_args(
+                "scheduler-supervise", "--poll-ms", "20", *extra))], env=self.env,
+                stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                **({"pass_fds": (parent_handle.fileno(),)} if os.name != "nt" else {}))
         self.children.append(process)
         self.supervisors.append(process)
         state = self.wait_for(lambda: (state if (state := self.status())["state"] == "running"
             and state["generation"] > previous["generation"] else None), process)
         self.assertNotEqual(state["pid"], process.pid)
         worker = self.identity(state["pid"], process.pid)
+        if sys.platform == "darwin":
+            from darwin_process_fixture import vnode_paths
+            descriptors = vnode_paths(worker.pid)
+            for number in (0, 1, 2):
+                self.assertEqual(descriptors.get(number), "/dev/null")
+            self.assertNotIn(str(inherited), descriptors.values())
         return process, state, worker
 
     def restarted(self, process, previous):
@@ -522,15 +550,24 @@ class SupervisorTests(unittest.TestCase):
         for epoch, generation in ((original["stop_epoch"], stopped["generation"]),
                                   (stopped["stop_epoch"], stopped["generation"] - 1)):
             with self.subTest(epoch=epoch, generation=generation):
-                self.invoke(*self.worker_args("scheduler-child", "--owner", "stale-launch-fixture",
+                arguments = self.worker_args("scheduler-child", "--owner", "stale-launch-fixture",
                     "--poll-ms", "20", "--expected-stop-epoch", str(epoch),
-                    "--expected-generation", str(generation)), expected=2)
+                    "--expected-generation", str(generation))
+                if sys.platform == "darwin":
+                    from darwin_process_fixture import process_identity
+                    arguments += ["--parent-pid", str(os.getpid()), "--parent-identity", process_identity(os.getpid())]
+                    result = subprocess.run([str(fixture.EXE), *map(str, arguments)], env=self.env,
+                        capture_output=True, text=True, timeout=10, start_new_session=True)
+                    self.assertEqual(result.returncode, 2, (result.stdout, result.stderr))
+                    self.assertIn("fence", json.loads(result.stdout)["error"].lower())
+                else:
+                    self.invoke(*arguments, expected=2)
                 self.assertEqual(self.database_snapshot(), before)
                 self.assertEqual(self.requests(), requests)
 
     if os.name != "nt":
         # Windows children do not have a shared console in this harness, so
-        # Ctrl+Break cannot be delivered portably. Linux tests exercise the
+        # Ctrl+Break cannot be delivered portably. POSIX tests exercise the
         # real signal handlers without manufacturing a cancellation in SQLite.
         def test_cooperative_supervisor_signal_stops_child_without_restart(self):
             process, original, worker = self.start_supervisor()
@@ -544,7 +581,7 @@ class SupervisorTests(unittest.TestCase):
 
         def test_normal_worker_signal_exit_is_not_restarted(self):
             process, original, worker = self.start_supervisor()
-            signal.pidfd_send_signal(worker.fd, signal.SIGTERM)
+            worker.send_signal(signal.SIGTERM)
             result = self.result(process, "normal_exit", 0)
             self.assertEqual(result["last_exit_code"], 0)
             self.assertFalse(worker.alive())
@@ -570,6 +607,91 @@ class SupervisorTests(unittest.TestCase):
                 self.assertFalse(self.database.exists())
                 self.assertFalse((self.workspace / ".codestudio").exists())
         self.assertEqual(self.requests(), [])
+
+    @unittest.skipUnless(sys.platform == "darwin", "native macOS worker parent guard")
+    def test_parent_identity_mismatch_is_rejected_before_state_creation(self):
+        from darwin_process_fixture import process_identity
+        actual = process_identity(os.getpid())
+        prefix, birth = actual.rsplit(":", 1)
+        arguments = self.worker_args("scheduler-child", "--owner", "parent-identity-fixture", "--poll-ms", "20",
+            "--expected-stop-epoch", "0", "--expected-generation", "0")
+        for extra in ([], ["--parent-pid", str(os.getpid())],
+                      ["--parent-pid", "1", "--parent-identity", actual],
+                      ["--parent-pid", str(os.getpid()), "--parent-identity", f"{prefix}:{int(birth) + 1}"],
+                      ["--parent-pid", str(os.getpid()), "--parent-identity", "darwin:invalid"]):
+            with self.subTest(extra=extra):
+                result = subprocess.run([str(fixture.EXE), *map(str, [*arguments, *extra])], env=self.env,
+                    capture_output=True, text=True, timeout=10, start_new_session=True)
+                self.assertEqual(result.returncode, 2, (result.stdout, result.stderr))
+                self.assertFalse(self.database.exists())
+                self.assertFalse((self.workspace / ".codestudio").exists())
+        # Even a correct parent identity must not authorize a worker to kill a
+        # shared caller process group when its parent exits.
+        result = subprocess.run([str(fixture.EXE), *map(str, [*arguments,
+            "--parent-pid", str(os.getpid()), "--parent-identity", actual])], env=self.env,
+            capture_output=True, text=True, timeout=10)
+        self.assertEqual(result.returncode, 2, (result.stdout, result.stderr))
+        self.assertIn("process group", json.loads(result.stdout)["error"])
+        self.assertFalse(self.database.exists())
+        self.assertFalse((self.workspace / ".codestudio").exists())
+        self.assertEqual(self.requests(), [])
+
+    @unittest.skipUnless(sys.platform == "darwin", "native macOS worker startup lifetime")
+    def test_parent_exit_before_worker_exec_cannot_admit_work(self):
+        from darwin_process_fixture import ProcessWatch
+        arguments = self.worker_args("scheduler-child", "--owner", "orphan-startup-fixture", "--poll-ms", "20",
+            "--expected-stop-epoch", "0", "--expected-generation", "0")
+        # Hold the forked child before exec, reap its parent, then release the
+        # real scheduler image. A dead parent must be refused before RunLock or
+        # Store creation, even though no watch existed at the instant of death.
+        script = """
+import json, os, sys
+from darwin_process_fixture import process_identity
+parent = os.getpid()
+identity = process_identity(parent)
+child = os.fork()
+if child:
+    print(json.dumps({"pid": child}), flush=True)
+    os._exit(0)
+os.setsid()
+os.read(int(sys.argv[1]), 1)
+os.close(int(sys.argv[1]))
+os.execv(sys.argv[2], [*sys.argv[2:], "--parent-pid", str(parent), "--parent-identity", identity])
+"""
+        gate_read, gate_write = os.pipe()
+        watch = None
+        helper = None
+        try:
+            helper = subprocess.Popen([sys.executable, "-c", script, str(gate_read), str(fixture.EXE),
+                *map(str, arguments)], env=dict(self.env, PYTHONPATH=str(pathlib.Path(__file__).parent)),
+                stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                text=True, pass_fds=(gate_read,))
+            self.children.append(helper)
+            os.close(gate_read)
+            gate_read = None
+            child = json.loads(helper.stdout.readline())["pid"]
+            watch = ProcessWatch(child)
+            self.assertEqual(helper.wait(timeout=5), 0)
+            os.write(gate_write, b"x")
+            os.close(gate_write)
+            gate_write = None
+            self.wait_for(lambda: not watch.alive())
+            output, error = helper.communicate(timeout=5)
+            self.assertIn("parent", json.loads(output)["error"].lower(), (output, error))
+            self.assertFalse(self.database.exists())
+            self.assertFalse((self.workspace / ".codestudio").exists())
+            self.assertEqual(self.requests(), [])
+        finally:
+            for descriptor in (gate_read, gate_write):
+                if descriptor is not None:
+                    os.close(descriptor)
+            if watch:
+                try:
+                    watch.kill()
+                finally:
+                    watch.close()
+            if helper and helper.poll() is None:
+                self.kill(helper)
 
     def test_detached_supervisor_preserves_control_pipes_and_supports_owned_stop(self):
         task, action = self.waiting_task()

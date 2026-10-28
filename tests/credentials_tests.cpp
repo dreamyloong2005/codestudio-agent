@@ -6,6 +6,10 @@
 #include <string>
 #include <string_view>
 
+#ifdef __APPLE__
+void run_credentials_macos_tests();
+#endif
+
 namespace {
 void check(bool condition, const char* message) {
     if (!condition) throw std::runtime_error(std::string("credentials: ") + message);
@@ -76,6 +80,9 @@ void run_credentials_tests() {
     check(result.state == "unavailable" && result.secret.empty(), "invalid environment value escaped as a credential");
 #ifdef _WIN32
     check(system_credential_backend() == "windows-credential-manager", "incorrect native credential backend");
+#elif defined(__APPLE__)
+    check(system_credential_backend() == "macos-keychain", "incorrect native credential backend");
+    run_credentials_macos_tests();
 #elif defined(__linux__)
     check(system_credential_backend() == "linux-secret-service", "incorrect native credential backend");
 #else

@@ -282,6 +282,22 @@ class StaticContractTests(unittest.TestCase):
                 with self.subTest(method=method, ordinary_extra=key), self.assertRaises(ValidationError):
                     self.contract.validate_response(method, {**frame, "result": {**ordinary, key: value}})
 
+    def test_launchagent_receipt_uses_uid_and_requires_login(self):
+        receipt = {"available": True, "registered": True, "enabled": True, "conflict": False,
+                   "supervised": False, "poll_ms": 100, "workspace": "/work", "state_database": "/work/state",
+                   "task_name": "com.codestudio.agent.scheduler.fixture", "executable": "/bin/agent", "started": False,
+                   "trigger": "current_user_logon", "backend": "launchagent", "user_uid": "501",
+                   "plist_path": "/Users/test/Library/LaunchAgents/fixture.plist", "requires_login": True}
+        method = "scheduler/autostart/status"
+        frame = {"jsonrpc": "2.0", "id": 1, "result": receipt}
+        self.contract.validate_response(method, frame)
+        for key in ("user_uid", "plist_path", "requires_login"):
+            bad = dict(receipt); del bad[key]
+            with self.subTest(missing=key), self.assertRaises(ValidationError):
+                self.contract.validate_response(method, {**frame, "result": bad})
+        with self.assertRaises(ValidationError):
+            self.contract.validate_response(method, {**frame, "result": {**receipt, "trigger": "user_manager_start"}})
+
     def test_supervised_start_receipt_is_complete_and_distinguishes_processes(self):
         ordinary = {"state": "running", "owner": "w", "pid": 12, "generation": 1, "stop_epoch": 0,
                     "started_at_ms": 10, "heartbeat_at_ms": 10, "started": True}

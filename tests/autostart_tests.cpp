@@ -1,4 +1,7 @@
 #include "codestudio/autostart.hpp"
+#ifdef __APPLE__
+#include "../src/platform/autostart_macos.hpp"
+#endif
 
 #include <stdexcept>
 #include <utility>
@@ -200,6 +203,58 @@ void run_autostart_tests() {
     rejects([] { (void)plan("/opt/agent","/tmp/project\\","/tmp/state","1000",{25}); },"WorkingDirectory line continuation accepted");
     rejects([] { (void)plan("/opt/agent","/tmp/project","/tmp/state","root",{25}); },"non-numeric UID accepted");
     rejects([] { (void)plan("/opt/agent","/tmp/project","/tmp/state","1000",{19}); },"invalid Linux poll accepted");
+#elif defined(__APPLE__)
+    using namespace codestudio::autostart_detail;
+    const std::string label="com.codestudio.agent.scheduler.fixture";
+    const auto override_text=[&](const std::string& value) { return "\n\tdisabled services = {\n\t\t\""+label+"\" => "+value+"\n\t}\n"; };
+    check(macos_launchd_disabled_override(override_text("disabled"),label),"launchd disabled override ignored");
+    check(macos_launchd_disabled_override(override_text("true"),label),"launchd boolean disabled override ignored");
+    check(!macos_launchd_disabled_override(override_text("enabled"),label) &&
+          !macos_launchd_disabled_override(override_text("false"),label),"launchd enabled override rejected");
+    check(!macos_launchd_disabled_override(override_text("disabled"),label+"-other"),"launchd label prefix confused with exact identity");
+    check(!macos_launchd_disabled_override("disabled services = {\n}",label),"empty launchd override table rejected");
+    rejects([&] { (void)macos_launchd_disabled_override("",label); },"missing launchd response accepted");
+    rejects([&] { (void)macos_launchd_disabled_override(override_text("unknown"),label); },"unknown launchd state accepted");
+    rejects([&] { (void)macos_launchd_disabled_override("disabled services = {\n\""+label+"\" => disabled\n",label); },"truncated launchd response accepted");
+    rejects([&] { (void)macos_launchd_disabled_override("disabled services = {\n\""+label+"\" => disabled\n\""+label+"\" => enabled\n}",label); },"duplicate launchd override accepted");
+    const auto expected=plan("/Applications/CodeStudio Agent/agent", "/Users/test/project & <tags> \"quotes\" 工作区",
+        "/Users/test/state $cash.sqlite3", "501", {25});
+    check(matches(expected,expected),"LaunchAgent plan did not match itself");
+    const auto text=expected.at("plist_text").get<std::string>();
+    check(text.find("&amp; &lt;tags&gt; &quot;quotes&quot;")!=std::string::npos,"LaunchAgent XML escaping failed");
+    check(text.find("<key>KeepAlive</key><false/>")!=std::string::npos,"LaunchAgent has automatic restarts");
+    check(text.find("<key>RunAtLoad</key><true/>")!=std::string::npos,"LaunchAgent does not run at login");
+    check(text.find("<key>LimitLoadToSessionType</key><string>Aqua</string>")!=std::string::npos,"LaunchAgent session is not GUI login");
+    check(text.find("EnvironmentVariables")==std::string::npos,"LaunchAgent copies credentials from the environment");
+    check(expected.at("arguments").size()==8 && expected.at("arguments")[3]==expected.at("workspace"),"LaunchAgent arguments are not literal");
+    const auto supervised=plan("/Applications/CodeStudio Agent/agent", "/Users/test/project & <tags> \"quotes\" 工作区",
+        "/Users/test/state $cash.sqlite3", "501", {25,true,7,1500});
+    check(expected.at("task_name")==supervised.at("task_name"),"LaunchAgent mode changed registration identity");
+    check(matches(supervised,supervised) && !matches(expected,supervised) && !matches(supervised,expected) &&
+        matches(expected,supervised,false) && matches(supervised,expected,false),"LaunchAgent mode matching failed");
+    check(supervised.at("arguments").size()==12 && supervised.at("arguments")[1]=="scheduler-supervise" &&
+        supervised.at("arguments")[9]=="7" && supervised.at("arguments")[11]=="1500","LaunchAgent supervisor limits not frozen");
+    for (const auto* key:{"plist_text","task_name","workspace","state_database","user_uid","executable","arguments"}) {
+        auto changed=expected; changed[key]="foreign";
+        check(!matches(expected,changed,false),"Foreign LaunchAgent contract accepted");
+    }
+    for (const auto* key:{"supervised","max_restarts","restart_delay_ms"}) {
+        auto changed=supervised; changed.erase(key);
+        check(!matches(expected,changed,false),"Incomplete LaunchAgent supervisor accepted");
+    }
+    auto changed=supervised; changed["max_restarts"]=7.0;
+    check(!matches(expected,changed,false),"Floating LaunchAgent integer metadata accepted");
+    changed=expected; changed["max_restarts"]=3;
+    check(!matches(expected,changed,false),"Unsupervised LaunchAgent restart metadata accepted");
+    changed=expected; changed["foreign"]=true;
+    check(!matches(expected,changed,false),"Extra LaunchAgent contract fields accepted");
+    for (const auto& uid:{"root","0501","-1","4294967296","501\n"})
+        rejects([&] { (void)plan("/opt/agent","/tmp/project","/tmp/state",uid,{25}); },"Invalid LaunchAgent UID accepted");
+    rejects([] { (void)plan("relative","/tmp/project","/tmp/state","501",{25}); },"Relative LaunchAgent executable accepted");
+    rejects([] { (void)plan("/opt/agent","/tmp/../project","/tmp/state","501",{25}); },"Unnormalized LaunchAgent workspace accepted");
+    rejects([] { (void)plan("/opt/agent","/tmp/project\nInjected","/tmp/state","501",{25}); },"LaunchAgent control character accepted");
+    check(plan("/opt/agent","/tmp/project","/tmp/state","502",{25}).at("task_name")!=
+        plan("/opt/agent","/tmp/project","/tmp/state","501",{25}).at("task_name"),"LaunchAgent UID not bound to identity");
 #else
     rejects([] { (void)scheduler_autostart("/tmp", "/tmp/state", "status"); }, "unsupported platform silently accepted");
 #endif

@@ -28,11 +28,11 @@ python scripts/verify.py --mode release --skip-build --suite schema --suite mcp_
 
 ## CI
 
-[native.yml](../.github/workflows/native.yml) 提供 Windows、Linux 和 macOS ARM64 自托管 runner 作业，要求标签 `codestudio-agent` 及对应系统/架构。作业复用统一入口运行两种配置；Windows/Linux 额外打包并验证临时安装，上传报告和包；macOS 阶段 1 上传原生验证报告。它不发布 Release、不推送代码、不永久安装 Agent。runner 需要预先满足工具链、OS 隔离、网络依赖获取与测试会话条件。
+[native.yml](../.github/workflows/native.yml) 提供 Windows、Linux 和 macOS ARM64 自托管 runner 作业，要求标签 `codestudio-agent` 及对应系统/架构。作业复用统一入口运行两种配置；Windows/Linux 额外打包并验证临时安装，上传报告和包；macOS 阶段 1/2 上传原生验证报告。它不发布 Release、不推送代码、不永久安装 Agent。runner 需要预先满足工具链、OS 隔离、网络依赖获取与测试会话条件。
 
 工作流只配置手动触发及 main 分支 push，未为不可信 PR 启用自托管执行。仓库已建立 Git 远端；提交或推送工作流不代表托管 CI 已经通过。CI 的实际状态以对应 runner 的作业日志为准。
 
-macOS 已有原生 arm64 验证入口与 CI 作业定义，本机 Debug/Release 验收通过，尚未提供发布包、安装或签名公证后端。[macOS 指南](macos.md)将用户级安装/升级/卸载、签名、公证和干净 Mac 验收保留在阶段 4；Intel/Universal 包按需求增加。阶段 1 回执会明确跳过原生 OAuth、监督、隔离资源/插件、真实隔离构建与安装；通用协议和失败关闭行为继续验证。不能把这些跳过项或 CI 定义视为验收通过。
+macOS 已有原生 arm64 验证入口与 CI 作业定义，本机 Debug/Release 验收通过，尚未提供发布包、安装或签名公证后端。[macOS 指南](macos.md)将用户级安装/升级/卸载、签名、公证和干净 Mac 验收保留在阶段 4；Intel/Universal 包按需求增加。当前 macOS 验证入口运行原生 OAuth、监督和自启登记套件，明确跳过隔离资源/插件、真实隔离构建与安装；真实登录触发使用单独的会话探针；通用协议和失败关闭行为继续验证。不能把这些跳过项或 CI 定义视为验收通过。
 
 ## 创建发布包
 

@@ -32,6 +32,10 @@ struct Configuration {
     std::int64_t before=0,after=-1;
     bool once=false,supervise=false;
     std::optional<SchedulerStartFence> expected;
+#ifdef __APPLE__
+    std::uint32_t parent_pid=0;
+    std::string parent_identity;
+#endif
 };
 std::int64_t integer(const std::string& value,std::int64_t low,std::int64_t high) {
     std::int64_t result=0;
@@ -69,6 +73,9 @@ Configuration configure(const std::vector<std::string>& argv) {
               (name=="--max-restarts" || name=="--restart-delay-ms")) ||
             ((config.command=="scheduler-child" || config.command=="scheduler-supervise") &&
               (name=="--expected-stop-epoch" || name=="--expected-generation")) ||
+#ifdef __APPLE__
+            (config.command=="scheduler-child" && (name=="--parent-pid" || name=="--parent-identity")) ||
+#endif
             ((config.command=="schedule-list" || config.command=="cron-list") && (name=="--before" || name=="--limit")) ||
             (config.command=="scheduler-supervisor-events" && (name=="--after" || name=="--limit")) ||
             (config.command=="cron-preview" && (name=="--cron" || name=="--timezone" || name=="--count" || name=="--after"));
@@ -87,6 +94,17 @@ Configuration configure(const std::vector<std::string>& argv) {
     if (epoch!=generation || (config.command=="scheduler-child" &&
         (!epoch || !values.contains("--owner") || !values.contains("--state") || !values.contains("--poll-ms"))))
         throw std::runtime_error("Internal scheduler child requires all fixed launch options");
+#ifdef __APPLE__
+    if (config.command=="scheduler-child") {
+        if (!values.contains("--parent-pid") || !values.contains("--parent-identity"))
+            throw std::runtime_error("Internal scheduler child requires its parent birth identity");
+        config.parent_pid=static_cast<std::uint32_t>(integer(values.at("--parent-pid"),2,INT32_MAX));
+        config.parent_identity=values.at("--parent-identity");
+        if (config.parent_identity.size()>128 || config.parent_identity.find('\0')!=std::string::npos ||
+            !config.parent_identity.starts_with("darwin:"))
+            throw std::runtime_error("Invalid scheduler parent birth identity");
+    }
+#endif
     if (epoch) config.expected=SchedulerStartFence{integer(values.at("--expected-stop-epoch"),0,INT64_MAX),
         integer(values.at("--expected-generation"),0,INT64_MAX-1)};
     if (!values.contains("--workspace")) throw std::runtime_error("Scheduler requires an explicit --workspace");
@@ -134,6 +152,11 @@ struct Active {
     std::string current_job() { std::lock_guard guard(mutex); return job; }
 };
 CommandResult run_worker(const Configuration& config,const std::atomic_bool& shutdown) {
+#ifdef __APPLE__
+    // Parent identity is checked before opening state or acquiring any locks.
+    auto parent_guard=config.command=="scheduler-child"
+        ? watch_scheduler_parent(config.parent_pid,config.parent_identity) : nullptr;
+#endif
     std::unique_ptr<RunLock> admission_workspace,admission_database;
     if (config.command!="scheduler-child") {
         admission_workspace=std::make_unique<RunLock>(config.workspace/".codestudio"/"supervisor");
@@ -240,7 +263,7 @@ CommandResult run_worker(const Configuration& config,const std::atomic_bool& shu
 }
 
 CommandResult run_supervisor(const Configuration& config,const std::atomic_bool& shutdown) {
-#if !defined(_WIN32) && !defined(__linux__)
+#if !defined(_WIN32) && !defined(__linux__) && !defined(__APPLE__)
     throw std::runtime_error("Worker supervision is unsupported on this platform");
 #else
     RunLock admission_workspace(config.workspace/".codestudio"/"supervisor");
@@ -379,6 +402,7 @@ CommandResult scheduler_command(const std::vector<std::string>& argv,const std::
         return {{{"expression",config.expression},{"timezone",config.timezone},{"after_ms",after},
             {"occurrences",occurrences},{"misfire","coalesce"},{"overlap","skip"}},0};
     }
+    if (config.command=="scheduler-run" || config.command=="scheduler-child") return run_worker(config,cancelled);
     StateReader reader(config.database);
     if (config.command=="schedule-list") return {reader.schedules(config.before,config.limit),0};
     if (config.command=="schedule-show") return {reader.schedule(config.job),0};
@@ -387,7 +411,6 @@ CommandResult scheduler_command(const std::vector<std::string>& argv,const std::
     if (config.command=="scheduler-supervisor-events") return {reader.supervisor_events(config.after,config.limit),0};
     if (config.command=="cron-list") return {reader.crons(config.before,config.limit),0};
     if (config.command=="cron-show") return {reader.cron(config.job),0};
-    if (config.command=="scheduler-run" || config.command=="scheduler-child") return run_worker(config,cancelled);
     if (config.command=="scheduler-supervise") return run_supervisor(config,cancelled);
     if (config.command=="schedule-cancel" || config.command=="scheduler-stop" || config.command=="cron-pause" ||
         config.command=="cron-resume" || config.command=="cron-cancel") {

@@ -93,8 +93,9 @@ jobs:
     timeout-minutes: 60
     # The runner owner supplies Python >= 3.11, XMake and a matching LLVM/libc++
     # installation through CODESTUDIO_LLVM_ROOT / CODESTUDIO_LIBCXX_ROOT.
-    # The latter must have timezone support. This is a stage 1 test artifact,
-    # not a signed/notarized macOS distribution package.
+    # The latter must have timezone support. Stage 2 also requires an unlocked
+    # default Keychain in the runner user session. This is a native test artifact,
+    # not a signed/notarized package or evidence of actual login-triggered startup.
     steps:
       - uses: actions/checkout@v4
         with:

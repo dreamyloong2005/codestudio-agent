@@ -89,7 +89,7 @@ Windows 的 `scheduler-start` 启动隐藏的独立 worker，标准句柄指向 
 
 Linux 的 `scheduler-start` 通过 `setsid` 和双重 fork 脱离启动终端，三个标准描述符指向 `/dev/null`，执行前关闭其他继承描述符，包括客户端管道和 runner 锁。启动器通过专用管道确认 `exec` 成功，再等待本次 owner/PID 登记；客户端 EOF 或退出不会停止已经启动的 worker。此方式不脱离已有 cgroup，也不改变系统的会话清理策略；注销、用户管理器停止或 WSL 发行版关闭仍可能结束它。
 
-启动器等待最多约 5 秒确认本次 owner/PID 已登记。若提示启动未确认，应先检查状态和队列再决定重试；这个错误不能证明 worker 已退出。普通独立 worker 不自动拉起；需要时显式启用下文的有界监督。Windows 与 Linux 可另行显式登记下文的平台自启；登记和当前会话中的 worker 启动是两个独立操作。
+启动器等待最多约 5 秒确认本次 owner/PID 已登记。若提示启动未确认，应先检查状态和队列再决定重试；这个错误不能证明 worker 已退出。普通独立 worker 不自动拉起；需要时显式启用下文的有界监督。Windows、Linux 与 macOS 可另行显式登记下文的平台自启；登记和当前会话中的 worker 启动是两个独立操作。
 
 任务绑定保存 `env:VARIABLE` 或 `system:identifier` 凭据引用，密钥值不保存进队列、绑定或命令行。默认引用为 `env:CODESTUDIO_API_KEY`。worker 每次开始续跑时解析保存的引用，当前任务固定使用取得的值；更新同一个系统凭据后，后续任务可直接读取新值，无需重启 worker。缺失、锁定或不可用时失败，不回退环境密钥，也不因认证失败隐式刷新或重放。详见 [模型凭据与轮换](credentials.md)。
 
@@ -103,7 +103,7 @@ codestudio-agent scheduler-run --workspace D:\YourProject --poll-ms 100
 codestudio-agent scheduler-run --workspace D:\YourProject --once
 ```
 
-Linux 命令语义相同，使用本机路径和 shell 续行语法，例如 `codestudio-agent scheduler-start --workspace /home/user/project`。Linux 编译与运行验证范围见 [验证记录](validation.md)；macOS 等其他平台的后台启动和自启仍明确不支持。
+Linux 命令语义相同，使用本机路径和 shell 续行语法，例如 `codestudio-agent scheduler-start --workspace /home/user/project`。Linux 和 macOS 编译与运行验证范围见 [验证记录](validation.md)。macOS 通过 `setsid` 和双重 fork 脱离终端，执行前关闭其他继承描述符，标准流指向 `/dev/null`；受管子 worker 使用 `posix_spawn` 创建自己的进程组。客户端关闭不停止已登记的后台 worker；注销和系统会话清理仍可能结束进程。受管 worker 在取得执行锁前核对父 PID 和出生身份，以 kqueue 监视父进程退出；监督器死亡时 worker 自终止。普通进程组不保证清理所有另建进程组的工具后代，也不构成阶段 3 的隔离边界。
 
 ## 有界 worker 监督
 
@@ -188,7 +188,7 @@ codestudio-agent scheduler-supervisor-events --workspace D:\YourProject --after 
 
 ## Cron 周期任务
 
-Cron 由 Windows/Linux 共用的调度循环执行，不写系统 crontab 或 systemd timer。worker 必须保持运行；它不会自动唤醒已关闭的 WSL 发行版或主机。
+Cron 由 Windows/Linux/macOS 共用的调度循环执行，不写系统 crontab 或 systemd timer。worker 必须保持运行；它不会自动唤醒已关闭的 WSL 发行版或主机。
 
 创建周期模板时显式提供提示词、模型配置和所需权限：
 
@@ -296,7 +296,7 @@ WSL 需要先启动发行版并启用 systemd，之后还取决于该用户管�
 
 ## stdio 接入
 
-协议版本仍为 2。`initialize` 返回 `background_scheduler: true`、`automatic_resume: true`、`cron: true`；Windows/Linux 的 `worker_supervision: true` 表示支持显式有界监督，`supervisor_diagnostics: true` 表示提供上述持久记录和进程身份诊断，`login_autostart: true` 和 `supervised_autostart: true` 分别表示已编译自启后端及其监督模式接入，运行时可用性仍查 `scheduler/autostart/status`。其他平台的这四个能力为 false。Windows 返回 `trigger: current_user_logon`，Linux 返回 `trigger: user_manager_start`。这些能力表示客户端可显式创建持久登记与控制 worker，不表示启动服务就自动执行历史任务或修改登录设置。
+协议版本仍为 2。`initialize` 返回 `background_scheduler: true`、`automatic_resume: true`、`cron: true`；Windows/Linux/macOS 的 `worker_supervision: true` 表示支持显式有界监督，`supervisor_diagnostics: true` 表示提供上述持久记录和进程身份诊断，`login_autostart: true` 和 `supervised_autostart: true` 分别表示已编译自启后端及其监督模式接入，运行时可用性仍查 `scheduler/autostart/status`。其他平台的这四个能力为 false。Windows/macOS 返回 `trigger: current_user_logon`，Linux 返回 `trigger: user_manager_start`。这些能力表示客户端可显式创建持久登记与控制 worker，不表示启动服务就自动执行历史任务或修改登录设置。
 
 | 方法 | 参数 | 返回值 |
 |---|---|---|
@@ -331,3 +331,17 @@ python tests/autostart_integration.py build/windows/x64/debug/codestudio-agent.e
 ```
 
 当前平台与实际回归结果以 [验证记录](validation.md) 为准。
+
+## macOS 当前用户 LaunchAgent
+
+```sh
+codestudio-agent scheduler-autostart-enable --workspace /Users/me/project --supervise --max-restarts 3 --restart-delay-ms 1000
+codestudio-agent scheduler-autostart-status --workspace /Users/me/project
+codestudio-agent scheduler-autostart-disable --workspace /Users/me/project
+```
+
+登记位于当前用户的 `~/Library/LaunchAgents/com.codestudio.agent.scheduler.<摘要>.plist`，使用固定绝对 executable、workspace、state 和监督参数。plist 使用字面参数数组、`RunAtLoad=true`、`KeepAlive=false` 和 Aqua 会话限制，不保存 shell、账号密码、API Key 或终端环境。普通模式运行 `scheduler-run`，显式监督模式运行 `scheduler-supervise`。登记只写配置，不调用 bootstrap/kickstart；禁用只移除通过归属检查的登记，不 bootout、不终止现有 worker。停止当前执行仍需 `scheduler-stop`。
+
+查询返回 `backend: launchagent`、`trigger: current_user_logon`、`user_uid`、`plist_path` 和 `requires_login`。另以最多 2 秒的只读 `launchctl print-disabled` 探测当前 GUI 域：`launchd_probe_available` 表示探测成功，`disabled_override` 为明确禁用状态，未知时为 null。该 label 被系统禁用时返回 `enabled: false`/冲突并拒绝启用；无 GUI 域或探测失败时也不宣称启用成功。禁用仍能移除自有 plist，不修改系统的 Disabled override。`enabled: true` 表示登记可用，不证明进程已加载或未来登录必定成功。归属、权限、符号/硬链接或内容不匹配的登记视为冲突，不覆盖或删除。改变固定参数需先 disable 再 enable。launchd 不自动重启退出的进程；有界监督结束后必须等待新的明确启动或有效登录触发，不重置任务权限与预算。
+
+真实注销/登录验收使用 [macOS 指南](macos.md) 中的可续接探针。plist 静态检查、手动 bootstrap 与普通后台启动均不替代该项验收。后台 Keychain 可用性按实际登录会话判断；登记命令所在终端的临时环境不会写入 LaunchAgent。

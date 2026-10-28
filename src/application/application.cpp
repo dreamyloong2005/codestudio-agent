@@ -666,7 +666,7 @@ static CommandResult execute_impl(const std::vector<std::string>& argv,
                {"sandbox_default","none"},{"sandbox_support","compiled-backends"},
                {"sandbox_runtime_probe","not-run"},{"sandbox_scope","process-and-mcp-children"},
                {"automatic_resume",true},{"cron",true},{"state_schema",7},
-#if defined(_WIN32) || defined(__linux__)
+#if defined(_WIN32) || defined(__linux__) || defined(__APPLE__)
                {"background_scheduler",true},{"supervised_autostart",true},
                {"worker_supervision",true},{"supervisor_diagnostics",true},
                {"login_autostart",true},

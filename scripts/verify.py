@@ -33,12 +33,9 @@ def unsupported_suites():
     if PLATFORM != "macosx":
         return {}
     return {
-        "mcp_oauth": "macOS native OAuth storage and refresh locking belong to stage 2",
         "plugin_sandbox": "macOS OS isolation belongs to stage 3",
         "sandbox": "macOS OS sandbox execution belongs to stage 3; refusal is covered by native/CLI tests",
-        "autostart": "macOS LaunchAgent integration belongs to stage 2; refusal is covered by native/CLI tests",
         "sandbox_resources": "macOS isolated resource ownership and reclamation belong to stage 3",
-        "supervisor": "macOS background worker supervision belongs to stage 2",
         "real_build": "macOS isolated workspace execution belongs to stage 3",
         "delivery": "macOS installation, signing and notarization belong to stage 4",
     }

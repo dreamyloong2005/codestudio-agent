@@ -65,7 +65,7 @@ target("agent-core")
         add_packages("openssl", {public = true})
         if is_plat("macosx") then
             add_syslinks("curl", {public = true})
-            add_frameworks("CoreFoundation", {public = true})
+            add_frameworks("CoreFoundation", "Security", {public = true})
         else
             add_packages("libcurl", {public = true})
         end
@@ -159,6 +159,7 @@ target("agent-tests")
     add_files("tests/checkpoint_store_tests.cpp", "tests/resume_kernel_tests.cpp")
     add_files("tests/scheduler_store_tests.cpp")
     add_files("tests/credentials_tests.cpp")
+    if is_plat("macosx") then add_files("tests/credentials_macos_tests.cpp") end
     add_files("tests/cron_tests.cpp", "tests/cron_store_tests.cpp", "tests/autostart_tests.cpp", "tests/process_observation_tests.cpp")
     add_files("tests/sandbox_tests.cpp")
     add_files("tests/state_reader_tests.cpp")

@@ -8,6 +8,8 @@
 #ifdef _WIN32
 #include <windows.h>
 #include <wincred.h>
+#elif defined(__APPLE__)
+#include "credentials_macos.hpp"
 #elif defined(__linux__)
 #include <libsecret/secret.h>
 #include <chrono>
@@ -240,6 +242,10 @@ std::string native_delete(std::string_view name, bool oauth = false) {
     return secret_item_delete_sync(session.item(), session.deadline.get(), session.error.out())
         ? "deleted" : session.error.state();
 }
+#elif defined(__APPLE__)
+CredentialValue native_read(std::string_view name, bool oauth = false) { return credentials_macos::read(name, oauth); }
+std::string native_write(std::string_view name, std::string_view secret, bool oauth = false) { return credentials_macos::write(name, secret, oauth); }
+std::string native_delete(std::string_view name, bool oauth = false) { return credentials_macos::erase(name, oauth); }
 #else
 CredentialValue native_read(std::string_view, bool = false) { return {"unavailable", {}}; }
 std::string native_write(std::string_view, std::string_view, bool = false) { return "unavailable"; }
@@ -306,6 +312,8 @@ std::string system_credential_backend() {
     return "windows-credential-manager";
 #elif defined(__linux__)
     return "linux-secret-service";
+#elif defined(__APPLE__)
+    return "macos-keychain";
 #else
     return "unsupported";
 #endif

@@ -16,8 +16,8 @@
 - `read_file`、`write_file`、`run_process` 三种工具；写入和进程执行分别授权。
 - SQLite 任务、动作与事件记录；先持久化执行意图，再调用工具。
 - `history`、`show` 查看记录与检查点摘要；`recover` 标记中断任务和结果不明动作；`resume` 在核对配置、权限和回执后继续同一任务。
-- **后台续跑队列**：显式登记已有任务的原授权，由独立 worker 按延迟、期限、退避及原预算续跑；支持审批等待、取消和安全崩溃恢复。Windows/Linux 后台启动独立于 stdio 客户端，worker 自身不自动重启。见 [后台续跑](docs/scheduler.md)。
-- **Cron 与平台自启**：Windows/Linux 共用五字段 cron、固定时区及触发预览；每次生成独立任务与预算，支持暂停/取消、遗漏合并和防重叠。Windows 登记当前用户登录触发；Linux 登记 systemd 用户管理器启动触发。登记不立即启动、不保存账号密码。见 [周期任务与自启](docs/scheduler.md#cron-周期任务)。
+- **后台续跑队列**：显式登记已有任务的原授权，由独立 worker 按延迟、期限、退避及原预算续跑；支持审批等待、取消和安全崩溃恢复。Windows/Linux/macOS 后台启动独立于 stdio 客户端，worker 自身不自动重启。见 [后台续跑](docs/scheduler.md)。
+- **Cron 与平台自启**：Windows/Linux/macOS 共用五字段 cron、固定时区及触发预览；每次生成独立任务与预算，支持暂停/取消、遗漏合并和防重叠。Windows 登记当前用户登录触发；Linux 登记 systemd 用户管理器启动触发；macOS 使用当前用户 LaunchAgent。登记不立即启动、不保存账号密码。见 [周期任务与自启](docs/scheduler.md#cron-周期任务)。
 - Windows Job Object 管理进程树；POSIX 后端使用进程组。包含超时、取消、输出限长和凭据环境过滤。
 - Windows 可选 `--sandbox appcontainer`：普通进程与 stdio MCP 使用 LPAC、无网络 capabilities、单 executable 暂存和私有 scratch。默认仍为 `none`；隔离边界与验证说明见 [Windows 沙箱](docs/sandbox.md)。
 - Linux 可选 `--sandbox linux-namespace`：Bubblewrap 私有根和命名空间、seccomp、cgroup v2，支持普通工具及 stdio MCP 的单进程隔离。需要明确的系统委派，缺失时拒绝执行。见 [Linux 与 WSL](docs/linux.md)。
@@ -52,7 +52,7 @@ export CODESTUDIO_CONTRACT_PYTHON=/absolute/path/to/python3
 bash scripts/verify-macos.sh all
 ```
 
-验证会实际编译和运行 C++26、`std::format`、时区与 DST 探针，并生成 `build/verification/macosx/` 下的独立回执。macOS 当前使用环境凭据和 `--sandbox none`；Keychain/OAuth 原生存储、后台启动与监督、LaunchAgent 和隔离执行均明确声明为不可用。构建提案可创建、审阅、拒绝并续跑；批准请求因隔离后端缺失而在提交决定前拒绝。安装与签名公证属于后续阶段。
+验证会实际编译和运行 C++26、`std::format`、时区与 DST 探针，并生成 `build/verification/macosx/` 下的独立回执。macOS 支持环境与 Keychain 凭据、OAuth 原生存储、后台启动与有界监督及 LaunchAgent 登记。真实登录触发须按 [macOS 验收步骤](docs/macos.md) 单独验证；隔离执行仍不可用，使用 `--sandbox none`。构建提案可创建、审阅、拒绝并续跑；批准请求因隔离后端缺失而在提交决定前拒绝。安装与签名公证属于后续阶段。
 
 ## 无需密钥体验
 
@@ -81,7 +81,7 @@ xmake run codestudio-agent run --workspace D:\YourProject `
     --prompt '阅读 README.md，说明这个项目的构建步骤。'
 ```
 
-系统凭据支持 Windows 当前用户 Credential Manager 和 Linux Secret Service。使用 `credential-set --name work-model --stdin` 从重定向 stdin 设置/更新，再通过 `credential-status --credential system:work-model` 查询可用状态，`credential-delete --name work-model` 删除。设置不会从普通终端回显读取，安全输入示例与平台条件见 [模型凭据与轮换](docs/credentials.md)。
+系统凭据支持 Windows 当前用户 Credential Manager、Linux Secret Service 和 macOS Keychain。使用 `credential-set --name work-model --stdin` 从重定向 stdin 设置/更新，再通过 `credential-status --credential system:work-model` 查询可用状态，`credential-delete --name work-model` 删除。设置不会从普通终端回显读取，安全输入示例与平台条件见 [模型凭据与轮换](docs/credentials.md)。
 
 系统库每次新任务或续跑读取一次，轮换后后续任务使用新值，正在执行的操作保持原值；缺失、锁定或不可用均失败，不回退来源或因认证错误隐式重放。引用保存在精确执行绑定中；缺少引用的旧模型检查点拒绝续跑，不做转换。数据库仍为 schema 7，协议和检查点仍为 version 2。
 
@@ -134,7 +134,7 @@ Windows 可添加 `--sandbox appcontainer`，将普通进程和 stdio MCP 服务
 
 接口支持任务分页/详情、已提交事件订阅与重放、异步启动/续跑、取消和关闭，以及持久续跑队列、cron、独立 worker 和登录自启控制。实时模型文本是临时展示，最终状态仍以任务回执为准。具体请求、生命周期和输出限制见 [本地任务服务协议](docs/task-service.md)。CodeStudio Next 与其他可信客户端可通过此接口接入。
 
-Windows/Linux 可用 `scheduler-start --supervise` 或 RPC `scheduler/start` 的 `supervise: true` 显式启用有界崩溃监督；自启登记也可显式选择监督模式，默认仍直接运行 worker。能力分别通过 `worker_supervision`、`supervised_autostart` 声明；`supervisor_diagnostics` 声明持久监督记录、事件查询和只读进程身份观测。监督不会扩大任务原授权、预算或自动重放未知动作。
+Windows/Linux/macOS 可用 `scheduler-start --supervise` 或 RPC `scheduler/start` 的 `supervise: true` 显式启用有界崩溃监督；自启登记也可显式选择监督模式，默认仍直接运行 worker。能力分别通过 `worker_supervision`、`supervised_autostart` 声明；`supervisor_diagnostics` 声明持久监督记录、事件查询和只读进程身份观测。监督不会扩大任务原授权、预算或自动重放未知动作。
 
 [机器可读协议](protocol/task-service.schema.json) 定义请求、响应、通知与 43 个方法的映射，协议版本保持 2。初始化返回本次进程的 `session_id`；`operations/get` 可查询当前操作和最近 64 个完成回执。重启后应查询持久任务和事件，不能把缓存缺失视为重新执行授权。错误提供稳定的类别和恢复建议，客户端无需解析错误消息。
 
@@ -199,7 +199,7 @@ codestudio-agent scheduler-autostart-enable --workspace D:\YourProject
 
 `--max-runs 0` 表示持续重复，直到暂停或取消；每次触发有独立的模型预算及期限。`local` 时区在创建时固定为 IANA 名称；夏令时缺失分钟跳过，重复分钟分别对应两个 UTC 时刻。遗漏的空闲触发合并，上一轮运行或等待审批期间的触发跳过；阻断或未知效果会暂停计划。创建不请求模型，但配置 MCP 时会启动已授权服务器以冻结工具 schema；RPC `crons/create` 因此是异步登记。
 
-Windows 自启采用当前用户登录触发；Task Scheduler 的 `Hidden` 只隐藏登记项，不保证控制台进程没有窗口。Linux 使用 systemd 用户单元和 `default.target.wants`，返回 `trigger: user_manager_start`，通常随首次登录启动用户管理器；管理器已运行时再登录不会重新触发。Linux 登记不 reload/start 当前管理器，也不改变 linger，在下一次管理器启动时生效。WSL 必须先启动发行版，此功能不会唤醒 WSL 或注册 Windows 登录任务。
+Windows 自启采用当前用户登录触发；Task Scheduler 的 `Hidden` 只隐藏登记项，不保证控制台进程没有窗口。Linux 使用 systemd 用户单元和 `default.target.wants`，返回 `trigger: user_manager_start`，通常随首次登录启动用户管理器；管理器已运行时再登录不会重新触发。Linux 登记不 reload/start 当前管理器，也不改变 linger，在下一次管理器启动时生效。WSL 必须先启动发行版，此功能不会唤醒 WSL 或注册 Windows 登录任务。macOS 使用当前用户 LaunchAgent，返回 `current_user_logon`，登记在下次 GUI 登录时采用；只读检查系统禁用状态，既不 bootstrap/kickstart，也不修改系统禁用设置。
 
 两平台自启默认执行 `scheduler-run`，可显式登记带有限重启次数的 `scheduler-supervise`：
 
@@ -210,7 +210,7 @@ codestudio-agent scheduler-autostart-enable --workspace D:\YourProject --supervi
     --max-restarts 3 --restart-delay-ms 1000
 ```
 
-登记不立即启动进程、不保存账号密码或 API Key；Windows 的系统重启次数保持 0，Linux 保持 `Restart=no`，监督器自身不会被自动拉起。每次后续有效的平台触发启动新的监督生命周期，不能延长上一轮任务的原预算或权限。环境引用取自实际启动进程环境（Linux 为用户管理器环境），不能依赖启用命令所在终端的临时环境变量。任务也可绑定系统凭据引用；对应用户的凭据库必须在实际启动会话中可读取。可用 `scheduler-autostart-status` 查询已登记的 `supervised` 和监督限制；改变模式、轮询间隔或监督限制需先 disable 再 enable，停止当前 worker 仍使用 `scheduler-stop`。Linux 的运行时可用性、注销行为、配置路径和登记检查边界见 [systemd 用户管理器自启](docs/scheduler.md#linux-systemd-用户管理器自启)。
+登记不立即启动进程、不保存账号密码或 API Key；Windows 的系统重启次数保持 0，Linux 保持 `Restart=no`，macOS 保持 `KeepAlive=false`，监督器自身不会被自动拉起。每次后续有效的平台触发启动新的监督生命周期，不能延长上一轮任务的原预算或权限。环境引用取自实际启动进程环境（Linux 为用户管理器环境），不能依赖启用命令所在终端的临时环境变量。任务也可绑定系统凭据引用；对应用户的凭据库必须在实际启动会话中可读取。可用 `scheduler-autostart-status` 查询已登记的 `supervised` 和监督限制；改变模式、轮询间隔或监督限制需先 disable 再 enable，停止当前 worker 仍使用 `scheduler-stop`。Linux 的运行时可用性、注销行为、配置路径和登记检查边界见 [systemd 用户管理器自启](docs/scheduler.md#linux-systemd-用户管理器自启)。
 
 需要 worker 异常退出后自动恢复时，单独选择有界监督：
 
@@ -290,7 +290,7 @@ tests/               C++ 行为测试与本地 HTTP/CLI 集成测试
 
 Windows/Linux 工作区导入/导出和 CPU/内存限制已实现，后续仍需 OS 磁盘配额、工具链自动打包、macOS 后端与跨平台 CI。其他构建工具的清单仍需分别验证依赖和沙箱兼容性。CodeStudio Next 通过本地任务 API 复用核心。本地模型后续工作已按要求暂停。Windows/Linux 持久续跑、cron、各自平台自启、显式有界 worker 监督、持久监督诊断和模型凭据引用/系统存储已实现，自启也可显式选择监督模式；远程 MCP 的 Streamable HTTP 和显式 Bearer 凭据已实现；公开客户端 OAuth、插件精确版本锁定和本地/HTTPS 分发已实现；多代理、费用估算、任务数据库加密和托管插件市场尚未实现。具体依赖与验收条件见 [开发路线](docs/roadmap.md)。
 
-本轮实现 **macOS arm64 基础运行与原生验证**，本机验收结果见 [验证记录](docs/validation.md)；已提供 macOS 原生 CI 作业定义，托管运行仍须单独确认。后续依次完成 Keychain/后台调度/LaunchAgent 系统集成、隔离后端和正式交付；Intel/Universal 包按需求扩展。四阶段边界见 [macOS 指南](docs/macos.md)。
+本轮实现 **macOS arm64 基础运行与原生验证**，本机验收结果见 [验证记录](docs/validation.md)；已提供 macOS 原生 CI 作业定义，托管运行仍须单独确认。阶段 2 已加入 Keychain/后台调度/LaunchAgent 系统集成，真实登录验收单独记录；后续完成隔离后端和正式交付；Intel/Universal 包按需求扩展。四阶段边界见 [macOS 指南](docs/macos.md)。
 
 MCP 扩展管理：[OAuth 登录与刷新](docs/mcp-oauth.md) · [插件版本锁定与分发](docs/plugins.md)。
 

@@ -16,14 +16,18 @@
 #define NOMINMAX
 #endif
 #include <windows.h>
-#elif defined(__linux__)
+#elif defined(__linux__) || defined(__APPLE__)
 #include <cerrno>
 #include <climits>
 #include <csignal>
 #include <fcntl.h>
 #include <poll.h>
 #include <sys/resource.h>
+#ifdef __linux__
 #include <sys/syscall.h>
+#else
+#include <mach-o/dyld.h>
+#endif
 #include <sys/wait.h>
 #include <unistd.h>
 #endif
@@ -228,7 +232,7 @@ std::uint32_t start_scheduler_process(const std::vector<std::string>& argv) {
         throw;
     }
     return static_cast<std::uint32_t>(info.dwProcessId);
-#elif defined(__linux__)
+#elif defined(__linux__) || defined(__APPLE__)
     std::map<std::string,std::string> options;
     for (std::size_t index=2;index<argv.size();index+=2) {
         bool known=false;
@@ -250,7 +254,18 @@ std::uint32_t start_scheduler_process(const std::vector<std::string>& argv) {
     const auto parsed=std::from_chars(value.data(),value.data()+value.size(),poll_ms);
     if (parsed.ec!=std::errc{} || parsed.ptr!=value.data()+value.size() || poll_ms<20 || poll_ms>5000)
         throw std::invalid_argument("Scheduler poll-ms must be in 20..5000");
+#ifdef __APPLE__
+    std::uint32_t executable_size=0;
+    (void)_NSGetExecutablePath(nullptr,&executable_size);
+    if (!executable_size || executable_size>1024*1024)
+        throw std::runtime_error("Cannot determine scheduler executable path");
+    std::vector<char> executable_path(executable_size);
+    if (_NSGetExecutablePath(executable_path.data(),&executable_size)!=0)
+        throw std::runtime_error("Cannot read scheduler executable path");
+    const auto executable=std::filesystem::canonical(executable_path.data()).string();
+#else
     const auto executable=std::filesystem::canonical("/proc/self/exe").string();
+#endif
     std::vector<std::string> arguments=argv; arguments[0]=executable;
     std::vector<char*> raw; raw.reserve(arguments.size()+1);
     for (auto& argument:arguments) raw.push_back(argument.data());
@@ -262,7 +277,12 @@ std::uint32_t start_scheduler_process(const std::vector<std::string>& argv) {
     auto descriptor_limit=descriptors.rlim_cur==RLIM_INFINITY ? static_cast<rlim_t>(INT_MAX) : descriptors.rlim_cur;
     // A descriptor can remain open above a subsequently lowered resource limit.
     // Inspect before fork, so the fallback still closes all inherited handles.
-    for (const auto& entry:std::filesystem::directory_iterator("/proc/self/fd")) {
+#ifdef __APPLE__
+    constexpr auto descriptor_directory="/dev/fd";
+#else
+    constexpr auto descriptor_directory="/proc/self/fd";
+#endif
+    for (const auto& entry:std::filesystem::directory_iterator(descriptor_directory)) {
         const auto name=entry.path().filename().string();
         unsigned descriptor=0;
         const auto parsed_fd=std::from_chars(name.data(),name.data()+name.size(),descriptor);
@@ -271,7 +291,15 @@ std::uint32_t start_scheduler_process(const std::vector<std::string>& argv) {
             descriptor_limit=static_cast<rlim_t>(descriptor)+1;
     }
     int pipefd[2];
+#ifdef __APPLE__
+    if (pipe(pipefd)!=0) throw std::system_error(errno,std::generic_category(),"Create scheduler launch pipe");
+    if (fcntl(pipefd[0],F_SETFD,FD_CLOEXEC)<0 || fcntl(pipefd[1],F_SETFD,FD_CLOEXEC)<0) {
+        const auto error=errno; close(pipefd[0]); close(pipefd[1]);
+        throw std::system_error(error,std::generic_category(),"Protect scheduler launch pipe");
+    }
+#else
     if (pipe2(pipefd,O_CLOEXEC)!=0) throw std::system_error(errno,std::generic_category(),"Create scheduler launch pipe");
+#endif
     for (auto& fd:pipefd) if (fd<3) {
         const auto replacement=fcntl(fd,F_DUPFD_CLOEXEC,3);
         if (replacement<0) { const auto error=errno; close(pipefd[0]); close(pipefd[1]);

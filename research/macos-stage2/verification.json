@@ -1,0 +1,144 @@
+{
+  "format": 2,
+  "product": "CodeStudio Agent",
+  "platform": "macosx",
+  "arch": "arm64",
+  "scope": "macOS stage 2 native systems integration",
+  "status": "pending_real_login",
+  "native_verification": "succeeded",
+  "stage2_accepted": false,
+  "configurations": {
+    "debug": {
+      "report": "debug/verification.json",
+      "selected_suites": [
+        "toolchain",
+        "native",
+        "schema",
+        "provider",
+        "streaming",
+        "contract",
+        "service",
+        "credentials",
+        "cli",
+        "local_models",
+        "mcp",
+        "mcp_http",
+        "mcp_oauth",
+        "plugins",
+        "resume",
+        "scheduler",
+        "supervisor",
+        "cron",
+        "autostart",
+        "package",
+        "verification"
+      ],
+      "native_groups": 22,
+      "python_cases": 360,
+      "python_passed": 349,
+      "python_skipped": 11,
+      "unsupported_suites": {
+        "plugin_sandbox": "macOS OS isolation belongs to stage 3",
+        "sandbox": "macOS OS sandbox execution belongs to stage 3; refusal is covered by native/CLI tests",
+        "sandbox_resources": "macOS isolated resource ownership and reclamation belong to stage 3",
+        "real_build": "macOS isolated workspace execution belongs to stage 3",
+        "delivery": "macOS installation, signing and notarization belong to stage 4"
+      },
+      "artifact": {
+        "path": "build/macosx/arm64/debug/codestudio-agent",
+        "size": 14462128,
+        "sha256": "17e8135076691d6f43dc7a760c5c701ea2ac04c58fc63cc8abcd6c2598b6e80b"
+      },
+      "runtime_probe": {
+        "cplusplus": 202400,
+        "current_zone": "Asia/Shanghai",
+        "cxx26": true,
+        "dependencies": {
+          "curl": "libcurl/8.7.1 SecureTransport (LibreSSL/3.3.6) zlib/1.2.12 nghttp2/1.68.1",
+          "json": "3.12.0",
+          "openssl": "OpenSSL 3.6.5 29 Sep 2026",
+          "sqlite": "3.50.4"
+        },
+        "format": "probe:07",
+        "libcpp_version": 220108,
+        "timezone_dst": true,
+        "timezone_offsets": true,
+        "tzdb_version": "2026c-rearguard"
+      }
+    },
+    "release": {
+      "report": "release/verification.json",
+      "selected_suites": [
+        "toolchain",
+        "native",
+        "schema",
+        "provider",
+        "streaming",
+        "contract",
+        "service",
+        "credentials",
+        "cli",
+        "local_models",
+        "mcp",
+        "mcp_http",
+        "mcp_oauth",
+        "plugins",
+        "resume",
+        "scheduler",
+        "supervisor",
+        "cron",
+        "autostart",
+        "package",
+        "verification"
+      ],
+      "native_groups": 22,
+      "python_cases": 360,
+      "python_passed": 349,
+      "python_skipped": 11,
+      "unsupported_suites": {
+        "plugin_sandbox": "macOS OS isolation belongs to stage 3",
+        "sandbox": "macOS OS sandbox execution belongs to stage 3; refusal is covered by native/CLI tests",
+        "sandbox_resources": "macOS isolated resource ownership and reclamation belong to stage 3",
+        "real_build": "macOS isolated workspace execution belongs to stage 3",
+        "delivery": "macOS installation, signing and notarization belong to stage 4"
+      },
+      "artifact": {
+        "path": "build/macosx/arm64/release/codestudio-agent",
+        "size": 7545952,
+        "sha256": "d8c3a1b2efeb0f27f59eb530d7e625ab9b3484ba7a487347f3e30e47599972e2"
+      },
+      "runtime_probe": {
+        "cplusplus": 202400,
+        "current_zone": "Asia/Shanghai",
+        "cxx26": true,
+        "dependencies": {
+          "curl": "libcurl/8.7.1 SecureTransport (LibreSSL/3.3.6) zlib/1.2.12 nghttp2/1.68.1",
+          "json": "3.12.0",
+          "openssl": "OpenSSL 3.6.5 29 Sep 2026",
+          "sqlite": "3.50.4"
+        },
+        "format": "probe:07",
+        "libcpp_version": 220108,
+        "timezone_dst": true,
+        "timezone_offsets": true,
+        "tzdb_version": "2026c-rearguard"
+      }
+    }
+  },
+  "ci": "Self-hosted workflow defined; hosted execution not claimed",
+  "deployment_target": "15.0",
+  "tested_macos": "26.5.2",
+  "source": {
+    "sha256": "e847ff945c64b3c7fe7926724449a3ce4750e6639a2fb2042c5675e2db0ed53a",
+    "files": 212
+  },
+  "real_login": {
+    "status": "awaiting_real_login",
+    "prepared_receipt": "login-acceptance-prepared.json",
+    "live_receipt": "/Users/taosiyuan/codestudio-agent/build/macos-login-acceptance/login-acceptance.json",
+    "same_session_refused": true,
+    "registration_started_workers": false,
+    "fixtures": 2,
+    "requirement": "docs/macos.md stage 2 acceptance criterion 3; a real GUI logout/login is required. No manual bootstrap/start substitutes for it."
+  }
+}

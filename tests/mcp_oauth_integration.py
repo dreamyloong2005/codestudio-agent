@@ -9,6 +9,8 @@ import copy
 import hashlib
 import json
 import os
+import pathlib
+import stat
 import queue
 import sqlite3
 import subprocess
@@ -21,7 +23,11 @@ from contextlib import closing
 from http.server import ThreadingHTTPServer
 from urllib.error import HTTPError
 from urllib.parse import parse_qs, urlencode, urlsplit
-from urllib.request import urlopen
+from urllib.request import ProxyHandler, build_opener
+
+# Authorization callbacks belong to our local fixture. macOS system proxies
+# need not exempt loopback, and must never receive synthetic auth codes.
+urlopen = build_opener(ProxyHandler({})).open
 
 import resume_integration as fixture
 from mcp_http_fixture import Handler as McpHandler, PROTOCOL, CURSOR
@@ -226,15 +232,39 @@ class McpOAuthTests(unittest.TestCase):
             result = subprocess.run([str(fixture.EXE), *map(str, self.auth_args("logout"))],
                                     env=self.env, capture_output=True, timeout=15)
             data = json.loads(result.stdout)
-            self.assertIn(data.get("state"), ("deleted", "missing", "locked", "unavailable"), result.stdout)
+            self.assertIn(data.get("state"), ("deleted", "missing") if sys.platform == "darwin" else
+                          ("deleted", "missing", "locked", "unavailable"), result.stdout)
             for secret in self.secrets:
                 self.assertNotIn(secret.encode(), result.stdout + result.stderr)
         def delete_ordinary():
             result = subprocess.run([str(fixture.EXE), "credential-delete", "--name", self.name],
                                     env=self.env, capture_output=True, timeout=15)
-            self.assertIn(json.loads(result.stdout).get("state"), ("deleted", "missing", "locked", "unavailable"))
+            self.assertIn(json.loads(result.stdout).get("state"), ("deleted", "missing") if sys.platform == "darwin" else
+                          ("deleted", "missing", "locked", "unavailable"))
         attempt(delete_oauth)
         attempt(delete_ordinary)
+        if sys.platform == "darwin":
+            def remove_owned_lock():
+                # All callers for this random test name have exited. Product
+                # locks retain their inode; only fixture cleanup unlinks it.
+                import fcntl
+                native_temp = subprocess.check_output(["/usr/bin/getconf", "DARWIN_USER_TEMP_DIR"], text=True).strip()
+                path = pathlib.Path(native_temp) / "org.codestudio.Agent.oauth-locks" / (hashlib.sha256(self.name.encode()).hexdigest() + ".lock")
+                try:
+                    descriptor = os.open(path, os.O_RDWR | os.O_NOFOLLOW)
+                except FileNotFoundError:
+                    return
+                try:
+                    info = os.fstat(descriptor)
+                    self.assertTrue(stat.S_ISREG(info.st_mode) and info.st_uid == os.geteuid() and
+                                    stat.S_IMODE(info.st_mode) == 0o600 and info.st_nlink == 1 and info.st_size == 0)
+                    fcntl.flock(descriptor, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                    current = path.lstat()
+                    self.assertEqual((current.st_dev, current.st_ino), (info.st_dev, info.st_ino))
+                    path.unlink()
+                finally:
+                    os.close(descriptor)
+            attempt(remove_owned_lock)
         attempt(lambda: fixture.ResumeTests.tearDown(self))
         if errors:
             for error in errors[1:]:
@@ -279,7 +309,7 @@ class McpOAuthTests(unittest.TestCase):
         # Native-store availability is checked without leaving a credential.
         probe = self.capture("credential-set", "--name", self.name, "--stdin", input=b"synthetic-probe\n")
         state = json.loads(probe.stdout).get("state")
-        if os.name != "nt" and state in ("locked", "unavailable"):
+        if sys.platform.startswith("linux") and state in ("locked", "unavailable"):
             self.assertEqual(probe.returncode, 2)
             self.skipTest("private Linux Secret Service is " + state)
         self.assertEqual(probe.returncode, 0, probe.stdout + probe.stderr)

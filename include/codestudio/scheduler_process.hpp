@@ -13,7 +13,7 @@ namespace codestudio {
 // The worker inherits the current environment, but only null standard handles;
 // no client pipes, runner locks or parent-owned process lifetime are inherited.
 // Windows verifies escape from any parent Job before allowing the worker to run.
-// Linux detaches through setsid/double-fork and confirms successful exec over a pipe.
+// Linux and macOS detach through setsid/double-fork and confirm exec over a pipe.
 // The returned PID is informational, not authority to terminate a later process.
 // The caller confirms its owner token in persistent state before reporting ready.
 // Other platforms reject background launch; foreground scheduler-run is separate.

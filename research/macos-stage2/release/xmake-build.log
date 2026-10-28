@@ -1,0 +1,115 @@
+[ 10%]: <agent-tests> cache compiling.release tests/core_tests.cpp
+[ 10%]: <agent-tests> cache compiling.release tests/tools_tests.cpp
+[ 10%]: <agent-tests> cache compiling.release tests/line_process_tests.cpp
+[ 10%]: <agent-tests> cache compiling.release tests/messages_tests.cpp
+[ 10%]: <agent-tests> cache compiling.release tests/responses_tests.cpp
+[ 10%]: <agent-tests> cache compiling.release tests/process_tests.cpp
+[ 11%]: <agent-tests> cache compiling.release tests/mcp_tests.cpp
+[ 12%]: <agent-tests> cache compiling.release tests/checkpoint_store_tests.cpp
+[ 12%]: <agent-tests> cache compiling.release tests/resume_kernel_tests.cpp
+[ 13%]: <agent-tests> cache compiling.release tests/scheduler_store_tests.cpp
+[ 14%]: <agent-tests> cache compiling.release tests/credentials_tests.cpp
+[ 15%]: <agent-tests> cache compiling.release tests/credentials_macos_tests.cpp
+[ 15%]: <agent-tests> cache compiling.release tests/cron_tests.cpp
+tests/credentials_macos_tests.cpp:29:29: warning: 'SecKeychainCreate' is deprecated: first deprecated in macOS 10.10 - SecKeychain is deprecated [-Wdeprecated-declarations]
+   29 |         const auto result = SecKeychainCreate(file.c_str(), std::char_traits<char>::length(password),
+      |                             ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk/System/Library/Frameworks/Security.framework/Headers/SecKeychain.h:309:10: note: 'SecKeychainCreate' has been explicitly marked deprecated here
+  309 | OSStatus SecKeychainCreate(const char *pathName, UInt32 passwordLength, const void * _Nullable password, Boolean promptUser, SecAccessRef _Nullable initialAccess, SecKeychainRef * _Nonnull __attribute__((cf_returns_retained)) keychain)
+      |          ^
+tests/credentials_macos_tests.cpp:38:19: warning: 'SecKeychainDelete' is deprecated: first deprecated in macOS 10.10 - SecKeychain is deprecated [-Wdeprecated-declarations]
+   38 |             check(SecKeychainDelete(value) == errSecSuccess, "cannot delete private fixture keychain");
+      |                   ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk/System/Library/Frameworks/Security.framework/Headers/SecKeychain.h:319:10: note: 'SecKeychainDelete' has been explicitly marked deprecated here
+  319 | OSStatus SecKeychainDelete(SecKeychainRef _Nullable keychainOrArray)
+      |          ^
+tests/credentials_macos_tests.cpp:44:28: warning: 'SecKeychainDelete' is deprecated: first deprecated in macOS 10.10 - SecKeychain is deprecated [-Wdeprecated-declarations]
+   44 |         if (value) { (void)SecKeychainDelete(value); CFRelease(value); }
+      |                            ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk/System/Library/Frameworks/Security.framework/Headers/SecKeychain.h:319:10: note: 'SecKeychainDelete' has been explicitly marked deprecated here
+[ 16%]: <agent-tests> cache compiling.release tests/cron_store_tests.cpp
+[ 17%]: <agent-tests> cache compiling.release tests/autostart_tests.cpp
+[ 18%]: <agent-tests> cache compiling.release tests/process_observation_tests.cpp
+[ 18%]: <agent-tests> cache compiling.release tests/sandbox_tests.cpp
+[ 19%]: <agent-tests> cache compiling.release tests/state_reader_tests.cpp
+[ 20%]: <agent-tests> cache compiling.release tests/build_workspace_tests.cpp
+[ 21%]: <agent-tests> cache compiling.release tests/workspace_execution_tests.cpp
+[ 21%]: <agent-tests> cache compiling.release tests/build_proposal_tests.cpp
+[ 22%]: <agent-tests> cache compiling.release tests/build_decision_tests.cpp
+[ 23%]: <agent-core> cache compiling.release src/core/digest.cpp
+[ 24%]: <agent-core> cache compiling.release src/core/kernel.cpp
+[ 24%]: <agent-core> cache compiling.release src/core/cron.cpp
+[ 25%]: <agent-core> cache compiling.release src/core/state_reader.cpp
+[ 26%]: <agent-core> cache compiling.release src/core/build_info.cpp
+[ 27%]: <agent-core> cache compiling.release src/core/store.cpp
+[ 27%]: <agent-core> cache compiling.release src/provider/responses.cpp
+[ 28%]: <agent-core> cache compiling.release src/provider/provider.cpp
+[ 29%]: <agent-core> cache compiling.release src/provider/messages.cpp
+[ 30%]: <agent-core> cache compiling.release src/tools/build_proposal.cpp
+[ 30%]: <agent-core> cache compiling.release src/tools/workspace_build.cpp
+[ 31%]: <agent-core> cache compiling.release src/tools/tools.cpp
+[ 32%]: <agent-core> cache compiling.release src/platform/autostart_options.cpp
+[ 33%]: <agent-core> cache compiling.release src/platform/sandbox_resources.cpp
+[ 33%]: <agent-core> cache compiling.release src/platform/sandbox_resources_windows.cpp
+[ 34%]: <agent-core> cache compiling.release src/platform/process.cpp
+[ 35%]: <agent-core> cache compiling.release src/platform/sandbox_resources_linux.cpp
+[ 36%]: <agent-core> cache compiling.release src/platform/sandbox.cpp
+[ 36%]: <agent-core> cache compiling.release src/platform/autostart_linux.cpp
+[ 37%]: <agent-core> cache compiling.release src/platform/scheduler_child.cpp
+[ 38%]: <agent-core> cache compiling.release src/platform/build_workspace_linux.cpp
+[ 39%]: <agent-core> cache compiling.release src/platform/line_process.cpp
+[ 39%]: <agent-core> cache compiling.release src/platform/build_manifest_macos.cpp
+[ 40%]: <agent-core> cache compiling.release src/platform/linux_sandbox.cpp
+[ 41%]: <agent-core> cache compiling.release src/platform/autostart_macos.cpp
+[ 42%]: <agent-core> cache compiling.release src/platform/credentials.cpp
+[ 42%]: <agent-core> cache compiling.release src/platform/build_workspace.cpp
+[ 43%]: <agent-core> cache compiling.release src/platform/windows_sandbox.cpp
+[ 44%]: <agent-core> cache compiling.release src/platform/process_package.cpp
+[ 45%]: <agent-core> cache compiling.release src/platform/process_observation.cpp
+[ 45%]: <agent-core> cache compiling.release src/platform/autostart.cpp
+[ 46%]: <agent-core> cache compiling.release src/platform/scheduler_process.cpp
+[ 47%]: <agent-core> cache compiling.release src/platform/credentials_macos.cpp
+[ 48%]: <agent-core> cache compiling.release src/mcp/oauth_http.cpp
+src/platform/credentials_macos.cpp:51:34: warning: 'SecKeychainSetUserInteractionAllowed' is deprecated: first deprecated in macOS 10.10 - SecKeychain is deprecated [-Wdeprecated-declarations]
+   51 |     static const bool disabled = SecKeychainSetUserInteractionAllowed(false) == errSecSuccess;
+      |                                  ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk/System/Library/Frameworks/Security.framework/Headers/SecKeychain.h:639:10: note: 'SecKeychainSetUserInteractionAllowed' has been explicitly marked deprecated here
+  639 | OSStatus SecKeychainSetUserInteractionAllowed(Boolean state)
+      |          ^
+src/platform/credentials_macos.cpp:60:48: warning: 'kSecUseAuthenticationUIFail' is deprecated: first deprecated in macOS 11.0 - Instead of kSecUseAuthenticationUI, use kSecUseAuthenticationContext and set LAContext.interactionNotAllowed property [-Wdeprecated-declarations]
+   60 |     set(result.get(), kSecUseAuthenticationUI, kSecUseAuthenticationUIFail);
+      |                                                ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk/System/Library/Frameworks/Security.framework/Headers/SecItem.h:1078:26: note: 'kSecUseAuthenticationUIFail' has been explicitly marked deprecated here
+ 1078 | extern const CFStringRef kSecUseAuthenticationUIFail
+      |                          ^
+src/platform/credentials_macos.cpp:89:33: warning: 'SecKeychainCopyDefault' is deprecated: first deprecated in macOS 10.10 - SecKeychain is deprecated [-Wdeprecated-declarations]
+   89 |             const auto result = SecKeychainCopyDefault(&keychain.value);
+      |                                 ^
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk/System/Library/Frameworks/Security.framework/Headers/SecKeychain.h:384:10: note: 'SecKeychainCopyDefault' has been explicitly marked deprecated here
+[ 49%]: <agent-core> cache compiling.release src/mcp/stdio_transport.cpp
+[ 49%]: <agent-core> cache compiling.release src/mcp/mcp.cpp
+[ 50%]: <agent-core> cache compiling.release src/mcp/oauth.cpp
+[ 51%]: <agent-core> cache compiling.release src/mcp/oauth_native.cpp
+[ 52%]: <agent-core> cache compiling.release src/mcp/http_transport.cpp
+[ 52%]: <agent-core> cache compiling.release src/application/supervisor_diagnostics.cpp
+[ 53%]: <agent-core> cache compiling.release src/application/extension_commands.cpp
+[ 54%]: <agent-core> cache compiling.release src/application/scheduler.cpp
+[ 55%]: <agent-core> cache compiling.release src/application/service.cpp
+[ 55%]: <agent-core> cache compiling.release src/application/build_approval.cpp
+[ 56%]: <agent-core> cache compiling.release src/application/application.cpp
+[ 57%]: <agent-core> cache compiling.release src/execution/workspace_execution.cpp
+[ 58%]: <agent-core> cache compiling.release src/execution/build_manifest.cpp
+[ 58%]: <agent-core> cache compiling.release src/plugins/plugins.cpp
+[ 59%]: <agent-core> cache compiling.release src/plugins/download.cpp
+[ 66%]: <sandbox-resource-fixture> cache compiling.release tests/sandbox_resource_fixture.cpp
+[ 67%]: <codestudio-agent> cache compiling.release src/cli/credentials_cli.cpp
+[ 67%]: <codestudio-agent> cache compiling.release src/cli/main.cpp
+[ 68%]: <provider-fixture> cache compiling.release tests/provider_fixture.cpp
+[ 69%]: <toolchain-probe> cache compiling.release tests/toolchain_probe.cpp
+[ 82%]: <agent-core> archiving.release libagent-core.a
+[ 82%]: <sandbox-resource-fixture> linking.release sandbox-resource-fixture
+[ 84%]: <codestudio-agent> linking.release codestudio-agent
+[ 88%]: <agent-tests> linking.release agent-tests
+[ 91%]: <toolchain-probe> linking.release toolchain-probe
+[ 91%]: <provider-fixture> linking.release provider-fixture
+[100%]: build ok, spent 21.387s

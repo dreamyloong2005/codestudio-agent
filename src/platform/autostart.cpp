@@ -10,6 +10,8 @@
 #include <system_error>
 #ifdef __linux__
 #include "autostart_linux.hpp"
+#elif defined(__APPLE__)
+#include "autostart_macos.hpp"
 #endif
 
 #ifdef _WIN32
@@ -378,6 +380,8 @@ Json plan(const std::filesystem::path& executable, const std::filesystem::path& 
     return result;
 #elif defined(__linux__)
     return linux_autostart_plan(executable,workspace,database,sid,options);
+#elif defined(__APPLE__)
+    return macos_autostart_plan(executable,workspace,database,sid,options);
 #else
     (void)executable; (void)workspace; (void)database; (void)sid; (void)options;
     throw std::runtime_error("Login autostart is unsupported on this platform");
@@ -408,6 +412,8 @@ bool matches(const Json& expected, const Json& observed, bool check_options) {
     } catch (const std::exception&) { return false; }
 #elif defined(__linux__)
     return linux_autostart_matches(expected,observed,check_options);
+#elif defined(__APPLE__)
+    return macos_autostart_matches(expected,observed,check_options);
 #else
     (void)expected; (void)observed; (void)check_options; return false;
 #endif
@@ -489,6 +495,8 @@ Json scheduler_autostart(const std::filesystem::path& workspace, const std::file
     }
 #elif defined(__linux__)
     return linux_autostart(workspace,database,action,options);
+#elif defined(__APPLE__)
+    return macos_autostart(workspace,database,action,options);
 #else
     (void)workspace; (void)database; (void)options;
     throw std::runtime_error("Login autostart is unsupported on this platform");

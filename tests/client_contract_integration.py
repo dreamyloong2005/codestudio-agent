@@ -101,8 +101,8 @@ class ClientContractTests(unittest.TestCase):
             client.initialize()
         return client
 
-    @unittest.skipUnless(os.name == "nt" or sys.platform.startswith("linux"),
-                         "Windows/Linux native worker supervision")
+    @unittest.skipUnless(os.name == "nt" or sys.platform.startswith("linux") or sys.platform == "darwin",
+                         "Windows/Linux/macOS native worker supervision")
     def test_supervised_start_contract_and_independent_client_lifecycle(self):
         client = self.client(initialize=False)
         self.assertTrue(client.initialize()["capabilities"]["worker_supervision"])
@@ -137,8 +137,8 @@ class ClientContractTests(unittest.TestCase):
                 return probe.returncode == 0
             self.wait_for(released)
 
-    @unittest.skipUnless(os.name == "nt" or sys.platform.startswith("linux"),
-                         "Windows/Linux native worker supervision")
+    @unittest.skipUnless(os.name == "nt" or sys.platform.startswith("linux") or sys.platform == "darwin",
+                         "Windows/Linux/macOS native worker supervision")
     def test_supervisor_diagnostics_survive_client_reconnection_and_page_durable_runs(self):
         client = self.client(initialize=False)
         self.assertTrue(client.initialize()["capabilities"]["supervisor_diagnostics"])
@@ -208,8 +208,8 @@ class ClientContractTests(unittest.TestCase):
             self.assertEqual(database.execute("PRAGMA user_version").fetchone()[0], 7)
         self.assertEqual(self.requests(), [])
 
-    @unittest.skipUnless(os.name == "nt" or sys.platform.startswith("linux"),
-                         "Windows or Linux login autostart")
+    @unittest.skipUnless(os.name == "nt" or sys.platform.startswith("linux") or sys.platform == "darwin",
+                         "Windows/Linux/macOS login autostart")
     def test_supervised_autostart_registration_survives_client_and_rejects_conflicting_options(self):
         client = self.client(initialize=False)
         initialized = client.initialize()
@@ -316,13 +316,13 @@ class ClientContractTests(unittest.TestCase):
         self.assertEqual(initialized["session_id"], before["data"]["session_id"])
         for capability in ("background_scheduler", "mcp_oauth"):
             self.assertEqual(initialized["capabilities"][capability],
-                             os.name == "nt" or sys.platform.startswith("linux"))
+                             os.name == "nt" or sys.platform.startswith("linux") or sys.platform == "darwin")
         self.assertTrue(initialized["capabilities"]["operation_lookup"])
         self.assertTrue(initialized["capabilities"]["structured_errors"])
         self.assertEqual(initialized["capabilities"]["supervised_autostart"],
-                         os.name == "nt" or sys.platform.startswith("linux"))
+                         os.name == "nt" or sys.platform.startswith("linux") or sys.platform == "darwin")
         self.assertEqual(initialized["capabilities"]["supervisor_diagnostics"],
-                         os.name == "nt" or sys.platform.startswith("linux"))
+                         os.name == "nt" or sys.platform.startswith("linux") or sys.platform == "darwin")
         self.assertEqual(initialized["limits"]["operation_history"], 64)
         self.assertEqual(initialized["limits"]["operation_result_bytes"], 262144)
         status = client.rpc("operations/status")

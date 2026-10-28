@@ -1,4 +1,12 @@
 #include "codestudio/scheduler_child.hpp"
+#ifdef __APPLE__
+#include "codestudio/process_observation.hpp"
+#include "darwin_spawn.hpp"
+#include <crt_externs.h>
+#include <mach-o/dyld.h>
+#include <sys/event.h>
+#include <thread>
+#endif
 
 #include <charconv>
 #include <chrono>
@@ -15,15 +23,17 @@
 #define NOMINMAX
 #endif
 #include <windows.h>
-#elif defined(__linux__)
+#elif defined(__linux__) || defined(__APPLE__)
 #include <cerrno>
 #include <climits>
 #include <csignal>
 #include <fcntl.h>
 #include <poll.h>
+#ifdef __linux__
 #include <sys/prctl.h>
 #include <sys/resource.h>
 #include <sys/syscall.h>
+#endif
 #include <sys/wait.h>
 #include <unistd.h>
 #endif
@@ -172,7 +182,7 @@ private:
     DWORD pid_ = 0;
     std::optional<std::int64_t> exit_;
 };
-#elif defined(__linux__)
+#elif defined(__linux__) || defined(__APPLE__)
 class Descriptor {
 public:
     explicit Descriptor(int value = -1) : value_(value) {}
@@ -189,9 +199,9 @@ private:
     throw std::system_error(error, std::generic_category(), operation);
 }
 
-class LinuxSchedulerChild final : public SchedulerChild {
+class PosixSchedulerChild final : public SchedulerChild {
 public:
-    ~LinuxSchedulerChild() override {
+    ~PosixSchedulerChild() override {
         if (!active_) return;
         int status = 0;
         pid_t result;
@@ -318,7 +328,7 @@ std::unique_ptr<SchedulerChild> start_scheduler_child(const SchedulerChildOption
     Descriptor null_io(open("/dev/null", O_RDWR | O_CLOEXEC));
     if (null_io.get() < 0) posix_error("Open scheduler child null streams");
     ensure_nonstandard(null_io);
-    auto child = std::make_unique<LinuxSchedulerChild>();
+    auto child = std::make_unique<PosixSchedulerChild>();
     const auto parent_pid = getpid();
     const auto directory = options.workspace.string();
     const auto pid = fork();
@@ -382,8 +392,79 @@ std::unique_ptr<SchedulerChild> start_scheduler_child(const SchedulerChildOption
     }
     if (!confirmed) throw std::runtime_error("Scheduler child exec confirmation timed out");
     return child;
+#elif defined(__APPLE__)
+    std::uint32_t size = 0;
+    (void)_NSGetExecutablePath(nullptr, &size);
+    if (!size || size > 1024 * 1024) throw std::runtime_error("Cannot determine scheduler child executable path");
+    std::vector<char> path(size);
+    if (_NSGetExecutablePath(path.data(), &size) != 0)
+        throw std::runtime_error("Cannot read scheduler child executable path");
+    const auto executable = std::filesystem::canonical(path.data()).string();
+    const auto parent_identity = current_process_identity();
+    std::vector<std::string> arguments{executable, "scheduler-child", "--workspace", options.workspace.string(),
+        "--state", options.database.string(), "--owner", options.owner, "--poll-ms", std::to_string(options.poll_ms),
+        "--expected-stop-epoch", std::to_string(options.expected_stop_epoch),
+        "--expected-generation", std::to_string(options.expected_generation),
+        "--parent-pid", std::to_string(getpid()), "--parent-identity", parent_identity};
+    std::vector<char*> raw;
+    raw.reserve(arguments.size() + 1);
+    for (auto& argument : arguments) raw.push_back(argument.data());
+    raw.push_back(nullptr);
+    Descriptor null_io(open("/dev/null", O_RDWR | O_CLOEXEC));
+    if (null_io.get() < 0) posix_error("Open scheduler child null streams");
+    ensure_nonstandard(null_io);
+    auto child = std::make_unique<PosixSchedulerChild>();
+    // CLOEXEC_DEFAULT allows only the explicit null streams through. posix_spawn
+    // reports exec failure synchronously, without running C++ after fork.
+    child->adopt(darwin_spawn(executable.c_str(), raw.data(), *_NSGetEnviron(),
+                             options.workspace.c_str(), null_io.get(), null_io.get(), null_io.get()));
+    return child;
 #else
-    throw std::runtime_error("Owned scheduler children are supported only on Windows and Linux");
+    throw std::runtime_error("Owned scheduler children are supported only on Windows, Linux and macOS");
 #endif
 }
+
+#ifdef __APPLE__
+namespace {
+class DarwinSchedulerParentGuard final : public SchedulerParentGuard {
+public:
+    DarwinSchedulerParentGuard(std::uint32_t pid, const std::string& identity) : queue_(kqueue()) {
+        if (queue_.get() < 0) posix_error("Create scheduler parent watch");
+        if (fcntl(queue_.get(), F_SETFD, FD_CLOEXEC) < 0) posix_error("Protect scheduler parent watch");
+        if (pid <= 1 || pid > INT_MAX || getppid() != static_cast<pid_t>(pid) || getpgrp() != getpid() ||
+            observe_process_identity(pid, identity) != "matching_process")
+            throw std::runtime_error("Scheduler parent identity or worker process group does not match");
+        struct kevent event{};
+        EV_SET(&event, pid, EVFILT_PROC, EV_ADD | EV_ENABLE | EV_ONESHOT, NOTE_EXIT, 0, nullptr);
+        if (kevent(queue_.get(), &event, 1, nullptr, 0, nullptr) < 0) posix_error("Bind scheduler parent watch");
+        // A death before registration (including before exec) must never grant
+        // work admission. Recheck the actual parent and its birth identity after
+        // the kernel has bound the watch, then retain that binding until exit.
+        if (getppid() != static_cast<pid_t>(pid) || observe_process_identity(pid, identity) != "matching_process")
+            throw std::runtime_error("Scheduler parent exited before worker admission");
+        watcher_ = std::jthread([this](std::stop_token stop) {
+            while (!stop.stop_requested()) {
+                struct kevent event{};
+                const timespec timeout{0, 100000000};
+                const auto count = kevent(queue_.get(), nullptr, 0, &event, 1, &timeout);
+                if (count < 0 && errno == EINTR) continue;
+                if (count == 0) continue;
+                // Any watch failure is fail-closed. This is our own group, never
+                // a PID recovered from durable state or an observed parent PID.
+                // Other tool groups are outside this worker-lifetime guarantee.
+                (void)kill(0, SIGKILL);
+                _exit(137);
+            }
+        });
+    }
+private:
+    Descriptor queue_;
+    std::jthread watcher_;
+};
+}
+
+std::unique_ptr<SchedulerParentGuard> watch_scheduler_parent(std::uint32_t pid, const std::string& identity) {
+    return std::make_unique<DarwinSchedulerParentGuard>(pid, identity);
+}
+#endif
 }

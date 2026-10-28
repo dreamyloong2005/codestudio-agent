@@ -1,0 +1,23 @@
+test_enable_readback_idempotency_configuration_conflict_and_remove (__main__.AutostartTests.test_enable_readback_idempotency_configuration_conflict_and_remove) ... ok
+test_invalid_poll_cannot_register_or_create_workspace_state (__main__.AutostartTests.test_invalid_poll_cannot_register_or_create_workspace_state) ... ok
+test_invalid_supervision_flags_do_not_register_or_create_state (__main__.AutostartTests.test_invalid_supervision_flags_do_not_register_or_create_state) ... ok
+test_linux_modified_unit_and_foreign_enable_link_are_not_removed (__main__.AutostartTests.test_linux_modified_unit_and_foreign_enable_link_are_not_removed) ... skipped 'Linux systemd unit ownership'
+test_linux_orphan_enable_link_and_symlink_unit_fail_closed (__main__.AutostartTests.test_linux_orphan_enable_link_and_symlink_unit_fail_closed) ... skipped 'Linux systemd unit ownership'
+test_linux_supervised_metadata_tampering_refuses_control (__main__.AutostartTests.test_linux_supervised_metadata_tampering_refuses_control) ... skipped 'Linux supervised unit ownership'
+test_linux_unit_contract_and_systemd_syntax (__main__.AutostartTests.test_linux_unit_contract_and_systemd_syntax) ... skipped 'Linux systemd unit ownership'
+test_macos_disable_does_not_stop_running_worker (__main__.AutostartTests.test_macos_disable_does_not_stop_running_worker) ... ok
+test_macos_links_special_files_and_writable_registration_are_refused (__main__.AutostartTests.test_macos_links_special_files_and_writable_registration_are_refused) ... ok
+test_macos_plist_contract_escaping_and_no_immediate_launch (__main__.AutostartTests.test_macos_plist_contract_escaping_and_no_immediate_launch) ... ok
+test_macos_tampered_contract_is_preserved (__main__.AutostartTests.test_macos_tampered_contract_is_preserved) ... ok
+test_mode_switch_requires_explicit_disable_and_preserves_identity (__main__.AutostartTests.test_mode_switch_requires_explicit_disable_and_preserves_identity) ... ok
+test_state_and_workspace_scope_have_distinct_owned_names (__main__.AutostartTests.test_state_and_workspace_scope_have_distinct_owned_names) ... ok
+test_status_and_absent_disable_do_not_create_state_or_launch_work (__main__.AutostartTests.test_status_and_absent_disable_do_not_create_state_or_launch_work) ... ok
+test_status_and_disable_reject_configuration_flags_without_changing_registration (__main__.AutostartTests.test_status_and_disable_reject_configuration_flags_without_changing_registration) ... ok
+test_supervised_enable_readback_limits_conflicts_and_remove (__main__.AutostartTests.test_supervised_enable_readback_limits_conflicts_and_remove) ... ok
+test_supervised_limit_boundaries_are_preserved (__main__.AutostartTests.test_supervised_limit_boundaries_are_preserved) ... ok
+test_windows_supervised_native_definition_has_no_second_restart_policy (__main__.AutostartTests.test_windows_supervised_native_definition_has_no_second_restart_policy) ... skipped 'Windows native Task Scheduler readback'
+
+----------------------------------------------------------------------
+Ran 18 tests in 2.166s
+
+OK (skipped=5)

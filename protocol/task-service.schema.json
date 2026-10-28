@@ -2178,7 +2178,10 @@
           "type": "string"
         },
         "backend": {
-          "const": "systemd-user"
+          "enum": [
+            "systemd-user",
+            "launchagent"
+          ]
         },
         "unit_path": {
           "type": "string"
@@ -2207,6 +2210,21 @@
           "type": "integer",
           "minimum": 100,
           "maximum": 60000
+        },
+        "plist_path": {
+          "type": "string"
+        },
+        "requires_login": {
+          "type": "boolean"
+        },
+        "launchd_probe_available": {
+          "type": "boolean"
+        },
+        "disabled_override": {
+          "type": [
+            "boolean",
+            "null"
+          ]
         }
       },
       "required": [
@@ -2242,12 +2260,41 @@
               "unit_path",
               "user_uid",
               "requires_manager_reload"
-            ]
+            ],
+            "properties": {
+              "backend": {
+                "const": "systemd-user"
+              }
+            }
           },
           "else": {
-            "required": [
-              "user_sid"
-            ]
+            "if": {
+              "properties": {
+                "backend": {
+                  "const": "launchagent"
+                }
+              },
+              "required": [
+                "backend"
+              ]
+            },
+            "then": {
+              "required": [
+                "user_uid",
+                "plist_path",
+                "requires_login"
+              ],
+              "properties": {
+                "trigger": {
+                  "const": "current_user_logon"
+                }
+              }
+            },
+            "else": {
+              "required": [
+                "user_sid"
+              ]
+            }
           }
         },
         {

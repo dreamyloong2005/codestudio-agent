@@ -5,12 +5,17 @@ so the next real boundary is approximately 23 hours away. Due timestamps are
 moved in the test database without waiting for a wall-clock schedule boundary.
 """
 import json
+import os
+import signal
+import subprocess
+import sys
 import sqlite3
 import threading
 import time
 import unittest
 from contextlib import closing
 from datetime import datetime, timezone
+from zoneinfo import ZoneInfo
 import resume_integration as fixture
 
 DAY_MS = 24 * 60 * 60 * 1000
@@ -118,6 +123,110 @@ class CronTests(unittest.TestCase):
     def reject(self, task, action):
         return self.invoke("build-reject", task, "--workspace", self.workspace,
                            "--action", action["id"], "--digest", action["result"]["output"]["digest"])
+
+    def detached_worker(self):
+        result = self.invoke(*self.worker_args("scheduler-start", "--supervise", "--poll-ms", "20",
+                                              "--max-restarts", "1", "--restart-delay-ms", "100"))
+        self.worker_started = True
+        self.assertTrue(result["started"])
+        self.assertTrue(result["supervised"])
+        self.assertNotEqual(result["pid"], result["supervisor_pid"])
+        return result
+
+    def stop_detached_worker(self):
+        self.invoke(*self.worker_args("scheduler-stop"))
+        # Successful foreground admission proves that the detached supervisor
+        # and its child released both ownership locks, not just a database flag.
+        def released():
+            result = subprocess.run([str(fixture.EXE), *map(str, self.worker_args("scheduler-run", "--once"))],
+                                    env=self.env, capture_output=True, timeout=5)
+            return result.returncode == 0
+        self.wait_for(released)
+        self.worker_started = False
+
+    def reject_with_running_worker(self, task, action):
+        def accepted():
+            result = subprocess.run([str(fixture.EXE), "build-reject", task, "--workspace", str(self.workspace),
+                "--action", action["id"], "--digest", action["result"]["output"]["digest"]],
+                env=self.env, capture_output=True, text=True, timeout=5)
+            if result.returncode == 2 and "in use by another runner" in result.stdout:
+                return False  # Admission failed before a decision; wait for the worker's short poll lock.
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            return True
+        self.wait_for(accepted)
+
+    @unittest.skipUnless(sys.platform == "darwin", "macOS native detached cron integration")
+    def test_detached_cron_timezone_coalescing_approval_and_independent_budgets(self):
+        local = datetime.fromtimestamp(self.slot_ms / 1000, ZoneInfo("America/New_York"))
+        (self.workspace / "input.txt").write_text("source", encoding="utf-8")
+        created = self.create("--allow-build-proposals", "--max-turns", "2", "--max-runs", "2",
+                              expression=f"{local.minute} {local.hour} * * *", zone="America/New_York")
+        self.setup_responses({"body": fixture.reply("responses", tool=("propose_build", self.proposal_arguments()))})
+        self.sql_execute("UPDATE cron_schedules SET next_due_at_ms=? WHERE id=?",
+                         (self.slot_ms - 7 * DAY_MS, created["id"]))
+        self.detached_worker()
+        try:
+            self.wait_for(lambda: self.occurrences(created["id"]))
+            first = self.occurrences(created["id"])[0]
+            self.wait_for(lambda: self.job(first[2])["status"] == "waiting_approval")
+            self.assertEqual(first[0], self.slot_ms)
+            self.assertEqual(self.cron(created["id"])["timezone"], "America/New_York")
+            self.due(created["id"], age_completed=True)
+            self.wait_for(lambda: self.cron(created["id"])["next_due_at_ms"] > self.slot_ms)
+            self.assertEqual(len(self.occurrences(created["id"])), 1)
+            self.assertEqual(len(self.requests()), 1)
+            self.setup_responses({"body": fixture.reply("responses", text="first private result")})
+            self.reject_with_running_worker(first[1], self.show(first[1])["actions"][0])
+            self.wait_for(lambda: self.job(first[2])["status"] == "completed")
+            self.setup_responses({"body": fixture.reply("responses", tool=("propose_build", self.proposal_arguments()),
+                                                       call_id="fresh-background-proposal")})
+            self.due(created["id"])
+            self.wait_for(lambda: len(self.occurrences(created["id"])) == 2)
+            second = self.occurrences(created["id"])[1]
+            self.wait_for(lambda: self.job(second[2])["status"] == "waiting_approval")
+            self.assertNotEqual(first[1], second[1])
+            self.assertNotIn("first private result", json.dumps(self.requests()[-1]["body"]))
+            action = self.show(second[1])["actions"][0]
+            self.assertEqual(action["continuation"]["status"], "pending")
+            self.setup_responses({"body": fixture.reply("responses")})
+            self.reject_with_running_worker(second[1], action)
+            self.wait_for(lambda: self.job(second[2])["status"] == "completed")
+            self.assertEqual(self.cron(created["id"])["status"], "exhausted")
+            for occurrence in (first, second):
+                self.assertEqual(self.show(occurrence[1])["checkpoint"]["turns"], 2)
+            self.assertEqual(len(self.requests()), 4)
+            self.assertFalse((self.workspace / "artifacts").exists())
+        finally:
+            self.stop_detached_worker()
+
+    @unittest.skipUnless(sys.platform == "darwin", "macOS native detached cron integration")
+    def test_detached_supervisor_crash_blocks_unknown_effect_without_replay(self):
+        manifest, marker, grants = self.configure_mcp()
+        created = self.create("--allow-process", fixture.PROCESS, "--process-timeout-ms", "15000", *grants)
+        self.setup_responses({"body": fixture.reply("responses", tool=("run_process", {
+            "executable": str(fixture.PROCESS), "arguments": ["sleep", "10000"]}))})
+        self.due(created["id"])
+        started = self.detached_worker()
+        try:
+            self.wait_for(lambda: self.sql_rows("SELECT id FROM actions WHERE status='dispatched'"))
+            occurrence = self.occurrences(created["id"])[0]
+            state = self.invoke(*self.worker_args("scheduler-status"))
+            self.assertEqual((state["pid"], state["owner"]), (started["pid"], started["owner"]))
+            marker.unlink()
+            requests = self.requests()
+            os.kill(started["pid"], signal.SIGKILL)
+            self.wait_for(lambda: self.job(occurrence[2])["status"] == "blocked")
+            self.assertEqual(self.show(occurrence[1])["actions"][0]["effect"], "unknown")
+            self.assertEqual(self.cron(created["id"])["status"], "paused")
+            self.due(created["id"])
+            self.stop_detached_worker()
+            self.once()
+            self.assertEqual(self.occurrences(created["id"]), [occurrence])
+            self.assertEqual(self.requests(), requests)
+            self.assertFalse(marker.exists())
+        finally:
+            if self.worker_started:
+                self.stop_detached_worker()
 
     def test_enrollment_creates_only_a_template_and_readonly_listing(self):
         created = self.create("--name", "Weekday check", "--max-runs", "2", expression="0 9 * * 1-5")

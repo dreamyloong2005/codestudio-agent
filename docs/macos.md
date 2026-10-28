@@ -1,6 +1,6 @@
 # macOS 适配路线
 
-CodeStudio Agent 的 macOS 首个目标是 Apple Silicon（arm64）基础运行版。本轮已落地阶段 1 适配与原生验证入口，Debug/Release 验收通过；系统集成、隔离能力和正式交付分别属于后续阶段。实现状态、测试通过和托管 CI 运行结果分别记录。
+CodeStudio Agent 的 macOS 首个目标是 Apple Silicon（arm64）基础运行版。阶段 1 已完成本机 Debug/Release 验收；阶段 2 已实现 Keychain、后台监督和 LaunchAgent 登记，真实登录触发的验收单独记录。隔离能力和正式交付属于后续阶段。实现状态、测试通过和托管 CI 运行结果分别记录。
 
 核心继续使用 **C++26 + XMake**，mcpp 等生态成熟后再评估迁移。CodeStudio Agent 负责无界面的 Agent/Harness、CLI 和服务接口；桌面 UI 属于 **CodeStudio Next**。本地模型后续开发继续暂停，macOS 适配不包含模型下载、服务管理或内嵌推理。
 
@@ -12,9 +12,9 @@ CodeStudio Agent 的 macOS 首个目标是 Apple Silicon（arm64）基础运行�
 |---|---|---|
 | 原生构建与验证 | 已增加 macosx/arm64 配置、C++26/格式化/时区运行探针和 Debug/Release 回执；本机 Debug/Release 验收通过，打包留在阶段 4 | [XMake 配置](../xmake.lua)、[工具链要求](../scripts/toolchains.json)、[验证入口](../scripts/verify.py)、[打包入口](../scripts/package.py) |
 | 普通进程与身份 | Darwin 使用 posix_spawn、明确继承标准流与进程组；出生身份绑定系统启动 UUID 和微秒级启动时间，使用 kqueue 检查查询中的退出 | [进程执行](../src/platform/process.cpp)、[stdio 子进程](../src/platform/line_process.cpp)、[身份观测](../src/platform/process_observation.cpp) |
-| 后台 worker 与监督 | 后台启动与监督明确返回不支持；通用队列、cron 与前台 scheduler-run 可以独立验证，原生生命周期留在阶段 2 | [后台启动](../src/platform/scheduler_process.cpp)、[监督子进程](../src/platform/scheduler_child.cpp)、[调度语义](scheduler.md) |
-| 系统凭据与 OAuth | 环境凭据可用；系统后端返回 unsupported，OAuth 登录/刷新原生互斥明确拒绝，Keychain 留在阶段 2 | [凭据后端](../src/platform/credentials.cpp)、[OAuth 原生能力](../src/mcp/oauth_native.cpp)、[凭据语义](credentials.md)、[OAuth](mcp-oauth.md) |
-| 当前用户登录自启 | 缺少 macOS LaunchAgent 后端 | [自启入口](../src/platform/autostart.cpp)、[后台调度](scheduler.md) |
+| 后台 worker 与监督 | 支持独立会话后台启动、绑定父身份的受管 worker、有限重启和停止代数；复用持久队列与 cron | [后台启动](../src/platform/scheduler_process.cpp)、[监督子进程](../src/platform/scheduler_child.cpp)、[调度语义](scheduler.md) |
+| 系统凭据与 OAuth | 环境与非交互 Keychain 凭据可用；OAuth 使用独立记录域及跨进程刷新锁，保留崩溃不可重试标记 | [凭据后端](../src/platform/credentials.cpp)、[OAuth 原生能力](../src/mcp/oauth_native.cpp)、[凭据语义](credentials.md)、[OAuth](mcp-oauth.md) |
+| 当前用户登录自启 | 当前用户 LaunchAgent enable/status/disable 已实现；不立即执行、不无限重启，真实登录证据单列 | [自启入口](../src/platform/autostart.cpp)、[后台调度](scheduler.md) |
 | OS 隔离与工作区执行 | 只读清单快照已适配，拒绝链接、非普通文件与读取期间的身份/内容变化；工作区导入、执行与导出仍不支持，无宿主回退 | [沙箱入口](../src/platform/sandbox.cpp)、[工作区操作](../src/platform/build_workspace.cpp)、[隔离构建](workspace-builds.md) |
 | 资源登记与回收 | 非 Windows/Linux 平台使用不支持存根，缺少本机资源身份和回收实现 | [资源接口实现](../src/platform/sandbox_resources.cpp)、[资源生命周期](sandbox-resources.md) |
 | CI 与发布交付 | 已定义 macOS ARM64 自托管原生验证作业；尚无本轮托管运行结论，安装验收及签名公证留在阶段 4 | [CI 定义](../.github/workflows/native.yml)、[交付说明](delivery.md) |
@@ -24,7 +24,7 @@ CodeStudio Agent 的 macOS 首个目标是 Apple Silicon（arm64）基础运行�
 | 顺序 | 里程碑 | 状态 | 完成标志 |
 |---|---|---|---|
 | 1 | macOS arm64 基础运行与原生验证 | 代码已落地，本机原生验收通过 | 原生 Debug/Release 构建与基础功能测试通过，产生对应源码和产物的机器回执 |
-| 2 | Keychain、后台监督与登录自启 | 待实现，依赖阶段 1 | 凭据生命周期、后台续跑、cron 和 LaunchAgent 的真实运行场景通过 |
+| 2 | Keychain、后台监督与登录自启 | 代码已实现；真实登录验收待完成 | 凭据生命周期、后台续跑、cron 和 LaunchAgent 的真实运行场景通过 |
 | 3 | 插件、工作区与资源生命周期隔离 | 待设计和实现，依赖基础进程与身份能力 | 后端方案确认，隔离拒绝、资源限额、取消和崩溃回收得到实际验证 |
 | 4 | 安装、签名公证与正式交付 | 待实现，依赖拟发布能力的验收 | 干净 Mac 完成安装、升级、卸载及发布包运行验收 |
 
@@ -82,7 +82,7 @@ build/macosx/arm64/release/codestudio-agent doctor
 build/macosx/arm64/release/codestudio-agent demo --workspace .demo-workspace
 ```
 
-`doctor` 和服务 `initialize` 对 macOS 返回 `background_scheduler: false`、`mcp_oauth: false`（doctor 中为 `mcp_oauth.available`）、`worker_supervision: false`、`login_autostart: false`、`plugin_sandbox: false`、`sandbox_resources: false`。`doctor.workspace_build.available` 为 false。`build_proposals` 与 `approval_continuation` 支持创建、审阅、拒绝提案及随后续跑；提案回执的 backend 为 unsupported，批准请求在提交决定前因缺少隔离后端而拒绝，不能用来推导隔离构建可执行。系统凭据不会回退到已有环境密钥，隔离请求不会降级为宿主运行。
+`doctor` 和服务 `initialize` 对 macOS 返回 `background_scheduler: true`、`mcp_oauth: true`（doctor 中为 `mcp_oauth.available`）、`worker_supervision: true`、`login_autostart: true`、`plugin_sandbox: false`、`sandbox_resources: false`。`doctor.workspace_build.available` 为 false。`build_proposals` 与 `approval_continuation` 支持创建、审阅、拒绝提案及随后续跑；提案回执的 backend 为 unsupported，批准请求在提交决定前因缺少隔离后端而拒绝，不能用来推导隔离构建可执行。Keychain 缺失、锁定或不可用时不会回退到已有环境密钥，隔离请求不会降级为宿主运行。
 
 ## 阶段 2：系统集成
 
@@ -103,6 +103,26 @@ build/macosx/arm64/release/codestudio-agent demo --workspace .demo-workspace
 2. 客户端退出后 worker 的行为符合文档；worker 故障后的监督次数与退避有界，停止操作不作用于身份不符的进程。
 3. 完成真实登录触发验收；LaunchAgent 文件生成、静态检查或手动启动不能代替登录后启动测试。
 4. 续跑和新一轮 cron 仍遵守原授权、各自预算及未知效果阻断规则，不因平台适配扩大权限。
+
+### 阶段 2 验证与真实登录
+
+统一验证入口已纳入 `credentials`、`mcp_oauth`、`scheduler`、`supervisor`、`autostart` 和真实后台 `cron` 场景；机器回执见 [阶段 2 验证记录](../research/macos-stage2/verification.json)。Keychain 锁定测试使用独立临时库并检查用户默认库/搜索列表保持不变；CLI/OAuth 与后台轮换测试使用随机命名的自有条目，结束后删除。后台监督验证父退出前后的拒绝/收敛、固定 owner 与新 generation、次数/退避、停止与未知效果阻断。普通工具自行创建的进程组不属于 worker 组收敛保证。
+
+**真实 GUI 注销/登录验收仍需单独完成，未通过前不能宣称整个阶段 2 验收完成。** 可续接探针为 [verify-macos-login.py](../scripts/verify-macos-login.py)：
+
+```sh
+build/contract-python/bin/python scripts/verify-macos-login.py prepare \
+  --executable "$PWD/build/macosx/arm64/release/codestudio-agent" \
+  --evidence-dir "$PWD/build/macos-login-acceptance"
+# 保存其他工作，手动注销此 macOS 用户并重新登录；不要手动 bootstrap 或启动探针。
+build/contract-python/bin/python scripts/verify-macos-login.py verify \
+  --evidence-dir "$PWD/build/macos-login-acceptance"
+# 如要取消这次验收，可随时移除探针自己的登记并停止自己的 worker：
+build/contract-python/bin/python scripts/verify-macos-login.py cleanup \
+  --evidence-dir "$PWD/build/macos-login-acceptance"
+```
+
+prepare 仅登记独立的普通/监督两种 fixture，记录可执行文件与 plist 摘要和 GUI 会话身份，不立即运行，也不注销用户。verify 要求会话确实变化、launchd 使用原 plist 直接启动对应进程、监督身份匹配；随后核对禁用登记保持 worker 存活，并通过 `scheduler-stop` 停止，确认 launchd 没有重启。相同会话、源码重建后产物变化或不完整回执都不能计为通过。操作者须遵守不手动 bootstrap/启动的验收流程；脚本能核对新会话与 launchd 进程关系，但不能单凭事后状态区分新会话中手动 bootstrap 和自动登录加载。可执行文件及其专用 libc++ 路径必须保留到验收结束。脚本不创建用户、不解锁 Keychain、不重置系统登录配置。
 
 ## 阶段 3：隔离能力
 

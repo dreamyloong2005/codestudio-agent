@@ -33,7 +33,7 @@ codestudio-agent mcp-auth-logout --mcp-config remote.json --server remote
 
 `discover` 访问元数据，不启动工具。`login` 在 stderr 输出一条带 `authorization_url` 与 `redirect_uri` 的 JSON 通知，然后等待用户在浏览器完成授权；stdout 仅输出最终 JSON 结果。程序不自动打开浏览器。登录等待预算为 100..300000 ms，元数据/令牌请求另受清单 `timeout_ms` 限制。取消、超时、state/issuer 不匹配、无效响应和缺失系统库均不回退到匿名或明文存储。
 
-访问令牌、刷新令牌及其绑定共同保存在独立的当前用户 OAuth 存储域中：Windows Credential Manager 的 `CodeStudio-Agent/oauth/`，Linux Secret Service 的独立内部标识。普通 `credential-*` 命令或模型的 `system:` 引用不能读取这个域；OAuth 的 `system:NAME` 只选择 OAuth 记录名。记录总长度最多 2048 字节；超过限制的服务令牌组合会明确拒绝，不能写入清单、日志、数据库、检查点或 shell 参数。Linux 需要已可用且解锁的 Secret Service；程序不提示解锁、不创建密钥环。
+访问令牌、刷新令牌及其绑定共同保存在独立的当前用户 OAuth 存储域中：Windows Credential Manager 的 `CodeStudio-Agent/oauth/`，Linux Secret Service 的独立内部标识，以及 macOS Keychain 的独立 OAuth service。普通 `credential-*` 命令或模型的 `system:` 引用不能读取这个域；OAuth 的 `system:NAME` 只选择 OAuth 记录名。记录总长度最多 2048 字节；超过限制的服务令牌组合会明确拒绝，不能写入清单、日志、数据库、检查点或 shell 参数。Linux 需要已可用且解锁的 Secret Service；macOS 需要当前默认 Keychain 已可读取。程序不提示解锁、不创建用户密钥环。
 
 每次新运行、显式续跑或调度执行前重新读取令牌。即将过期时先在跨进程锁中刷新，再固定本次操作的令牌。刷新派发前将记录标记为不可重试；如果请求、持久化或进程发生不确定失败，后续运行拒绝复用旧刷新令牌，需要明确重新登录。运行中收到 401 不自动刷新、重新初始化或重发工具调用。已经派发且无法确认的工具继续按未知效果处理。
 
@@ -45,7 +45,7 @@ codestudio-agent mcp-auth-logout --mcp-config remote.json --server remote
 
 当前实现要求授权、令牌和元数据地址不含查询串；`resource_metadata` 必须与配置的 MCP 资源同源。网络请求验证 HTTPS 证书，不跟随重定向，不使用代理、系统自动登录或 Cookie；测试用明文仅接受明确启用的字面回环地址。令牌响应必须包含正数且有上限的 `expires_in`，返回的 scope 集合须与显式配置一致。令牌剩余有效期不超过 30 秒时需要刷新；没有刷新令牌则要求重新登录。
 
-登录、刷新和退出登录按凭据名串行。Windows 使用当前用户身份限定的命名互斥量；Linux 使用当前网络命名空间内的 UID/凭据名限定抽象 Unix socket，退出时由内核释放，不遗留锁文件。不要让不同 Linux 网络命名空间中的进程同时刷新同一系统 OAuth 记录；锁协调不代替系统凭据库的访问控制。
+登录、刷新和退出登录按凭据名串行。Windows 使用当前用户身份限定的命名互斥量；Linux 使用当前网络命名空间内的 UID/凭据名限定抽象 Unix socket，退出时由内核释放，不遗留锁文件。不要让不同 Linux 网络命名空间中的进程同时刷新同一系统 OAuth 记录；锁协调不代替系统凭据库的访问控制。macOS 使用当前用户私有目录中按凭据名散列的 `flock` 锁；核对目录/文件归属、权限及身份，拒绝链接，进程崩溃后由内核释放锁。锁文件不含令牌，持久的刷新不可重试标记仍负责阻止崩溃后的重复交换。
 
 ## CodeStudio Next 接口
 

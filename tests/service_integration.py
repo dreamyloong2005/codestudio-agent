@@ -341,9 +341,9 @@ class ServiceTests(unittest.TestCase):
         self.assertTrue(initialized["capabilities"]["automatic_resume"])
         for capability in ("background_scheduler", "mcp_oauth"):
             self.assertEqual(initialized["capabilities"][capability],
-                             os.name == "nt" or sys.platform.startswith("linux"))
+                             os.name == "nt" or sys.platform.startswith("linux") or sys.platform == "darwin")
         self.assertEqual(initialized["capabilities"]["supervisor_diagnostics"],
-                         os.name == "nt" or sys.platform.startswith("linux"))
+                         os.name == "nt" or sys.platform.startswith("linux") or sys.platform == "darwin")
         self.assertEqual(client.rpc("tasks/list")["items"], [])
         self.assertEqual(client.rpc("events/list")["items"], [])
         self.assertEqual(client.rpc("schedules/list")["items"], [])
@@ -423,8 +423,8 @@ class ServiceTests(unittest.TestCase):
         client = self.client(initialize=False)
         capabilities = client.initialize()["capabilities"]
         self.assertTrue(capabilities["cron"])
-        self.assertEqual(capabilities["login_autostart"], os.name == "nt" or sys.platform.startswith("linux"))
-        self.assertEqual(capabilities["supervised_autostart"], os.name == "nt" or sys.platform.startswith("linux"))
+        self.assertEqual(capabilities["login_autostart"], os.name == "nt" or sys.platform.startswith("linux") or sys.platform == "darwin")
+        self.assertEqual(capabilities["supervised_autostart"], os.name == "nt" or sys.platform.startswith("linux") or sys.platform == "darwin")
         self.assertEqual(client.rpc("crons/list")["items"], [])
         client.rpc("crons/get", {"cron_id": "missing"}, error=True)
         preview = client.rpc("crons/preview", {"expression": "*/15 * * * *",
@@ -519,7 +519,7 @@ class ServiceTests(unittest.TestCase):
     def test_supervised_autostart_invalid_parameters_have_no_effects(self):
         client = self.client()
         before = None
-        if os.name == "nt" or sys.platform.startswith("linux"):
+        if os.name == "nt" or sys.platform.startswith("linux") or sys.platform == "darwin":
             before = client.rpc("scheduler/autostart/status")
             self.assertFalse(before["registered"])
         invalid = [

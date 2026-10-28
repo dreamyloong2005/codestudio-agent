@@ -7,6 +7,8 @@ uses a private XDG_CONFIG_HOME, without altering the running user manager.
 import json
 import os
 import pathlib
+import plistlib
+import time
 import subprocess
 import sys
 import tempfile
@@ -17,7 +19,7 @@ EXE = pathlib.Path(sys.argv.pop(1)).resolve()
 TOKEN = "autostart-fixture-credential-not-for-registration"
 
 
-@unittest.skipUnless(os.name == "nt" or sys.platform.startswith("linux"), "Windows or Linux autostart integration")
+@unittest.skipUnless(os.name == "nt" or sys.platform.startswith(("linux", "darwin")), "Native autostart integration")
 class AutostartTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory(prefix="codestudio-autostart-")
@@ -53,7 +55,7 @@ class AutostartTests(unittest.TestCase):
 
     def test_status_and_absent_disable_do_not_create_state_or_launch_work(self):
         first = self.invoke("status")
-        self.assertEqual(first["trigger"], "current_user_logon" if os.name == "nt" else "user_manager_start")
+        self.assertEqual(first["trigger"], "user_manager_start" if sys.platform.startswith("linux") else "current_user_logon")
         self.assertFalse(first["enabled"])
         self.assertFalse(first["conflict"])
         self.assertFalse(first["started"])
@@ -325,6 +327,141 @@ $definition = $service.GetFolder('\\').GetTask($env:CODESTUDIO_TEST_AUTOSTART_NA
             self.assertEqual(outside.read_text(), "foreign unit\n")
         finally:
             path.unlink()
+
+
+    @unittest.skipUnless(sys.platform == "darwin", "macOS LaunchAgent registration")
+    def test_macos_plist_contract_escaping_and_no_immediate_launch(self):
+        import pwd
+        self.workspace = pathlib.Path(self.temp.name) / 'workspace & <tags> "quotes" 工作区'
+        self.workspace.mkdir()
+        self.database = self.workspace / "state & database.sqlite3"
+        for supervised in (False, True):
+            flags = ("--supervise", "--max-restarts", "7", "--restart-delay-ms", "1500") if supervised else ()
+            created = self.invoke("enable", *flags)
+            path = pathlib.Path(created["plist_path"])
+            self.assertEqual(path.parent, pathlib.Path(pwd.getpwuid(os.geteuid()).pw_dir) / "Library" / "LaunchAgents")
+            self.assertEqual(path.name, created["task_name"] + ".plist")
+            self.assertEqual(created["backend"], "launchagent")
+            self.assertTrue(created["launchd_probe_available"])
+            self.assertFalse(created["disabled_override"])
+            self.assertTrue(created["requires_login"])
+            self.assertEqual(path.stat().st_mode & 0o777, 0o600)
+            self.assertEqual(path.stat().st_nlink, 1)
+            text = path.read_text()
+            actual = plistlib.loads(path.read_bytes())
+            args = [str(EXE), "scheduler-supervise" if supervised else "scheduler-run", "--workspace",
+                    str(self.workspace.resolve()), "--state", str(self.database.resolve()), "--poll-ms", "100"]
+            if supervised:
+                args += ["--max-restarts", "7", "--restart-delay-ms", "1500"]
+            self.assertEqual(actual, {"Label": created["task_name"], "ProgramArguments": args,
+                "WorkingDirectory": str(self.workspace.resolve()), "RunAtLoad": True, "KeepAlive": False,
+                "LimitLoadToSessionType": "Aqua", "StandardInPath": "/dev/null",
+                "StandardOutPath": "/dev/null", "StandardErrorPath": "/dev/null"})
+            self.assertNotIn(TOKEN, text)
+            checked = subprocess.run(["plutil", "-lint", str(path)], capture_output=True, text=True, timeout=10)
+            self.assertEqual(checked.returncode, 0, checked.stdout + checked.stderr)
+            # A static registration must not enter the current launchd session.
+            loaded = subprocess.run(["launchctl", "print", f"gui/{os.geteuid()}/{created['task_name']}"],
+                                    capture_output=True, text=True, timeout=10)
+            self.assertNotEqual(loaded.returncode, 0, loaded.stdout)
+            self.assertFalse(self.database.exists())
+            self.assertTrue(self.invoke("disable")["removed"])
+            self.assertFalse(path.exists())
+
+    @unittest.skipUnless(sys.platform == "darwin", "macOS LaunchAgent ownership")
+    def test_macos_tampered_contract_is_preserved(self):
+        created = self.invoke("enable", "--supervise", "--max-restarts", "7", "--restart-delay-ms", "1500")
+        path = pathlib.Path(created["plist_path"])
+        original = path.read_bytes()
+        definitions = []
+        for key, value in (("Label", "foreign"), ("WorkingDirectory", "/tmp"), ("KeepAlive", True),
+                           ("RunAtLoad", False), ("LimitLoadToSessionType", "Background"),
+                           ("EnvironmentVariables", {"CODESTUDIO_API_KEY": "foreign-secret"}),
+                           ("StartInterval", 10), ("StandardOutPath", "/tmp/foreign.log")):
+            altered = plistlib.loads(original)
+            altered[key] = value
+            definitions.append(plistlib.dumps(altered))
+        for index, value in ((0, "/usr/bin/true"), (1, "scheduler-run"), (3, "/tmp"), (5, "/tmp/state"),
+                             (9, "101"), (11, "99")):
+            altered = plistlib.loads(original)
+            altered["ProgramArguments"][index] = value
+            definitions.append(plistlib.dumps(altered))
+        definitions.extend((original + b"<!-- foreign edit -->", b"not a plist"))
+        for tampered in definitions:
+            with self.subTest(tampered=tampered[:100]):
+                path.write_bytes(tampered)
+                try:
+                    self.assertTrue(self.invoke("status")["conflict"])
+                    self.invoke("enable", expected=2)
+                    self.invoke("disable", expected=2)
+                    self.assertEqual(path.read_bytes(), tampered)
+                finally:
+                    path.write_bytes(original)
+        self.assertTrue(self.invoke("status")["supervised"])
+
+    @unittest.skipUnless(sys.platform == "darwin", "macOS LaunchAgent filesystem ownership")
+    def test_macos_links_special_files_and_writable_registration_are_refused(self):
+        created = self.invoke("enable")
+        path = pathlib.Path(created["plist_path"])
+        original = path.read_bytes()
+        self.invoke("disable")
+        outside = pathlib.Path(self.temp.name) / "foreign.plist"
+        outside.write_bytes(original)
+        for kind in ("symlink", "hardlink", "fifo", "writable"):
+            with self.subTest(kind=kind):
+                if kind == "symlink":
+                    path.symlink_to(outside)
+                elif kind == "hardlink":
+                    os.link(outside, path)
+                elif kind == "fifo":
+                    os.mkfifo(path, 0o600)
+                else:
+                    path.write_bytes(original)
+                    path.chmod(0o666)
+                try:
+                    for action in ("status", "enable", "disable"):
+                        self.invoke(action, expected=2)
+                    self.assertTrue(path.exists() or path.is_symlink())
+                    self.assertEqual(outside.read_bytes(), original)
+                finally:
+                    path.unlink()
+        self.assertFalse(self.invoke("status")["registered"])
+
+    @unittest.skipUnless(sys.platform == "darwin", "macOS LaunchAgent removal preserves running worker")
+    def test_macos_disable_does_not_stop_running_worker(self):
+        self.invoke("enable")
+        args = ["--workspace", str(self.workspace), "--state", str(self.database)]
+        def command(name):
+            result = subprocess.run([str(EXE), name, *args], env=self.env,
+                                    capture_output=True, text=True, timeout=20)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            return json.loads(result.stdout)
+        process = subprocess.Popen([str(EXE), "scheduler-run", *args, "--poll-ms", "25"],
+                                   env=self.env, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True)
+        try:
+            deadline = time.monotonic() + 10
+            while time.monotonic() < deadline:
+                if process.poll() is not None:
+                    self.fail("Worker exited before registration removal: " + process.stderr.read())
+                if command("scheduler-status")["state"] == "running":
+                    break
+                time.sleep(0.05)
+            else:
+                self.fail("Worker did not start")
+            before = command("scheduler-status")
+            self.assertTrue(self.invoke("disable")["removed"])
+            after = command("scheduler-status")
+            self.assertEqual(after["state"], "running")
+            self.assertEqual(after["pid"], before["pid"])
+            self.assertIsNone(process.poll())
+        finally:
+            command("scheduler-stop")
+            try:
+                process.wait(timeout=10)
+            except subprocess.TimeoutExpired:
+                process.terminate()
+                process.wait(timeout=5)
+            process.stderr.close()
 
 
 if __name__ == "__main__":

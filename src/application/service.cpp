@@ -585,16 +585,19 @@ int serve(const Configuration& config, const std::atomic_bool& shutdown) {
                     {"capabilities",{{"task_operations",true},{"event_replay",true},{"text_deltas",true},{"automatic_resume",true},
                         {"cron",true},{"operation_lookup",true},{"structured_errors",true},
                         {"mcp_streamable_http",true},{"plugin_locks",true},{"plugin_distribution",true},
-#if defined(_WIN32) || defined(__linux__)
+#if defined(_WIN32) || defined(__linux__) || defined(__APPLE__)
                         {"background_scheduler",true},{"mcp_oauth",true},
-                        {"plugin_sandbox",true},{"sandbox_resources",true},
                         {"worker_supervision",true},{"supervised_autostart",true},{"supervisor_diagnostics",true},
                         {"login_autostart",true},
 #else
                         {"background_scheduler",false},{"mcp_oauth",false},
-                        {"plugin_sandbox",false},{"sandbox_resources",false},
                         {"worker_supervision",false},{"supervised_autostart",false},{"supervisor_diagnostics",false},
                         {"login_autostart",false},
+#endif
+#if defined(_WIN32) || defined(__linux__)
+                        {"plugin_sandbox",true},{"sandbox_resources",true},
+#else
+                        {"plugin_sandbox",false},{"sandbox_resources",false},
 #endif
                         {"build_proposals",true},{"approval_continuation",true}}},
                     {"limits",{{"input_bytes",input_limit},{"output_bytes",output_limit},{"page_items",100},{"active_operations",1},

@@ -95,13 +95,15 @@ class CliTests(unittest.TestCase):
 
     def test_doctor_declares_native_capabilities_for_the_current_platform(self):
         doctor = self.invoke("doctor")
-        native_integration = os.name == "nt" or sys.platform.startswith("linux")
+        native_isolation = os.name == "nt" or sys.platform.startswith("linux")
+        native_integration = native_isolation or sys.platform == "darwin"
         for capability in ("background_scheduler", "worker_supervision", "login_autostart",
-                           "supervised_autostart", "os_sandbox"):
+                           "supervised_autostart", "supervisor_diagnostics"):
             self.assertEqual(doctor[capability], native_integration)
         self.assertEqual(doctor["mcp_oauth"]["available"], native_integration)
-        self.assertEqual(doctor["workspace_build"]["available"], native_integration)
-        self.assertEqual(doctor["sandbox_resources"]["available"], native_integration)
+        self.assertEqual(doctor["os_sandbox"], native_isolation)
+        self.assertEqual(doctor["workspace_build"]["available"], native_isolation)
+        self.assertEqual(doctor["sandbox_resources"]["available"], native_isolation)
         self.assertTrue(doctor["build_proposals"])
         self.assertTrue(doctor["approval_continuation"])
         self.assertFalse(self.database.exists())
@@ -114,13 +116,17 @@ class CliTests(unittest.TestCase):
                 error = self.invoke(*self.run_args("--sandbox", sandbox), expected=2)
                 self.assertIn("isolation was not disabled", error["error"])
                 self.assertFalse((self.workspace / "CODESTUDIO_DEMO.txt").exists())
+        error = self.invoke("sandbox-resources", expected=2)
+        self.assertIn("unavailable", error["error"].lower())
+        self.assertFalse(self.database.exists())
+
+    @unittest.skipIf(os.name == "nt" or sys.platform.startswith("linux") or sys.platform == "darwin",
+                     "Checks unavailable native integrations on other platforms")
+    def test_unsupported_background_and_credentials_fail_without_fallback(self):
         for command in ("scheduler-start", "scheduler-supervise", "scheduler-autostart-enable"):
             with self.subTest(command=command):
                 error = self.invoke(command, "--workspace", self.workspace, expected=2)
                 self.assertIn("unsupported", error["error"].lower())
-        error = self.invoke("sandbox-resources", expected=2)
-        self.assertIn("unavailable", error["error"].lower())
-        self.assertFalse(self.database.exists())
         # The default environment secret must not substitute for a requested
         # system credential when no native store exists.
         status = self.invoke("credential-status", "--credential", "system:macos-fixture", expected=2)
@@ -128,7 +134,7 @@ class CliTests(unittest.TestCase):
         self.invoke(*self.run_args("--credential", "system:macos-fixture"), expected=2)
         self.assertEqual(self.server.requests, [])
 
-    @unittest.skipIf(os.name == "nt" or sys.platform.startswith("linux"),
+    @unittest.skipIf(os.name == "nt" or sys.platform.startswith("linux") or sys.platform == "darwin",
                      "Checks OAuth's unsupported native store and lock")
     def test_unsupported_oauth_login_does_not_contact_server(self):
         manifest = self.workspace / "oauth.json"

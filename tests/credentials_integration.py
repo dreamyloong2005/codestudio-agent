@@ -107,11 +107,7 @@ class CredentialTests(unittest.TestCase):
         result = self.capture("credential-set", "--name", self.name, "--stdin",
                               input=(secret or self.first).encode() + b"\n")
         data = json.loads(result.stdout)
-        if sys.platform == "darwin":
-            self.assertEqual((result.returncode, data["state"], data["backend"]), (2, "unavailable", "unsupported"))
-            self.assertFalse(self.database.exists())
-            self.skipTest("macOS Keychain backend belongs to stage 2")
-        if data.get("state") in ("locked", "unavailable") and os.name != "nt":
+        if data.get("state") in ("locked", "unavailable") and sys.platform.startswith("linux"):
             self.assertEqual(result.returncode, 2)
             self.assertFalse(self.database.exists())
             self.skipTest("private Linux Secret Service is " + data["state"])
@@ -436,6 +432,34 @@ class CredentialTests(unittest.TestCase):
         self.assertEqual(self.header_key(self.requests()[-1]), self.second)
         self.assertEqual(len(self.requests()), 2)
         self.assert_secrets_absent()
+
+
+    @unittest.skipUnless(sys.platform == "darwin", "macOS detached Keychain integration")
+    def test_detached_worker_resolves_rotated_keychain_after_launcher_exits(self):
+        self.require_system()
+        self.setup_responses({"status": 503})
+        task = self.invoke(*self.run_args("--credential", self.system_reference), expected=1)["task_id"]
+        job = self.invoke("schedule-resume", task, "--workspace", self.workspace,
+                          "--allow-http-loopback", "--delay-ms", "3000")
+        launcher = self.start("scheduler-start", "--workspace", self.workspace, "--poll-ms", "25")
+        try:
+            out, err = launcher.communicate(timeout=10)
+            self.assertEqual(launcher.returncode, 0, out + err)
+            started = json.loads(out)
+            self.assertTrue(started["started"])
+            self.assertNotEqual(started["pid"], launcher.pid)
+            self.assertEqual(self.invoke("scheduler-status", "--workspace", self.workspace)["state"], "running")
+            self.set_system(self.second)
+            self.setup_responses({"body": fixture.reply()})
+            self.wait_for(lambda: self.invoke("schedule-show", job["id"], "--workspace", self.workspace)["status"] == "completed")
+            self.assertEqual(self.header_key(self.requests()[-1]), self.second)
+            self.assertEqual(len(self.requests()), 2)
+            for secret in self.secrets:
+                self.assertNotIn(secret.encode(), out + err)
+            self.assert_secrets_absent()
+        finally:
+            self.invoke("scheduler-stop", "--workspace", self.workspace)
+            self.wait_for(lambda: self.invoke("scheduler-status", "--workspace", self.workspace)["state"] == "stopped")
 
 
 if __name__ == "__main__":

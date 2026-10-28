@@ -93,7 +93,7 @@
 
 ## 持久续跑队列
 
-`initialize` 返回 `capabilities.background_scheduler: true` 和 `automatic_resume: true`。Windows/Linux 还返回 `worker_supervision: true`、`supervisor_diagnostics: true`，其他平台为 false，分别表示支持显式有界 worker 监督及其持久记录、事件查询和只读进程身份观测。客户端可通过 `schedules/create` 显式登记已有暂停任务的原授权，由独立 worker 按期限和原预算续跑；该接口不接受新 run 或 prompt。周期新任务使用下文的 `crons/create`。最多 100 个活动 job，同一任务最多一个，worker 每次运行一个任务。同一数据库只允许一个 worker，它只消费与启动工作区绑定匹配的 job；共享数据库的其他工作区需先停止当前 worker，再从对应工作区启动。
+`initialize` 返回 `capabilities.background_scheduler: true` 和 `automatic_resume: true`。Windows/Linux/macOS 还返回 `worker_supervision: true`、`supervisor_diagnostics: true`，其他平台为 false，分别表示支持显式有界 worker 监督及其持久记录、事件查询和只读进程身份观测。客户端可通过 `schedules/create` 显式登记已有暂停任务的原授权，由独立 worker 按期限和原预算续跑；该接口不接受新 run 或 prompt。周期新任务使用下文的 `crons/create`。最多 100 个活动 job，同一任务最多一个，worker 每次运行一个任务。同一数据库只允许一个 worker，它只消费与启动工作区绑定匹配的 job；共享数据库的其他工作区需先停止当前 worker，再从对应工作区启动。
 
 | 方法 | 严格接受的参数 | 同步返回值 |
 |---|---|---|
@@ -117,7 +117,7 @@
 
 `options` 复用 `tasks/resume`，需要重复全部原授权；不接受 `prompt`、`workspace`、`state`、`api_key` 或显式 `stream: true`。登记保存精确绑定、检查点 revision 和原累计轮次预算，不能增加预算。`delay_ms` 默认 0、范围 0..604800000；`deadline_ms` 默认 86400000、范围 1..604800000，且必须大于 delay。二者均相对登记时刻。`max_attempts` 默认 8、范围 1..100；`retry_delay_ms` 默认 1000、范围 100..60000；`poll_ms` 默认 100、范围 20..5000。分页 limit 默认 50、范围 1..100。
 
-登记本身不启动 worker。Windows/Linux worker 成功独立启动后，客户端 EOF 和 `shutdown` 不会将它取消；Windows 不允许脱离的父 Job 会使后台启动明确失败，Linux worker 仍受原 cgroup、用户会话及 WSL 发行版生命周期约束。后台任务通过持久事件和队列/任务查询观察，不产生当前连接的 `operation/text` 或 `operation/finished`。每次续跑按保存引用读取凭据；系统库更新在下一次操作生效，当前操作不刷新。环境引用仍受 worker 启动环境限制，修改外部终端或服务不会改变已有进程，需从新环境重启。
+登记本身不启动 worker。Windows/Linux/macOS worker 成功独立启动后，客户端 EOF 和 `shutdown` 不会将它取消；Windows 不允许脱离的父 Job 会使后台启动明确失败，Linux worker 仍受原 cgroup、用户会话及 WSL 发行版生命周期约束。后台任务通过持久事件和队列/任务查询观察，不产生当前连接的 `operation/text` 或 `operation/finished`。每次续跑按保存引用读取凭据；系统库更新在下一次操作生效，当前操作不刷新。环境引用仍受 worker 启动环境限制，修改外部终端或服务不会改变已有进程，需从新环境重启。
 
 `scheduler/start` 的 `supervise` 默认为 false。显式设为 true 后，独立监督进程在直接管理的 worker 异常退出后按有界策略重启。`max_restarts` 默认 3、范围 0..100，按监督进程整个生命周期累计，不因稳定运行而重置；`restart_delay_ms` 默认 1000、范围 100..60000，按次指数退避并封顶 60000 毫秒。未启用监督时提供这两个字段会拒绝请求。此模式不改变原任务的权限、预算、期限或未知动作恢复规则。
 
@@ -142,7 +142,7 @@
 
 ## 周期任务与登录自启
 
-`initialize` 返回 `capabilities.cron: true`。`login_autostart` 和 `supervised_autostart` 在 Windows/Linux 为 true，其他平台为 false，分别声明自启后端和监督模式接入；它们是编译能力声明，实际登记仍受平台条件和当前用户权限约束。Windows 使用 Task Scheduler 登录触发；Linux 使用 systemd 用户管理器启动触发，返回 `user_manager_start`，不保证每次登录都会触发。
+`initialize` 返回 `capabilities.cron: true`。`login_autostart` 和 `supervised_autostart` 在 Windows/Linux/macOS 为 true，其他平台为 false，分别声明自启后端和监督模式接入；它们是编译能力声明，实际登记仍受平台条件和当前用户权限约束。Windows 使用 Task Scheduler 登录触发；Linux 使用 systemd 用户管理器启动触发，返回 `user_manager_start`，不保证每次登录都会触发。macOS 使用当前用户 LaunchAgent 的 Aqua 登录触发，返回 `current_user_logon`；登记本身不触发当前会话执行。
 
 | 方法 | 严格接受的参数 | 返回方式 |
 |---|---|---|
@@ -284,7 +284,7 @@ RPC 错误保留 JSON-RPC 的 `code` 和可读 `message`，新增 `data.kind`、
 
 输入帧最多 1 MiB，输出帧最多 4 MiB，排队输出最多 16 MiB；单次写入超过约 5 秒会停止连接并取消活动操作，防止不读管道的客户端无限占用资源。超长输入在报告错误后关闭服务。输出超限/断连可能导致最终通知无法送达，结果以数据库为准。客户端关闭时应持续读取输出直至进程退出。
 
-服务尚不包含 HTTP/WebSocket、并行任务执行或跨用户认证。独立 worker 需要显式启动，或由已明确登记的平台自启触发；它不是未登录系统服务。`scheduler/start` 支持可脱离父 Job 的 Windows 环境及 Linux 独立后台进程，并可显式启用有界监督；自启也可显式登记监督模式，默认仍运行普通 worker，监督器本身不自动重启。实际运行和登记验证以 [验证记录](validation.md) 为准；macOS 尚不支持。桌面展示与权限交互由 CodeStudio Next 等可信客户端负责，Agent 校验收到的授权并执行相同策略。
+服务尚不包含 HTTP/WebSocket、并行任务执行或跨用户认证。独立 worker 需要显式启动，或由已明确登记的平台自启触发；它不是未登录系统服务。`scheduler/start` 支持可脱离父 Job 的 Windows 环境及 Linux/macOS 独立后台进程，并可显式启用有界监督；自启也可显式登记监督模式，默认仍运行普通 worker，监督器本身不自动重启。实际运行和登记验证以 [验证记录](validation.md) 为准；macOS 的真实登录触发另行验收。桌面展示与权限交互由 CodeStudio Next 等可信客户端负责，Agent 校验收到的授权并执行相同策略。
 
 ## OAuth 与插件管理
 
