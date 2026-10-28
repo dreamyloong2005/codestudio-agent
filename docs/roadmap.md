@@ -1,8 +1,8 @@
-# CodeStudioAgent 后续路线
+# CodeStudio Agent 后续路线
 
 这是一份按依赖关系排列的实施路线，不是工期承诺。核心继续使用 C++26 + XMake；mcpp 等生态成熟后再评估迁移。
 
-CodeStudioAgent 专注无界面的 Agent/Harness、CLI 和服务接口。桌面 UI 属于独立项目 **CodeStudio Next**，界面实现和技术选型由该项目负责；Agent 提供接入契约并执行权限、审批、隔离、恢复和调度规则。
+CodeStudio Agent 专注无界面的 Agent/Harness、CLI 和服务接口。桌面 UI 属于独立项目 **CodeStudio Next**，界面实现和技术选型由该项目负责；Agent 提供接入契约并执行权限、审批、隔离、恢复和调度规则。
 
 | 阶段 | 交付内容 | 验收条件 | 状态 |
 |---|---|---|---|

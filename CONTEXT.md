@@ -1,6 +1,6 @@
-# CodeStudioAgent
+# CodeStudio Agent
 
-CodeStudioAgent is a headless agent runtime and harness. It connects model reasoning to explicitly authorized tools while retaining execution and recovery records.
+CodeStudio Agent is a headless agent runtime and harness. It connects model reasoning to explicitly authorized tools while retaining execution and recovery records.
 
 ## Language
 

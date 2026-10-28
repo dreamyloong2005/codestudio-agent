@@ -1,8 +1,8 @@
 # macOS 适配路线
 
-CodeStudioAgent 的 macOS 首个目标是 Apple Silicon（arm64）基础运行版。本轮已落地阶段 1 适配与原生验证入口，Debug/Release 验收通过；系统集成、隔离能力和正式交付分别属于后续阶段。实现状态、测试通过和托管 CI 运行结果分别记录。
+CodeStudio Agent 的 macOS 首个目标是 Apple Silicon（arm64）基础运行版。本轮已落地阶段 1 适配与原生验证入口，Debug/Release 验收通过；系统集成、隔离能力和正式交付分别属于后续阶段。实现状态、测试通过和托管 CI 运行结果分别记录。
 
-核心继续使用 **C++26 + XMake**，mcpp 等生态成熟后再评估迁移。CodeStudioAgent 负责无界面的 Agent/Harness、CLI 和服务接口；桌面 UI 属于 **CodeStudio Next**。本地模型后续开发继续暂停，macOS 适配不包含模型下载、服务管理或内嵌推理。
+核心继续使用 **C++26 + XMake**，mcpp 等生态成熟后再评估迁移。CodeStudio Agent 负责无界面的 Agent/Harness、CLI 和服务接口；桌面 UI 属于 **CodeStudio Next**。本地模型后续开发继续暂停，macOS 适配不包含模型下载、服务管理或内嵌推理。
 
 ## 当前状态
 

@@ -1,4 +1,4 @@
-# CodeStudioAgent 0.1.0 验证记录
+# CodeStudio Agent 0.1.0 验证记录
 
 本记录描述当前格式的回归范围和本轮验证状态。项目自身使用 C++26 + XMake；工作区隔离执行接受通用步骤清单，XMake 命令只属于真实构建测试夹具。当前验证目标为 Windows x64 / clang-cl、Arch Linux x86-64 / GCC 16（WSL2）和新增的 macOS arm64 / LLVM 22。各平台的 Debug 与 Release 顺序执行；Linux 使用独立原生目录，不覆盖 Windows XMake 缓存。
 
@@ -268,7 +268,7 @@ Linux 测试环境为 Arch WSL2、内核 `6.18.33.2-microsoft-standard-WSL2`、G
 
 Release 交付目录为 `build/linux/x86_64/release/`，包含 `codestudio-agent`、`codestudio-agent-linux-x86_64.tar.gz`、运行说明、构建机动态库清单和 `SHA256SUMS`。已核对源码、测试和构建脚本与最终测试镜像一致；镜像中的锁文件差异仅为 XMake 生成的 Linux pkg-config 记录，Windows 依赖记录未改动。二进制从 Linux 镜像复制后的 SHA256 与压缩包内字节一致，在工作区交付路径运行 `doctor` 成功。详见 [交付回执](../research/linux/delivery.json)。这是 Arch x86-64 动态链接产物，未宣称其他发行版兼容。
 
-最终静态检查见 [final-static.log](../research/linux/final-static.log)：Python 源码通过 AST 解析，文档相对链接目标存在；未发现项目残留进程、临时隔离 cgroup/目录、真实用户配置中的 CodeStudioAgent 自启项或工作区数据库。Windows XMake 仍为 Windows x64 / clang-cl / Release，Debug 与 Release 产物均保留。检查未启动后台 worker 或登记自启。
+最终静态检查见 [final-static.log](../research/linux/final-static.log)：Python 源码通过 AST 解析，文档相对链接目标存在；未发现项目残留进程、临时隔离 cgroup/目录、真实用户配置中的 CodeStudio Agent 自启项或工作区数据库。Windows XMake 仍为 Windows x64 / clang-cl / Release，Debug 与 Release 产物均保留。检查未启动后台 worker 或登记自启。
 
 ## 已完成的前次工作区清理
 

@@ -2,7 +2,7 @@
 
 桌面客户端可作为父进程启动 `codestudio-agent serve --workspace <已有目录> [--state <数据库>]`，通过独占 stdin/stdout 管道交换 UTF-8、每行一个 JSON-RPC 2.0 消息。服务不监听 TCP 端口，stdout 只包含协议帧；启动错误写 stderr。客户端需要同时排空 stdout 和 stderr。
 
-这是 CodeStudioAgent 向 CodeStudio Next 等可信客户端提供的接入协议；桌面 UI 的实现和技术选型属于独立的 CodeStudio Next 项目。服务与普通 CLI 共用 `execute_command`，复用进程授权、MCP、平台沙箱、SQLite 账本、工作区锁及恢复逻辑。持有管道的客户端被视为有权代表用户授权工具；该协议不是给不可信网页或插件开放的授权入口。
+这是 CodeStudio Agent 向 CodeStudio Next 等可信客户端提供的接入协议；桌面 UI 的实现和技术选型属于独立的 CodeStudio Next 项目。服务与普通 CLI 共用 `execute_command`，复用进程授权、MCP、平台沙箱、SQLite 账本、工作区锁及恢复逻辑。持有管道的客户端被视为有权代表用户授权工具；该协议不是给不可信网页或插件开放的授权入口。
 
 可运行的父进程接入示例见 [task_client.py](../examples/task_client.py)。默认只查列表；显式 `--demo` 会执行离线写入/读回，等待操作完成通知和持久化完成事件，再查询任务详情并关闭服务。
 

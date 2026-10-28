@@ -1,6 +1,6 @@
 # 构建、验证与用户级安装
 
-CodeStudioAgent 的运行程序使用 C++26 + XMake。Python 仅用于开发验证、打包和安装管理；已安装的 Agent 本身不需要 Python。包保留原可执行文件名称，用户工作区、SQLite 数据库和系统凭据独立于应用安装目录。
+CodeStudio Agent 的运行程序使用 C++26 + XMake。Python 仅用于开发验证、打包和安装管理；已安装的 Agent 本身不需要 Python。包保留原可执行文件名称，用户工作区、SQLite 数据库和系统凭据独立于应用安装目录。
 
 ## 构建要求与统一入口
 

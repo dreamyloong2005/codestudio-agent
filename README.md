@@ -1,8 +1,8 @@
-# CodeStudioAgent
+# CodeStudio Agent
 
 以 **C++26 + XMake** 构建的本地 Agent/Harness。当前为 **0.1.0 CLI 基础版本**：模型通过受控工具操作指定工作区，任务、工具意图和结果保存到 SQLite。
 
-**CodeStudioAgent** 负责无界面的执行内核、CLI、本地任务服务、工具权限、隔离和调度。桌面 UI 由独立项目 **CodeStudio Next** 负责，通过任务服务接口接入；界面实现及其技术选型归该项目管理。
+**CodeStudio Agent** 负责无界面的执行内核、CLI、本地任务服务、工具权限、隔离和调度。桌面 UI 由独立项目 **CodeStudio Next** 负责，通过任务服务接口接入；界面实现及其技术选型归该项目管理。
 
 长期架构见 [研究报告](Agent与Harness研究及新产品架构建议.md)。未来随着 mcpp 生态成熟再评估迁移；当前工程使用 XMake。
 

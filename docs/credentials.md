@@ -65,7 +65,7 @@ subprocess.run(
 
 ## 平台条件
 
-Windows 使用当前用户的 Credential Manager Generic Credential，保存于 CodeStudioAgent 专属目标命名空间，持久性为本机用户凭据。读取、更新和删除会核对目标及归属元数据；冲突条目不覆盖。自启必须使用同一个用户，其他用户的凭据不可由同名引用取得。
+Windows 使用当前用户的 Credential Manager Generic Credential，保存于 CodeStudio Agent 专属目标命名空间，持久性为本机用户凭据。读取、更新和删除会核对目标及归属元数据；冲突条目不覆盖。自启必须使用同一个用户，其他用户的凭据不可由同名引用取得。
 
 Linux 使用 `libsecret-1` 连接当前会话的 Secret Service。构建和运行需要 libsecret 及其 GLib/GIO 依赖；服务提供者和已有默认集合由用户管理。Agent 不创建或解锁集合，不显示解锁提示，也不保存解锁密码；已锁定时返回 `locked`，无服务或无默认集合时返回 `unavailable`。每次 native 操作共享 5 秒取消期限；没有明文文件回退。凭据条目按应用/schema/标识符及标签核对，重复或被修改的条目拒绝使用和修改。
 
