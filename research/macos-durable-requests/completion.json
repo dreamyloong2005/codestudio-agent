@@ -1,7 +1,7 @@
 {
   "format": 1,
   "product": "CodeStudio Agent",
-  "recorded_at_utc": "2026-10-31T17:51:18.910548+00:00",
+  "recorded_at_utc": "2026-10-31T17:52:29.652590+00:00",
   "status": "local_followup_complete_external_acceptance_pending",
   "all_plan_items_accepted": false,
   "source": {
@@ -170,8 +170,18 @@
   },
   "M4": {
     "status": "deferred_by_user_no_available_runner",
-    "observed_ci_status": "ci_not_completed_current_head_queued",
-    "receipt": "ci-preflight.json",
+    "observed_ci_status": "remote_runs_observed_not_artifact_verified",
+    "receipt": "ci.json",
+    "implementation_commit": "a61283bad3ea24e0a6f6052c2477a9eb385fa3c1",
+    "runs": [
+      {
+        "id": 41226587274,
+        "head_sha": "a61283bad3ea24e0a6f6052c2477a9eb385fa3c1",
+        "status": "pending",
+        "conclusion": null,
+        "html_url": "https://github.com/dreamyloong2005/codestudio-agent/actions/runs/41226587274"
+      }
+    ],
     "native_ci_verified": false,
     "artifact_bytes_validated": false
   },

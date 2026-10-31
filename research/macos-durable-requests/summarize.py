@@ -72,6 +72,9 @@ def main():
                "real_login_verified": login["status"] == "passed"},
         "M4": {"status": "deferred_by_user_no_available_runner", "observed_ci_status": ci["status"],
                "receipt": "ci.json" if (EVIDENCE / "ci.json").exists() else "ci-preflight.json",
+               "implementation_commit": ci.get("head_sha", ci.get("source_head")),
+               "runs": [{key: run.get(key) for key in ("id", "head_sha", "status", "conclusion", "html_url")}
+                        for run in ci.get("runs", [])],
                "native_ci_verified": False, "artifact_bytes_validated": False},
         "residue": {"before": "residue-before.json", "after": "residue-after.json",
                     "process_candidates_after": len(after["processes"]["candidates"]),

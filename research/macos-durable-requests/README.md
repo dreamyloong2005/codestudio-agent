@@ -10,9 +10,11 @@
 | M1 | Debug/Release 各 23 组原生测试、407 项 Python 通过、11 项跳过；每配置持久请求 27/27 | [Debug](native/debug-20261031T174514Z-3cadb9c3/verification.json)、[Release](native/release-20261031T174734Z-0d7e5aba/verification.json) |
 | M2 | 相同输入的两次归档字节一致；实际解包交付 35/35、持久请求 27/27；安装客户端、重启查询、旧库拒绝与数据保留通过 | [归档](package/packaging.json)、[交付](delivery/release-20261031T174955Z-22bb05b1/verification.json)、[客户端](installed-client/verification.json) |
 | M3 | schema 8 完整运行时已固定，普通/监督两个探针已登记、未启动；待操作者真实注销/登录 | [运行时](login/runtime-manifest.json)、[登记](login/prepared.json) |
-| M4 | 用户确认暂无 runner；记录实际作业排队，未取得执行或产物验收 | [CI 预检](ci-preflight.json)，最终提交快照在 `ci.json` |
+| M4 | 用户确认暂无 runner；实现提交 `a61283b` 已触发真实运行，快照为 `pending`，未取得执行或产物验收 | [CI 快照](ci.json)、[Actions 运行](https://github.com/dreamyloong2005/codestudio-agent/actions/runs/41226587274) |
 
 最终测试源码为 227 文件，SHA256 `6a7cf041e668e31b3c1f134003242fe7e1745f014abb6d615f994fbe73e6304c`。开发归档为 `build/macos-durable-requests/package-1/codestudio-agent-macosx-arm64.tar.gz`，SHA256 `a4cbd76490e7ff8995b99d52057eacc40d72580385db091ad930b00b0b1bbc25`。完整包内程序与两份私有运行库分别留有来源和最终摘要。
+
+实现与本机证据先提交为 `a61283b` 并推送，以取得绑定该提交的实际 CI 快照。后续提交只补充本目录的 CI/完成记录，以 `[skip ci]` 避免为纯证据更新重复排队；测试源码和交付包保持上述摘要。
 
 首次 Debug 回归中，新增加的两个测试预期与现有行为不符：Darwin 已将 APFS 大小写/Unicode 别名规范到同一工作区；schema 7 数据库则在 `serve` 开始接收请求前被拒绝。原始失败记录保留在 `native/debug-20261031T174223Z-a792c05d/`，修正测试后重新冻结源码并执行完整回归，不把失败快照算作最终验收。
 

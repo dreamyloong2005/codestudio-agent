@@ -1,0 +1,45 @@
+{
+  "format": 1,
+  "product": "CodeStudio Agent",
+  "head_sha": "a61283bad3ea24e0a6f6052c2477a9eb385fa3c1",
+  "captured_at_utc": "2026-10-31T17:52:04.545259+00:00",
+  "scope": "Public GitHub Actions metadata for the exact requested commit",
+  "workflow": ".github/workflows/native.yml",
+  "api_access": "unauthenticated_public_read_only",
+  "status": "remote_runs_observed_not_artifact_verified",
+  "native_ci_verified": false,
+  "artifact_bytes_downloaded_or_validated": false,
+  "runs": [
+    {
+      "id": 41226587274,
+      "name": "Native verification and packages",
+      "path": ".github/workflows/native.yml",
+      "event": "push",
+      "status": "pending",
+      "conclusion": null,
+      "workflow_id": 396141890,
+      "head_branch": "main",
+      "head_sha": "a61283bad3ea24e0a6f6052c2477a9eb385fa3c1",
+      "html_url": "https://github.com/dreamyloong2005/codestudio-agent/actions/runs/41226587274",
+      "created_at": "2026-10-31T17:51:58Z",
+      "updated_at": "2026-10-31T17:51:59Z",
+      "run_attempt": 1,
+      "jobs": {
+        "url": "https://api.github.com/repos/dreamyloong2005/codestudio-agent/actions/runs/41226587274/jobs?per_page=100",
+        "http_status": 200,
+        "total_count": 0,
+        "jobs": []
+      },
+      "artifacts": {
+        "url": "https://api.github.com/repos/dreamyloong2005/codestudio-agent/actions/runs/41226587274/artifacts?per_page=100",
+        "http_status": 200,
+        "total_count": 0,
+        "artifacts": []
+      }
+    }
+  ],
+  "query": {
+    "url": "https://api.github.com/repos/dreamyloong2005/codestudio-agent/actions/runs?head_sha=a61283bad3ea24e0a6f6052c2477a9eb385fa3c1&per_page=100",
+    "http_status": 200
+  }
+}
