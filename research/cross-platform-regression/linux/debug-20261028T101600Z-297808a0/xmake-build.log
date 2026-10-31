@@ -1,0 +1,50 @@
+[ 10%]: <agent-tests> cache compiling.debug tests/core_tests.cpp
+[ 10%]: <agent-tests> cache compiling.debug tests/tools_tests.cpp
+[ 10%]: <agent-tests> cache compiling.debug tests/process_tests.cpp
+[ 14%]: <agent-tests> cache compiling.debug tests/credentials_tests.cpp
+[ 16%]: <agent-tests> cache compiling.debug tests/autostart_tests.cpp
+[ 16%]: <agent-tests> cache compiling.debug tests/line_process_tests.cpp
+[ 17%]: <agent-tests> cache compiling.debug tests/process_observation_tests.cpp
+[ 17%]: <agent-tests> cache compiling.debug tests/sandbox_tests.cpp
+[ 19%]: <agent-tests> cache compiling.debug tests/build_workspace_tests.cpp
+[ 20%]: <agent-tests> cache compiling.debug tests/workspace_execution_tests.cpp
+[ 21%]: <agent-tests> cache compiling.debug tests/build_proposal_tests.cpp
+[ 21%]: <agent-tests> cache compiling.debug tests/build_decision_tests.cpp
+[ 26%]: <agent-core> cache compiling.debug src/core/digest.cpp
+[ 29%]: <agent-core> cache compiling.debug src/tools/build_proposal.cpp
+[ 30%]: <agent-core> cache compiling.debug src/tools/tools.cpp
+[ 31%]: <agent-core> cache compiling.debug src/tools/workspace_build.cpp
+[ 32%]: <agent-core> cache compiling.debug src/platform/scheduler_child.cpp
+[ 33%]: <agent-core> cache compiling.debug src/platform/build_workspace_linux.cpp
+[ 34%]: <agent-core> cache compiling.debug src/platform/build_workspace.cpp
+[ 35%]: <agent-core> cache compiling.debug src/platform/credentials.cpp
+[ 35%]: <agent-core> cache compiling.debug src/platform/build_workspace_macos.cpp
+[ 36%]: <agent-core> cache compiling.debug src/platform/credentials_macos.cpp
+[ 37%]: <agent-core> cache compiling.debug src/platform/line_process.cpp
+[ 38%]: <agent-core> cache compiling.debug src/platform/process.cpp
+[ 38%]: <agent-core> cache compiling.debug src/platform/windows_sandbox.cpp
+[ 40%]: <agent-core> cache compiling.debug src/platform/autostart_macos.cpp
+[ 42%]: <agent-core> cache compiling.debug src/platform/autostart.cpp
+[ 43%]: <agent-core> cache compiling.debug src/platform/linux_sandbox.cpp
+[ 44%]: <agent-core> cache compiling.debug src/platform/scheduler_process.cpp
+[ 45%]: <agent-core> cache compiling.debug src/platform/process_package.cpp
+[ 45%]: <agent-core> cache compiling.debug src/platform/process_observation.cpp
+[ 48%]: <agent-core> cache compiling.debug src/platform/build_manifest_macos.cpp
+[ 49%]: <agent-core> cache compiling.debug src/mcp/oauth_native.cpp
+[ 53%]: <agent-core> cache compiling.debug src/application/scheduler.cpp
+[ 54%]: <agent-core> cache compiling.debug src/application/service.cpp
+[ 55%]: <agent-core> cache compiling.debug src/application/application.cpp
+[ 58%]: <agent-core> cache compiling.debug src/execution/workspace_execution.cpp
+[ 60%]: <agent-core> cache compiling.debug src/plugins/plugins.cpp
+[ 61%]: <process-fixture> cache compiling.debug tests/process_fixture.cpp
+[ 62%]: <line-process-fixture> cache compiling.debug tests/line_process_fixture.cpp
+[ 65%]: <plugin-sandbox-fixture> cache compiling.debug tests/plugin_sandbox_fixture.cpp
+[ 70%]: <process-fixture> linking.debug process-fixture
+[ 71%]: <line-process-fixture> linking.debug line-process-fixture
+[ 84%]: <agent-core> archiving.debug libagent-core.a
+[ 85%]: <sandbox-resource-fixture> linking.debug sandbox-resource-fixture
+[ 85%]: <codestudio-agent> linking.debug codestudio-agent
+[ 85%]: <provider-fixture> linking.debug provider-fixture
+[ 91%]: <plugin-sandbox-fixture> linking.debug plugin-sandbox-fixture
+[ 92%]: <agent-tests> linking.debug agent-tests
+[100%]: build ok, spent 21.008s

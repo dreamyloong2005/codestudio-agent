@@ -1,0 +1,45 @@
+{
+  "format": 2,
+  "product": "CodeStudio-Agent",
+  "status": "packaged",
+  "platform": "linux",
+  "arch": "x86_64",
+  "package": "/var/tmp/codestudio-agent-linux/build/packages/linux-x86_64/codestudio-agent-linux-x86_64",
+  "archive": "/var/tmp/codestudio-agent-linux/build/packages/linux-x86_64/codestudio-agent-linux-x86_64.tar.gz",
+  "sha256": "ad37e2530295fd5f4090302b1acd71bc78cdce9a82f12e8162be7b24bffc141c",
+  "bytes": 1720868,
+  "verification": {
+    "state": "supplied",
+    "sha256": "cece936e05f8da85bb5ec2448741529eadacec664be6b6831ced793f731c5bb3",
+    "selected_suites": [
+      "native",
+      "schema",
+      "provider",
+      "streaming",
+      "contract",
+      "service",
+      "credentials",
+      "cli",
+      "local_models",
+      "mcp",
+      "mcp_http",
+      "mcp_oauth",
+      "plugins",
+      "plugin_sandbox",
+      "resume",
+      "sandbox",
+      "sandbox_resources",
+      "scheduler",
+      "supervisor",
+      "cron",
+      "autostart",
+      "real_build",
+      "package",
+      "verification"
+    ],
+    "omitted_suites": [
+      "delivery"
+    ],
+    "unsupported_suites": {}
+  }
+}

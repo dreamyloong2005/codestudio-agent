@@ -83,7 +83,7 @@ xmake run codestudio-agent run --workspace D:\YourProject `
 
 系统凭据支持 Windows 当前用户 Credential Manager、Linux Secret Service 和 macOS Keychain。使用 `credential-set --name work-model --stdin` 从重定向 stdin 设置/更新，再通过 `credential-status --credential system:work-model` 查询可用状态，`credential-delete --name work-model` 删除。设置不会从普通终端回显读取，安全输入示例与平台条件见 [模型凭据与轮换](docs/credentials.md)。
 
-系统库每次新任务或续跑读取一次，轮换后后续任务使用新值，正在执行的操作保持原值；缺失、锁定或不可用均失败，不回退来源或因认证错误隐式重放。引用保存在精确执行绑定中；缺少引用的旧模型检查点拒绝续跑，不做转换。数据库仍为 schema 7，协议和检查点仍为 version 2。
+系统库每次新任务或续跑读取一次，轮换后后续任务使用新值，正在执行的操作保持原值；缺失、锁定或不可用均失败，不回退来源或因认证错误隐式重放。引用保存在精确执行绑定中；缺少引用的旧模型检查点拒绝续跑，不做转换。数据库仍为 schema 8，协议和检查点仍为 version 2。
 
 也可使用 `--base-url`、`--model` 参数覆盖环境配置。通过 `--api` 或环境变量 `CODESTUDIO_API` 选择协议，默认 `chat-completions`：
 
@@ -136,7 +136,7 @@ Windows 可添加 `--sandbox appcontainer`，将普通进程和 stdio MCP 服务
 
 Windows/Linux/macOS 可用 `scheduler-start --supervise` 或 RPC `scheduler/start` 的 `supervise: true` 显式启用有界崩溃监督；自启登记也可显式选择监督模式，默认仍直接运行 worker。能力分别通过 `worker_supervision`、`supervised_autostart` 声明；`supervisor_diagnostics` 声明持久监督记录、事件查询和只读进程身份观测。监督不会扩大任务原授权、预算或自动重放未知动作。
 
-[机器可读协议](protocol/task-service.schema.json) 定义请求、响应、通知与 43 个方法的映射，协议版本保持 2。初始化返回本次进程的 `session_id`；`operations/get` 可查询当前操作和最近 64 个完成回执。重启后应查询持久任务和事件，不能把缓存缺失视为重新执行授权。错误提供稳定的类别和恢复建议，客户端无需解析错误消息。
+[机器可读协议](protocol/task-service.schema.json) 定义请求、响应、通知与 47 个方法的映射，协议版本保持 2。初始化返回本次进程的 `session_id` 和已存在数据库的 `database_id`；`operations/get` 保留当前操作及最近 64 个完成回执的会话查询语义。`state/initialize` 可显式创建空状态库；`tasks/start` 与 `tasks/resume` 可携带成对的 `database_id` / `request_key`，通过 `requests/get` 跨重启查询原操作与任务。同键重复请求只返回历史回执，不重新执行；未知效果继续阻断。错误提供稳定的类别和恢复建议，客户端无需解析错误消息。
 
 [客户端示例](examples/task_client.py) 只依赖 Python 标准库，默认读取列表后退出。使用已有的专用目录并添加 `--demo`，可体验离线任务与完成事件（会写入 `CODESTUDIO_DEMO.txt`）：
 
@@ -230,7 +230,7 @@ codestudio-agent scheduler-supervisor-events --workspace D:\YourProject --after 
 
 事件可按游标重读；每页最多 100 条，心跳不会产生事件。查询不启动进程，也不授予结束进程或重放任务的权限。完整字段与边界见 [监督状态与事件](docs/scheduler.md#监督状态与事件)；跨平台结果见 [验证记录](docs/validation.md)。
 
-任务记录只接受 schema 7 状态库，以及 version 2 的检查点封装、执行绑定和内核状态。已初始化的 schema 6 数据库与其他不匹配版本均明确拒绝，不迁移，也不按任务隐藏旧记录。请使用新的 `--state` 路径或新工作区创建任务；运行时不会自动转换或删除状态库。
+任务记录只接受 schema 8 状态库，以及 version 2 的检查点封装、执行绑定和内核状态。已初始化的其他版本数据库与其他不匹配版本均明确拒绝，不迁移，也不按任务隐藏旧记录。请使用新的 `--state` 路径或新工作区创建任务；运行时不会自动转换或删除状态库。
 
 数据库采用 WAL、FULL synchronous 和事务。运行记录保留用户提示词、工具输入输出与文件内容，**目前不加密**；请按敏感项目资料保护数据库。应用对本次选中的密钥及既有 `CODESTUDIO_API_KEY` 做脱敏，并从子进程环境移除 `CODESTUDIO_API_KEY` 与 `OPENAI_API_KEY`，但不承诺识别工具输出中的所有秘密。自定义环境引用不会自动成为所有子进程的环境过滤规则；同用户未隔离程序也可能调用系统凭据 API，工具授权和 OS 隔离仍是独立边界。
 

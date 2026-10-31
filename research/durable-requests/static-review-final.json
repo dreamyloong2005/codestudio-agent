@@ -1,0 +1,303 @@
+{
+  "kind": "read_only_static_review_final",
+  "created_at_utc": "2026-10-28T12:07:16.208538+00:00",
+  "source": {
+    "expected": {
+      "sha256": "bbced79621faf60b09001d97177d8160e21ac2a9dbc62d7fd9cb411682c3f426",
+      "files": 226
+    },
+    "observed": {
+      "sha256": "bbced79621faf60b09001d97177d8160e21ac2a9dbc62d7fd9cb411682c3f426",
+      "files": 226
+    },
+    "matches_expected": true
+  },
+  "scope": {
+    "markdown_files": 27,
+    "excluded_source_tree": "research/ historical Markdown; current research/durable-requests/README.md included; referenced local targets checked",
+    "source_files_written": [],
+    "evidence_only_output": "research/durable-requests/static-review-final.json",
+    "runtime_tests_or_builds_run": false
+  },
+  "local_links": {
+    "checked": 343,
+    "anchor_targets_checked": 13,
+    "broken": [],
+    "files": [
+      "Agent与Harness研究及新产品架构建议.md",
+      "CONTEXT.md",
+      "README.md",
+      "docs/architecture.md",
+      "docs/build-proposals.md",
+      "docs/credentials.md",
+      "docs/delivery.md",
+      "docs/linux.md",
+      "docs/local-models.md",
+      "docs/macos.md",
+      "docs/mcp-oauth.md",
+      "docs/mcp.md",
+      "docs/plugin-sandbox.md",
+      "docs/plugins.md",
+      "docs/resume-contract.md",
+      "docs/resume.md",
+      "docs/roadmap.md",
+      "docs/sandbox-resources.md",
+      "docs/sandbox.md",
+      "docs/scheduler.md",
+      "docs/streaming-apis.md",
+      "docs/task-service.md",
+      "docs/validation.md",
+      "docs/workspace-builds.md",
+      "protocol/README.md",
+      "tests/fixtures/xmake-build/README.md",
+      "research/durable-requests/README.md"
+    ],
+    "parent_written_targets_verified": [
+      {
+        "source": "research/durable-requests/README.md",
+        "line": 20,
+        "target": "completion.json",
+        "reason": "parent_writing_completion_receipt"
+      }
+    ]
+  },
+  "whitespace": {
+    "passed": true,
+    "exit_code": 0,
+    "output": ""
+  },
+  "line_endings": {
+    "tracked_changed_files_checked": 42,
+    "changes_from_HEAD": [],
+    "per_file": [
+      {
+        "path": "CONTEXT.md",
+        "head": "LF",
+        "working": "LF"
+      },
+      {
+        "path": "README.md",
+        "head": "CRLF",
+        "working": "CRLF"
+      },
+      {
+        "path": "docs/architecture.md",
+        "head": "CRLF",
+        "working": "CRLF"
+      },
+      {
+        "path": "docs/build-proposals.md",
+        "head": "CRLF",
+        "working": "CRLF"
+      },
+      {
+        "path": "docs/credentials.md",
+        "head": "CRLF",
+        "working": "CRLF"
+      },
+      {
+        "path": "docs/delivery.md",
+        "head": "LF",
+        "working": "LF"
+      },
+      {
+        "path": "docs/macos.md",
+        "head": "LF",
+        "working": "LF"
+      },
+      {
+        "path": "docs/resume-contract.md",
+        "head": "CRLF",
+        "working": "CRLF"
+      },
+      {
+        "path": "docs/resume.md",
+        "head": "CRLF",
+        "working": "CRLF"
+      },
+      {
+        "path": "docs/roadmap.md",
+        "head": "CRLF",
+        "working": "CRLF"
+      },
+      {
+        "path": "docs/sandbox-resources.md",
+        "head": "LF",
+        "working": "LF"
+      },
+      {
+        "path": "docs/scheduler.md",
+        "head": "CRLF",
+        "working": "CRLF"
+      },
+      {
+        "path": "docs/task-service.md",
+        "head": "CRLF",
+        "working": "CRLF"
+      },
+      {
+        "path": "docs/validation.md",
+        "head": "CRLF",
+        "working": "CRLF"
+      },
+      {
+        "path": "docs/workspace-builds.md",
+        "head": "LF",
+        "working": "LF"
+      },
+      {
+        "path": "examples/task_client.py",
+        "head": "CRLF",
+        "working": "CRLF"
+      },
+      {
+        "path": "include/codestudio/application.hpp",
+        "head": "LF",
+        "working": "LF"
+      },
+      {
+        "path": "include/codestudio/kernel.hpp",
+        "head": "LF",
+        "working": "LF"
+      },
+      {
+        "path": "include/codestudio/state_reader.hpp",
+        "head": "LF",
+        "working": "LF"
+      },
+      {
+        "path": "include/codestudio/store.hpp",
+        "head": "LF",
+        "working": "LF"
+      },
+      {
+        "path": "protocol/README.md",
+        "head": "CRLF",
+        "working": "CRLF"
+      },
+      {
+        "path": "protocol/task-service.schema.json",
+        "head": "CRLF",
+        "working": "CRLF"
+      },
+      {
+        "path": "scripts/verify.py",
+        "head": "LF",
+        "working": "LF"
+      },
+      {
+        "path": "src/application/application.cpp",
+        "head": "CRLF",
+        "working": "CRLF"
+      },
+      {
+        "path": "src/application/service.cpp",
+        "head": "CRLF",
+        "working": "CRLF"
+      },
+      {
+        "path": "src/core/kernel.cpp",
+        "head": "LF",
+        "working": "LF"
+      },
+      {
+        "path": "src/core/state_reader.cpp",
+        "head": "LF",
+        "working": "LF"
+      },
+      {
+        "path": "src/core/store.cpp",
+        "head": "LF",
+        "working": "LF"
+      },
+      {
+        "path": "tests/checkpoint_store_tests.cpp",
+        "head": "CRLF",
+        "working": "CRLF"
+      },
+      {
+        "path": "tests/cli_integration.py",
+        "head": "CRLF",
+        "working": "CRLF"
+      },
+      {
+        "path": "tests/client_contract_integration.py",
+        "head": "LF",
+        "working": "LF"
+      },
+      {
+        "path": "tests/contract_schema.py",
+        "head": "CRLF",
+        "working": "CRLF"
+      },
+      {
+        "path": "tests/core_tests.cpp",
+        "head": "CRLF",
+        "working": "CRLF"
+      },
+      {
+        "path": "tests/cron_integration.py",
+        "head": "CRLF",
+        "working": "CRLF"
+      },
+      {
+        "path": "tests/cron_store_tests.cpp",
+        "head": "CRLF",
+        "working": "CRLF"
+      },
+      {
+        "path": "tests/delivery_integration.py",
+        "head": "LF",
+        "working": "LF"
+      },
+      {
+        "path": "tests/resume_integration.py",
+        "head": "CRLF",
+        "working": "CRLF"
+      },
+      {
+        "path": "tests/scheduler_integration.py",
+        "head": "CRLF",
+        "working": "CRLF"
+      },
+      {
+        "path": "tests/service_integration.py",
+        "head": "CRLF",
+        "working": "CRLF"
+      },
+      {
+        "path": "tests/state_reader_tests.cpp",
+        "head": "CRLF",
+        "working": "CRLF"
+      },
+      {
+        "path": "tests/supervisor_integration.py",
+        "head": "LF",
+        "working": "LF"
+      },
+      {
+        "path": "xmake.lua",
+        "head": "CRLF",
+        "working": "CRLF"
+      }
+    ]
+  },
+  "schema_consistency": {
+    "database_schema": 8,
+    "task_protocol": 2,
+    "method_count": 47,
+    "historical_schema7": "Intentional in dated validation milestones and macOS prior-native-evidence qualification; current docs require schema8 and reject schema7 without migration.",
+    "stale_method_count_occurrences_excluding_historical_validation": []
+  },
+  "findings": [],
+  "status": "passed",
+  "resolved_previous_findings": [
+    "README client introduction now says47 methods and documents durable query/replay rules.",
+    "scripts/verify.py again uses its original LF line endings."
+  ],
+  "notes": [
+    "Read-only source review; only this evidence JSON was written.",
+    "Final documentation/script-byte snapshot differs from four-config tested snapshot; parent separately records exact post-verification changes and unchanged implementation. This review does not relabel runtime receipts.",
+    "This static review does not establish new runtime, platform, login or delivery acceptance."
+  ]
+}

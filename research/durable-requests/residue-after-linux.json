@@ -1,0 +1,47 @@
+{
+  "format": 2,
+  "platform": "linux",
+  "root": "/var/tmp/codestudio-agent-linux",
+  "generated_at": "2026-10-28T12:00:48.130324+00:00",
+  "observed": {
+    "project_processes": [],
+    "unresolved_processes": [],
+    "private_credential_fixture_processes": [],
+    "test_cgroups": [],
+    "autostart_registrations": [],
+    "oauth_abstract_locks": [],
+    "temporary_resources": [],
+    "sandbox_registry_entries": [],
+    "project_database_candidates": []
+  },
+  "registry_roots": [
+    "/root/.local/state/CodeStudio-Agent/sandbox-resources"
+  ],
+  "errors": [],
+  "scope": "Names, paths and process birth observations only; no resource mutation or credential/database payload reads. Database detection uses filename extensions. Linux credential values are not inspected; private-service cleanup needs its separate receipt.",
+  "zero_total_residue_gate": "passed",
+  "baseline": "/mnt/d/Dev/Projects/codestudio-agent/research/durable-requests/residue-before-linux.json",
+  "new_observations": {
+    "autostart_registrations": [],
+    "oauth_abstract_locks": [],
+    "private_credential_fixture_processes": [],
+    "project_database_candidates": [],
+    "project_processes": [],
+    "sandbox_registry_entries": [],
+    "temporary_resources": [],
+    "test_cgroups": [],
+    "unresolved_processes": []
+  },
+  "no_longer_observed": {
+    "autostart_registrations": [],
+    "oauth_abstract_locks": [],
+    "private_credential_fixture_processes": [],
+    "project_database_candidates": [],
+    "project_processes": [],
+    "sandbox_registry_entries": [],
+    "temporary_resources": [],
+    "test_cgroups": [],
+    "unresolved_processes": []
+  },
+  "no_new_residue_gate": "passed"
+}

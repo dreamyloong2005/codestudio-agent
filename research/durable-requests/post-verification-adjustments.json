@@ -1,0 +1,28 @@
+{
+  "tested_source": {
+    "sha256": "4fe025a8e0a20c6f6e6b870219e423a1358e1590e9cf6bb84f96e3b11d71df23",
+    "files": 226
+  },
+  "final_source": {
+    "sha256": "bbced79621faf60b09001d97177d8160e21ac2a9dbc62d7fd9cb411682c3f426",
+    "files": 226
+  },
+  "changes": [
+    {
+      "path": "README.md",
+      "before": "dea90eaa3aa1dd43dfc7d005b77d556d29cea1458e1ef9df7704b9d4c3e1962b",
+      "after": "91d11a070997f4fef799a24ca5ab1e6fc04d12954facf33e6ce80a78ac06963a",
+      "reason": "Correct current method count and document durable client entry points"
+    },
+    {
+      "path": "scripts/verify.py",
+      "before": "918e2bcffa15caf4b3cc1cecf12b1e618400c414e45d3bcde561cc159be81e11",
+      "after": "6f2f51266973fc92acd88c9845cadc33dbd894987bbaf697e5731c856ff8d302",
+      "reason": "Restore original LF line endings",
+      "python_ast_identical": true,
+      "only_crlf_to_lf": true
+    }
+  ],
+  "all_other_implementation_files_match_tested_snapshot": true,
+  "scope": "Full suites certify tested_source. Final source differs only by this documented README edit and Python newline normalization; runtime, tests, protocol and example bytes are unchanged."
+}

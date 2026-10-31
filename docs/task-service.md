@@ -4,9 +4,9 @@
 
 这是 CodeStudio Agent 向 CodeStudio Next 等可信客户端提供的接入协议；桌面 UI 的实现和技术选型属于独立的 CodeStudio Next 项目。服务与普通 CLI 共用 `execute_command`，复用进程授权、MCP、平台沙箱、SQLite 账本、工作区锁及恢复逻辑。持有管道的客户端被视为有权代表用户授权工具；该协议不是给不可信网页或插件开放的授权入口。
 
-可运行的父进程接入示例见 [task_client.py](../examples/task_client.py)。默认只查列表；显式 `--demo` 会执行离线写入/读回，等待操作完成通知和持久化完成事件，再查询任务详情并关闭服务。
+可运行的父进程接入示例见 [task_client.py](../examples/task_client.py)。默认只查列表；显式 `--demo` 会初始化状态库、以请求键执行离线写入/读回，等待操作完成通知和持久化完成事件，再核对持久请求回执与任务详情并关闭服务。
 
-机器可读定义见 [task-service.schema.json](../protocol/task-service.schema.json)。该 JSON Schema 描述请求、响应和通知；`x-methods` 关联 35 个方法的参数、返回值及重试分类。它是客户端契约，宿主仍执行配置、授权和状态检查。现行协议仍为 2，新增能力通过初始化结果发现。`capabilities.mcp_streamable_http` 声明远程 MCP 客户端支持；任务仍通过 `mcp_config` 和 `allow_mcp` 显式授权，服务本身不新增 HTTP 监听端口。
+机器可读定义见 [task-service.schema.json](../protocol/task-service.schema.json)。该 JSON Schema 描述请求、响应和通知；`x-methods` 关联 47 个方法的参数、返回值及重试分类。它是客户端契约，宿主仍执行配置、授权和状态检查。现行协议仍为 2，新增能力通过初始化结果发现。`capabilities.mcp_streamable_http` 声明远程 MCP 客户端支持；任务仍通过 `mcp_config` 和 `allow_mcp` 显式授权，服务本身不新增 HTTP 监听端口。
 
 ## 初始化和查询
 
@@ -16,7 +16,7 @@
 {"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocol_version":2}}
 ```
 
-返回协议版本、固定的工作区/数据库路径、能力及限制，以及本次服务进程唯一的 `session_id`。`capabilities.operation_lookup` 和 `structured_errors` 分别声明操作回执查询与结构化错误支持。重启服务会更换 session，不表示数据库或任务被重建。批量请求、重复 JSON 键、未知字段、错误类型和非当前协议版本均拒绝。客户端无 ID 通知不执行任何操作；所有改变状态的操作都需要请求 ID。
+返回协议版本、固定的工作区/数据库路径、能力及限制，以及本次服务进程唯一的 `session_id`。`database_id` 是当前已初始化数据库的 32 位小写十六进制身份；数据库不存在或尚未初始化时为 null，`initialize` 本身不创建数据库。`capabilities.operation_lookup`、`structured_errors` 和 `durable_requests` 分别声明会话回执查询、结构化错误和持久请求支持。重启服务会更换 session，不表示数据库或任务被重建。批量请求、重复 JSON 键、未知字段、错误类型和非当前协议版本均拒绝。客户端无 ID 通知不执行任何操作；所有改变状态的操作都需要请求 ID。
 
 | 方法 | 参数 | 返回值 |
 |---|---|---|
@@ -27,8 +27,11 @@
 | `events/unsubscribe` | 空对象 | 停止后续事件查询；已排队帧仍可能到达 |
 | `operations/status` | 空对象 | `session_id`、`active` 与当前或最近的 `operation_id`；从未启动操作时 ID 为空字符串 |
 | `operations/get` | `session_id`、`operation_id` | 当前操作或本会话保留的完成回执，查询不执行或续跑任务 |
+| `requests/get` | `database_id`、`request_key` | 本工作区中该请求的持久回执，可跨服务重启查询；不执行、恢复或续跑任务 |
 
-查询使用独立的只读 SQLite 连接，不创建任务或迁移数据库。数据库不存在或新状态库仍在初始化时返回空页，后续会重新打开。已初始化状态库只接受 schema 7；schema 6 及其他不匹配版本在整个数据库入口拒绝，不按任务隐藏记录。需要继续工作时，使用新的 `--state` 路径或新工作区创建任务，原数据库文件不被转换。记录中的 `workspace` 表示其原工作区。
+`state/initialize` 接受空参数，是显式的同步写操作：在工作区和数据库准入锁下创建当前格式的空状态库，返回 `database_id`、`workspace` 和 `state_database`；已有当前数据库返回原身份。它不创建任务、不启动工具或 worker，前台操作活动时返回 busy。客户端只有在准备提交新的持久请求时才需要初始化空状态库；普通查询无需调用它。保存数据库身份后再生成和保存请求键，不能在数据库丢失后通过重新初始化静默继续旧请求。
+
+查询使用独立的只读 SQLite 连接，不创建任务或迁移数据库。数据库不存在或新状态库仍在初始化时返回空页，后续会重新打开。已初始化状态库只接受 schema 8；schema 7 及其他不匹配版本在整个数据库入口拒绝，不按任务隐藏记录。需要继续工作时，使用新的 `--state` 路径或新工作区创建任务，原数据库文件不被转换。记录中的 `workspace` 表示其原工作区。
 
 分页最多返回 100 条、序列化后不超过 2 MiB。客户端根据 `has_more` 和返回的 `next_before` / `next_after` 继续分页；游标对应实际已返回的任务或事件记录。
 
@@ -65,7 +68,7 @@
 }
 ```
 
-可选 `mcp_config` 指定 version 2 的本地 MCP 配置清单，配合 `allow_mcp` 显式授权；该配置版本与 MCP 日期协议版本独立。`allow_process` 使用绝对 executable 路径。未知选项及 RPC 中的 `workspace`、`state`、`api_key` 均拒绝。`credential` 接受 `env:VARIABLE` 或 `system:identifier`，默认 `env:CODESTUDIO_API_KEY`；每次操作开始时读取、在操作期间固定使用，值不进入请求或绑定。系统凭据在调用服务前通过 CLI 配置，服务没有设置、删除或读取密钥值的 RPC，方法总数仍为 35。接口和平台条件见 [模型凭据与轮换](credentials.md)。`demo` 的 options 必须为空，其 provider 仍是固定脚本，不调用模型。
+可选 `mcp_config` 指定 version 2 的本地 MCP 配置清单，配合 `allow_mcp` 显式授权；该配置版本与 MCP 日期协议版本独立。`allow_process` 使用绝对 executable 路径。未知选项及 RPC 中的 `workspace`、`state`、`api_key` 均拒绝。`credential` 接受 `env:VARIABLE` 或 `system:identifier`，默认 `env:CODESTUDIO_API_KEY`；每次新执行开始时读取、在执行期间固定使用，值不进入请求或绑定。同键重复请求只返回历史回执，不重新读取凭据。系统凭据在调用服务前通过 CLI 配置，服务没有设置、删除或读取密钥值的 RPC。接口和平台条件见 [模型凭据与轮换](credentials.md)。`demo` 的 options 必须为空，其 provider 仍是固定脚本，不调用模型。
 
 隔离工作区构建使用 `mode: "build"`，只接受一个显式构建清单：
 
@@ -77,11 +80,11 @@
 
 `mode: "run"` 也可添加 `options.build_config`，向模型显式开放 `build_workspace` 工具。工具参数必须为空对象，模型不能在调用时改写冻结清单。该构建授权不改变其他已授权工具的运行方式；例如普通 `run_process` 仍遵循原 `sandbox` 选项。构建清单路径加入宿主文件工具的受保护路径。
 
-启动和续跑立即返回 `{"session_id":"...","operation_id":"...","status":"accepted"}`，随后在工作线程执行完整预检；接受请求不代表任务已创建或工具已执行。`operation/finished` 通知包含同一 session/operation ID、`exit_code` 以及 `result` 或 `error`。成功创建的任务 ID 位于最终 result，也可从持久化 `task.started` 事件获取。服务每次只允许一个活动操作；同时启动或 recover 会报 busy。
+启动和续跑返回 `{"session_id":"...","operation_id":"...","status":"accepted"}`，随后在工作线程执行完整预检；接受请求不代表任务已创建或工具已执行。`operation/finished` 通知包含同一 session/operation ID、`exit_code` 以及 `result` 或 `error`。成功创建的任务 ID 位于最终 result，也可从持久化 `task.started` 事件获取。服务每次只允许一个活动操作；另一次新启动或 recover 会报 busy。携带请求键的请求先完成持久准入再发送 accepted，并额外返回 `durable_request` 与 `replayed`；已存在的同键请求在 busy 检查前返回原回执，详细规则见下文。
 
 取消使用 `operations/cancel`，参数为当前 `operation_id`。取消是请求，不代表操作已停；应等待 `operation/finished` 和账本结果。取消可能留下已发生或无法确认的工具效果，仍采用原有 `unknown` 语义。
 
-`tasks/resume` 接受 `task_id` 和 `options`。需要重新提供原来的写入、进程、MCP、回环和沙箱授权，工作区/配置必须匹配检查点；不允许替换 prompt。省略 `credential` 时恢复保存引用，显式提供时必须完全相同；相同引用下的密钥可轮换。缺少该字段的旧模型检查点拒绝续跑，不补默认引用；数据库 schema 7 和协议/检查点 version 2 不变。省略 stream 会继承原值；显式 `false` 对应 `--no-stream`。首版拒绝续跑时显式 `stream: true`，避免 CLI 缺少强制开启选项时静默忽略请求。
+`tasks/resume` 接受 `task_id` 和 `options`。需要重新提供原来的写入、进程、MCP、回环和沙箱授权，工作区/配置必须匹配检查点；不允许替换 prompt。省略 `credential` 时恢复保存引用，显式提供时必须完全相同；相同引用下的密钥可轮换。缺少该字段的旧模型检查点拒绝续跑，不补默认引用；当前数据库为 schema 8，协议/检查点继续为 version 2。省略 stream 会继承原值；显式 `false` 对应 `--no-stream`。首版拒绝续跑时显式 `stream: true`，避免 CLI 缺少强制开启选项时静默忽略请求。
 
 原任务包含构建工具时，续跑必须再次提供同一 `build_config`，冻结构建绑定必须完全一致；绑定不匹配在 MCP 进程启动前拒绝。直接构建的 provider 为 `isolated-build`，续跑只接受 `build_config` 及可选 `max_turns`，不允许增加模型、进程、MCP、网络或沙箱授权。安全检查点可以复用已有回执，结果不明的构建不会自动重放。
 
@@ -239,7 +242,42 @@ Linux 写入当前用户专属的 systemd 单元和启用链接，核验准确�
 
 `operation/text` 含 `operation_id`、`text` 和 `provisional: true`。它携带实时模型文本，保留 UTF-8/换行，跨分片过滤当前配置的密钥；客户端应按纯文本渲染。文本增量没有持久游标，不保证断连重放，也不能作为工具执行或任务完成的证据。持久化通知和操作完成通知来自不同路径，不承诺二者之间的总顺序；同一订阅的事件按 seq 排序。
 
-请求 ID 用于响应关联，不是幂等键。客户端不能因没收到结果就重发启动/工具请求，应先查询数据库和 operation 状态；operation ID 只在本次服务进程内有效。
+JSON-RPC 请求 ID 用于响应关联，不是幂等键。未携带持久请求键的调用不能因没收到结果就自动重发，应先查询数据库和 operation 状态；其 operation 查询只在本次服务进程内有效。持久请求键只覆盖 `tasks/start` 和 `tasks/resume`，不向任意工具、OAuth、插件或其他管理请求提供重试授权。
+
+## 跨重启请求去重
+
+`tasks/start` 和 `tasks/resume` 可同时携带 `database_id` 与 `request_key`，缺少其中一个即拒绝。数据库身份必须来自 `initialize` 或显式 `state/initialize`；请求键为 1–128 个 ASCII 字符，只允许 `A-Z a-z 0-9 . _ : -`。键是客户端生成的非秘密唯一标识，不能使用 API Key、访问令牌或其他秘密；包含当前已知环境凭据的键会在准入前拒绝。客户端应在首次提交前保存数据库身份、工作区、键、方法和完整参数；同一次请求始终使用这些值，新的一次用户操作使用新键。
+
+```json
+{"jsonrpc":"2.0","id":2,"method":"state/initialize","params":{}}
+{"jsonrpc":"2.0","id":3,"method":"tasks/start","params":{"database_id":"<32-hex database_id>","request_key":"desktop:task-001","mode":"demo","options":{}}}
+{"jsonrpc":"2.0","id":4,"method":"requests/get","params":{"database_id":"<same database_id>","request_key":"desktop:task-001"}}
+```
+
+持久请求绑定数据库、规范工作区、方法及除两个身份字段外的参数摘要。JSON 对象键顺序不影响相等性；数组顺序、字符串原值、字段省略与显式提供仍有区别，例如省略 options 与 `options: {}` 不能在同键下互换。原执行授权在任务绑定中冻结；同键不同参数、方法或工作区返回 `request_conflict`。重复相同请求只读取原操作，不重新加载配置、解析密钥、创建任务或调用工具；修改配置文件或轮换凭据不会使原请求获得第二次执行。需要新的执行时，使用新键并通过原有授权和恢复校验。
+
+首次准入持久保存请求身份与唯一操作 ID。任务创建及其请求关联原子提交；续跑关联原任务后才进入执行。服务完成操作时先保存经过脱敏和大小限制的回执，再发布完成通知。进程在这些步骤之间退出时，原请求仍占用原键；重复请求不会重新执行已准入的工作。查询结果为：
+
+```json
+{
+  "database_id": "<original database identity>",
+  "request_key": "desktop:task-001",
+  "operation_id": "<original operation>",
+  "session_id": "<original service session>",
+  "method": "tasks/start",
+  "state": "incomplete",
+  "task_id": null,
+  "completion": null
+}
+```
+
+`state: incomplete` 只表示最终操作回执尚未保存，不代表进程仍在运行，也不表示工具未执行。`task_id` 在关联后可用；已创建任务可能已经完成或留下未知效果，必须查询任务及事件。`finished` 表示最终回执已保存，`completion` 使用原 `operation/finished` 结构与原 session/operation 身份；它可能记录成功、失败、取消或等待审批。大结果仍使用 256 KiB 限制与 `result_omitted` / `result_bytes` / `result_refs`，不持久化临时文本流。
+
+同键重复调用仍返回 status accepted，但 `replayed: true` 仅表示返回历史记录，**不会启动新操作，也不会重新发送完成或文本通知**。返回的 session_id 属于原服务进程，可能与本次 initialize 不同；此时使用 `requests/get`，不能把它当作当前会话的可取消操作。新准入为 `replayed: false`，携带同结构的 `durable_request`。
+
+请求记录在数据库生命周期内不自动过期或删除；每个数据库最多 10,000 条，限制由 `limits.durable_requests` 声明。达到上限后拒绝新键，已有键仍可查询和去重，不通过淘汰旧键重新放行执行。需要归档时保留原数据库与对应客户端身份，使用新状态库开展新工作。数据库被替换时旧身份返回 `database_mismatch`；任意回滚或备份恢复可能保留同一身份，服务无法检测所有此类回滚，因此不得在恢复后的库上自动重试原请求或复用旧键。
+
+持久请求去重不是外部副作用的 exactly-once 保证。查询、同键重复请求、服务重启均不执行 recover/resume，不收养后台授权。对 incomplete 任务仍需原有显式恢复流程；未知副作用继续阻断，不能通过换键重放被禁止的续跑。
 
 ## 操作回执和断连处理
 
@@ -257,10 +295,10 @@ Linux 写入当前用户专属的 systemd 单元和启用链接，核验准确�
 
 1. 同一服务仍可通信时，用已确认的 session/operation 查询；查询不会再次执行动作，也不会重新发送文本流。
 2. stdio 关闭后，前台服务取消活动操作并退出。新的父子连接是新的服务 session。使用任务 ID 查询持久记录，并从最后实际处理的事件 seq 重放；硬崩溃后的 running 任务按原规则显式 recover。
-3. 若丢失 accepted 或任务 ID，查询任务列表及持久事件核对。无法唯一确认原请求时，交由调用方处理，不能自动重复提交写请求。
+3. 若携带持久请求键且丢失 accepted 或任务 ID，用保存的 database_id/request_key 调用 `requests/get`，或原样提交同键请求读取历史准入。未携带键时查询任务列表及持久事件核对；无法唯一确认原请求时，交由调用方处理，不能自动重复提交写请求。
 4. `session_mismatch` 或 `operation_not_found` 只说明缓存不可用。即使任务已经完成并产生文件，也可能得到这类错误；它们不证明动作未执行。
 
-数据库路径替换/回滚后不能继续使用原事件游标。操作查询不提供跨重启幂等键，也不改变原任务恢复、审批唯一性和未知效果阻断规则。
+数据库路径替换/回滚后不能继续使用原事件游标。`operations/get` 保留会话缓存语义，跨重启持久查询由 `requests/get` 提供；两者均不改变原任务恢复、审批唯一性和未知效果阻断规则。
 
 ## 结构化错误
 
@@ -275,6 +313,10 @@ RPC 错误保留 JSON-RPC 的 `code` 和可读 `message`，新增 `data.kind`、
 | `session_mismatch` / 查询时的 `operation_not_found` | `query_state` | 改查持久任务与事件；原操作结果不能由缓存缺失推断 |
 | 取消时的 `operation_not_found` | `query_operation` | 本次取消未接受；核对原操作与任务 |
 | `command_failed` / `operation_failed` / `internal_error` | `query_state` | 核对已提交状态和回执，禁止基于错误码自动重放 |
+| `request_conflict` | `fix_request` | 同键对应不同参数、方法或工作区；原请求保持不变 |
+| `database_mismatch` | `query_state` | 请求的数据库身份与当前库不符或库缺失；不在新库重放原请求 |
+| `request_not_found` | `query_state` | 当前库中未查到该键；缺失不证明过去未执行，例如数据库可能回滚过 |
+| `request_limit` | `query_state` | 持久请求记录达到上限；已有键继续保留，不淘汰后重新执行 |
 
 `outcome: not_started` 仅描述这次被拒请求的执行路径，不描述过去的任务；`unknown` 表示错误层无法证明没有副作用。通用命令异常和异步异常保守返回 unknown，线程无法创建则返回 not_started。它们不是持久工具回执的 effect 值，也不是新增的重试授权。业务命令正常返回的 result（含失败任务或审批 continuation）仍遵循各自原有结构。服务无法启动或管道已损坏时，可能没有可交付的结构化帧。
 

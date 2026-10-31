@@ -128,7 +128,7 @@ class SchedulerTests(unittest.TestCase):
                 self.assertEqual(len(self.show(task)["actions"]), 1)
                 self.assertEqual(self.once()["processed"], 0)
                 self.assertEqual(len(self.requests()), before + 1)
-        self.assertEqual(self.sql_rows("PRAGMA user_version")[0][0], 7)
+        self.assertEqual(self.sql_rows("PRAGMA user_version")[0][0], 8)
         self.assertNotIn(fixture.TOKEN, self.database_snapshot())
 
     def test_delay_and_queued_cancellation_never_dispatch_early(self):

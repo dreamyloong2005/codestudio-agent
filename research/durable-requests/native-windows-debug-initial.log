@@ -1,0 +1,5 @@
+PASS persistence/recovery/transitions/schema
+PASS credential references/validation/environment isolation
+PASS task loop/policy/budgets/redaction
+PASS current checkpoint format/atomicity/resume guards
+FAIL: Durable request cannot authorize another task execution

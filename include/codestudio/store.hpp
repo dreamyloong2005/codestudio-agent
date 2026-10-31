@@ -30,6 +30,30 @@ struct SupervisorRunState {
     std::optional<std::int64_t> last_exit_code;
     std::string exit_reason;
 };
+// A client request is a durable admission, not an instruction to replay work.
+// The caller holds both runner locks from admission through completion.
+struct DurableRequest {
+    std::string database_id;
+    std::string request_key;
+    std::string request_digest;
+    std::string method;
+    std::string operation_id;
+    std::string session_id;
+    std::string workspace;
+};
+class DatabaseMismatch : public std::runtime_error {
+public:
+    using std::runtime_error::runtime_error;
+};
+class RequestConflict : public std::runtime_error {
+public:
+    using std::runtime_error::runtime_error;
+};
+class RequestLimit : public std::runtime_error {
+public:
+    using std::runtime_error::runtime_error;
+};
+
 std::string new_id();
 std::string path_utf8(const std::filesystem::path& path);
 std::filesystem::path utf8_path(const std::string& text);
@@ -58,8 +82,18 @@ public:
     Store(const Store&) = delete;
     Store& operator=(const Store&) = delete;
 
+    std::string database_id() const;
+    // null means absent, never that earlier work did not occur. Keys are retained
+    // for the life of this database, including incomplete admissions after a crash.
+    Json request(const std::string& key) const;
+    // Returns the public receipt plus created. A duplicate never re-admits work.
+    Json admit_request(const DurableRequest& request);
+    // Caller supplies a redacted, bounded completion. Identical repeats are a
+    // no-op; a different completion cannot overwrite the original receipt.
+    void finish_request(const std::string& operation_id, const Json& completion);
     std::string create_task(const std::string& prompt, const std::string& workspace,
-                            const std::string& provider);
+                            const std::string& provider, const Json* initial_state = nullptr,
+                            const Json* binding = nullptr, const std::string& request_operation_id = {});
     // waiting_approval pauses on an unconsumed proposal and requires its exact
     // resumable checkpoint; it emits task.waiting_approval, not task.finished.
     void finish_task(const std::string& id, const std::string& status, const std::string& summary,
@@ -77,7 +111,8 @@ public:
     // Caller holds workspace/database locks. Requires recover before resuming a
     // crashed running task; rejects uncertain actions and mismatched bindings.
     void resume_task(const std::string& task, const Json& expected_binding,
-                     const std::string& scheduler_job = {}, const std::string& claim_token = {});
+                     const std::string& scheduler_job = {}, const std::string& claim_token = {},
+                     const std::string& request_operation_id = {});
     std::int64_t checkpoint_revision(const std::string& task) const;
     Json schedule_resume(const std::string& task, const Json& resume_argv, const Json& expected_binding,
                          std::int64_t expected_revision, std::int64_t due_ms, std::int64_t deadline_ms,

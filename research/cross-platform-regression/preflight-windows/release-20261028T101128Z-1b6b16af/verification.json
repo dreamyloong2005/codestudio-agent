@@ -1,0 +1,104 @@
+{
+  "format": 2,
+  "product": "CodeStudio-Agent",
+  "platform": "windows",
+  "arch": "x64",
+  "mode": "release",
+  "started_at": "2026-10-28T10:11:28.453698+00:00",
+  "status": "preflight",
+  "selected_suites": [
+    "native",
+    "schema",
+    "provider",
+    "streaming",
+    "contract",
+    "service",
+    "credentials",
+    "cli",
+    "local_models",
+    "mcp",
+    "mcp_http",
+    "mcp_oauth",
+    "plugins",
+    "plugin_sandbox",
+    "resume",
+    "sandbox",
+    "sandbox_resources",
+    "scheduler",
+    "supervisor",
+    "cron",
+    "autostart",
+    "spawn_lifetime",
+    "build",
+    "build_proposals",
+    "real_build",
+    "package",
+    "verification"
+  ],
+  "omitted_suites": [
+    "delivery"
+  ],
+  "unsupported_suites": {},
+  "build_requested": true,
+  "steps": [],
+  "test_environment": {},
+  "source": {
+    "sha256": "d2c0e1600daf2b8d1addb61e563a5ea2643c371356cfdc383f76ccaa2194eb8a",
+    "files": 223
+  },
+  "toolchain": {
+    "python": "3.12.11",
+    "requirements": {
+      "format": 2,
+      "python_minimum": "3.11.0",
+      "xmake_minimum": "3.0.5",
+      "jsonschema": "4.23.0",
+      "windows": {
+        "arch": "x64",
+        "toolchain": "clang-cl",
+        "compiler_minimum": "22.0.0",
+        "requirements": [
+          "Visual Studio 2022 C++ build tools and Windows SDK",
+          "LLVM clang-cl 22 or newer"
+        ]
+      },
+      "linux": {
+        "arch": "x86_64",
+        "toolchain": "gcc",
+        "compiler_minimum": "16.0.0",
+        "pkg_config_minimum": {
+          "nlohmann_json": "3.12.0",
+          "sqlite3": "3.50.4",
+          "libcurl": "8.15.0",
+          "openssl": "3.0.0",
+          "libsecret-1": "0.21.0"
+        },
+        "requirements": [
+          "bubblewrap at /usr/bin/bwrap",
+          "tzdata",
+          "cgroup v2 delegation with cpu/memory/pids",
+          "user namespaces and seccomp"
+        ]
+      },
+      "macosx": {
+        "arch": "arm64",
+        "toolchain": "llvm",
+        "compiler_minimum": "22.1.8",
+        "llvm_environment": "CODESTUDIO_LLVM_ROOT",
+        "requirements": [
+          "Native Apple Silicon Mac (arm64)",
+          "Xcode command line tools and macOS SDK",
+          "LLVM 22.1.8 or newer and matching standalone libc++/libc++abi built with timezone support; bundled Apple and LLVM macOS libc++ disable timezones",
+          "Runtime C++26, std::format and IANA timezone/DST probe must pass",
+          "No Linux libsecret, namespace or cgroup dependency"
+        ],
+        "macos_minimum": "15.0",
+        "libcxx_environment": "CODESTUDIO_LIBCXX_ROOT"
+      }
+    },
+    "jsonschema": "4.23.0",
+    "xmake": "xmake v3.0.8+dev.1e431c685, A cross-platform build utility based on Lua",
+    "compiler": "clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)"
+  },
+  "finished_at": "2026-10-28T10:11:29.070041+00:00"
+}

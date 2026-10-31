@@ -1,0 +1,73 @@
+{
+  "format": 2,
+  "raw_receipt": "residue-after-windows-final.json",
+  "baseline": "residue-before-windows.json",
+  "cause": "The helper expanded temporary-directory matching from explicit prefixes to all codestudio-* after the baseline was taken.",
+  "correction": "Final comparison uses the original baseline predicate. Expanded-only observations remain separately recorded, unmodified.",
+  "additional_observations": [
+    {
+      "path": "C:\\Users\\DREAMY~1\\AppData\\Local\\Temp\\codestudio-build-copy-tests-97ae674c95f569ac486c699e6eccf008",
+      "device": 164061189186043291,
+      "inode": 461618961806114377,
+      "birthtime_ns": 1792577539863892200,
+      "mtime_ns": 1792990333167807500,
+      "created_before_run": true,
+      "last_modified_before_run": true
+    },
+    {
+      "path": "C:\\Users\\DREAMY~1\\AppData\\Local\\Temp\\codestudio-cli-l98o7e39",
+      "device": 164061189186043291,
+      "inode": 18858823440254961,
+      "birthtime_ns": 1792544390404193100,
+      "mtime_ns": 1792544390405194200,
+      "created_before_run": true,
+      "last_modified_before_run": true
+    },
+    {
+      "path": "C:\\Users\\DREAMY~1\\AppData\\Local\\Temp\\codestudio-cli-tffkresm",
+      "device": 164061189186043291,
+      "inode": 62768919806523751,
+      "birthtime_ns": 1792544390933228200,
+      "mtime_ns": 1792544390933228200,
+      "created_before_run": true,
+      "last_modified_before_run": true
+    },
+    {
+      "path": "C:\\Users\\DREAMY~1\\AppData\\Local\\Temp\\codestudio-llvm-alias-pf8_tf5p",
+      "device": 164061189186043291,
+      "inode": 17451448557004534,
+      "birthtime_ns": 1792576916492384000,
+      "mtime_ns": 1792990333171489100,
+      "created_before_run": true,
+      "last_modified_before_run": true
+    },
+    {
+      "path": "C:\\Users\\DREAMY~1\\AppData\\Local\\Temp\\codestudio-llvm-drive-nww61ekz",
+      "device": 164061189186043291,
+      "inode": 74590868828570311,
+      "birthtime_ns": 1792577440662174200,
+      "mtime_ns": 1792577448665990600,
+      "created_before_run": true,
+      "last_modified_before_run": true
+    },
+    {
+      "path": "C:\\Users\\DREAMY~1\\AppData\\Local\\Temp\\codestudio-llvm-startup-6yatqkv6",
+      "device": 164061189186043291,
+      "inode": 12947848929633987,
+      "birthtime_ns": 1792576649610745800,
+      "mtime_ns": 1792576649641533200,
+      "created_before_run": true,
+      "last_modified_before_run": true
+    },
+    {
+      "path": "C:\\Users\\DREAMY~1\\AppData\\Local\\Temp\\codestudio-llvm-syscall-2w354jy_",
+      "device": 164061189186043291,
+      "inode": 5629499535173918,
+      "birthtime_ns": 1792576759828738400,
+      "mtime_ns": 1792576760190280200,
+      "created_before_run": true,
+      "last_modified_before_run": true
+    }
+  ],
+  "claim": "Filesystem timestamps predate this run; these paths were not enumerated in the original baseline, so unchanged-since-baseline is not claimed."
+}

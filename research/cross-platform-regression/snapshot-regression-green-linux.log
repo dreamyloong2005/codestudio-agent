@@ -1,0 +1,7 @@
+test_same_length_write_during_snapshot_is_rejected (delivery_snapshot_regression.PackageSnapshotTests.test_same_length_write_during_snapshot_is_rejected) ... ok
+test_unchanged_executable_and_text_have_stable_snapshots (delivery_snapshot_regression.PackageSnapshotTests.test_unchanged_executable_and_text_have_stable_snapshots) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.001s
+
+OK

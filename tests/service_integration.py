@@ -393,7 +393,7 @@ class ServiceTests(unittest.TestCase):
         self.assertFalse((self.workspace / ".codestudio").exists())
 
     def test_unsupported_state_schema_is_rejected_without_migration(self):
-        for version in (1, 2, 3, 4, 5, 6, 999):
+        for version in (1, 2, 3, 4, 5, 6, 7, 999):
             with self.subTest(version=version):
                 database = self.workspace / f"unsupported-state-{version}.sqlite3"
                 with closing(sqlite3.connect(database)) as db:

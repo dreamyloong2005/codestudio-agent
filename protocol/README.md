@@ -19,11 +19,14 @@ semantics. This directory contains no client UI or generated runtime dependency.
 
 `execution` is `query`, synchronous `control`, or asynchronous foreground
 `operation`. `retry: query_only` permits another observation, whose result may
-have changed; `never` forbids automatic request replay. It does not forbid a new,
-explicit user action after inspecting durable state. JSON-RPC IDs only correlate
-messages and are not idempotency keys. `completion_result` exists only for the
-five methods that return an operation acceptance. `x-notifications` maps the
-four server notification names to their parameter schemas.
+have changed; `never` forbids general automatic request replay. It does not forbid
+a new, explicit user action after inspecting durable state. JSON-RPC IDs only
+correlate messages and are not idempotency keys. For `tasks/start` and
+`tasks/resume`, additional `deduplication` metadata describes the narrower paired
+`database_id` / `request_key` contract: an identical submission returns the
+original receipt without executing again. Other operations do not gain this
+behavior. `completion_result` exists for methods that return an operation
+acceptance. `x-notifications` maps server notification names to parameter schemas.
 
 Responses do not include their request's method. Validate the response envelope,
 then use the correlated request's `x-methods[method].result` for its result.
@@ -34,6 +37,31 @@ The bounded in-memory history is scoped to `session_id`; a cache miss or changed
 session never proves that a previous operation had no effects. Large cached
 results explicitly carry `result: null`, `result_omitted`, `result_bytes` and
 `result_refs`, while the original completion notification keeps its full result.
+
+`initialize` remains read-only and reports `database_id: null` when state does
+not exist. `state/initialize` explicitly creates an empty current-schema database
+under runner admission locks and returns its identity; it never creates a task.
+Save that identity and the request key before the first keyed submission. Keys
+are client-generated nonsecret identifiers, never API keys or access tokens;
+known environment secrets in a key are rejected before admission.
+`requests/get` queries the durable receipt using both values. Receipts and keys
+are retained for the lifetime of the database, with a 10,000-record limit that
+rejects new keys rather than evicting old ones. The database schema is 8; older
+initialized schemas are rejected without migration.
+
+A keyed acceptance includes `durable_request` and `replayed`. Repeated keys
+return the original operation/session identities, which may differ from the
+current connection, and do not re-emit completion or text notifications. The
+request is matched against its method, workspace and canonical explicit JSON
+parameters: object key order is immaterial; array order, omitted fields and
+explicit defaults remain significant. Configuration and credentials are not
+reloaded for a duplicate. A durable `incomplete` receipt means only that its final
+completion is absent; it proves neither current execution nor absence of effects.
+Finished receipts use the same bounded completion shape as session snapshots.
+Query the task and follow explicit recovery rules after interruption. Missing
+receipts never authorize replay. Database identity catches replacement with a
+different database, but cannot detect every rollback of the same database; do not
+reuse old keys or automatically retry old requests after restoring a backup.
 
 All `$ref` targets are local. Request fields and options are closed; result
 records allow additive fields. Event payloads, tool receipts, provider bindings
@@ -62,7 +90,8 @@ python tests/client_contract_integration.py /absolute/path/to/codestudio-agent
 `Contract` in [tests/contract_schema.py](../tests/contract_schema.py) exposes
 `validate_request(frame)`, `validate_response(method, frame)`,
 `validate_notification(frame, operation_method=None)`,
-`validate_completion(method, completion)` and `validate_frame(frame, method=None)`.
+`validate_completion(method, completion)`, `validate_durable_request(receipt)` and
+`validate_frame(frame, method=None)`.
 Validation errors are standard `jsonschema.ValidationError` instances. The
 static suite checks the Draft 2020-12 metaschema, resolves every reference, checks
 runtime dispatch/notification coverage and exercises invalid wire boundaries.

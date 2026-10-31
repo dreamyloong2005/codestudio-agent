@@ -27,7 +27,7 @@ PLATFORM = "windows" if sys.platform == "win32" else "linux" if sys.platform.sta
 ARCH = "x64" if PLATFORM == "windows" else "arm64" if PLATFORM == "macosx" else "x86_64"
 SUFFIX = ".exe" if PLATFORM == "windows" else ""
 COMMON = ("native", "schema", "credentials", "provider", "streaming", "cli", "local_models", "mcp", "mcp_http", "mcp_oauth", "plugins", "plugin_sandbox",
-          "resume", "sandbox", "sandbox_resources", "contract", "service", "scheduler", "supervisor", "cron", "autostart")
+          "resume", "sandbox", "sandbox_resources", "contract", "service", "durable_requests", "scheduler", "supervisor", "cron", "autostart")
 
 
 def unsupported_suites():
@@ -176,7 +176,7 @@ def preflight(env, build, suites):
         observed["deployment_target"] = config["macosx"]["macos_minimum"]
         if version(observed["macos"]) < version(observed["deployment_target"]):
             raise RuntimeError("macOS is below scripts/toolchains.json requirements")
-    if "schema" in suites or "contract" in suites or "service" in suites:
+    if {"schema", "contract", "service", "durable_requests"}.intersection(suites):
         observed["jsonschema"] = importlib.metadata.version("jsonschema")
         if observed["jsonschema"] != config["jsonschema"]:
             raise RuntimeError("Install the pinned tests/requirements.txt in the selected Python environment")
@@ -298,7 +298,7 @@ def step(name, command, directory, env, timeout):
             result["status"] = "failed"
     elif name == "native":
         result["native_groups"] = len(re.findall(r"^PASS ", content, re.MULTILINE))
-        if result["native_groups"] != 22 or re.search(r"^FAIL", content, re.MULTILINE):
+        if result["native_groups"] != 23 or re.search(r"^FAIL", content, re.MULTILINE):
             result["status"] = "failed"
     elif name == "real_build" and PLATFORM == "windows":
         variants = re.findall(r"^PASS real isolated XMake / (explicit-v2|custom-cache-v2) / "

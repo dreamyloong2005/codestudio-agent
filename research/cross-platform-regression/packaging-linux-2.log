@@ -1,0 +1,45 @@
+{
+  "format": 2,
+  "product": "CodeStudio-Agent",
+  "status": "packaged",
+  "platform": "linux",
+  "arch": "x86_64",
+  "package": "/var/tmp/codestudio-agent-linux/build/cross-platform-regression/linux/package-repeat/codestudio-agent-linux-x86_64",
+  "archive": "/var/tmp/codestudio-agent-linux/build/cross-platform-regression/linux/package-repeat/codestudio-agent-linux-x86_64.tar.gz",
+  "sha256": "45d7a94173ba2b03337dea9f44d3bf0449d93ec69e539a8b9dd66503533f7df8",
+  "bytes": 1720740,
+  "verification": {
+    "state": "supplied",
+    "sha256": "171784adb9ca8f630abf5da39ae27ff62aa514c26bac661f64ab57aee33a5452",
+    "selected_suites": [
+      "native",
+      "schema",
+      "provider",
+      "streaming",
+      "contract",
+      "service",
+      "credentials",
+      "cli",
+      "local_models",
+      "mcp",
+      "mcp_http",
+      "mcp_oauth",
+      "plugins",
+      "plugin_sandbox",
+      "resume",
+      "sandbox",
+      "sandbox_resources",
+      "scheduler",
+      "supervisor",
+      "cron",
+      "autostart",
+      "real_build",
+      "package",
+      "verification"
+    ],
+    "omitted_suites": [
+      "delivery"
+    ],
+    "unsupported_suites": {}
+  }
+}

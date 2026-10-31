@@ -1,0 +1,354 @@
+{
+  "format": 2,
+  "generated_at": "2026-10-28T10:46:21.900150+00:00",
+  "base_commit": "e97557be1884c6a87d5959d14ab4e076523ad5de",
+  "source": {
+    "sha256": "e64b3d581a1d30bb22452f2b511971927c3957af9281678625da82b1af0a51ca",
+    "files": 223
+  },
+  "status": "completed",
+  "configurations": {
+    "windows-debug": {
+      "receipt": "windows/debug-20261028T103333Z-c222fa01/verification.json",
+      "native_groups": 22,
+      "python_cases": 452,
+      "python_passed": 431,
+      "python_skipped": 21,
+      "selected_suites": [
+        "native",
+        "schema",
+        "provider",
+        "streaming",
+        "contract",
+        "service",
+        "credentials",
+        "cli",
+        "local_models",
+        "mcp",
+        "mcp_http",
+        "mcp_oauth",
+        "plugins",
+        "plugin_sandbox",
+        "resume",
+        "sandbox",
+        "sandbox_resources",
+        "scheduler",
+        "supervisor",
+        "cron",
+        "autostart",
+        "spawn_lifetime",
+        "build",
+        "build_proposals",
+        "real_build",
+        "package",
+        "verification"
+      ],
+      "omitted_suites": [
+        "delivery"
+      ],
+      "unsupported_suites": {},
+      "artifact": {
+        "path": "build/windows/x64/debug/codestudio-agent.exe",
+        "size": 6940672,
+        "sha256": "646df7965bed66070b85ab9238412c1f65f8cfaa4dad01d6b25d86b4282182a3"
+      }
+    },
+    "windows-release": {
+      "receipt": "windows/release-20261028T103818Z-49746910/verification.json",
+      "native_groups": 22,
+      "python_cases": 452,
+      "python_passed": 431,
+      "python_skipped": 21,
+      "selected_suites": [
+        "native",
+        "schema",
+        "provider",
+        "streaming",
+        "contract",
+        "service",
+        "credentials",
+        "cli",
+        "local_models",
+        "mcp",
+        "mcp_http",
+        "mcp_oauth",
+        "plugins",
+        "plugin_sandbox",
+        "resume",
+        "sandbox",
+        "sandbox_resources",
+        "scheduler",
+        "supervisor",
+        "cron",
+        "autostart",
+        "spawn_lifetime",
+        "build",
+        "build_proposals",
+        "real_build",
+        "package",
+        "verification"
+      ],
+      "omitted_suites": [
+        "delivery"
+      ],
+      "unsupported_suites": {},
+      "artifact": {
+        "path": "build/windows/x64/release/codestudio-agent.exe",
+        "size": 5326848,
+        "sha256": "5d3de2adc5f1dafdaabc6b34355baf3e7e3efec03c098a6250a9e8782ae7f58f"
+      }
+    },
+    "linux-debug": {
+      "receipt": "linux/debug-20261028T103333Z-06b6bc04/verification.json",
+      "native_groups": 22,
+      "python_cases": 416,
+      "python_passed": 400,
+      "python_skipped": 16,
+      "selected_suites": [
+        "native",
+        "schema",
+        "provider",
+        "streaming",
+        "contract",
+        "service",
+        "credentials",
+        "cli",
+        "local_models",
+        "mcp",
+        "mcp_http",
+        "mcp_oauth",
+        "plugins",
+        "plugin_sandbox",
+        "resume",
+        "sandbox",
+        "sandbox_resources",
+        "scheduler",
+        "supervisor",
+        "cron",
+        "autostart",
+        "real_build",
+        "package",
+        "verification"
+      ],
+      "omitted_suites": [
+        "delivery"
+      ],
+      "unsupported_suites": {},
+      "artifact": {
+        "path": "build/linux/x86_64/debug/codestudio-agent",
+        "size": 36967008,
+        "sha256": "e5370f66a32c7d593d33317dac03b9ae87a7f18fc93d804c47ff122e2d6040de"
+      }
+    },
+    "linux-release": {
+      "receipt": "linux/release-20261028T103633Z-d73ac300/verification.json",
+      "native_groups": 22,
+      "python_cases": 416,
+      "python_passed": 400,
+      "python_skipped": 16,
+      "selected_suites": [
+        "native",
+        "schema",
+        "provider",
+        "streaming",
+        "contract",
+        "service",
+        "credentials",
+        "cli",
+        "local_models",
+        "mcp",
+        "mcp_http",
+        "mcp_oauth",
+        "plugins",
+        "plugin_sandbox",
+        "resume",
+        "sandbox",
+        "sandbox_resources",
+        "scheduler",
+        "supervisor",
+        "cron",
+        "autostart",
+        "real_build",
+        "package",
+        "verification"
+      ],
+      "omitted_suites": [
+        "delivery"
+      ],
+      "unsupported_suites": {},
+      "artifact": {
+        "path": "build/linux/x86_64/release/codestudio-agent",
+        "size": 3507560,
+        "sha256": "d287163b95e48f72de0c2aa8cc0e049b55a4b7cf23c5d2f74b8ab4b89ae6b8d7"
+      }
+    }
+  },
+  "packages": {
+    "windows": {
+      "receipt": "archive-windows-final.json",
+      "sha256": "47613c9a329e7f71ede7bb25d59b250f3213071b47e05df3d4b31597cbb689de",
+      "payload_files": 41,
+      "repeat_archive_identical": true,
+      "fresh_archive_extraction": true,
+      "installed_verification": {
+        "receipt": "installed-windows/release-20261028T104237Z-3ee4be9d/verification.json",
+        "native_groups": 0,
+        "python_cases": 35,
+        "python_passed": 25,
+        "python_skipped": 10,
+        "selected_suites": [
+          "delivery"
+        ],
+        "omitted_suites": [
+          "native",
+          "schema",
+          "provider",
+          "streaming",
+          "contract",
+          "service",
+          "credentials",
+          "cli",
+          "local_models",
+          "mcp",
+          "mcp_http",
+          "mcp_oauth",
+          "plugins",
+          "plugin_sandbox",
+          "resume",
+          "sandbox",
+          "sandbox_resources",
+          "scheduler",
+          "supervisor",
+          "cron",
+          "autostart",
+          "spawn_lifetime",
+          "build",
+          "build_proposals",
+          "real_build",
+          "package",
+          "verification"
+        ],
+        "unsupported_suites": {},
+        "artifact": {
+          "path": "build/windows/x64/release/codestudio-agent.exe",
+          "size": 5326848,
+          "sha256": "5d3de2adc5f1dafdaabc6b34355baf3e7e3efec03c098a6250a9e8782ae7f58f"
+        }
+      },
+      "path": "build/packages/windows-x64/codestudio-agent-windows-x64.zip"
+    },
+    "linux": {
+      "receipt": "archive-linux-final.json",
+      "sha256": "ad37e2530295fd5f4090302b1acd71bc78cdce9a82f12e8162be7b24bffc141c",
+      "payload_files": 41,
+      "repeat_archive_identical": true,
+      "fresh_archive_extraction": true,
+      "installed_verification": {
+        "receipt": "installed-linux/release-20261028T103843Z-27a42ca7/verification.json",
+        "native_groups": 0,
+        "python_cases": 35,
+        "python_passed": 26,
+        "python_skipped": 9,
+        "selected_suites": [
+          "delivery"
+        ],
+        "omitted_suites": [
+          "native",
+          "schema",
+          "provider",
+          "streaming",
+          "contract",
+          "service",
+          "credentials",
+          "cli",
+          "local_models",
+          "mcp",
+          "mcp_http",
+          "mcp_oauth",
+          "plugins",
+          "plugin_sandbox",
+          "resume",
+          "sandbox",
+          "sandbox_resources",
+          "scheduler",
+          "supervisor",
+          "cron",
+          "autostart",
+          "real_build",
+          "package",
+          "verification"
+        ],
+        "unsupported_suites": {},
+        "artifact": {
+          "path": "build/linux/x86_64/release/codestudio-agent",
+          "size": 3507560,
+          "sha256": "d287163b95e48f72de0c2aa8cc0e049b55a4b7cf23c5d2f74b8ab4b89ae6b8d7"
+        }
+      },
+      "path": "build/linux/x86_64/release/codestudio-agent-linux-x86_64.tar.gz"
+    }
+  },
+  "residue": {
+    "windows": {
+      "receipt": "residue-after-windows-consistent.json",
+      "no_new_residue_gate": "passed",
+      "zero_total_residue_gate": "failed",
+      "observed_counts": {
+        "project_processes": 0,
+        "unresolved_processes": 0,
+        "autostart_registrations": 0,
+        "credential_test_names": 0,
+        "sandbox_profiles": 69,
+        "temporary_resources": 70,
+        "sandbox_registry_entries": 0,
+        "project_database_candidates": 0
+      }
+    },
+    "linux": {
+      "receipt": "residue-after-linux-final.json",
+      "no_new_residue_gate": "passed",
+      "zero_total_residue_gate": "passed",
+      "observed_counts": {
+        "project_processes": 0,
+        "unresolved_processes": 0,
+        "private_credential_fixture_processes": 0,
+        "test_cgroups": 0,
+        "autostart_registrations": 0,
+        "oauth_abstract_locks": 0,
+        "temporary_resources": 0,
+        "sandbox_registry_entries": 0,
+        "project_database_candidates": 0
+      }
+    }
+  },
+  "expanded_scan_audit": "windows-expanded-scan-audit.json",
+  "runtime_or_installer_changes": false,
+  "validation_code_changed": true,
+  "validation_fix": {
+    "file": "tests/delivery_integration.py",
+    "cause": "Windows lstat and fstat ctime/mode representations differ; compare each metadata API against itself while preserving file identity and end-path checks.",
+    "red": "snapshot-regression-red.log",
+    "focused_green": [
+      "snapshot-regression-green-windows.log",
+      "snapshot-regression-green-linux.log"
+    ],
+    "initial_delivery_failure": "installed-windows/release-20261028T102624Z-185d69ff/verification.json"
+  },
+  "initial_harness_failures": [
+    {
+      "receipt": "residue-before-linux.json",
+      "reason": "Absent optional systemd user directory was initially treated as a scan error; corrected and rescanned."
+    },
+    {
+      "receipt": "packaging-linux-initial-root-refusal.log",
+      "reason": "Package harness initially omitted XMAKE_ROOT for the existing root WSL test host; corrected test environment."
+    }
+  ],
+  "boundaries": [
+    "Platform-specific skips and enclosing Windows Job restrictions remain explicit in per-suite logs.",
+    "Historical Windows staging/profile directories and the previously policy-blocked fixture were observed only; no historical adoption or deletion.",
+    "Existing Windows and WSL hosts; no independent clean machine, real login/reboot, hosted CI, or permanent installation.",
+    "No real inference, external OAuth login, signing/notarization, Git commit/push, or external publication.",
+    "macOS prior receipts retain their original scope; this run neither revalidates macOS nor enables its isolation."
+  ]
+}

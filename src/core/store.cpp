@@ -5,6 +5,7 @@
 #include "scheduler_storage.hpp"
 #include "cron_storage.hpp"
 #include "supervisor_storage.hpp"
+#include "durable_request_storage.hpp"
 #include <sqlite3.h>
 #include <array>
 #include <algorithm>
@@ -98,6 +99,20 @@ void require_changed(sqlite3* db) {
     if (sqlite3_changes(db) != 1) throw std::runtime_error("Invalid state transition or unknown record");
 }
 constexpr std::size_t checkpoint_limit = 16 * 1024 * 1024;
+
+// Caller owns the task-transition transaction. A request may attach exactly one
+// execution; an incomplete receipt is never permission to enter the runner again.
+void associate_request(sqlite3* db, const std::string& operation, const std::string& method,
+                       const std::string& workspace, const std::string& task, const Json& binding) {
+    durable_request_storage::hex(operation,32,"Invalid durable operation identity");
+    Statement current(db,"SELECT method,workspace,state,task_id FROM durable_requests WHERE operation_id=?");
+    current.bind(1,operation);
+    if (!current.next() || current.text(0)!=method || current.text(1)!=workspace ||
+        current.text(2)!="incomplete" || !current.null(3))
+        throw RequestConflict("Durable request cannot authorize another task execution");
+    Statement update(db,"UPDATE durable_requests SET task_id=?,authorization=? WHERE operation_id=? AND state='incomplete' AND task_id IS NULL");
+    update.bind(1,task); update.bind(2,binding.dump()); update.bind(3,operation); update.next(); require_changed(db);
+}
 
 void validate_checkpoint(const Json& state, const Json& binding) {
     if (!state.is_object() || !state.contains("version") || !state.at("version").is_number_integer() ||
@@ -386,7 +401,7 @@ Store::Store(const std::filesystem::path& database) {
             Statement version(db_, "PRAGMA user_version");
             version.next();
             schema_version = version.number(0);
-            if (schema_version != 0 && schema_version != 7)
+            if (schema_version != 0 && schema_version != 8)
                 throw std::runtime_error("Unsupported state schema; use a new state database");
             if (schema_version == 0) {
                 Statement objects(db_, "SELECT count(*) FROM sqlite_schema WHERE name NOT GLOB 'sqlite_*'");
@@ -396,7 +411,7 @@ Store::Store(const std::filesystem::path& database) {
             }
         }
         sql(db_, "PRAGMA foreign_keys=ON; PRAGMA journal_mode=WAL; PRAGMA synchronous=FULL;");
-        if (schema_version == 7) return;
+        if (schema_version == 8) { (void)database_id(); return; }
         Transaction tx(db_);
         sql(db_, R"(
             CREATE TABLE tasks (
@@ -498,24 +513,114 @@ Store::Store(const std::filesystem::path& database) {
                 kind TEXT NOT NULL, payload TEXT NOT NULL, created_at_ms INTEGER NOT NULL
             );
             CREATE INDEX supervisor_events_run ON supervisor_events(run_id,seq);
-            PRAGMA user_version=7;
+            CREATE TABLE database_identity (
+                singleton INTEGER PRIMARY KEY CHECK(singleton=1),
+                database_id TEXT NOT NULL UNIQUE CHECK(length(database_id)=32 AND database_id NOT GLOB '*[^0-9a-f]*')
+            );
+            CREATE TABLE durable_requests (
+                request_key TEXT PRIMARY KEY CHECK(length(CAST(request_key AS BLOB)) BETWEEN 1 AND 128),
+                request_digest TEXT NOT NULL CHECK(length(request_digest)=64 AND request_digest NOT GLOB '*[^0-9a-f]*'),
+                method TEXT NOT NULL CHECK(method IN ('tasks/start','tasks/resume')),
+                operation_id TEXT NOT NULL UNIQUE CHECK(length(operation_id)=32 AND operation_id NOT GLOB '*[^0-9a-f]*'),
+                session_id TEXT NOT NULL CHECK(length(session_id)=32 AND session_id NOT GLOB '*[^0-9a-f]*'),
+                workspace TEXT NOT NULL,
+                state TEXT NOT NULL DEFAULT 'incomplete' CHECK(state IN ('incomplete','finished')),
+                task_id TEXT REFERENCES tasks(id), authorization TEXT,
+                completion TEXT CHECK(completion IS NULL OR length(CAST(completion AS BLOB))<=307200),
+                created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+                finished_at TEXT,
+                CHECK((state='incomplete' AND completion IS NULL AND finished_at IS NULL) OR
+                      (state='finished' AND completion IS NOT NULL AND finished_at IS NOT NULL)),
+                CHECK((task_id IS NULL AND authorization IS NULL) OR
+                      (task_id IS NOT NULL AND authorization IS NOT NULL))
+            );
+            PRAGMA user_version=8;
         )");
+        Statement identity(db_,"INSERT INTO database_identity(singleton,database_id) VALUES(1,?)");
+        identity.bind(1,new_id()); identity.next();
         tx.commit();
     } catch (...) { sqlite3_close(db_); db_ = nullptr; throw; }
 }
 Store::~Store() { sqlite3_close(db_); }
+
+std::string Store::database_id() const {
+    Statement query(db_,"SELECT database_id FROM database_identity WHERE singleton=1");
+    if (!query.next()) throw std::runtime_error("State database identity is missing");
+    const auto id=query.text(0);
+    durable_request_storage::hex(id,32,"Invalid state database identity");
+    return id;
+}
+Json Store::request(const std::string& key) const {
+    durable_request_storage::key(key);
+    ReadSnapshot snapshot(db_);
+    (void)database_id();
+    const auto text=std::string("SELECT ")+durable_request_storage::columns+
+        " FROM durable_requests r CROSS JOIN database_identity d WHERE d.singleton=1 AND r.request_key=?";
+    Statement query(db_,text.c_str()); query.bind(1,key);
+    return query.next() ? durable_request_storage::receipt(query) : Json(nullptr);
+}
+Json Store::admit_request(const DurableRequest& value) {
+    durable_request_storage::admission(value);
+    Transaction tx(db_);
+    if (database_id()!=value.database_id)
+        throw DatabaseMismatch("State database identity changed; do not retry against a replacement database");
+    const auto text=std::string("SELECT ")+durable_request_storage::columns+
+        " FROM durable_requests r CROSS JOIN database_identity d WHERE d.singleton=1 AND r.request_key=?";
+    Statement existing(db_,text.c_str()); existing.bind(1,value.request_key);
+    if (existing.next()) {
+        auto result=durable_request_storage::receipt(existing);
+        durable_request_storage::match(existing,value.request_digest,value.method,value.workspace);
+        result["created"]=false;
+        tx.commit(); return result;
+    }
+    Statement count(db_,"SELECT count(*) FROM durable_requests"); count.next();
+    if (count.number(0)>=static_cast<std::int64_t>(durable_request_storage::history_limit))
+        throw RequestLimit("Durable request retention limit reached; existing keys remain queryable");
+    Statement insert(db_,"INSERT INTO durable_requests(request_key,request_digest,method,operation_id,session_id,workspace) VALUES(?,?,?,?,?,?)");
+    insert.bind(1,value.request_key); insert.bind(2,value.request_digest); insert.bind(3,value.method);
+    insert.bind(4,value.operation_id); insert.bind(5,value.session_id); insert.bind(6,value.workspace); insert.next();
+    auto result=request(value.request_key); result["created"]=true;
+    tx.commit(); return result;
+}
+void Store::finish_request(const std::string& operation_id, const Json& completion) {
+    durable_request_storage::hex(operation_id,32,"Invalid durable operation identity");
+    if (!completion.is_object() || completion.dump().size()>durable_request_storage::completion_limit)
+        throw std::invalid_argument("Durable completion must be an object of at most 300 KiB");
+    Transaction tx(db_);
+    Statement current(db_,"SELECT state,completion,session_id FROM durable_requests WHERE operation_id=?");
+    current.bind(1,operation_id);
+    if (!current.next()) throw std::runtime_error("Durable operation is not admitted");
+    if ((completion.contains("operation_id") && completion.at("operation_id")!=operation_id) ||
+        (completion.contains("session_id") && completion.at("session_id")!=current.text(2)))
+        throw RequestConflict("Durable completion identity does not match its admission");
+    if (current.text(0)=="finished") {
+        if (protocol::strict_json(current.text(1))!=completion)
+            throw RequestConflict("Durable operation already has a different completion");
+        tx.commit(); return;
+    }
+    Statement update(db_,"UPDATE durable_requests SET state='finished',completion=?,finished_at=strftime('%Y-%m-%dT%H:%M:%fZ','now') WHERE operation_id=? AND state='incomplete'");
+    update.bind(1,completion.dump()); update.bind(2,operation_id); update.next(); require_changed(db_);
+    tx.commit();
+}
 
 void Store::event(const std::string& task, const std::string& kind, const Json& payload) {
     Statement query(db_, "INSERT INTO events(task_id,kind,payload) VALUES(?,?,?)");
     query.bind(1, task); query.bind(2, kind); query.bind(3, payload.dump()); query.next();
 }
 std::string Store::create_task(const std::string& prompt, const std::string& workspace,
-                                const std::string& provider) {
+                                const std::string& provider, const Json* initial_state,
+                                const Json* binding, const std::string& request_operation_id) {
+    if ((initial_state==nullptr)!=(binding==nullptr) ||
+        (!request_operation_id.empty() && !initial_state))
+        throw std::invalid_argument("Durable task creation requires its initial checkpoint and binding");
     const auto id = new_id();
     Transaction tx(db_);
     Statement query(db_, "INSERT INTO tasks(id,prompt,workspace,provider,status) VALUES(?,?,?,?,'running')");
     query.bind(1,id); query.bind(2,prompt); query.bind(3,workspace); query.bind(4,provider); query.next();
     event(id, "task.started", {{"provider",provider},{"workspace",workspace}});
+    if (initial_state) save_checkpoint_in_transaction(db_,id,*initial_state,binding);
+    if (!request_operation_id.empty())
+        associate_request(db_,request_operation_id,"tasks/start",workspace,id,*binding);
     tx.commit();
     return id;
 }
@@ -619,7 +724,8 @@ void Store::save_checkpoint(const std::string& task, const Json& state, const Js
 Json Store::checkpoint(const std::string& task) const { return read_checkpoint(db_,task); }
 
 void Store::resume_task(const std::string& task, const Json& expected_binding,
-                        const std::string& scheduler_job, const std::string& claim_token) {
+                        const std::string& scheduler_job, const std::string& claim_token,
+                        const std::string& request_operation_id) {
     Transaction tx(db_);
     Statement current(db_, "SELECT status FROM tasks WHERE id=?");
     current.bind(1,task);
@@ -672,6 +778,11 @@ void Store::resume_task(const std::string& task, const Json& expected_binding,
     Statement update(db_, "UPDATE tasks SET status='running',summary='',updated_at=strftime('%Y-%m-%dT%H:%M:%fZ','now') WHERE id=? AND status=?");
     update.bind(1,task); update.bind(2,previous_status); update.next(); require_changed(db_);
     event(task,"task.resumed",{{"previous_status",previous_status},{"checkpoint_version",2}});
+    if (!request_operation_id.empty()) {
+        Statement workspace(db_,"SELECT workspace FROM tasks WHERE id=?");
+        workspace.bind(1,task); workspace.next();
+        associate_request(db_,request_operation_id,"tasks/resume",workspace.text(0),task,expected_binding);
+    }
     tx.commit();
 }
 std::int64_t Store::checkpoint_revision(const std::string& task) const { return revision(db_,task); }

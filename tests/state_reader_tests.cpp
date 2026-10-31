@@ -145,7 +145,7 @@ void uninitialized_state_reopens() {
         reader.scheduler_snapshot()["supervisor"].is_null(),"schema 0 supervisor view was treated as initialized");
     rejects([&] { reader.task("missing"); },"uninitialized database returned a task");
     rejects([&] { reader.build_proposal("missing","missing"); },"uninitialized database returned a proposal");
-    initializing.exec("BEGIN IMMEDIATE; CREATE TABLE initializing_only(value TEXT); PRAGMA user_version=7;");
+    initializing.exec("BEGIN IMMEDIATE; CREATE TABLE initializing_only(value TEXT); PRAGMA user_version=8;");
     check(reader.tasks()["items"].empty() && reader.events()["items"].empty(),"uncommitted schema became observable");
     initializing.exec("ROLLBACK");
     {
@@ -158,7 +158,7 @@ void uninitialized_state_reopens() {
 
 void unsupported_schemas_are_rejected_without_changes() {
     Temp temp;
-    for (const auto version : {0,1,2,3,4,5,6,999}) {
+    for (const auto version : {0,1,2,3,4,5,6,7,999}) {
         const auto path=temp.root / ("unsupported-" + std::to_string(version) + ".sqlite3");
         {
             Database db(path);
@@ -346,7 +346,7 @@ void current_schema_and_checkpoint_versions_are_required() {
     }
     {
         Database db(path);
-        check(db.value("PRAGMA user_version")=="7","new state did not use current schema");
+        check(db.value("PRAGMA user_version")=="8","new state did not use current schema");
         db.exec("PRAGMA wal_checkpoint(TRUNCATE); PRAGMA journal_mode=DELETE;");
     }
     StateReader reader(path);

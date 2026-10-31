@@ -48,7 +48,7 @@ codestudio-agent build --workspace D:\YourProject --build-config D:\YourProject\
 
 工具所需的环境变量和私有缓存目录应通过 `environment` 显式声明，并随清单一起审阅。宿主不会自动补充工具专用环境，也不会自动探测、安装或下载工具。通用步骤适合执行已明确授权的构建、测试、代码生成或打包程序；具体工具的依赖和沙箱兼容性仍需验证。
 
-构建绑定使用 version 2，包含原清单、执行计划、隔离后端和导出策略；提案回执也使用 version 2，二者都不含 `plugin` 标记。Windows 构建后端标识为 `windows-lpac-build-v2`。状态库只接受 schema 7，检查点封装、绑定和内核状态只接受 version 2。遇到其他状态版本时，需使用新状态库或新工作区创建任务；不会转换旧数据库或检查点。
+构建绑定使用 version 2，包含原清单、执行计划、隔离后端和导出策略；提案回执也使用 version 2，二者都不含 `plugin` 标记。Windows 构建后端标识为 `windows-lpac-build-v2`。状态库只接受 schema 8，检查点封装、绑定和内核状态只接受 version 2。遇到其他状态版本时，需使用新状态库或新工作区创建任务；不会转换旧数据库或检查点。
 
 | 模块 | 职责 |
 |---|---|

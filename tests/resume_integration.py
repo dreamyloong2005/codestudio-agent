@@ -335,7 +335,7 @@ class ResumeTests(unittest.TestCase):
         self.assertEqual(original[0], 2)
         self.assertEqual(json.loads(original[1])["version"], 2)
         self.assertEqual(json.loads(original[2])["version"], 2)
-        self.assertEqual(self.sql_rows("PRAGMA user_version")[0][0], 7)
+        self.assertEqual(self.sql_rows("PRAGMA user_version")[0][0], 8)
         self.assertEqual({row[0] for row in self.sql_rows("SELECT DISTINCT schema_version FROM events")}, {2})
         for field in ("version", "state", "binding"):
             for version in ((0, 1, 3) if field == "version" else (0, 1, 3, True, "2")):

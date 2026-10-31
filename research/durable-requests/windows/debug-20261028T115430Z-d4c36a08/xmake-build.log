@@ -1,0 +1,106 @@
+[ 10%]: <agent-tests> cache compiling.debug tests\core_tests.cpp
+[ 10%]: <agent-tests> cache compiling.debug tests\tools_tests.cpp
+[ 10%]: <agent-tests> cache compiling.debug tests\process_tests.cpp
+[ 10%]: <agent-tests> cache compiling.debug tests\responses_tests.cpp
+[ 10%]: <agent-tests> cache compiling.debug tests\messages_tests.cpp
+[ 10%]: <agent-tests> cache compiling.debug tests\line_process_tests.cpp
+[ 10%]: <agent-tests> cache compiling.debug tests\mcp_tests.cpp
+[ 11%]: <agent-tests> cache compiling.debug tests\checkpoint_store_tests.cpp
+[ 12%]: <agent-tests> cache compiling.debug tests\resume_kernel_tests.cpp
+[ 13%]: <agent-tests> cache compiling.debug tests\durable_request_store_tests.cpp
+[ 13%]: <agent-tests> cache compiling.debug tests\scheduler_store_tests.cpp
+[ 14%]: <agent-tests> cache compiling.debug tests\credentials_tests.cpp
+tests\credentials_tests.cpp(35,38): warning: 'getenv' is deprecated: This function or variable may be unsafe. Consider using _dupenv_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details. [-Wdeprecated-declarations]
+   35 |         if (const auto* value = std::getenv(name.c_str())) previous = value;
+      |                                      ^
+C:\Program Files (x86)\Windows Kits\10\include\10.0.26100.0\ucrt\stdlib.h(1183,20): note: 'getenv' has been explicitly marked deprecated here
+ 1183 |     _Check_return_ _CRT_INSECURE_DEPRECATE(_dupenv_s)
+      |                    ^
+C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.44.35207\include\vcruntime.h(368,55): note: expanded from macro '_CRT_INSECURE_DEPRECATE'
+  368 |         #define _CRT_INSECURE_DEPRECATE(_Replacement) _CRT_DEPRECATE_TEXT(    \
+[ 15%]: <agent-tests> cache compiling.debug tests\cron_tests.cpp
+[ 16%]: <agent-tests> cache compiling.debug tests\cron_store_tests.cpp
+[ 16%]: <agent-tests> cache compiling.debug tests\autostart_tests.cpp
+[ 17%]: <agent-tests> cache compiling.debug tests\process_observation_tests.cpp
+[ 18%]: <agent-tests> cache compiling.debug tests\sandbox_tests.cpp
+[ 19%]: <agent-tests> cache compiling.debug tests\state_reader_tests.cpp
+[ 20%]: <agent-tests> cache compiling.debug tests\build_workspace_tests.cpp
+[ 20%]: <agent-tests> cache compiling.debug tests\workspace_execution_tests.cpp
+[ 21%]: <agent-tests> cache compiling.debug tests\build_proposal_tests.cpp
+[ 22%]: <agent-tests> cache compiling.debug tests\build_decision_tests.cpp
+[ 23%]: <agent-core> cache compiling.debug src\core\build_info.cpp
+[ 23%]: <agent-core> cache compiling.debug src\core\cron.cpp
+[ 24%]: <agent-core> cache compiling.debug src\core\digest.cpp
+[ 25%]: <agent-core> cache compiling.debug src\core\kernel.cpp
+[ 26%]: <agent-core> cache compiling.debug src\core\state_reader.cpp
+[ 27%]: <agent-core> cache compiling.debug src\core\store.cpp
+[ 27%]: <agent-core> cache compiling.debug src\provider\messages.cpp
+[ 28%]: <agent-core> cache compiling.debug src\provider\provider.cpp
+[ 29%]: <agent-core> cache compiling.debug src\provider\responses.cpp
+[ 30%]: <agent-core> cache compiling.debug src\tools\build_proposal.cpp
+[ 30%]: <agent-core> cache compiling.debug src\tools\tools.cpp
+[ 31%]: <agent-core> cache compiling.debug src\tools\workspace_build.cpp
+[ 32%]: <agent-core> cache compiling.debug src\platform\autostart.cpp
+[ 33%]: <agent-core> cache compiling.debug src\platform\autostart_linux.cpp
+[ 33%]: <agent-core> cache compiling.debug src\platform\autostart_macos.cpp
+[ 34%]: <agent-core> cache compiling.debug src\platform\autostart_options.cpp
+[ 35%]: <agent-core> cache compiling.debug src\platform\build_manifest_macos.cpp
+[ 36%]: <agent-core> cache compiling.debug src\platform\build_workspace.cpp
+[ 37%]: <agent-core> cache compiling.debug src\platform\build_workspace_linux.cpp
+[ 37%]: <agent-core> cache compiling.debug src\platform\build_workspace_macos.cpp
+[ 38%]: <agent-core> cache compiling.debug src\platform\credentials.cpp
+[ 39%]: <agent-core> cache compiling.debug src\platform\credentials_macos.cpp
+[ 40%]: <agent-core> cache compiling.debug src\platform\line_process.cpp
+[ 40%]: <agent-core> cache compiling.debug src\platform\linux_sandbox.cpp
+[ 41%]: <agent-core> cache compiling.debug src\platform\process.cpp
+[ 42%]: <agent-core> cache compiling.debug src\platform\process_observation.cpp
+[ 43%]: <agent-core> cache compiling.debug src\platform\process_package.cpp
+[ 44%]: <agent-core> cache compiling.debug src\platform\sandbox.cpp
+[ 44%]: <agent-core> cache compiling.debug src\platform\sandbox_resources.cpp
+[ 45%]: <agent-core> cache compiling.debug src\platform\sandbox_resources_linux.cpp
+[ 46%]: <agent-core> cache compiling.debug src\platform\sandbox_resources_windows.cpp
+[ 47%]: <agent-core> cache compiling.debug src\platform\scheduler_child.cpp
+[ 47%]: <agent-core> cache compiling.debug src\platform\scheduler_process.cpp
+[ 48%]: <agent-core> cache compiling.debug src\platform\windows_sandbox.cpp
+[ 49%]: <agent-core> cache compiling.debug src\mcp\http_transport.cpp
+[ 50%]: <agent-core> cache compiling.debug src\mcp\mcp.cpp
+[ 50%]: <agent-core> cache compiling.debug src\mcp\oauth.cpp
+[ 51%]: <agent-core> cache compiling.debug src\mcp\oauth_http.cpp
+[ 52%]: <agent-core> cache compiling.debug src\mcp\oauth_native.cpp
+[ 53%]: <agent-core> cache compiling.debug src\mcp\stdio_transport.cpp
+[ 54%]: <agent-core> cache compiling.debug src\application\application.cpp
+[ 54%]: <agent-core> cache compiling.debug src\application\build_approval.cpp
+[ 55%]: <agent-core> cache compiling.debug src\application\extension_commands.cpp
+[ 56%]: <agent-core> cache compiling.debug src\application\scheduler.cpp
+[ 57%]: <agent-core> cache compiling.debug src\application\service.cpp
+[ 57%]: <agent-core> cache compiling.debug src\application\supervisor_diagnostics.cpp
+[ 58%]: <agent-core> cache compiling.debug src\execution\build_manifest.cpp
+[ 59%]: <agent-core> cache compiling.debug src\execution\workspace_execution.cpp
+[ 60%]: <agent-core> cache compiling.debug src\plugins\download.cpp
+[ 61%]: <agent-core> cache compiling.debug src\plugins\plugins.cpp
+[ 61%]: <process-fixture> cache compiling.debug tests\process_fixture.cpp
+[ 62%]: <line-process-fixture> cache compiling.debug tests\line_process_fixture.cpp
+[ 63%]: <mcp-fixture> cache compiling.debug tests\mcp_fixture.cpp
+[ 64%]: <sandbox-fixture> cache compiling.debug tests\sandbox_fixture.cpp
+[ 64%]: <build-fixture> cache compiling.debug tests\build_fixture.cpp
+[ 65%]: <plugin-sandbox-fixture> cache compiling.debug tests\plugin_sandbox_fixture.cpp
+[ 66%]: <plugin-sandbox-library> cache compiling.debug tests\plugin_sandbox_library.cpp
+[ 67%]: <plugin-sandbox-dependency> cache compiling.debug tests\plugin_sandbox_dependency.cpp
+[ 67%]: <sandbox-resource-fixture> cache compiling.debug tests\sandbox_resource_fixture.cpp
+[ 68%]: <codestudio-agent> cache compiling.debug src\cli\credentials_cli.cpp
+[ 69%]: <codestudio-agent> cache compiling.debug src\cli\main.cpp
+[ 70%]: <provider-fixture> cache compiling.debug tests\provider_fixture.cpp
+[ 71%]: <process-fixture> linking.debug process-fixture.exe
+[ 71%]: <line-process-fixture> linking.debug line-process-fixture.exe
+[ 72%]: <plugin-sandbox-dependency> linking.debug plugin-sandbox-dependency.dll
+[ 73%]: <agent-core> archiving.debug agent-core.lib
+[ 74%]: <mcp-fixture> linking.debug mcp-fixture.exe
+[ 74%]: <sandbox-fixture> linking.debug sandbox-fixture.exe
+[ 75%]: <build-fixture> linking.debug build-fixture.exe
+[ 80%]: <plugin-sandbox-library> linking.debug plugin-sandbox-library.dll
+[ 81%]: <plugin-sandbox-fixture> linking.debug plugin-sandbox-fixture.exe
+[ 83%]: <sandbox-resource-fixture> linking.debug sandbox-resource-fixture.exe
+[ 86%]: <codestudio-agent> linking.debug codestudio-agent.exe
+[ 88%]: <agent-tests> linking.debug agent-tests.exe
+[ 93%]: <provider-fixture> linking.debug provider-fixture.exe
+[100%]: build ok, spent 35.984s

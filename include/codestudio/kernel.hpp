@@ -14,6 +14,7 @@ struct RunOptions {
     std::string resume_task_id;
     std::string scheduler_job_id;
     std::string scheduler_claim_token;
+    std::string request_operation_id;
 };
 
 Json run_agent(Store& store, ModelProvider& provider, const ToolBroker& tools,

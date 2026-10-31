@@ -1,0 +1,20 @@
+{
+  "status": "succeeded",
+  "final_source": {
+    "sha256": "bbced79621faf60b09001d97177d8160e21ac2a9dbc62d7fd9cb411682c3f426",
+    "files": 226
+  },
+  "unchanged_tested_artifacts": [
+    {
+      "path": "build/linux/x86_64/release/codestudio-agent",
+      "size": 3581312,
+      "sha256": "11bf56be97cf0cac6d304291077242fa770854ed0747fb008deef40d8dbea697"
+    },
+    {
+      "path": "build/linux/x86_64/debug/codestudio-agent",
+      "size": 37158840,
+      "sha256": "e2ad9fe6f36e95642fdc33b3ceaab4fad45791a67af5c16420bbf0c4a7224b19"
+    }
+  ],
+  "verification_script_tests": "20 passed"
+}

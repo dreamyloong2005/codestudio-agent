@@ -243,7 +243,7 @@ class CronTests(unittest.TestCase):
         self.assertEqual([item["id"] for item in listed["items"]], [created["id"]])
         self.assertFalse(listed["has_more"])
         self.assertEqual(self.database_snapshot(), before)
-        self.assertEqual(self.sql_rows("PRAGMA user_version"), [(7,)])
+        self.assertEqual(self.sql_rows("PRAGMA user_version"), [(8,)])
         self.assertNotIn(fixture.TOKEN, before)
 
     def test_three_protocols_each_occurrence_gets_fresh_task_history_and_budget(self):

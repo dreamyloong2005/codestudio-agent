@@ -298,7 +298,7 @@ class CliTests(unittest.TestCase):
         self.assertEqual(recovered["recovered"][0]["task_id"], "old-running")
 
     def test_unsupported_schema_refusal_preserves_database_without_migration(self):
-        for version in (1, 2, 3, 4, 5, 999):
+        for version in (1, 2, 3, 4, 5, 6, 7, 999):
             with self.subTest(version=version):
                 database = self.workspace / f"unsupported-state-{version}.sqlite3"
                 with closing(sqlite3.connect(database)) as db:

@@ -205,7 +205,7 @@ class ClientContractTests(unittest.TestCase):
                          {"items": [], "next_after": after, "has_more": False})
         with closing(sqlite3.connect(self.database)) as database:
             self.assertEqual("\n".join(database.iterdump()), before)
-            self.assertEqual(database.execute("PRAGMA user_version").fetchone()[0], 7)
+            self.assertEqual(database.execute("PRAGMA user_version").fetchone()[0], 8)
         self.assertEqual(self.requests(), [])
 
     @unittest.skipUnless(os.name == "nt" or sys.platform.startswith("linux") or sys.platform == "darwin",

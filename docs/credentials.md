@@ -75,7 +75,7 @@ macOS 使用 Security.framework，在当前用户的默认 Keychain 保存通用
 
 ## 续跑、后台任务和审批
 
-模型配置的 `credential` 是执行绑定的一部分。现行状态数据库仍为 schema 7，协议和检查点仍为 version 2；缺少该字段的旧模型检查点明确拒绝，不补默认值或转换，需要创建新任务。相同引用下值的轮换不改变绑定；改成另一个引用则拒绝续跑，即使两个引用恰好保存相同值。
+模型配置的 `credential` 是执行绑定的一部分。现行状态数据库为 schema 8，协议和检查点仍为 version 2；缺少该字段的旧模型检查点明确拒绝，不补默认值或转换，需要创建新任务。相同引用下值的轮换不改变绑定；改成另一个引用则拒绝续跑，即使两个引用恰好保存相同值。
 
 系统凭据更新后，正在运行的模型操作仍使用开始时取得的值。后续前台任务、显式续跑和调度尝试读取新值。认证失败不触发即时刷新或隐式重放；后台是否能进行下一次尝试，仍由原调度授权、检查点阶段、期限、次数和预算决定。未知工具效果始终阻断继续。
 
@@ -87,7 +87,7 @@ macOS 使用 Security.framework，在当前用户的默认 Keychain 保存通用
 
 ## 服务接口与权限边界
 
-stdio 服务仍为协议 2、43 个方法。模型相关 `options.credential` 对应 CLI 选项，可用于 `tasks/start` 的 run 模式、`tasks/resume`、`schedules/create`、`crons/create` 和审批的 `continue_options`。服务不接受 `api_key`，也不提供设置、删除或读取密钥值的 RPC；系统凭据先通过 CLI 管理。UI 继续由 CodeStudio Next 负责。
+stdio 服务仍为协议 2、47 个方法。模型相关 `options.credential` 对应 CLI 选项，可用于 `tasks/start` 的 run 模式、`tasks/resume`、`schedules/create`、`crons/create` 和审批的 `continue_options`。服务不接受 `api_key`，也不提供设置、删除或读取密钥值的 RPC；系统凭据先通过 CLI 管理。UI 继续由 CodeStudio Next 负责。
 
 实际选中的值和既有 `CODESTUDIO_API_KEY` 均进入本次操作的脱敏上下文，包括流式文本、记录及最终错误；操作结束后不缓存所选凭据。任务数据库、提示词、工具输入输出和配置本身仍是明文。脱敏不保证识别所有未知秘密，也不保证识别密钥的编码、拆分或变形。
 

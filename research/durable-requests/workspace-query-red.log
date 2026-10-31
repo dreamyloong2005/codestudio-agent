@@ -1,0 +1,20 @@
+test_same_database_and_key_cannot_retarget_another_workspace (__main__.DurableRequestTests.test_same_database_and_key_cannot_retarget_another_workspace) ... FAIL
+
+======================================================================
+FAIL: test_same_database_and_key_cannot_retarget_another_workspace (__main__.DurableRequestTests.test_same_database_and_key_cannot_retarget_another_workspace)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\durable_requests_integration.py", line 405, in test_same_database_and_key_cannot_retarget_another_workspace
+    self.assert_kind(self.receipt(other_client, database_id, "workspace-bound", error=True), "request_conflict")
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\Projects\codestudio-agent\tests\durable_requests_integration.py", line 97, in receipt
+    return client.rpc("requests/get", {"database_id": database_id, "request_key": key}, error=error)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\Projects\codestudio-agent\tests\service_integration.py", line 152, in rpc
+    raise AssertionError(f"Expected RPC error: {reply!r}")
+AssertionError: Expected RPC error: {'id': 3, 'jsonrpc': '2.0', 'result': {'completion': {'exit_code': 0, 'operation_id': 'dbd4944894aa86b8eeb35d5cded8191e', 'result': {'product': 'CodeStudio-Agent', 'provider': 'offline-demo', 'state_database': 'C:\\Users\\dreamyloong\\AppData\\Local\\Temp\\codestudio-service-lb6av324\\workspace with spaces\\.codestudio\\state.sqlite3', 'status': 'completed', 'summary': 'Offline demo completed: wrote CODESTUDIO_DEMO.txt and verified its contents by reading it back.', 'task_id': 'ed8b6959a7b8d3c350d181187b678d72', 'turns': 3, 'verification': 'Tool receipts recorded; final answer is not independent acceptance.'}, 'session_id': '2a6038fbe202d61971618fc31568d3cc'}, 'database_id': '80c0df91447b8ecea84d4f3c484186d1', 'method': 'tasks/start', 'operation_id': 'dbd4944894aa86b8eeb35d5cded8191e', 'request_key': 'workspace-bound', 'session_id': '2a6038fbe202d61971618fc31568d3cc', 'state': 'finished', 'task_id': 'ed8b6959a7b8d3c350d181187b678d72'}}
+
+----------------------------------------------------------------------
+Ran 1 test in 0.383s
+
+FAILED (failures=1)

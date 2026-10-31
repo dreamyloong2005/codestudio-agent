@@ -1,0 +1,90 @@
+Verification failed: C++ runtime changed while tests were running
+Report: /tmp/codestudio-verification-amhy2noo/release-20261028T101918Z-99851220/verification.json
+.Verification failed: Source changed during verification; the receipt is not valid for a single snapshot
+Report: /tmp/codestudio-verification-7l64xw7l/source/release-20261028T101918Z-b08eac86/verification.json
+Verification failed: Built executables changed while tests were running
+Report: /tmp/codestudio-verification-7l64xw7l/binary/release-20261028T101918Z-1df66877/verification.json
+..Verification failed: Delivery package changed while tests were running
+Report: /tmp/codestudio-verification-i6a7hskn/release-20261028T101918Z-b9de1412/verification.json
+.linux/release schema: failed
+Ran 2 tests in 0.1s
+
+OK
+
+.Report: /tmp/codestudio-verification-dfou91g4/release-20261028T101918Z-d5d0be68/verification.json
+......Verification failed: missing tool
+Report: /tmp/codestudio-verification-bhkx0enb/release-20261028T101918Z-2dcecf9d/verification.json
+.Report: /tmp/codestudio-verification-fgod1tyc/debug-20261028T101918Z-b66e1801/verification.json
+.linux/release toolchain: succeeded
+linux/release toolchain: failed
+{}
+
+linux/release toolchain: failed
+{"cxx26": true, "cplusplus": 202400, "format": "probe:07", "timezone_offsets": true, "timezone_dst": false, "tzdb_version": "2026a", "current_zone": "Asia/Shanghai"}
+
+linux/release toolchain: failed
+{"cxx26": true, "cplusplus": 202302, "format": "probe:07", "timezone_offsets": true, "timezone_dst": true, "tzdb_version": "2026a", "current_zone": "Asia/Shanghai"}
+
+..linux/release schema: failed
+
+.linux/release schema: succeeded
+.windows/release real_build: succeeded
+windows/release real_build: failed
+PASS 2 real isolated XMake builds: explicit-v2 and custom-cache-v2
+windows/release real_build: failed
+PASS real isolated XMake / explicit-v2 / C++26 pack indexing / compile / link / execute / atomic export
+  steps=3, bytes=1024, sha256=fixture
+PASS real isolated XMake / explicit-v2 / C++26 pack indexing / compile / link / execute / atomic export
+PASS 2 real isolated XMake builds: explicit-v2 and custom-cache-v2
+
+windows/release real_build: failed
+PASS real isolated XMake / explicit-v2 / C++26 pack indexing / compile / link / execute / atomic export
+  steps=3, bytes=1024, sha256=fixture
+
+PASS 2 real isolated XMake builds: explicit-v2 and custom-cache-v2
+
+windows/release real_build: failed
+PASS real isolated XMake / explicit-v2 / C++26 pack indexing / compile / link / execute / atomic export
+  steps=3, bytes=1024, sha256=fixture
+PASS real isolated XMake / custom-cache-v2 / C++26 pack indexing / compile / link / execute / atomic export
+
+
+windows/release real_build: failed
+PASS real isolated XMake / explicit-v2 / C++26 pack indexing / compile / link / execute / atomic export
+  steps=3, bytes=1024, sha256=fixture
+PASS real isolated XMake / custom-cache-v2 / C++26 pack indexing / compile / link / execute / atomic export
+PASS 2 real isolated XMake builds: explicit-v2 and custom-cache-v2
+unfinished
+
+windows/release real_build: failed
+FAIL earlier operation
+PASS real isolated XMake / explicit-v2 / C++26 pack indexing / compile / link / execute / atomic export
+  steps=3, bytes=1024, sha256=fixture
+PASS real isolated XMake / custom-cache-v2 / C++26 pack indexing / compile / link / execute / atomic export
+PASS 2 real isolated XMake builds: explicit-v2 and custom-cache-v2
+
+windows/release real_build: failed
+PASS real isolated XMake / explicit-v2 / C++26 pack indexing / compile / link / execute / atomic export
+  steps=3, bytes=1024, sha256=fixture
+PASS real isolated XMake / custom-cache-v2 / C++26 pack indexing / compile / link / execute / atomic export
+PASS 2 real isolated XMake builds: explicit-v2 and custom-cache-v2
+
+.linux/release schema: failed
+Ran 0 tests in 0.1s
+
+OK
+
+linux/release schema: failed
+Ran 1 test in 0.1s
+
+OK
+not a complete test run
+
+.linux/release schema: failed
+just a message
+
+.
+----------------------------------------------------------------------
+Ran 20 tests in 1.156s
+
+OK

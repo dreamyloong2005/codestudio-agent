@@ -95,7 +95,7 @@ void registration_and_readers() {
     rejects([&] { create(store,at,-1); },"negative occurrence budget accepted");
     rejects([&] { store.create_cron("bad","* * * * *","UTC",prompt,"fixture",argv(),initial(),604800001,8,100,0,at); },"unbounded per-run deadline accepted");
     check(store.crons()["items"].size()==2,"rejected definition left a record");
-    Database raw(path); check(raw.count("PRAGMA user_version")==7,"schema is not current");
+    Database raw(path); check(raw.count("PRAGMA user_version")==8,"schema is not current");
 }
 
 void materialization_atomicity() {

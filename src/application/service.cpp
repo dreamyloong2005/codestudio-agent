@@ -1,6 +1,7 @@
 #include "codestudio/service.hpp"
 #include "codestudio/application.hpp"
 #include "codestudio/credentials.hpp"
+#include "codestudio/digest.hpp"
 #include "codestudio/state_reader.hpp"
 #include "codestudio/store.hpp"
 #include "codestudio/scheduler.hpp"
@@ -271,6 +272,48 @@ void notification(Stdio& io, const std::string& method, Json params) {
 }
 
 struct Configuration { std::filesystem::path workspace, database; };
+
+std::string request_key(const Json& params) {
+    const auto key=string_value(params,"request_key",128);
+    if (application_redact(Json(key))!=Json(key))
+        throw RpcError(-32602,"request_key must be a nonsecret client-generated identifier");
+    if (!std::ranges::all_of(key,[](unsigned char c) {
+            return (c>='a' && c<='z') || (c>='A' && c<='Z') || (c>='0' && c<='9') ||
+                   c=='.' || c=='_' || c==':' || c=='-';
+        })) throw RpcError(-32602,"request_key must contain only ASCII letters, digits, '.', '_', ':' or '-'");
+    return key;
+}
+std::string database_identity(const Json& params) {
+    const auto id=string_value(params,"database_id",32);
+    if (id.size()!=32 || !std::ranges::all_of(id,[](char c) {
+            return (c>='0' && c<='9') || (c>='a' && c<='f');
+        })) throw RpcError(-32602,"database_id must be a 32-character lowercase hexadecimal identity");
+    return id;
+}
+Json request_acceptance(const Json& receipt,bool replayed) {
+    return {{"session_id",receipt.at("session_id")},{"operation_id",receipt.at("operation_id")},
+            {"status","accepted"},{"durable_request",receipt},{"replayed",replayed}};
+}
+
+// Admission and execution share the same locks and writer connection. A second
+// client may query the committed request without acquiring either runner lock.
+struct DurableOperation {
+    RunLock workspace_lock, database_lock;
+    Store store;
+    Json receipt;
+    DurableOperation(const Configuration& config,const DurableRequest& request)
+        : workspace_lock(config.workspace/".codestudio"/"workspace"), database_lock(config.database),
+          store(checked_database(config,request.database_id)) {
+        receipt=store.admit_request(request);
+    }
+private:
+    static const std::filesystem::path& checked_database(const Configuration& config,const std::string& expected) {
+        // Keyed execution never implicitly initializes a missing/replaced DB.
+        StateReader current(config.database);
+        if (current.database_id()!=expected) throw DatabaseMismatch("Durable request database identity differs");
+        return config.database;
+    }
+};
 Configuration configure(const std::vector<std::string>& argv) {
     std::map<std::string,std::string> values;
     for (std::size_t index = 2; index < argv.size(); ++index) {
@@ -505,8 +548,8 @@ std::vector<std::string> command(const Configuration& config, const std::string&
         return args;
     }
     const bool resume = method == "tasks/resume";
-    fields(params, resume ? std::initializer_list<std::string_view>{"task_id","options"} :
-                            std::initializer_list<std::string_view>{"mode","options"});
+    fields(params, resume ? std::initializer_list<std::string_view>{"task_id","options","database_id","request_key"} :
+                            std::initializer_list<std::string_view>{"mode","options","database_id","request_key"});
     const auto mode = resume ? "resume" : string_value(params, "mode", 16);
     if (!resume && mode != "run" && mode != "demo" && mode != "build") throw RpcError(-32602, "mode must be run, demo or build");
     const auto options = params.value("options", Json::object());
@@ -519,6 +562,7 @@ std::vector<std::string> command(const Configuration& config, const std::string&
 
 struct Operation {
     std::string id, method;
+    std::shared_ptr<DurableOperation> durable;
     Json completion;
     std::atomic_bool cancelled{false}, done{false};
     std::thread thread;
@@ -582,8 +626,9 @@ int serve(const Configuration& config, const std::atomic_bool& shutdown) {
                 initialized = true;
                 response(io,id,{{"protocol_version",2},{"product","CodeStudio-Agent"},{"version","0.1.0"},{"session_id",session},
                     {"workspace",path_utf8(config.workspace)},{"state_database",path_utf8(config.database)},
+                    {"database_id",reader.database_id()},
                     {"capabilities",{{"task_operations",true},{"event_replay",true},{"text_deltas",true},{"automatic_resume",true},
-                        {"cron",true},{"operation_lookup",true},{"structured_errors",true},
+                        {"cron",true},{"operation_lookup",true},{"structured_errors",true},{"durable_requests",true},
                         {"mcp_streamable_http",true},{"plugin_locks",true},{"plugin_distribution",true},
 #if defined(_WIN32) || defined(__linux__) || defined(__APPLE__)
                         {"background_scheduler",true},{"mcp_oauth",true},
@@ -601,10 +646,31 @@ int serve(const Configuration& config, const std::atomic_bool& shutdown) {
 #endif
                         {"build_proposals",true},{"approval_continuation",true}}},
                     {"limits",{{"input_bytes",input_limit},{"output_bytes",output_limit},{"page_items",100},{"active_operations",1},
-                        {"operation_history",operation_history_limit},{"operation_result_bytes",operation_result_limit}}}});
+                        {"operation_history",operation_history_limit},{"operation_result_bytes",operation_result_limit},
+                        {"durable_requests",10000}}}});
                 return;
             }
             if (!initialized) throw RpcError(-32002, "Initialize the service first");
+            if (method=="state/initialize") {
+                fields(params,{}); idle();
+                RunLock workspace_lock(config.workspace/".codestudio"/"workspace");
+                RunLock database_lock(config.database);
+                Store store(config.database);
+                response(io,id,{{"database_id",store.database_id()},{"workspace",path_utf8(config.workspace)},
+                    {"state_database",path_utf8(config.database)}});
+                return;
+            }
+            if (method=="requests/get") {
+                fields(params,{"database_id","request_key"});
+                const auto expected=database_identity(params), key=request_key(params);
+                // Reopen the pathname: a long-lived reader can still reference
+                // an unlinked old database on POSIX after external replacement.
+                StateReader current(config.database);
+                const auto receipt=current.request(expected,key,{},{},path_utf8(config.workspace));
+                if (receipt.is_null()) throw RpcError(-32000,"Durable request is not recorded; absence does not prove no effects",
+                    "request_not_found","query_state","unknown");
+                response(io,id,application_redact(receipt)); return;
+            }
             if (method=="sandboxes/list") {
                 fields(params,{"after","limit"});
                 const auto after=params.contains("after") ? string_value(params,"after",32) : std::string();
@@ -717,12 +783,45 @@ int serve(const Configuration& config, const std::atomic_bool& shutdown) {
                 method == "mcp/auth/discover" || method == "mcp/auth/status" || method == "mcp/auth/login" || method == "mcp/auth/logout" ||
                 method == "plugins/pack" || method == "plugins/install" || method == "plugins/lock" || method == "plugins/inspect" ||
                 method == "sandboxes/reclaim") {
-                idle(); auto args = command(config,method,params);
+                auto args = command(config,method,params);
+                std::shared_ptr<DurableOperation> durable;
+                if (method=="tasks/start" || method=="tasks/resume") {
+                    if (params.contains("request_key")!=params.contains("database_id"))
+                        throw RpcError(-32602,"request_key and database_id must be supplied together");
+                    if (params.contains("request_key")) {
+                        DurableRequest request;
+                        request.database_id=database_identity(params); request.request_key=request_key(params);
+                        request.method=method; request.workspace=path_utf8(config.workspace);
+                        auto normalized=params; normalized.erase("database_id"); normalized.erase("request_key");
+                        request.request_digest=sha256_bytes(Json{{"method",method},{"params",normalized},
+                            {"workspace",request.workspace}}.dump());
+                        StateReader current(config.database);
+                        const auto previous=current.request(request.database_id,request.request_key,
+                            request.request_digest,method,request.workspace);
+                        if (!previous.is_null()) {
+                            response(io,id,application_redact(request_acceptance(previous,true))); return;
+                        }
+                        idle();
+                        request.operation_id=new_id(); request.session_id=session;
+                        durable=std::make_shared<DurableOperation>(config,request);
+                        const bool created=durable->receipt.at("created").get<bool>();
+                        durable->receipt.erase("created");
+                        if (!created) {
+                            response(io,id,application_redact(request_acceptance(durable->receipt,true))); return;
+                        }
+                    }
+                }
+                idle();
                 operation = std::make_unique<Operation>(); operation->id = new_id(); operation->method = method;
+                if (durable) {
+                    operation->id=durable->receipt.at("operation_id").get<std::string>();
+                    operation->durable=std::move(durable);
+                }
                 auto* current = operation.get();
                 // Queue acceptance first: even an immediate demo failure cannot
                 // emit completion before its operation ID is acknowledged.
-                response(io,id,{{"session_id",session},{"operation_id",current->id},{"status","accepted"}});
+                if (current->durable) response(io,id,request_acceptance(current->durable->receipt,false));
+                else response(io,id,{{"session_id",session},{"operation_id",current->id},{"status","accepted"}});
                 const auto finish = [&io,current,&session](Json data) {
                     data["operation_id"] = current->id;
                     data["session_id"] = session;
@@ -744,6 +843,18 @@ int serve(const Configuration& config, const std::atomic_bool& shutdown) {
                             retained["result_refs"] = std::move(refs);
                         }
                     }
+                    if (current->durable) {
+                        try { current->durable->store.finish_request(current->id,retained); }
+                        catch (...) {
+                            // A terminal task is not proof that its operation
+                            // receipt committed. Keep the durable row incomplete.
+                            data={{"operation_id",current->id},{"session_id",session},{"exit_code",2},
+                                {"error",error_value(session,-32000,
+                                    "Cannot persist operation completion; query durable request and task state",
+                                    "operation_failed","query_state","unknown")}};
+                            retained=data;
+                        }
+                    }
                     current->completion = std::move(retained);
                     current->done.store(true);
                     // Once published the receipt is immutable. A transport allocation
@@ -752,7 +863,7 @@ int serve(const Configuration& config, const std::atomic_bool& shutdown) {
                     catch (...) { io.fail(); }
                 };
                 try {
-                    current->thread = std::thread([args=std::move(args),current,&io,&session,finish] {
+                    current->thread = std::thread([args=std::move(args),current,&io,&session,&config,finish] {
                         try {
                             CommandCallbacks callbacks;
                             callbacks.on_text = [&](std::string_view text) {
@@ -762,7 +873,10 @@ int serve(const Configuration& config, const std::atomic_bool& shutdown) {
                                 auto message=notice; message["operation_id"]=current->id;
                                 notification(io,"operation/authorization",std::move(message));
                             };
-                            const auto result = execute_command(args,current->cancelled,callbacks);
+                            const auto result = current->durable
+                                ? execute_task_request(args,current->cancelled,callbacks,
+                                    {current->durable->store,config.workspace,config.database,current->id})
+                                : execute_command(args,current->cancelled,callbacks);
                             finish({{"exit_code",result.exit_code},{"result",result.value}});
                         } catch (const std::exception& e) { finish({{"exit_code",2},{"error",error_value(session,-32000,e.what(),
                             "operation_failed","query_state","unknown")}}); }
@@ -778,6 +892,10 @@ int serve(const Configuration& config, const std::atomic_bool& shutdown) {
             }
             throw RpcError(-32601, "Method not found");
         } catch (const RpcError& e) { error(io,id,error_value(session,e.code,e.what(),e.kind,e.recovery,e.outcome)); }
+        catch (const DatabaseMismatch& e) { error(io,id,error_value(session,-32000,e.what(),"database_mismatch","query_state","unknown")); }
+        catch (const RequestConflict& e) { error(io,id,error_value(session,-32000,e.what(),"request_conflict","fix_request","not_started")); }
+        catch (const RequestLimit& e) { error(io,id,error_value(session,-32000,e.what(),"request_limit","query_state","not_started")); }
+        catch (const RunBusy& e) { error(io,id,error_value(session,-32000,e.what(),"busy","wait_for_idle","not_started")); }
         catch (const std::exception& e) { error(io,id,error_value(session,-32000,e.what())); }
     };
     while (true) {

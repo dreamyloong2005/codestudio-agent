@@ -1,0 +1,177 @@
+{
+  "format": 2,
+  "product": "CodeStudio-Agent",
+  "platform": "windows",
+  "arch": "x64",
+  "mode": "release",
+  "started_at": "2026-10-28T10:26:24.051449+00:00",
+  "status": "failed",
+  "selected_suites": [
+    "delivery"
+  ],
+  "omitted_suites": [
+    "native",
+    "schema",
+    "provider",
+    "streaming",
+    "contract",
+    "service",
+    "credentials",
+    "cli",
+    "local_models",
+    "mcp",
+    "mcp_http",
+    "mcp_oauth",
+    "plugins",
+    "plugin_sandbox",
+    "resume",
+    "sandbox",
+    "sandbox_resources",
+    "scheduler",
+    "supervisor",
+    "cron",
+    "autostart",
+    "spawn_lifetime",
+    "build",
+    "build_proposals",
+    "real_build",
+    "package",
+    "verification"
+  ],
+  "unsupported_suites": {},
+  "build_requested": false,
+  "steps": [
+    {
+      "name": "delivery",
+      "command": [
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\contract-python\\Scripts\\python.exe",
+        "tests/delivery_integration.py",
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\windows\\x64\\release\\codestudio-agent.exe",
+        "--package",
+        "D:\\Dev\\Projects\\codestudio-agent\\build\\cross-platform-regression\\windows\\archive-extracted\\codestudio-agent-windows-x64"
+      ],
+      "log": "delivery.log",
+      "status": "failed",
+      "returncode": 1,
+      "seconds": 0.172
+    }
+  ],
+  "test_environment": {},
+  "source": {
+    "sha256": "415d19dc9083d38e640514d65297f8850d4df0dd8c6832f082e50df427d07a7c",
+    "files": 223
+  },
+  "toolchain": {
+    "python": "3.12.11",
+    "requirements": {
+      "format": 2,
+      "python_minimum": "3.11.0",
+      "xmake_minimum": "3.0.5",
+      "jsonschema": "4.23.0",
+      "windows": {
+        "arch": "x64",
+        "toolchain": "clang-cl",
+        "compiler_minimum": "22.0.0",
+        "requirements": [
+          "Visual Studio 2022 C++ build tools and Windows SDK",
+          "LLVM clang-cl 22 or newer"
+        ]
+      },
+      "linux": {
+        "arch": "x86_64",
+        "toolchain": "gcc",
+        "compiler_minimum": "16.0.0",
+        "pkg_config_minimum": {
+          "nlohmann_json": "3.12.0",
+          "sqlite3": "3.50.4",
+          "libcurl": "8.15.0",
+          "openssl": "3.0.0",
+          "libsecret-1": "0.21.0"
+        },
+        "requirements": [
+          "bubblewrap at /usr/bin/bwrap",
+          "tzdata",
+          "cgroup v2 delegation with cpu/memory/pids",
+          "user namespaces and seccomp"
+        ]
+      },
+      "macosx": {
+        "arch": "arm64",
+        "toolchain": "llvm",
+        "compiler_minimum": "22.1.8",
+        "llvm_environment": "CODESTUDIO_LLVM_ROOT",
+        "requirements": [
+          "Native Apple Silicon Mac (arm64)",
+          "Xcode command line tools and macOS SDK",
+          "LLVM 22.1.8 or newer and matching standalone libc++/libc++abi built with timezone support; bundled Apple and LLVM macOS libc++ disable timezones",
+          "Runtime C++26, std::format and IANA timezone/DST probe must pass",
+          "No Linux libsecret, namespace or cgroup dependency"
+        ],
+        "macos_minimum": "15.0",
+        "libcxx_environment": "CODESTUDIO_LIBCXX_ROOT"
+      }
+    }
+  },
+  "delivery_package": {
+    "path": "D:\\Dev\\Projects\\codestudio-agent\\build\\cross-platform-regression\\windows\\archive-extracted\\codestudio-agent-windows-x64",
+    "manifest_sha256": "21e9f9faee2c2169de118f9e80218ed2fff54621f566c1db2759ef06d188bfa6",
+    "files": {
+      "README.md": "c3dae3a5f5328ca5b82a5dfaa5e69e7880122b627e8bb74254fa119f0d9f7f13",
+      "README.txt": "30577298107e69d72b904a646078e4e98d15fa726ac3f67a3edd7f9733e5deeb",
+      "build-metadata.json": "269bba9a3bdf5829d0f22aea5c5f2d67f76d42d30e55121111eaabe508f2b175",
+      "codestudio-agent.exe": "5d3de2adc5f1dafdaabc6b34355baf3e7e3efec03c098a6250a9e8782ae7f58f",
+      "docs/architecture.md": "36d8c45d3da90ce5e3352979dae990b0f85675c1ad39b1ef39adc557f3794c54",
+      "docs/build-proposals.md": "af23e407ce81106977e104d16114e6e6f95627188a0354b2a346656a750eafd9",
+      "docs/credentials.md": "697b2d43bd2cd8db3ad4823b06f2894d7007e078ed4be0849563a637e327267b",
+      "docs/delivery.md": "10d3a33ab053cbab199f00f85e2cd763caa2b065cc95b64ac13f7ae38f801df9",
+      "docs/linux.md": "98d14ea9c67b8553d0b55b6ca28d2875d5be38e561c1f645ba6014abfd12fc77",
+      "docs/local-models.md": "92575c134d7ccd41052daaf150c7108df53df1d29479386d27aa4acd8e9b59a8",
+      "docs/macos.md": "efa8dd3fd2ad138428d8ec4bdbbcb601f2dc8e7a5e5a7c402609e5a64691618c",
+      "docs/mcp-oauth.md": "34f626ee786aefb6afe247faeeb4f82bc42fca4932070ec14fc5c8f3c60e99e2",
+      "docs/mcp.md": "d6e66a5da95b9fefd8b197b20fc04f89d8f6d08a68dcbf090f83d9205ba6bdd3",
+      "docs/plugin-sandbox.md": "2c632206d31c8ef06876dfc6a484627f994af721de46a51e15494a6014b1c974",
+      "docs/plugins.md": "b27a60821a27435381f88b7fb5231fc6c034fbb258e26eb79fb80992c7dcc841",
+      "docs/resume-contract.md": "6756c7df289166a9c4f60d7d0a6b439b7e4151dcf28fff0161fa735f6d0faf3b",
+      "docs/resume.md": "95aa60eb9ae1a0a198742f572aeb0be5456aa7f9e4572a8653255f0def67a39d",
+      "docs/roadmap.md": "1ff58217fce16dca990f2c2e9cacd8542b517c4cf7984e74ebf460f92dfaf9d7",
+      "docs/sandbox-resources.md": "b8498341506b51dd1f233bd4f2473d30062aec4d32746b62927739f73cab51ac",
+      "docs/sandbox.md": "0beda2a9eaabe4953829d4a804fe147bfab0dfbb9d35864fcb2ec7e1173e1bb5",
+      "docs/scheduler.md": "2785cba50f213f4e14eb29111a3c6e5239f78cfa7d8f85cd53566cebc488df26",
+      "docs/streaming-apis.md": "c4dee17f3710091d10e2fbb916fac03ab4c2e48cc95c22442501e3d44bac162e",
+      "docs/task-service.md": "818391432756bc360b48b3c7b72b0693cb100a05709c94f69272ef1de7718577",
+      "docs/validation.md": "c0fed5bd7691a1d601072e79a590dee94679e9150a5010d55b89b736fe3e21e0",
+      "docs/workspace-builds.md": "016696fa494bdb5dccdc476a6212fa937ee7241c2e0a5453026731277b470128",
+      "examples/mcp-http.example.json": "93292aba9cb5f02a53151bdac468dfbb711a109b8f278b1ff26bec23a38508da",
+      "examples/mcp-oauth.example.json": "5ebb7a6fb1ac8dc700fac73f86c2cf39c941b7ba398297c98e7d38cb79e38720",
+      "examples/mcp-plugin-sandbox.example.json": "1e254a6dd657e5e6b900b45855cb07b1c16fee8f2dc3ce763ecef1cdd527ed41",
+      "examples/mcp-plugin.example.json": "cbfe8e551208a6ea67ab59fd67c694d58e58d71171332bfd603b77eea19072ad",
+      "examples/mcp.example.json": "1351776bdd19ed98649cab36d0802e47b87c006a29b582f36a1f2c32134628b8",
+      "examples/mcp_echo.py": "8850336896b6724be261363282b99432793cef8d484c8ad491ffe5c9744eaf74",
+      "examples/task_client.py": "5a23c43e77b5c523280f001db6acecf9ed7ab808c71c8e79812d355e176082c5",
+      "install.ps1": "7cea4047eedfed937554849cc9ed59d3c7b23c01c4ce9c8bf27868ff355b9622",
+      "install.py": "770d453ffb8d7047f79f7850f2327ab7b43d2880d82fa678933cbb2209d3dd35",
+      "install.sh": "8e32bdada2aea55d9152440893ce0019bf042774b4565340d4f00e91b6210ba5",
+      "protocol/README.md": "87e5f85fb56a3ae62f9dbd07fb649093a2d1f5457ee2ece6f5859f87e20db646",
+      "protocol/task-service.schema.json": "dccf1d4b872c8ee11e224ad51dcd7de017b90206e2112072c3e2f38c5fe14b2b",
+      "runtime-dependencies.txt": "df0f1ff2f79fd637739fbacd10f1908cb8cd25c49458f2269407088fd91d240b",
+      "verification.json": "d52e38d2f4c7ede1e476d4732ade8b6471af5c7d8e1d398e1fbe36fb527bf7b6",
+      "package.json": "21e9f9faee2c2169de118f9e80218ed2fff54621f566c1db2759ef06d188bfa6",
+      "SHA256SUMS": "de792dc8efe948017a77ca5c7b9be7f4355411a08d1d18f491310ed8792fcc10"
+    }
+  },
+  "tested_artifacts": {
+    "codestudio-agent.exe": "5d3de2adc5f1dafdaabc6b34355baf3e7e3efec03c098a6250a9e8782ae7f58f",
+    "agent-tests.exe": "f8f6f3caa7a9920ea0f3e133c0610f15eabddd2261851585306d4c525dff908f",
+    "provider-fixture.exe": "05ea4ff9a6b86e81a511f944d13b6eda6660e73c8d6fbe45bb8fcc5347732192",
+    "process-fixture.exe": "0e8d60e56817be58a6201378050a71ce5efa99457d9e7ad1724bf7dce45a3fbc",
+    "line-process-fixture.exe": "696caf7d4e27d83d790ff97ab703e3dfe24a8c3f968d3570519ced359773c3d3",
+    "mcp-fixture.exe": "6f3eccbadc33e65d1badf9b803f2d7a72376f5676bb6e8f183d93d295c3cac37",
+    "sandbox-fixture.exe": "032fcfe749727e5c101604d60a472bb58337147adf329e706781156243f692fa",
+    "build-fixture.exe": "4843be3604de612de1ea867793c06fe7de762943292cd9e0da63cf2533997185",
+    "sandbox-resource-fixture.exe": "d9fa5e66a5b3919b1e23d77fd44fc6ff34cf5d14709cc2603ca1f278afafe047",
+    "plugin-sandbox-fixture.exe": "54f2ff2ed19c1ae75aaba249d8a46440c32fb25563f5d87eefb921af3e226229",
+    "plugin-sandbox-library.dll": "a0d7d7c2b654923c91e1eab473909a45a5fa9be3566af6aeac3be56cbdc20105",
+    "plugin-sandbox-dependency.dll": "2cfa634fe9344c898acb7c79ca58889b377e6d2c7993b435683353eea93cd7d8"
+  },
+  "finished_at": "2026-10-28T10:26:24.343340+00:00"
+}

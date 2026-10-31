@@ -1,0 +1,316 @@
+{
+  "kind": "read_only_static_review",
+  "created_at_utc": "2026-10-28T11:57:38.224274+00:00",
+  "source": {
+    "expected": {
+      "sha256": "4fe025a8e0a20c6f6e6b870219e423a1358e1590e9cf6bb84f96e3b11d71df23",
+      "files": 226
+    },
+    "observed": {
+      "sha256": "4fe025a8e0a20c6f6e6b870219e423a1358e1590e9cf6bb84f96e3b11d71df23",
+      "files": 226
+    },
+    "matches_freeze": true
+  },
+  "scope": {
+    "markdown_files": 26,
+    "excluded_source_tree": "research/ historical Markdown; referenced local targets still checked",
+    "source_files_written": [],
+    "evidence_only_output": "research/durable-requests/static-review.json",
+    "runtime_tests_or_builds_run": false
+  },
+  "local_links": {
+    "checked": 338,
+    "anchor_targets_checked": 13,
+    "broken": [],
+    "files": [
+      "Agent与Harness研究及新产品架构建议.md",
+      "CONTEXT.md",
+      "README.md",
+      "docs/architecture.md",
+      "docs/build-proposals.md",
+      "docs/credentials.md",
+      "docs/delivery.md",
+      "docs/linux.md",
+      "docs/local-models.md",
+      "docs/macos.md",
+      "docs/mcp-oauth.md",
+      "docs/mcp.md",
+      "docs/plugin-sandbox.md",
+      "docs/plugins.md",
+      "docs/resume-contract.md",
+      "docs/resume.md",
+      "docs/roadmap.md",
+      "docs/sandbox-resources.md",
+      "docs/sandbox.md",
+      "docs/scheduler.md",
+      "docs/streaming-apis.md",
+      "docs/task-service.md",
+      "docs/validation.md",
+      "docs/workspace-builds.md",
+      "protocol/README.md",
+      "tests/fixtures/xmake-build/README.md"
+    ]
+  },
+  "whitespace": {
+    "passed": true,
+    "exit_code": 0,
+    "output": ""
+  },
+  "line_endings": {
+    "tracked_changed_files_checked": 42,
+    "changes_from_HEAD": [
+      {
+        "path": "scripts/verify.py",
+        "head": "LF",
+        "working": "CRLF"
+      }
+    ],
+    "per_file": [
+      {
+        "path": "CONTEXT.md",
+        "head": "LF",
+        "working": "LF"
+      },
+      {
+        "path": "README.md",
+        "head": "CRLF",
+        "working": "CRLF"
+      },
+      {
+        "path": "docs/architecture.md",
+        "head": "CRLF",
+        "working": "CRLF"
+      },
+      {
+        "path": "docs/build-proposals.md",
+        "head": "CRLF",
+        "working": "CRLF"
+      },
+      {
+        "path": "docs/credentials.md",
+        "head": "CRLF",
+        "working": "CRLF"
+      },
+      {
+        "path": "docs/delivery.md",
+        "head": "LF",
+        "working": "LF"
+      },
+      {
+        "path": "docs/macos.md",
+        "head": "LF",
+        "working": "LF"
+      },
+      {
+        "path": "docs/resume-contract.md",
+        "head": "CRLF",
+        "working": "CRLF"
+      },
+      {
+        "path": "docs/resume.md",
+        "head": "CRLF",
+        "working": "CRLF"
+      },
+      {
+        "path": "docs/roadmap.md",
+        "head": "CRLF",
+        "working": "CRLF"
+      },
+      {
+        "path": "docs/sandbox-resources.md",
+        "head": "LF",
+        "working": "LF"
+      },
+      {
+        "path": "docs/scheduler.md",
+        "head": "CRLF",
+        "working": "CRLF"
+      },
+      {
+        "path": "docs/task-service.md",
+        "head": "CRLF",
+        "working": "CRLF"
+      },
+      {
+        "path": "docs/validation.md",
+        "head": "CRLF",
+        "working": "CRLF"
+      },
+      {
+        "path": "docs/workspace-builds.md",
+        "head": "LF",
+        "working": "LF"
+      },
+      {
+        "path": "examples/task_client.py",
+        "head": "CRLF",
+        "working": "CRLF"
+      },
+      {
+        "path": "include/codestudio/application.hpp",
+        "head": "LF",
+        "working": "LF"
+      },
+      {
+        "path": "include/codestudio/kernel.hpp",
+        "head": "LF",
+        "working": "LF"
+      },
+      {
+        "path": "include/codestudio/state_reader.hpp",
+        "head": "LF",
+        "working": "LF"
+      },
+      {
+        "path": "include/codestudio/store.hpp",
+        "head": "LF",
+        "working": "LF"
+      },
+      {
+        "path": "protocol/README.md",
+        "head": "CRLF",
+        "working": "CRLF"
+      },
+      {
+        "path": "protocol/task-service.schema.json",
+        "head": "CRLF",
+        "working": "CRLF"
+      },
+      {
+        "path": "scripts/verify.py",
+        "head": "LF",
+        "working": "CRLF"
+      },
+      {
+        "path": "src/application/application.cpp",
+        "head": "CRLF",
+        "working": "CRLF"
+      },
+      {
+        "path": "src/application/service.cpp",
+        "head": "CRLF",
+        "working": "CRLF"
+      },
+      {
+        "path": "src/core/kernel.cpp",
+        "head": "LF",
+        "working": "LF"
+      },
+      {
+        "path": "src/core/state_reader.cpp",
+        "head": "LF",
+        "working": "LF"
+      },
+      {
+        "path": "src/core/store.cpp",
+        "head": "LF",
+        "working": "LF"
+      },
+      {
+        "path": "tests/checkpoint_store_tests.cpp",
+        "head": "CRLF",
+        "working": "CRLF"
+      },
+      {
+        "path": "tests/cli_integration.py",
+        "head": "CRLF",
+        "working": "CRLF"
+      },
+      {
+        "path": "tests/client_contract_integration.py",
+        "head": "LF",
+        "working": "LF"
+      },
+      {
+        "path": "tests/contract_schema.py",
+        "head": "CRLF",
+        "working": "CRLF"
+      },
+      {
+        "path": "tests/core_tests.cpp",
+        "head": "CRLF",
+        "working": "CRLF"
+      },
+      {
+        "path": "tests/cron_integration.py",
+        "head": "CRLF",
+        "working": "CRLF"
+      },
+      {
+        "path": "tests/cron_store_tests.cpp",
+        "head": "CRLF",
+        "working": "CRLF"
+      },
+      {
+        "path": "tests/delivery_integration.py",
+        "head": "LF",
+        "working": "LF"
+      },
+      {
+        "path": "tests/resume_integration.py",
+        "head": "CRLF",
+        "working": "CRLF"
+      },
+      {
+        "path": "tests/scheduler_integration.py",
+        "head": "CRLF",
+        "working": "CRLF"
+      },
+      {
+        "path": "tests/service_integration.py",
+        "head": "CRLF",
+        "working": "CRLF"
+      },
+      {
+        "path": "tests/state_reader_tests.cpp",
+        "head": "CRLF",
+        "working": "CRLF"
+      },
+      {
+        "path": "tests/supervisor_integration.py",
+        "head": "LF",
+        "working": "LF"
+      },
+      {
+        "path": "xmake.lua",
+        "head": "CRLF",
+        "working": "CRLF"
+      }
+    ],
+    "verification_script_functional_diff": "Ignoring end-of-line whitespace, verify.py adds durable_requests to COMMON, checks jsonschema for its suite, and raises native group expectation22 to23."
+  },
+  "schema_consistency": {
+    "database_schema": 8,
+    "task_protocol": 2,
+    "method_count": 47,
+    "historical_schema7": "Intentional in dated validation milestones and macOS prior-native-evidence qualification; current docs require schema8 and reject schema7 without migration.",
+    "stale_method_count_occurrences_excluding_historical_validation": [
+      {
+        "path": "README.md",
+        "line": 139,
+        "text": "[机器可读协议](protocol/task-service.schema.json) 定义请求、响应、通知与 43 个方法的映射，协议版本保持 2。初始化返回本次进程的 `session_id`；`operations/get` 可查询当前操作和最近 64 个完成回执。重启后应查询持久任务和事件，不能把缓存缺失视为重新执行授权。错误提供稳定的类别和恢复建议，客户端无需解析错误消息。"
+      }
+    ]
+  },
+  "findings": [
+    {
+      "severity": "documentation",
+      "path": "README.md",
+      "line": 139,
+      "issue": "Current client introduction still says43 methods and describes only session history/restart task-event reconciliation; machine contract now has47 methods and durable request lookup.",
+      "suggested_replacement": "[机器可读协议](protocol/task-service.schema.json) 定义请求、响应、通知与 47 个方法的映射，协议版本保持 2。初始化返回本次进程的 `session_id` 和已存在数据库的 `database_id`；`operations/get` 保留当前操作及最近 64 个完成回执的会话查询语义。`state/initialize` 可显式创建空状态库；`tasks/start` 与 `tasks/resume` 可携带成对的 `database_id` / `request_key`，通过 `requests/get` 跨重启查询原操作与任务。同键重复请求只返回历史回执，不重新执行；未知效果继续阻断。错误提供稳定的类别和恢复建议，客户端无需解析错误消息。"
+    },
+    {
+      "severity": "formatting",
+      "path": "scripts/verify.py",
+      "issue": "File-wide LF to CRLF conversion relative to HEAD expands three functional line edits to434 removed and434 added lines. Frozen verification snapshot includes the CRLF bytes.",
+      "suggested_action": "After current verification ends, restore this file to LF while preserving the three functional changes. Record exact pre/post fingerprints and distinguish formatting-only normalization from the verified snapshot."
+    }
+  ],
+  "status": "review_requires_attention",
+  "notes": [
+    "No frozen source edited. Parent will apply any doc-only correction after current full verification and preserve pre/post documentation hashes separately.",
+    "This static review does not establish runtime, platform, login or delivery acceptance."
+  ]
+}

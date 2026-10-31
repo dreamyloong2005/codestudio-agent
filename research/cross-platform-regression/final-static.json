@@ -1,0 +1,61 @@
+{
+  "format": 2,
+  "generated_at": "2026-10-28T10:46:21.900150+00:00",
+  "base_commit": "e97557be1884c6a87d5959d14ab4e076523ad5de",
+  "source": {
+    "sha256": "e64b3d581a1d30bb22452f2b511971927c3957af9281678625da82b1af0a51ca",
+    "files": 223
+  },
+  "status": "succeeded",
+  "document_links": 330,
+  "python_syntax_files": 50,
+  "changed_tracked_files": [
+    "CONTEXT.md",
+    "docs/delivery.md",
+    "docs/macos.md",
+    "docs/roadmap.md",
+    "docs/validation.md",
+    "tests/delivery_integration.py"
+  ],
+  "residue": {
+    "windows": {
+      "receipt": "residue-after-windows-consistent.json",
+      "no_new_residue_gate": "passed",
+      "zero_total_residue_gate": "failed",
+      "observed_counts": {
+        "project_processes": 0,
+        "unresolved_processes": 0,
+        "autostart_registrations": 0,
+        "credential_test_names": 0,
+        "sandbox_profiles": 69,
+        "temporary_resources": 70,
+        "sandbox_registry_entries": 0,
+        "project_database_candidates": 0
+      }
+    },
+    "linux": {
+      "receipt": "residue-after-linux-final.json",
+      "no_new_residue_gate": "passed",
+      "zero_total_residue_gate": "passed",
+      "observed_counts": {
+        "project_processes": 0,
+        "unresolved_processes": 0,
+        "private_credential_fixture_processes": 0,
+        "test_cgroups": 0,
+        "autostart_registrations": 0,
+        "oauth_abstract_locks": 0,
+        "temporary_resources": 0,
+        "sandbox_registry_entries": 0,
+        "project_database_candidates": 0
+      }
+    }
+  },
+  "expanded_scan_audit": "windows-expanded-scan-audit.json",
+  "credential_cleanup_receipts": [
+    "credential-cleanup-linux-20261028T101410Z-14fad166.json",
+    "credential-cleanup-linux-20261028T101600Z-252a77ce.json",
+    "credential-cleanup-linux-20261028T102255Z-68849359.json",
+    "credential-cleanup-linux-20261028T103333Z-78fc2f72.json",
+    "credential-cleanup-linux-20261028T103843Z-45dd8d8a.json"
+  ]
+}

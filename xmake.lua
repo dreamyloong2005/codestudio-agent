@@ -156,7 +156,7 @@ target("agent-tests")
     set_kind("binary")
     set_default(false)
     add_files("tests/core_tests.cpp", "tests/tools_tests.cpp", "tests/process_tests.cpp", "tests/responses_tests.cpp", "tests/messages_tests.cpp", "tests/line_process_tests.cpp", "tests/mcp_tests.cpp")
-    add_files("tests/checkpoint_store_tests.cpp", "tests/resume_kernel_tests.cpp")
+    add_files("tests/checkpoint_store_tests.cpp", "tests/resume_kernel_tests.cpp", "tests/durable_request_store_tests.cpp")
     add_files("tests/scheduler_store_tests.cpp")
     add_files("tests/credentials_tests.cpp")
     if is_plat("macosx") then add_files("tests/credentials_macos_tests.cpp") end

@@ -1,0 +1,186 @@
+{
+  "format": 2,
+  "generated_at": "2026-10-28T10:46:21.900150+00:00",
+  "base_commit": "e97557be1884c6a87d5959d14ab4e076523ad5de",
+  "source": {
+    "sha256": "e64b3d581a1d30bb22452f2b511971927c3957af9281678625da82b1af0a51ca",
+    "files": 223
+  },
+  "status": "succeeded",
+  "configurations": {
+    "windows-debug": {
+      "receipt": "windows/debug-20261028T103333Z-c222fa01/verification.json",
+      "native_groups": 22,
+      "python_cases": 452,
+      "python_passed": 431,
+      "python_skipped": 21,
+      "selected_suites": [
+        "native",
+        "schema",
+        "provider",
+        "streaming",
+        "contract",
+        "service",
+        "credentials",
+        "cli",
+        "local_models",
+        "mcp",
+        "mcp_http",
+        "mcp_oauth",
+        "plugins",
+        "plugin_sandbox",
+        "resume",
+        "sandbox",
+        "sandbox_resources",
+        "scheduler",
+        "supervisor",
+        "cron",
+        "autostart",
+        "spawn_lifetime",
+        "build",
+        "build_proposals",
+        "real_build",
+        "package",
+        "verification"
+      ],
+      "omitted_suites": [
+        "delivery"
+      ],
+      "unsupported_suites": {},
+      "artifact": {
+        "path": "build/windows/x64/debug/codestudio-agent.exe",
+        "size": 6940672,
+        "sha256": "646df7965bed66070b85ab9238412c1f65f8cfaa4dad01d6b25d86b4282182a3"
+      }
+    },
+    "windows-release": {
+      "receipt": "windows/release-20261028T103818Z-49746910/verification.json",
+      "native_groups": 22,
+      "python_cases": 452,
+      "python_passed": 431,
+      "python_skipped": 21,
+      "selected_suites": [
+        "native",
+        "schema",
+        "provider",
+        "streaming",
+        "contract",
+        "service",
+        "credentials",
+        "cli",
+        "local_models",
+        "mcp",
+        "mcp_http",
+        "mcp_oauth",
+        "plugins",
+        "plugin_sandbox",
+        "resume",
+        "sandbox",
+        "sandbox_resources",
+        "scheduler",
+        "supervisor",
+        "cron",
+        "autostart",
+        "spawn_lifetime",
+        "build",
+        "build_proposals",
+        "real_build",
+        "package",
+        "verification"
+      ],
+      "omitted_suites": [
+        "delivery"
+      ],
+      "unsupported_suites": {},
+      "artifact": {
+        "path": "build/windows/x64/release/codestudio-agent.exe",
+        "size": 5326848,
+        "sha256": "5d3de2adc5f1dafdaabc6b34355baf3e7e3efec03c098a6250a9e8782ae7f58f"
+      }
+    },
+    "linux-debug": {
+      "receipt": "linux/debug-20261028T103333Z-06b6bc04/verification.json",
+      "native_groups": 22,
+      "python_cases": 416,
+      "python_passed": 400,
+      "python_skipped": 16,
+      "selected_suites": [
+        "native",
+        "schema",
+        "provider",
+        "streaming",
+        "contract",
+        "service",
+        "credentials",
+        "cli",
+        "local_models",
+        "mcp",
+        "mcp_http",
+        "mcp_oauth",
+        "plugins",
+        "plugin_sandbox",
+        "resume",
+        "sandbox",
+        "sandbox_resources",
+        "scheduler",
+        "supervisor",
+        "cron",
+        "autostart",
+        "real_build",
+        "package",
+        "verification"
+      ],
+      "omitted_suites": [
+        "delivery"
+      ],
+      "unsupported_suites": {},
+      "artifact": {
+        "path": "build/linux/x86_64/debug/codestudio-agent",
+        "size": 36967008,
+        "sha256": "e5370f66a32c7d593d33317dac03b9ae87a7f18fc93d804c47ff122e2d6040de"
+      }
+    },
+    "linux-release": {
+      "receipt": "linux/release-20261028T103633Z-d73ac300/verification.json",
+      "native_groups": 22,
+      "python_cases": 416,
+      "python_passed": 400,
+      "python_skipped": 16,
+      "selected_suites": [
+        "native",
+        "schema",
+        "provider",
+        "streaming",
+        "contract",
+        "service",
+        "credentials",
+        "cli",
+        "local_models",
+        "mcp",
+        "mcp_http",
+        "mcp_oauth",
+        "plugins",
+        "plugin_sandbox",
+        "resume",
+        "sandbox",
+        "sandbox_resources",
+        "scheduler",
+        "supervisor",
+        "cron",
+        "autostart",
+        "real_build",
+        "package",
+        "verification"
+      ],
+      "omitted_suites": [
+        "delivery"
+      ],
+      "unsupported_suites": {},
+      "artifact": {
+        "path": "build/linux/x86_64/release/codestudio-agent",
+        "size": 3507560,
+        "sha256": "d287163b95e48f72de0c2aa8cc0e049b55a4b7cf23c5d2f74b8ab4b89ae6b8d7"
+      }
+    }
+  }
+}

@@ -1,0 +1,24 @@
+[
+  {
+    "name": "unchanged.txt",
+    "metadata": {
+      "st_ctime_ns": {
+        "path": 1793183277309359200,
+        "opened": 1793183277310359000,
+        "after": 1793183277310359000
+      }
+    },
+    "snapshot": "Delivery evidence file changed during snapshot"
+  },
+  {
+    "name": "unchanged.exe",
+    "metadata": {
+      "st_mode": {
+        "path": 33279,
+        "opened": 33206,
+        "after": 33206
+      }
+    },
+    "snapshot": "Delivery evidence file changed during snapshot"
+  }
+]

@@ -11,6 +11,7 @@ void run_messages_tests();
 void run_line_process_tests(const std::filesystem::path& fixture);
 void run_mcp_tests(const std::filesystem::path& fixture);
 void run_checkpoint_store_tests();
+void run_durable_request_store_tests();
 void run_resume_kernel_tests();
 void run_sandbox_tests(const std::filesystem::path& fixture);
 void run_state_reader_tests();
@@ -203,6 +204,7 @@ int main(int argc,char** argv) {
         run_credentials_tests();std::cout << "PASS credential references/validation/environment isolation\n";
         kernel_tests();std::cout << "PASS task loop/policy/budgets/redaction\n";
         run_checkpoint_store_tests();std::cout << "PASS current checkpoint format/atomicity/resume guards\n";
+        run_durable_request_store_tests();std::cout << "PASS durable request admission/atomic association/retention/no replay\n";
         run_scheduler_store_tests();std::cout << "PASS scheduler persistence/fencing/budgets/atomic recovery\n";
         run_cron_tests();std::cout << "PASS cron syntax/time zones/DST boundaries\n";
         run_cron_store_tests();std::cout << "PASS cron atomic occurrences/overlap/recovery/controls\n";

@@ -9,13 +9,21 @@ namespace codestudio {
 // caller thread; no writer connection or execution lock is shared with it.
 // Missing or uninitialized (schema 0) state produces empty pages until a writer
 // commits initialization. Neither condition creates or migrates state here.
-// Initialized databases must use the current schema 7; no legacy format is read.
+// Initialized databases must use the current schema 8; no legacy format is read.
 class StateReader {
 public:
     explicit StateReader(const std::filesystem::path& database);
     ~StateReader();
     StateReader(const StateReader&) = delete;
     StateReader& operator=(const StateReader&) = delete;
+
+    // Open a fresh path-bound snapshot for identity-sensitive request queries.
+    // These calls never create an absent database. A mismatched database identity
+    // throws DatabaseMismatch; an absent key returns null with unknown outcome.
+    Json database_id() const;
+    Json request(const std::string& database_id, const std::string& key,
+                 const std::string& expected_digest = {}, const std::string& expected_method = {},
+                 const std::string& expected_workspace = {}) const;
 
     // Cursor 0 means the newest task; rows are ordered by descending rowid.
     Json tasks(std::int64_t before = 0, std::size_t limit = 50) const;

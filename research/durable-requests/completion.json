@@ -1,0 +1,139 @@
+{
+  "status": "succeeded",
+  "implementation": "durable tasks/start and tasks/resume admission and cross-restart receipts",
+  "tested_source": {
+    "sha256": "4fe025a8e0a20c6f6e6b870219e423a1358e1590e9cf6bb84f96e3b11d71df23",
+    "files": 226
+  },
+  "final_source": {
+    "sha256": "bbced79621faf60b09001d97177d8160e21ac2a9dbc62d7fd9cb411682c3f426",
+    "files": 226
+  },
+  "configurations": [
+    {
+      "platform": "linux",
+      "mode": "debug",
+      "receipt": "research/durable-requests/linux/debug-20261028T115431Z-173ea274/verification.json",
+      "native_groups": 23,
+      "python_passed": 425,
+      "skipped": 16,
+      "durable_requests": 23,
+      "artifact": {
+        "path": "build/linux/x86_64/debug/codestudio-agent",
+        "size": 37158840,
+        "sha256": "e2ad9fe6f36e95642fdc33b3ceaab4fad45791a67af5c16420bbf0c4a7224b19"
+      },
+      "omitted_suites": [
+        "delivery"
+      ]
+    },
+    {
+      "platform": "linux",
+      "mode": "release",
+      "receipt": "research/durable-requests/linux/release-20261028T115809Z-449ce941/verification.json",
+      "native_groups": 23,
+      "python_passed": 425,
+      "skipped": 16,
+      "durable_requests": 23,
+      "artifact": {
+        "path": "build/linux/x86_64/release/codestudio-agent",
+        "size": 3581312,
+        "sha256": "11bf56be97cf0cac6d304291077242fa770854ed0747fb008deef40d8dbea697"
+      },
+      "omitted_suites": [
+        "delivery"
+      ]
+    },
+    {
+      "platform": "windows",
+      "mode": "debug",
+      "receipt": "research/durable-requests/windows/debug-20261028T115430Z-d4c36a08/verification.json",
+      "native_groups": 23,
+      "python_passed": 456,
+      "skipped": 21,
+      "durable_requests": 23,
+      "artifact": {
+        "path": "build/windows/x64/debug/codestudio-agent.exe",
+        "size": 7027712,
+        "sha256": "efb4d79931d04897c2c47fd8092a1829033c3b4cd8cf8fb0577970898339e89c"
+      },
+      "omitted_suites": [
+        "delivery"
+      ]
+    },
+    {
+      "platform": "windows",
+      "mode": "release",
+      "receipt": "research/durable-requests/windows/release-20261028T120019Z-4899a3fb/verification.json",
+      "native_groups": 23,
+      "python_passed": 456,
+      "skipped": 21,
+      "durable_requests": 23,
+      "artifact": {
+        "path": "build/windows/x64/release/codestudio-agent.exe",
+        "size": 5432832,
+        "sha256": "ee5f856f99c572445803b11482217ca9da1c8b5b4a8cebf10670af6007808317"
+      },
+      "omitted_suites": [
+        "delivery"
+      ]
+    }
+  ],
+  "post_verification_adjustments": "post-verification-adjustments.json",
+  "resource_scope": "原基线扫描范围内无新增残留; historical Windows resources left untouched; no zero-total-residue claim",
+  "residue": {
+    "windows": {
+      "no_new_residue_gate": "passed",
+      "zero_total_residue_gate": "failed",
+      "observed_counts": {
+        "project_processes": 0,
+        "unresolved_processes": 0,
+        "autostart_registrations": 0,
+        "credential_test_names": 0,
+        "sandbox_profiles": 69,
+        "temporary_resources": 70,
+        "sandbox_registry_entries": 0,
+        "project_database_candidates": 0
+      }
+    },
+    "linux": {
+      "no_new_residue_gate": "passed",
+      "zero_total_residue_gate": "passed",
+      "observed_counts": {
+        "project_processes": 0,
+        "unresolved_processes": 0,
+        "private_credential_fixture_processes": 0,
+        "test_cgroups": 0,
+        "autostart_registrations": 0,
+        "oauth_abstract_locks": 0,
+        "temporary_resources": 0,
+        "sandbox_registry_entries": 0,
+        "project_database_candidates": 0
+      }
+    }
+  },
+  "additional_current_request_fixture_prefixes": [],
+  "example_receipts": [
+    "example-linux-release.json",
+    "example-windows-debug.json",
+    "example-windows-release.json"
+  ],
+  "linux_credential_cleanup": "credential-cleanup-linux-20261028T115431Z-6a86278d.json",
+  "python_ast_files": 43,
+  "whitespace_check": "passed",
+  "no_commit_or_push": true,
+  "not_performed": [
+    "new installation archives",
+    "installation delivery suite",
+    "live model or OAuth",
+    "macOS native validation",
+    "real login or reboot",
+    "permanent autostart",
+    "hosted CI",
+    "signing or notarization",
+    "commit or push"
+  ],
+  "final_static_review": "static-review-final.json",
+  "local_links": 343,
+  "anchor_targets": 13
+}

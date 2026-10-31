@@ -4,6 +4,10 @@ CodeStudio Agent 的 macOS 首个目标是 Apple Silicon（arm64）基础运行�
 
 核心继续使用 **C++26 + XMake**，mcpp 等生态成熟后再评估迁移。CodeStudio Agent 负责无界面的 Agent/Harness、CLI 和服务接口；桌面 UI 属于 **CodeStudio Next**。本地模型后续开发继续暂停，macOS 适配不包含模型下载、服务管理或内嵌推理。
 
+## 当前同步跟进计划
+
+最新 schema 8 与持久请求能力的 Mac 跟进工作按 [macOS 同步跟进计划](macos-follow-up.md) 执行：先固定完整源码与工具链，再完成原生 Debug/Release、新测试包及安装验收；真实登录使用独立固定运行时，CI 单独保存实际作业结果。各项当前均为待执行，旧版原生回执不替代本轮验收。
+
 ## 当前状态
 
 当前新增 macOS 原生构建配置、Darwin 子进程启动、进程出生身份、只读清单快照、平台能力声明与基础套件选择。CLI、stdio 任务服务、模型协议、MCP、审批和恢复继续共用业务实现。最终原生通过范围以 [验证记录](validation.md) 与机器回执为准；普通进程组不构成 OS 沙箱。
@@ -73,7 +77,7 @@ export CODESTUDIO_CONTRACT_PYTHON="$PWD/build/contract-python/bin/python"
 bash scripts/verify-macos.sh all
 ```
 
-两个配置顺序执行；产物位于 `build/macosx/arm64/<mode>/`，回执位于 `build/verification/macosx/`。macOS 使用原生 arm64 的 SQLite 3.50.4、nlohmann JSON 3.12.0、静态 OpenSSL 3.6.5（摘要），HTTP 使用系统 libcurl（本轮运行库 8.7.1，SecureTransport）；不加载 Linux libsecret。开发二进制通过运行库路径加载上述专用 libc++，必须保留对应目录，不能把单个 executable 当作独立发布包。发布包和安装验证尚未开放；验证工具为不支持的套件记录明确的跳过原因，而不是成功结果。
+两个配置顺序执行；产物位于 `build/macosx/arm64/<mode>/`，回执位于 `build/verification/macosx/`。macOS 使用原生 arm64 的 SQLite 3.50.4、nlohmann JSON 3.12.0、静态 OpenSSL 3.6.5（摘要），HTTP 使用系统 libcurl（本轮运行库 8.7.1，SecureTransport）；不加载 Linux libsecret。开发二进制通过运行库路径加载上述专用 libc++，必须保留对应目录，不能把单个 executable 当作独立发布包。阶段 4 已提供携带私有运行库的可搬移包和安装验证，操作入口见 [交付说明](delivery.md)，本机交付结果见 [阶段 4 回执](../research/macos-stage4/README.md)。正式签名、公证和独立干净 Mac 验收仍暂缓；验证工具为不支持的隔离套件记录明确的跳过原因，而不是成功结果。
 
 能力查询示例：
 
@@ -181,8 +185,8 @@ prepare 仅登记独立的普通/监督两种 fixture，记录可执行文件与
 
 原生编译和运行验收需要真实 macOS 主机或 macOS runner。Windows/WSL 可以准备适配代码、协议夹具和文档，但不能完成 Darwin 运行时、Keychain、LaunchAgent、系统隔离或签名公证的原生验收。
 
-阶段 1 开始前应落实 Mac/runner、开发工具链和测试用户环境；阶段 2 需要可执行真实登录测试的会话；阶段 4 需要独立干净机器及可用的签名公证环境。CI 应使用受控测试数据，具有权限的自托管 runner 不执行不可信仓库代码。
+复现阶段 1 需要 Mac/runner、开发工具链和测试用户环境；阶段 2 尚需可执行真实登录测试的会话；阶段 4 的正式发布验收尚需独立干净机器及可用的签名公证环境。CI 应使用受控测试数据，具有权限的自托管 runner 不执行不可信仓库代码。
 
-平台适配保持现有状态库 schema 7，以及任务协议、检查点和本地配置 format/version 2 的规则，不增加旧格式兼容或数据迁移。通用业务状态机和客户端契约继续共用，平台差异集中在后端和能力声明中。
+当前共享运行时使用状态库 schema 8，任务协议、检查点和本地配置继续使用 format/version 2，不增加旧格式兼容或数据迁移。通用业务状态机和客户端契约继续共用，平台差异集中在后端和能力声明中。此前 macOS 原生回执保留其原源码与 schema 7 的历史范围；新增持久请求能力的 Windows/WSL 验证不能代替这一版本的 macOS 原生验收。
 
 实施进度更新到[开发路线](roadmap.md)，实际通过范围更新到[验证记录](validation.md)和对应机器回执，交付条件同步到[交付说明](delivery.md)。本文的计划状态不替代测试结论。

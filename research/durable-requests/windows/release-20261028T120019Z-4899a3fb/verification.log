@@ -1,0 +1,90 @@
+Verification failed: C++ runtime changed while tests were running
+Report: C:\Users\dreamyloong\AppData\Local\Temp\codestudio-verification-kkhw65vd\release-20261028T120432Z-fda98dd3\verification.json
+.Verification failed: Source changed during verification; the receipt is not valid for a single snapshot
+Report: C:\Users\dreamyloong\AppData\Local\Temp\codestudio-verification-wp1yayjt\source\release-20261028T120432Z-01f3932b\verification.json
+Verification failed: Built executables changed while tests were running
+Report: C:\Users\dreamyloong\AppData\Local\Temp\codestudio-verification-wp1yayjt\binary\release-20261028T120432Z-af520ea0\verification.json
+..Verification failed: Delivery package changed while tests were running
+Report: C:\Users\dreamyloong\AppData\Local\Temp\codestudio-verification-xfgqryvn\release-20261028T120432Z-0baaf31b\verification.json
+.windows/release schema: failed
+Ran 2 tests in 0.1s
+
+OK
+
+.Report: C:\Users\dreamyloong\AppData\Local\Temp\codestudio-verification-r15mmvai\release-20261028T120432Z-002a6821\verification.json
+......Verification failed: missing tool
+Report: C:\Users\dreamyloong\AppData\Local\Temp\codestudio-verification-_nq3hc7u\release-20261028T120433Z-833f6e1d\verification.json
+.Report: C:\Users\dreamyloong\AppData\Local\Temp\codestudio-verification-xiyi3hcy\debug-20261028T120433Z-c6ee20b2\verification.json
+.windows/release toolchain: succeeded
+windows/release toolchain: failed
+{}
+
+windows/release toolchain: failed
+{"cxx26": true, "cplusplus": 202400, "format": "probe:07", "timezone_offsets": true, "timezone_dst": false, "tzdb_version": "2026a", "current_zone": "Asia/Shanghai"}
+
+windows/release toolchain: failed
+{"cxx26": true, "cplusplus": 202302, "format": "probe:07", "timezone_offsets": true, "timezone_dst": true, "tzdb_version": "2026a", "current_zone": "Asia/Shanghai"}
+
+..windows/release schema: failed
+
+.windows/release schema: succeeded
+.windows/release real_build: succeeded
+windows/release real_build: failed
+PASS 2 real isolated XMake builds: explicit-v2 and custom-cache-v2
+windows/release real_build: failed
+PASS real isolated XMake / explicit-v2 / C++26 pack indexing / compile / link / execute / atomic export
+  steps=3, bytes=1024, sha256=fixture
+PASS real isolated XMake / explicit-v2 / C++26 pack indexing / compile / link / execute / atomic export
+PASS 2 real isolated XMake builds: explicit-v2 and custom-cache-v2
+
+windows/release real_build: failed
+PASS real isolated XMake / explicit-v2 / C++26 pack indexing / compile / link / execute / atomic export
+  steps=3, bytes=1024, sha256=fixture
+
+PASS 2 real isolated XMake builds: explicit-v2 and custom-cache-v2
+
+windows/release real_build: failed
+PASS real isolated XMake / explicit-v2 / C++26 pack indexing / compile / link / execute / atomic export
+  steps=3, bytes=1024, sha256=fixture
+PASS real isolated XMake / custom-cache-v2 / C++26 pack indexing / compile / link / execute / atomic export
+
+
+windows/release real_build: failed
+PASS real isolated XMake / explicit-v2 / C++26 pack indexing / compile / link / execute / atomic export
+  steps=3, bytes=1024, sha256=fixture
+PASS real isolated XMake / custom-cache-v2 / C++26 pack indexing / compile / link / execute / atomic export
+PASS 2 real isolated XMake builds: explicit-v2 and custom-cache-v2
+unfinished
+
+windows/release real_build: failed
+FAIL earlier operation
+PASS real isolated XMake / explicit-v2 / C++26 pack indexing / compile / link / execute / atomic export
+  steps=3, bytes=1024, sha256=fixture
+PASS real isolated XMake / custom-cache-v2 / C++26 pack indexing / compile / link / execute / atomic export
+PASS 2 real isolated XMake builds: explicit-v2 and custom-cache-v2
+
+windows/release real_build: failed
+PASS real isolated XMake / explicit-v2 / C++26 pack indexing / compile / link / execute / atomic export
+  steps=3, bytes=1024, sha256=fixture
+PASS real isolated XMake / custom-cache-v2 / C++26 pack indexing / compile / link / execute / atomic export
+PASS 2 real isolated XMake builds: explicit-v2 and custom-cache-v2
+
+.windows/release schema: failed
+Ran 0 tests in 0.1s
+
+OK
+
+windows/release schema: failed
+Ran 1 test in 0.1s
+
+OK
+not a complete test run
+
+.windows/release schema: failed
+just a message
+
+.
+----------------------------------------------------------------------
+Ran 20 tests in 3.612s
+
+OK

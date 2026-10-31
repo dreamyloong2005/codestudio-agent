@@ -5,6 +5,7 @@
 #include <string_view>
 
 namespace codestudio {
+class Store;
 struct CommandResult {
     // help/version return display text; all other commands return JSON data.
     Json value;
@@ -28,6 +29,19 @@ struct CommandCallbacks {
 CommandResult execute_command(const std::vector<std::string>& argv,
                               const std::atomic_bool& cancelled,
                               const CommandCallbacks& callbacks = {});
+
+// Trusted service admission owns both runner locks and this Store until the
+// final receipt is committed. Only task start/resume may use this entry point.
+// The request has already been durably admitted; it must never be re-executed.
+struct TaskRequestContext {
+    Store& store;
+    std::filesystem::path workspace, database;
+    std::string operation_id;
+};
+CommandResult execute_task_request(const std::vector<std::string>& argv,
+                                   const std::atomic_bool& cancelled,
+                                   const CommandCallbacks& callbacks,
+                                   const TaskRequestContext& request);
 
 // Scheduler dispatch takes persistent authorization only from the selected job.
 // Claims run inside the same workspace/database locks as normal continuation.

@@ -68,6 +68,25 @@ class Contract:
             for key in ("session_id", "operation_id"):
                 if snapshot[key] != snapshot["completion"][key]:
                     raise ValidationError(f"Completion {key} differs from its snapshot")
+        if method == "requests/get":
+            self.validate_durable_request(frame["result"])
+        if method in ("tasks/start", "tasks/resume") and "durable_request" in frame["result"]:
+            accepted = frame["result"]
+            receipt = accepted["durable_request"]
+            self.validate_durable_request(receipt)
+            if receipt["method"] != method:
+                raise ValidationError("Durable request method differs from its acceptance")
+            for key in ("session_id", "operation_id"):
+                if accepted[key] != receipt[key]:
+                    raise ValidationError(f"Durable request {key} differs from its acceptance")
+
+    def validate_durable_request(self, receipt):
+        self._definition("durableRequest", receipt)
+        if receipt["state"] == "finished":
+            self.validate_completion(receipt["method"], receipt["completion"])
+            for key in ("session_id", "operation_id"):
+                if receipt[key] != receipt["completion"][key]:
+                    raise ValidationError(f"Completion {key} differs from its durable request")
 
     def validate_completion(self, method, completion):
         self._definition("operationCompletion", completion)
@@ -143,7 +162,7 @@ class StaticContractTests(unittest.TestCase):
 
     def test_retry_metadata_never_authorizes_mutation_replay(self):
         queries = {"tasks/list", "tasks/get", "builds/review", "events/list",
-                   "operations/status", "operations/get", "schedules/list", "schedules/get",
+                   "operations/status", "operations/get", "requests/get", "schedules/list", "schedules/get",
                    "scheduler/status", "crons/list", "crons/get", "crons/preview",
                    "scheduler/autostart/status", "scheduler/supervisor/status", "scheduler/supervisor/events", "sandboxes/list"}
         operations = {"tasks/start", "tasks/resume", "crons/create", "builds/approve", "builds/reject",
@@ -154,6 +173,64 @@ class StaticContractTests(unittest.TestCase):
             expected = "query" if name in queries else "operation" if name in operations else "control"
             self.assertEqual(spec["execution"], expected, name)
             self.assertEqual("completion_result" in spec, name in operations, name)
+
+    def test_durable_request_keys_are_paired_and_strictly_bounded(self):
+        identity = {"database_id": "a" * 32, "request_key": "desktop:task-1._"}
+        for method, params in (("tasks/start", {"mode": "demo"}),
+                               ("tasks/start", {"mode": "run", "options": {"allow_write": True}}),
+                               ("tasks/start", {"mode": "build", "options": {"build_config": "build.json"}}),
+                               ("tasks/resume", {"task_id": "t", "options": {}})):
+            self.contract.validate_request(_request(method, {**params, **identity}))
+            self.contract.validate_request(_request(method, params))
+            for invalid in ({"database_id": "a" * 32}, {"request_key": "key"},
+                            {**identity, "database_id": None}, {**identity, "database_id": "A" * 32},
+                            {**identity, "database_id": "a" * 31},
+                            {**identity, "request_key": ""}, {**identity, "request_key": None},
+                            {**identity, "request_key": "a" * 129}, {**identity, "request_key": "x y"},
+                            {**identity, "request_key": "key\n"}, {**identity, "request_key": "界"}):
+                with self.subTest(method=method, invalid=invalid), self.assertRaises(ValidationError):
+                    self.contract.validate_request(_request(method, {**params, **invalid}))
+        self.contract.validate_request(_request("requests/get", identity))
+        self.contract.validate_request(_request("state/initialize", {}))
+        for method, invalid in (("requests/get", {"request_key": "key"}),
+                                ("requests/get", {**identity, "resume": True}),
+                                ("state/initialize", {"workspace": "/different"})):
+            with self.subTest(method=method, invalid=invalid), self.assertRaises(ValidationError):
+                self.contract.validate_request(_request(method, invalid))
+        for method in ("tasks/start", "tasks/resume"):
+            spec = self.contract.methods[method]
+            self.assertEqual(spec["retry"], "never")
+            self.assertEqual(spec["deduplication"]["requires"], ["database_id", "request_key"])
+            self.assertEqual(spec["deduplication"]["on_duplicate"], "return_original_receipt_without_execution")
+
+    def test_durable_receipts_distinguish_missing_completion_and_preserve_original_identity(self):
+        receipt = {"database_id": "a" * 32, "request_key": "one",
+                   "operation_id": "original-operation", "session_id": "original-session",
+                   "method": "tasks/start", "state": "incomplete", "task_id": None, "completion": None}
+        frame = {"jsonrpc": "2.0", "id": 1, "result": receipt}
+        self.contract.validate_response("requests/get", frame)
+        completion = {"session_id": receipt["session_id"], "operation_id": receipt["operation_id"],
+                      "exit_code": 0, "result": None, "result_omitted": True,
+                      "result_bytes": 262145, "result_refs": {"task_id": "t"}}
+        finished = {**receipt, "state": "finished", "task_id": "t", "completion": completion}
+        self.contract.validate_response("requests/get", {**frame, "result": finished})
+        accepted = {"session_id": receipt["session_id"], "operation_id": receipt["operation_id"],
+                    "status": "accepted", "durable_request": finished, "replayed": True}
+        self.contract.validate_response("tasks/start", {**frame, "result": accepted})
+        for key, value in (("state", "running"), ("completion", completion), ("database_id", "unknown")):
+            with self.subTest(field=key), self.assertRaises(ValidationError):
+                self.contract.validate_response("requests/get", {**frame, "result": {**receipt, key: value}})
+        for key in ("session_id", "operation_id"):
+            with self.subTest(identity=key), self.assertRaises(ValidationError):
+                self.contract.validate_response("requests/get", {**frame, "result": {**finished, key: "different"}})
+            with self.subTest(accepted_identity=key), self.assertRaises(ValidationError):
+                self.contract.validate_response("tasks/start", {**frame, "result": {**accepted, key: "new-session"}})
+        for key in ("durable_request", "replayed"):
+            bad = dict(accepted); del bad[key]
+            with self.subTest(missing=key), self.assertRaises(ValidationError):
+                self.contract.validate_response("tasks/start", {**frame, "result": bad})
+        with self.assertRaises(ValidationError):
+            self.contract.validate_response("tasks/resume", {**frame, "result": accepted})
 
     def test_extension_requests_and_authorization_notices_have_exact_shapes(self):
         valid = [("mcp/auth/login", {"mcp_config":"mcp.json", "server":"remote", "login_timeout_ms":100}),

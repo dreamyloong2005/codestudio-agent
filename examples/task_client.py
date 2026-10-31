@@ -2,10 +2,12 @@
 
 Standard library only. The default reads one task-list page without starting a
 task. --demo writes CODESTUDIO_DEMO.txt in the existing workspace, so use a
-dedicated directory. It discovers the session and capabilities, verifies the
-terminal operation receipt with a read-only lookup, then queries durable task
-state. It never automatically resends a command after losing a response. Model
-text, prompts, receipts and stderr are not printed.
+dedicated directory. It discovers the session and capabilities, explicitly
+initializes state for the demo, submits a new request key, verifies the durable
+operation receipt with a read-only lookup, then queries task state. Production
+clients must save database identity, request key and exact parameters before
+submission; this one-shot example keeps them only in memory and never retries
+after a lost response. Model text, prompts, receipts and stderr are not printed.
 
 python examples/task_client.py --agent build/windows/x64/release/codestudio-agent.exe \
     --workspace D:/YourExistingDemoDirectory --demo
@@ -19,6 +21,7 @@ import subprocess
 import sys
 import threading
 import time
+import uuid
 
 
 class ClientError(Exception):
@@ -29,6 +32,7 @@ ERROR_KINDS = frozenset({
     "parse_error", "invalid_request", "invalid_params", "method_not_found",
     "not_initialized", "already_initialized", "busy", "operation_not_found",
     "session_mismatch", "command_failed", "operation_failed", "internal_error",
+    "request_conflict", "database_mismatch", "request_not_found", "request_limit",
 })
 
 
@@ -43,6 +47,8 @@ class Client:
         self.overflow = threading.Event()
         self.next_id = 1
         self.session_id = None
+        self.database_id = None
+        self.request_key = None
         self.operation_id = None
         self.completion = None
         self.finished_tasks = deque(maxlen=256)
@@ -159,18 +165,27 @@ class Client:
         if initialized.get("protocol_version") != 2:
             raise ClientError("The service protocol version does not match this example.")
         capabilities = initialized.get("capabilities", {})
-        if not (capabilities.get("operation_lookup") and capabilities.get("structured_errors")):
-            raise ClientError("The service lacks operation lookup or structured errors.")
+        if not (capabilities.get("durable_requests") and capabilities.get("structured_errors")):
+            raise ClientError("The service lacks durable requests or structured errors.")
         self.session_id = initialized.get("session_id")
+        self.database_id = initialized.get("database_id")
         if not isinstance(self.session_id, str) or not self.session_id:
             raise ClientError("Initialization did not identify the service session.")
         return initialized
 
     def demo(self):
+        if self.database_id is None:
+            initialized = self.rpc("state/initialize")
+            self.database_id = initialized.get("database_id")
+        if (not isinstance(self.database_id, str) or len(self.database_id) != 32 or
+                any(character not in "0123456789abcdef" for character in self.database_id)):
+            raise ClientError("State initialization did not identify the database.")
+        self.request_key = "demo:" + uuid.uuid4().hex
         self.rpc("events/subscribe", {"after": 0})
-        accepted = self.rpc("tasks/start", {"mode": "demo", "options": {}})
+        accepted = self.rpc("tasks/start", {"mode": "demo", "options": {},
+            "database_id": self.database_id, "request_key": self.request_key})
         if (accepted.get("status") != "accepted" or not accepted.get("operation_id") or
-                accepted.get("session_id") != self.session_id):
+                accepted.get("session_id") != self.session_id or accepted.get("replayed") is not False):
             raise ClientError("The demo operation was not accepted.")
         self.operation_id = accepted["operation_id"]
         # Completion and committed ledger notifications may arrive in either
@@ -182,21 +197,24 @@ class Client:
             self.observe(self.receive())
         if self.completion["exit_code"] != 0 or self.completion["status"] != "completed":
             raise ClientError("The demo did not complete successfully; inspect it with the CLI.")
-        # The ID is scoped to this process session, and the cache is bounded.
-        # A lookup failure after eviction/restart is not proof of no effects;
-        # reconcile the durable task/events instead of resending tasks/start.
-        retained = self.rpc("operations/get", {
-            "session_id": self.session_id, "operation_id": self.operation_id,
+        # These identities survive service restart. A production reconnect must
+        # reuse the saved database identity, not adopt a newly created database.
+        # incomplete or a missing receipt is never proof that no effects occurred.
+        retained = self.rpc("requests/get", {
+            "database_id": self.database_id, "request_key": self.request_key,
         })
-        if (retained.get("session_id") != self.session_id or
+        if (retained.get("database_id") != self.database_id or
+                retained.get("request_key") != self.request_key or
+                retained.get("session_id") != self.session_id or
                 retained.get("operation_id") != self.operation_id or
                 retained.get("method") != "tasks/start" or retained.get("state") != "finished" or
+                retained.get("task_id") != self.completion["task_id"] or
                 self.completion_metadata(retained.get("completion", {})) != self.completion):
             raise ClientError("The retained receipt did not confirm the operation completion.")
         detail = self.rpc("tasks/get", {"task_id": self.completion["task_id"]})
         if detail.get("status") != "completed" or not isinstance(detail.get("action_count"), int):
             raise ClientError("Task detail did not confirm successful completion.")
-        print(f"Demo completed; session receipt and committed task verified; actions: {detail['action_count']}.")
+        print(f"Demo completed; durable request receipt and committed task verified; actions: {detail['action_count']}.")
 
     def shutdown(self):
         self.rpc("shutdown")

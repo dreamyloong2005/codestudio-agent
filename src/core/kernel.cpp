@@ -300,12 +300,20 @@ Json run_agent(Store& store, ModelProvider& provider, const ToolBroker& tools,
         if (options.max_turns<state["max_turns"].get<int>()) throw std::runtime_error("Resume cannot reduce the saved total model turn budget");
         if (state["phase"]!="tools" && options.max_turns<=state["turns"].get<int>())
             throw std::runtime_error("Model turn budget exhausted; resume with a larger --max-turns total (up to 100)");
-        store.resume_task(id,binding,options.scheduler_job_id,options.scheduler_claim_token);
+        store.resume_task(id,binding,options.scheduler_job_id,options.scheduler_claim_token,options.request_operation_id);
         state["max_turns"]=options.max_turns;
     } else {
-        id=store.create_task(clean(options.prompt).get<std::string>(),
-                             clean(canonical_path(tools.policy().workspace)).get<std::string>(),clean(provider.name()).get<std::string>());
         state=initial_state(options);
+        auto initial=clean(state);
+        if (initial!=state || safe_binding!=binding) {
+            state["resumable"]=false;
+            state["blocked_reason"]="Checkpoint redaction prevents exact continuation";
+            initial=clean(state);
+        }
+        id=store.create_task(clean(options.prompt).get<std::string>(),
+                             clean(canonical_path(tools.policy().workspace)).get<std::string>(),clean(provider.name()).get<std::string>(),
+                             options.request_operation_id.empty() ? nullptr : &initial,
+                             options.request_operation_id.empty() ? nullptr : &safe_binding,options.request_operation_id);
     }
     const auto snapshot=[&]() {
         auto safe=clean(state);
@@ -333,7 +341,7 @@ Json run_agent(Store& store, ModelProvider& provider, const ToolBroker& tools,
                                 body.at("effect")=="unknown" || body.at("effect")=="partial";
     };
     try {
-        save();
+        if (resuming || options.request_operation_id.empty()) save();
         if (!resuming) store.event(id,"tools.available",clean(schemas));
         for (;;) {
             if (cancelled.load()) return finish("cancelled","Cancelled by user");

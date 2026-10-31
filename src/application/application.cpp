@@ -476,7 +476,7 @@ restarts abnormal exits up to --max-restarts (0..100), and backs off from
 --restart-delay-ms (100..60000) exponentially to 60000ms. Stops fence restarts.
 Supervision does not expand task permissions, reset budgets or replay unknown effects.
 Stopping cancels the active job and preserves other queued jobs. Every execution
-rechecks current bindings. State databases must use schema 7; no migration occurs.
+rechecks current bindings. State databases must use schema 8; no migration occurs.
 cron-create freezes a fresh-task template and granted tool schemas without a model
 request. Each occurrence gets its own task and budget; max-runs 0 repeats until
 paused or cancelled. Missed triggers coalesce, instances never overlap, and
@@ -616,7 +616,8 @@ Json application_redact(Json value) {
 static CommandResult execute_impl(const std::vector<std::string>& argv,
                                  const std::atomic_bool& cancelled,
                                  const CommandCallbacks& callbacks,
-                                 Store* inherited_store = nullptr, const Json& scheduled = Json()) {
+                                 Store* inherited_store = nullptr, const Json& scheduled = Json(),
+                                 const TaskRequestContext* request = nullptr) {
     auto args = parse(argv);
     if (args.command=="help") return {help_text(), 0};
     if (args.command=="version") return {"CodeStudio-Agent 0.1.0\n", 0};
@@ -637,7 +638,7 @@ static CommandResult execute_impl(const std::vector<std::string>& argv,
                {"credentials",{{"references",Json::array({"env","system"})},
                     {"system_backend",system_credential_backend()},{"runtime_probe","not-run"},
                     {"resolution","per-operation"}}},
-               {"task_service",{{"transport","stdio"},{"protocol_version",2},{"event_replay",true}}},
+               {"task_service",{{"transport","stdio"},{"protocol_version",2},{"event_replay",true},{"durable_requests",true}}},
                {"mcp_transports",Json::array({"stdio","streamable-http"})},{"local_model_discovery",true},
                {"mcp_oauth",{{"available",system_credential_backend() != "unsupported"},{"grant","authorization_code"},{"pkce","S256"},{"client_registration","explicit"},
                     {"token_store","system"},{"refresh","before-operation"}}},{"plugin_locks",true},{"plugin_distribution",true},
@@ -665,7 +666,7 @@ static CommandResult execute_impl(const std::vector<std::string>& argv,
                     },{"reclaim","explicit-id"},{"runtime_probe","not-run"}}},
                {"sandbox_default","none"},{"sandbox_support","compiled-backends"},
                {"sandbox_runtime_probe","not-run"},{"sandbox_scope","process-and-mcp-children"},
-               {"automatic_resume",true},{"cron",true},{"state_schema",7},
+               {"automatic_resume",true},{"cron",true},{"state_schema",8},
 #if defined(_WIN32) || defined(__linux__) || defined(__APPLE__)
                {"background_scheduler",true},{"supervised_autostart",true},
                {"worker_supervision",true},{"supervisor_diagnostics",true},
@@ -742,6 +743,8 @@ static CommandResult execute_impl(const std::vector<std::string>& argv,
     } catch (const std::filesystem::filesystem_error&) {
         throw std::runtime_error("State path cannot be opened");
     }
+    if (request && (workspace != request->workspace || database != request->database))
+        throw std::runtime_error("Durable request workspace or database path changed after admission");
     if (args.command=="build-review") {
         StateReader reader(database);
         return {review_build_proposal(reader.build_proposal(args.task_id,args.get("--action")),workspace),0};
@@ -917,6 +920,7 @@ static CommandResult execute_impl(const std::vector<std::string>& argv,
         std::unique_ptr<StreamRedactor> stream_output;
         std::unique_ptr<ModelProvider> provider;
         RunOptions options;
+        if (request) options.request_operation_id=request->operation_id;
         options.secrets=current_credentials->secrets;
         options.max_turns=args.number("--max-turns",resuming ? saved.at("state").at("max_turns").get<int>() : 8,1,100);
         if ((decision || enrolling || !scheduled.is_null()) && options.max_turns!=saved.at("state").at("max_turns").get<int>())
@@ -1083,6 +1087,16 @@ CommandResult execute_command(const std::vector<std::string>& argv,const std::at
             argv[1]=="schedule-show" || argv[1]=="schedule-cancel"))
             return scheduler_command(argv,cancelled);
         return execute_impl(argv,cancelled,callbacks);
+    });
+}
+
+CommandResult execute_task_request(const std::vector<std::string>& argv,const std::atomic_bool& cancelled,
+                                   const CommandCallbacks& callbacks,const TaskRequestContext& request) {
+    return with_credential_scope([&]() -> CommandResult {
+        if (argv.size()<2 || (argv[1]!="run" && argv[1]!="demo" && argv[1]!="build" && argv[1]!="resume") ||
+            request.operation_id.empty())
+            throw std::runtime_error("Durable admission only supports task start and resume");
+        return execute_impl(argv,cancelled,callbacks,&request.store,Json(),&request);
     });
 }
 

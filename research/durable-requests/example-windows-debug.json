@@ -1,0 +1,17 @@
+{
+  "status": "succeeded",
+  "binary": "D:\\Dev\\Projects\\codestudio-agent\\build\\windows\\x64\\debug\\codestudio-agent.exe",
+  "sha256": "efb4d79931d04897c2c47fd8092a1829033c3b4cd8cf8fb0577970898339e89c",
+  "results": [
+    {
+      "mode": "readonly",
+      "exit_code": 0,
+      "stdout": "Connected; current task-list page contains 0 task(s).\nService closed.\n"
+    },
+    {
+      "mode": "demo",
+      "exit_code": 0,
+      "stdout": "Connected; current task-list page contains 0 task(s).\nDemo completed; durable request receipt and committed task verified; actions: 2.\nService closed.\n"
+    }
+  ]
+}

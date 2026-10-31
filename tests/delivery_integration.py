@@ -128,6 +128,11 @@ def package_snapshot(root):
     Each copied fixture is compared with this snapshot and the original package
     is checked again after the run. A receipt never binds tests to later bytes.
     """
+    def metadata(info):
+        return (info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns,
+                info.st_ctime_ns, info.st_mode, info.st_nlink,
+                getattr(info, "st_file_attributes", 0))
+
     records, directories, total_bytes, entries = {}, [], 0, 0
     pending = [root]
     while pending:
@@ -161,12 +166,52 @@ def package_snapshot(root):
                         raise RuntimeError("Delivery evidence file grew during snapshot")
                     hashed.update(data)
                 after = os.fstat(source.fileno())
-                if length != info.st_size or (after.st_size, after.st_mtime_ns, after.st_ctime_ns, after.st_mode, after.st_nlink) != (
-                        info.st_size, info.st_mtime_ns, info.st_ctime_ns, info.st_mode, 1):
+                # Windows path stat infers executable bits from the filename;
+                # its ctime can also differ from fstat. Compare each API to its
+                # own initial observation, while retaining the file ID binding.
+                if (length != info.st_size or metadata(after) != metadata(opened)
+                        or metadata(path.lstat()) != metadata(info)):
                     raise RuntimeError("Delivery evidence file changed during snapshot")
             records[name] = {"sha256": hashed.hexdigest(), "size": info.st_size,
                              "executable": bool(info.st_mode & 0o111) if os.name != "nt" else None}
     return {"files": records, "directories": sorted(directories)}
+
+
+class PackageSnapshotTests(unittest.TestCase):
+    def test_unchanged_executable_and_text_have_stable_snapshots(self):
+        with tempfile.TemporaryDirectory(prefix="codestudio-delivery-snapshot-") as temporary:
+            root = Path(temporary).resolve()
+            content = b"unchanged package fixture"
+            for name in ("ordinary.txt", "program.exe"):
+                (root / name).write_bytes(content)
+            first = package_snapshot(root)
+            self.assertEqual(package_snapshot(root), first)
+            self.assertEqual(set(first["files"]), {"ordinary.txt", "program.exe"})
+            for record in first["files"].values():
+                self.assertEqual(record["sha256"], hashlib.sha256(content).hexdigest())
+
+    def test_same_length_write_during_snapshot_is_rejected(self):
+        with tempfile.TemporaryDirectory(prefix="codestudio-delivery-snapshot-") as temporary:
+            root = Path(temporary).resolve()
+            path = root / "ordinary.txt"
+            path.write_bytes(b"before")
+            original = path.stat()
+            real_fstat = os.fstat
+            observations = 0
+
+            def mutate_before_final_observation(descriptor):
+                nonlocal observations
+                observations += 1
+                if observations == 2:
+                    path.write_bytes(b"after!")
+                    os.utime(path, ns=(original.st_atime_ns, original.st_mtime_ns + 1_000_000_000))
+                return real_fstat(descriptor)
+
+            with patch.object(os, "fstat", mutate_before_final_observation):
+                with self.assertRaisesRegex(RuntimeError, "changed during snapshot"):
+                    package_snapshot(root)
+            self.assertEqual(observations, 2)
+            self.assertEqual(path.read_bytes(), b"after!")
 
 
 class DeliveryResult(unittest.TextTestResult):
@@ -425,7 +470,7 @@ class DeliveryTests(unittest.TestCase):
     def test_installed_doctor_demo_service_and_environment_credential(self):
         self.install()
         doctor = self.agent("doctor")
-        self.assertEqual(doctor["state_schema"], 7)
+        self.assertEqual(doctor["state_schema"], 8)
         self.assertEqual(doctor["mcp_transports"], ["stdio", "streamable-http"])
         demo = self.agent("demo", "--workspace", self.workspace)
         self.assertEqual(demo["status"], "completed")
@@ -455,7 +500,7 @@ class DeliveryTests(unittest.TestCase):
             self.assertTrue((self.prefix / "lib" / name).is_file())
             self.assertFalse((self.prefix / "lib" / name).is_symlink())
         self.assertFalse(any(name.startswith(("DYLD_", "CODESTUDIO_")) for name in self.env))
-        self.assertEqual(self.agent("doctor")["state_schema"], 7)
+        self.assertEqual(self.agent("doctor")["state_schema"], 8)
         epoch = lambda value: int(datetime.fromisoformat(value).replace(tzinfo=timezone.utc).timestamp() * 1000)
         folded = self.agent("cron-preview", "--workspace", self.workspace, "--cron", "30 1 * * *",
                             "--timezone", "America/New_York", "--after", epoch("2026-11-01T00:00:00"), "--count", 2)
@@ -584,7 +629,7 @@ class DeliveryTests(unittest.TestCase):
         self.assertEqual(digest(self.prefix / EXECUTABLE), old_binary)
         self.assertEqual(self.tree_snapshot(self.workspace), saved)
         self.assertEqual(self.invoke("status")["status"], "installed")
-        self.assertEqual(self.agent("doctor")["state_schema"], 7)
+        self.assertEqual(self.agent("doctor")["state_schema"], 8)
 
     def test_downgrade_refused_without_modifying_installed_files(self):
         manifest = self.manifest()

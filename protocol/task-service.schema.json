@@ -3,7 +3,7 @@
   "$id": "urn:codestudio-agent:task-service:2",
   "title": "CodeStudio-Agent stdio task service protocol 2",
   "description": "UTF-8 JSON lines. Strict request parameters and extensible result records. x-maxBytes is a UTF-8 byte bound, unlike maxLength. Method results require request/response correlation. See protocol/README.md.",
-  "$comment": "Runtime permissions, state/binding, paths, cron syntax/timezone and cross-field budgets remain authoritative. This schema does not imply safe retries or durable operation lookup.",
+  "$comment": "Runtime permissions, state/binding, paths, cron syntax/timezone and cross-field budgets remain authoritative. Keyed task requests may return durable history; no request or receipt authorizes replay of unknown effects.",
   "oneOf": [
     {
       "$ref": "#/$defs/request"
@@ -29,6 +29,26 @@
       },
       "execution": "control",
       "retry": "never"
+    },
+    "state/initialize": {
+      "params": {
+        "$ref": "#/$defs/emptyParams"
+      },
+      "result": {
+        "$ref": "#/$defs/stateInitializeResult"
+      },
+      "execution": "control",
+      "retry": "never"
+    },
+    "requests/get": {
+      "params": {
+        "$ref": "#/$defs/requestGetParams"
+      },
+      "result": {
+        "$ref": "#/$defs/durableRequest"
+      },
+      "execution": "query",
+      "retry": "query_only"
     },
     "tasks/list": {
       "params": {
@@ -61,6 +81,16 @@
       "retry": "never",
       "completion_result": {
         "$ref": "#/$defs/taskRunResult"
+      },
+      "deduplication": {
+        "requires": [
+          "database_id",
+          "request_key"
+        ],
+        "scope": "database_and_workspace",
+        "retention": "database_lifetime",
+        "on_duplicate": "return_original_receipt_without_execution",
+        "parameter_equality": "canonical_explicit_json"
       }
     },
     "tasks/resume": {
@@ -74,6 +104,16 @@
       "retry": "never",
       "completion_result": {
         "$ref": "#/$defs/taskRunResult"
+      },
+      "deduplication": {
+        "requires": [
+          "database_id",
+          "request_key"
+        ],
+        "scope": "database_and_workspace",
+        "retention": "database_lifetime",
+        "on_duplicate": "return_original_receipt_without_execution",
+        "parameter_equality": "canonical_explicit_json"
       }
     },
     "tasks/recover": {
@@ -869,12 +909,26 @@
             },
             "options": {
               "$ref": "#/$defs/runOptions"
+            },
+            "database_id": {
+              "$ref": "#/$defs/databaseId"
+            },
+            "request_key": {
+              "$ref": "#/$defs/requestKey"
             }
           },
           "required": [
             "mode"
           ],
-          "additionalProperties": false
+          "additionalProperties": false,
+          "dependentRequired": {
+            "database_id": [
+              "request_key"
+            ],
+            "request_key": [
+              "database_id"
+            ]
+          }
         },
         {
           "type": "object",
@@ -884,12 +938,26 @@
             },
             "options": {
               "$ref": "#/$defs/emptyParams"
+            },
+            "database_id": {
+              "$ref": "#/$defs/databaseId"
+            },
+            "request_key": {
+              "$ref": "#/$defs/requestKey"
             }
           },
           "required": [
             "mode"
           ],
-          "additionalProperties": false
+          "additionalProperties": false,
+          "dependentRequired": {
+            "database_id": [
+              "request_key"
+            ],
+            "request_key": [
+              "database_id"
+            ]
+          }
         },
         {
           "type": "object",
@@ -899,13 +967,27 @@
             },
             "options": {
               "$ref": "#/$defs/buildOptions"
+            },
+            "database_id": {
+              "$ref": "#/$defs/databaseId"
+            },
+            "request_key": {
+              "$ref": "#/$defs/requestKey"
             }
           },
           "required": [
             "mode",
             "options"
           ],
-          "additionalProperties": false
+          "additionalProperties": false,
+          "dependentRequired": {
+            "database_id": [
+              "request_key"
+            ],
+            "request_key": [
+              "database_id"
+            ]
+          }
         }
       ]
     },
@@ -917,12 +999,26 @@
         },
         "options": {
           "$ref": "#/$defs/resumeOptions"
+        },
+        "database_id": {
+          "$ref": "#/$defs/databaseId"
+        },
+        "request_key": {
+          "$ref": "#/$defs/requestKey"
         }
       },
       "required": [
         "task_id"
       ],
-      "additionalProperties": false
+      "additionalProperties": false,
+      "dependentRequired": {
+        "database_id": [
+          "request_key"
+        ],
+        "request_key": [
+          "database_id"
+        ]
+      }
     },
     "taskIdParams": {
       "type": "object",
@@ -1306,6 +1402,9 @@
             },
             "sandbox_resources": {
               "type": "boolean"
+            },
+            "durable_requests": {
+              "const": true
             }
           },
           "required": [
@@ -1323,7 +1422,8 @@
             "login_autostart",
             "worker_supervision",
             "supervised_autostart",
-            "supervisor_diagnostics"
+            "supervisor_diagnostics",
+            "durable_requests"
           ],
           "additionalProperties": true
         },
@@ -1347,6 +1447,9 @@
             },
             "operation_result_bytes": {
               "const": 262144
+            },
+            "durable_requests": {
+              "const": 10000
             }
           },
           "required": [
@@ -1355,9 +1458,20 @@
             "page_items",
             "active_operations",
             "operation_history",
-            "operation_result_bytes"
+            "operation_result_bytes",
+            "durable_requests"
           ],
           "additionalProperties": true
+        },
+        "database_id": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/databaseId"
+            },
+            {
+              "type": "null"
+            }
+          ]
         }
       },
       "required": [
@@ -1368,7 +1482,8 @@
         "workspace",
         "state_database",
         "capabilities",
-        "limits"
+        "limits",
+        "database_id"
       ],
       "additionalProperties": true
     },
@@ -2816,6 +2931,12 @@
         },
         "status": {
           "const": "accepted"
+        },
+        "durable_request": {
+          "$ref": "#/$defs/durableRequest"
+        },
+        "replayed": {
+          "type": "boolean"
         }
       },
       "required": [
@@ -2823,7 +2944,15 @@
         "operation_id",
         "status"
       ],
-      "additionalProperties": true
+      "additionalProperties": true,
+      "dependentRequired": {
+        "durable_request": [
+          "replayed"
+        ],
+        "replayed": [
+          "durable_request"
+        ]
+      }
     },
     "operationStatus": {
       "type": "object",
@@ -2891,7 +3020,11 @@
             "session_mismatch",
             "command_failed",
             "operation_failed",
-            "internal_error"
+            "internal_error",
+            "request_conflict",
+            "database_mismatch",
+            "request_not_found",
+            "request_limit"
           ]
         },
         "recovery": {
@@ -3666,6 +3799,53 @@
             },
             "params": {
               "$ref": "#/$defs/initializeParams"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "id",
+            "method",
+            "params"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "id": {
+              "$ref": "#/$defs/requestId"
+            },
+            "method": {
+              "const": "state/initialize"
+            },
+            "params": {
+              "$ref": "#/$defs/emptyParams"
+            }
+          },
+          "required": [
+            "jsonrpc",
+            "id",
+            "method"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "jsonrpc": {
+              "const": "2.0"
+            },
+            "id": {
+              "$ref": "#/$defs/requestId"
+            },
+            "method": {
+              "const": "requests/get"
+            },
+            "params": {
+              "$ref": "#/$defs/requestGetParams"
             }
           },
           "required": [
@@ -5608,6 +5788,148 @@
         "reason"
       ],
       "additionalProperties": true
+    },
+    "databaseId": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{32}$",
+      "minLength": 32,
+      "maxLength": 32,
+      "x-maxBytes": 32
+    },
+    "requestKey": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._:-]+$",
+      "minLength": 1,
+      "maxLength": 128,
+      "x-maxBytes": 128,
+      "not": {
+        "pattern": "[^A-Za-z0-9._:-]"
+      }
+    },
+    "requestGetParams": {
+      "type": "object",
+      "properties": {
+        "database_id": {
+          "$ref": "#/$defs/databaseId"
+        },
+        "request_key": {
+          "$ref": "#/$defs/requestKey"
+        }
+      },
+      "required": [
+        "database_id",
+        "request_key"
+      ],
+      "additionalProperties": false
+    },
+    "stateInitializeResult": {
+      "type": "object",
+      "properties": {
+        "database_id": {
+          "$ref": "#/$defs/databaseId"
+        },
+        "workspace": {
+          "type": "string"
+        },
+        "state_database": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "database_id",
+        "workspace",
+        "state_database"
+      ],
+      "additionalProperties": true
+    },
+    "durableRequest": {
+      "type": "object",
+      "properties": {
+        "database_id": {
+          "$ref": "#/$defs/databaseId"
+        },
+        "request_key": {
+          "$ref": "#/$defs/requestKey"
+        },
+        "operation_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "session_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "method": {
+          "enum": [
+            "tasks/start",
+            "tasks/resume"
+          ]
+        },
+        "state": {
+          "enum": [
+            "incomplete",
+            "finished"
+          ]
+        },
+        "task_id": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/identifier"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "completion": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/operationCompletion"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "database_id",
+        "request_key",
+        "operation_id",
+        "session_id",
+        "method",
+        "state",
+        "task_id",
+        "completion"
+      ],
+      "additionalProperties": true,
+      "description": "Durable receipt scoped to the original database and workspace. incomplete reports missing completion, not process liveness or permission to retry execution. Keys never expire within a database lifetime.",
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "incomplete"
+              }
+            },
+            "required": [
+              "state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "completion": {
+                "type": "null"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "completion": {
+                "$ref": "#/$defs/operationCompletion"
+              }
+            }
+          }
+        }
+      ]
     }
   }
 }

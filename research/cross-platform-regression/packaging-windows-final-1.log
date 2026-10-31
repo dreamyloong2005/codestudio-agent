@@ -1,0 +1,48 @@
+{
+  "format": 2,
+  "product": "CodeStudio-Agent",
+  "status": "packaged",
+  "platform": "windows",
+  "arch": "x64",
+  "package": "D:\\Dev\\Projects\\codestudio-agent\\build\\packages\\windows-x64\\codestudio-agent-windows-x64",
+  "archive": "D:\\Dev\\Projects\\codestudio-agent\\build\\packages\\windows-x64\\codestudio-agent-windows-x64.zip",
+  "sha256": "47613c9a329e7f71ede7bb25d59b250f3213071b47e05df3d4b31597cbb689de",
+  "bytes": 2180197,
+  "verification": {
+    "state": "supplied",
+    "sha256": "dff541084cde15621a847685dbea3e431992eac6295690108bfedf0cd7b3706f",
+    "selected_suites": [
+      "native",
+      "schema",
+      "provider",
+      "streaming",
+      "contract",
+      "service",
+      "credentials",
+      "cli",
+      "local_models",
+      "mcp",
+      "mcp_http",
+      "mcp_oauth",
+      "plugins",
+      "plugin_sandbox",
+      "resume",
+      "sandbox",
+      "sandbox_resources",
+      "scheduler",
+      "supervisor",
+      "cron",
+      "autostart",
+      "spawn_lifetime",
+      "build",
+      "build_proposals",
+      "real_build",
+      "package",
+      "verification"
+    ],
+    "omitted_suites": [
+      "delivery"
+    ],
+    "unsupported_suites": {}
+  }
+}

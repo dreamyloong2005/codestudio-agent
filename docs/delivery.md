@@ -34,6 +34,16 @@ python scripts/verify.py --mode release --skip-build --suite schema --suite mcp_
 
 macOS 支持原生 arm64 包和用户级安装；签名公证通过下述独立入口执行，实际结果见[阶段 4 回执](../research/macos-stage4/README.md)。Intel/Universal 包按需求增加。隔离资源/插件与真实隔离构建继续明确跳过；真实登录触发使用单独的会话探针。安装测试通过、CI 定义和 ad-hoc 签名均不等于正式发布验收。
 
+## Windows/Linux 当前交付回归
+
+macOS 适配修改了共享的验证、打包和安装逻辑。针对合入后版本的 Windows/WSL Debug/Release、新归档安装/升级/卸载、产物摘要与清理边界统一记录在 [本轮回执](../research/cross-platform-regression/README.md)；旧版包和历史回执不自动证明当前版本通过。本轮本地交付不代替托管 CI、干净机器或真实登录验收。
+
+## macOS 当前同步交付计划
+
+最新 schema 8 的 Mac 交付按 [macOS 同步跟进计划 M2](macos-follow-up.md#m2测试包和安装验收) 跟进，依赖对应源码的原生 Debug/Release 回执。需要重新生成携带私有运行库的测试包，实际解包后验收安装、升级、卸载与包级持久请求；旧版包和原生程序摘要不能证明重定位后新包通过。包级专项还需处理独立进程夹具路径，不能假定分发包包含开发测试程序。
+
+真实登录和 CI 分别按计划 M3、M4 留证，正式签名、公证与独立干净机器验收保持暂缓。当前只完成计划编写，未创建新的 Mac 包、登记登录探针或触发 CI。
+
 ## 创建发布包
 
 在 Windows x64、Linux x86-64 或 macOS arm64 原生平台构建 Release 后执行：

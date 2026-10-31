@@ -4,6 +4,7 @@
 #include "scheduler_storage.hpp"
 #include "cron_storage.hpp"
 #include "supervisor_storage.hpp"
+#include "durable_request_storage.hpp"
 #include <sqlite3.h>
 #include <array>
 #include <climits>
@@ -152,7 +153,7 @@ struct StateReader::Impl {
 
     int version() const {
         Statement query(db, "PRAGMA user_version");
-        if (!query.next() || (query.number(0) != 0 && query.number(0) != 7))
+        if (!query.next() || (query.number(0) != 0 && query.number(0) != 8))
             throw std::runtime_error("Unsupported state schema for read-only queries; create a new state database");
         const auto version = static_cast<int>(query.number(0));
         if (version == 0) {
@@ -167,6 +168,44 @@ struct StateReader::Impl {
 StateReader::StateReader(const std::filesystem::path& database)
     : impl_(std::make_unique<Impl>(std::filesystem::absolute(database))) { impl_->open(); }
 StateReader::~StateReader() = default;
+
+Json StateReader::database_id() const {
+    // A long-lived SQLite connection can keep reading an unlinked old database.
+    // Identity-sensitive requests reopen the current path rather than trusting it.
+    Impl current(impl_->database);
+    if (!current.open()) return nullptr;
+    Snapshot snapshot(current.db);
+    if (current.version()==0) return nullptr;
+    Statement query(current.db,"SELECT database_id FROM database_identity WHERE singleton=1");
+    if (!query.next()) throw std::runtime_error("State database identity is missing");
+    const auto id=query.text(0);
+    durable_request_storage::hex(id,32,"Invalid state database identity");
+    return id;
+}
+Json StateReader::request(const std::string& expected_database_id, const std::string& key,
+                          const std::string& expected_digest, const std::string& expected_method,
+                          const std::string& expected_workspace) const {
+    durable_request_storage::hex(expected_database_id,32,"Invalid expected database identity");
+    durable_request_storage::key(key);
+    if (!expected_digest.empty()) durable_request_storage::hex(expected_digest,64,"Invalid expected request digest");
+    if (!expected_method.empty()) durable_request_storage::method(expected_method);
+    if (!expected_workspace.empty()) durable_request_storage::bounded_text(expected_workspace,32768,"Invalid expected workspace");
+    Impl current(impl_->database);
+    if (!current.open()) throw DatabaseMismatch("State database is absent; previous request outcome is unknown");
+    Snapshot snapshot(current.db);
+    if (current.version()==0) throw DatabaseMismatch("State database is uninitialized; previous request outcome is unknown");
+    Statement identity(current.db,"SELECT database_id FROM database_identity WHERE singleton=1");
+    if (!identity.next() || identity.text(0)!=expected_database_id)
+        throw DatabaseMismatch("State database identity changed; previous request outcome is unknown");
+    const auto text=std::string("SELECT ")+durable_request_storage::columns+
+        " FROM durable_requests r CROSS JOIN database_identity d WHERE d.singleton=1 AND r.request_key=?";
+    Statement query(current.db,text.c_str()); query.bind(1,key);
+    if (!query.next()) return nullptr;
+    auto result=durable_request_storage::receipt(query);
+    durable_request_storage::match(query,expected_digest,expected_method,expected_workspace);
+    return result;
+}
+
 
 Json StateReader::crons(std::int64_t before, std::size_t limit) const {
     pagination(before,limit);

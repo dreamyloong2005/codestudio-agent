@@ -89,11 +89,11 @@ void initialization_and_durability() {
         check(store.task(id).at("status") == "running","Durable task did not resume");
     }
     Database database(path);
-    check(database.value("PRAGMA user_version") == "7","Empty database was not initialized to the current schema");
+    check(database.value("PRAGMA user_version") == "8","Empty database was not initialized to the current schema");
 }
 
 void unsupported_schemas_are_read_only() {
-    for (const int version : {0,1,2,3,4,5,6,999}) {
+    for (const int version : {0,1,2,3,4,5,6,7,999}) {
         Temp temp; const auto path = temp.root / "unsupported.sqlite3";
         {
             Database database(path);

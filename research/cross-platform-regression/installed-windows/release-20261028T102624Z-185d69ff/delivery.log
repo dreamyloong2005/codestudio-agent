@@ -1,0 +1,17 @@
+E
+======================================================================
+ERROR: setUpClass (__main__.DeliveryTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\Dev\Projects\codestudio-agent\tests\delivery_integration.py", line 226, in setUpClass
+    PACKAGE_SNAPSHOT = package_snapshot(PACKAGE)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Dev\Projects\codestudio-agent\tests\delivery_integration.py", line 166, in package_snapshot
+    raise RuntimeError("Delivery evidence file changed during snapshot")
+RuntimeError: Delivery evidence file changed during snapshot
+
+----------------------------------------------------------------------
+Ran 0 tests in 0.005s
+
+FAILED (errors=1)
+Delivery evidence refused: package changed or no initial snapshot was captured.

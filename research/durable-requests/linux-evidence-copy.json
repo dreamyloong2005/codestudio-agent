@@ -1,0 +1,230 @@
+[
+  {
+    "path": "research/durable-requests/credential-cleanup-linux-20261028T115431Z-6a86278d.json",
+    "sha256": "a55c0ed62e7a21d26f9a4c3ef09b15151a43492797d7861ac063c459b3181545"
+  },
+  {
+    "path": "research/durable-requests/linux/debug-20261028T115431Z-173ea274/autostart.log",
+    "sha256": "60cf5caebfd44f0be45241932b820b2b00ec06ff42fff74d31817f15567cebe2"
+  },
+  {
+    "path": "research/durable-requests/linux/debug-20261028T115431Z-173ea274/cli.log",
+    "sha256": "464d2c256fa4a66769c8b71a200481babb1616b8ff8fef94ff389dcc85120791"
+  },
+  {
+    "path": "research/durable-requests/linux/debug-20261028T115431Z-173ea274/configure.log",
+    "sha256": "627173a150670622f3cfb71911fdebbe8a3a3fbdde9f2d945e594d47ea64d7c1"
+  },
+  {
+    "path": "research/durable-requests/linux/debug-20261028T115431Z-173ea274/contract.log",
+    "sha256": "86707ddb0d27a5cc4479f921626acf339da442015d0df3d3fc10a24b7563f510"
+  },
+  {
+    "path": "research/durable-requests/linux/debug-20261028T115431Z-173ea274/credentials.log",
+    "sha256": "9c1ec26e878b514821fd069439373b282677df2e637537609035ac7d9bac89fc"
+  },
+  {
+    "path": "research/durable-requests/linux/debug-20261028T115431Z-173ea274/cron.log",
+    "sha256": "9ae29d2bb9d1f7e5100785c8601892d2809ad143d220092d5220afc6dd5226a4"
+  },
+  {
+    "path": "research/durable-requests/linux/debug-20261028T115431Z-173ea274/durable_requests.log",
+    "sha256": "9f714da0c027305f3439114f5ace2a45d6b641d6f0036717d0c42944221da532"
+  },
+  {
+    "path": "research/durable-requests/linux/debug-20261028T115431Z-173ea274/local_models.log",
+    "sha256": "693756caf56d0b621e856b32f9426c017bf60c145178b5e0638b3335dd79c13f"
+  },
+  {
+    "path": "research/durable-requests/linux/debug-20261028T115431Z-173ea274/mcp.log",
+    "sha256": "bf84bc308968eaca6db5308c10da5a4a14fb9b2cbeddf03274fed2069dc5a349"
+  },
+  {
+    "path": "research/durable-requests/linux/debug-20261028T115431Z-173ea274/mcp_http.log",
+    "sha256": "32f2b05f77e086be8ad9d898b68732f3d462e3e8a751fc76aa539617c951bc26"
+  },
+  {
+    "path": "research/durable-requests/linux/debug-20261028T115431Z-173ea274/mcp_oauth.log",
+    "sha256": "d66d8972c329f39536d45e05a8bf1e034e853036ec78e8a60411fca2b4c34e47"
+  },
+  {
+    "path": "research/durable-requests/linux/debug-20261028T115431Z-173ea274/native.log",
+    "sha256": "766ab6ea531bff4946984dc8e7181c649735f78ae65beadb440dd6b25c14b0fe"
+  },
+  {
+    "path": "research/durable-requests/linux/debug-20261028T115431Z-173ea274/package.log",
+    "sha256": "938170522077765b26f6292b200d0dbc0f8d4d0557fa800d07bbf54446c026ff"
+  },
+  {
+    "path": "research/durable-requests/linux/debug-20261028T115431Z-173ea274/plugin_sandbox.log",
+    "sha256": "4f2d4062a280ac070e99674729a361f323a90bb7b4c38382062536e35378da36"
+  },
+  {
+    "path": "research/durable-requests/linux/debug-20261028T115431Z-173ea274/plugins.log",
+    "sha256": "359253e6c71496abe41f10069cb066ee36114f5dc55a1bc00862cc80b910f858"
+  },
+  {
+    "path": "research/durable-requests/linux/debug-20261028T115431Z-173ea274/provider.log",
+    "sha256": "7ec01e9d55fea7b7a70f654ca082eadea0710a14b2aa8d11a8d3ccd1105c352c"
+  },
+  {
+    "path": "research/durable-requests/linux/debug-20261028T115431Z-173ea274/real_build.log",
+    "sha256": "4653f76838c140384261b5ce6d5e0b994a7cf6e76f2ca2bf422fd7f199bcc6a2"
+  },
+  {
+    "path": "research/durable-requests/linux/debug-20261028T115431Z-173ea274/resume.log",
+    "sha256": "8d37b28b17e8cbab5ed2db39a7ab45711aeb3a88bda031c108c5907f258fca94"
+  },
+  {
+    "path": "research/durable-requests/linux/debug-20261028T115431Z-173ea274/sandbox.log",
+    "sha256": "fd0bd5684bfbf6bb57922520600610d96804328e4a4ec46dc95bcbd111a85ef4"
+  },
+  {
+    "path": "research/durable-requests/linux/debug-20261028T115431Z-173ea274/sandbox_resources.log",
+    "sha256": "7353f14e4efb4af5e7b287b383b0f569507117896dccbc6f05fa2592b7fba23d"
+  },
+  {
+    "path": "research/durable-requests/linux/debug-20261028T115431Z-173ea274/scheduler.log",
+    "sha256": "b6c66ab87d547b2c2dc4cece7297a93cc34d13f62bf0fa108e53e74ddac0c4e2"
+  },
+  {
+    "path": "research/durable-requests/linux/debug-20261028T115431Z-173ea274/schema.log",
+    "sha256": "3901809709510bd78e51da8940fc531db7eff8ce37b9f88d0d26d3ef39d6a646"
+  },
+  {
+    "path": "research/durable-requests/linux/debug-20261028T115431Z-173ea274/service.log",
+    "sha256": "32add7b50803a8594c2a829063df3cb2f7be93114b2fcfc91e33afc336b6b6ea"
+  },
+  {
+    "path": "research/durable-requests/linux/debug-20261028T115431Z-173ea274/streaming.log",
+    "sha256": "3fe56df60bc8e1e7e4d11913d91f75273eea2ec70372eaf8bc76498091438292"
+  },
+  {
+    "path": "research/durable-requests/linux/debug-20261028T115431Z-173ea274/supervisor.log",
+    "sha256": "a72c22432f6943f0d1b93f0f0027f00ab9ec4bc04a34271465dc167ce6c1a1a0"
+  },
+  {
+    "path": "research/durable-requests/linux/debug-20261028T115431Z-173ea274/verification.json",
+    "sha256": "055c60e0e437370d21a7b3aedddbfbdb3c88f6a48923b7ad324718575c40f0d8"
+  },
+  {
+    "path": "research/durable-requests/linux/debug-20261028T115431Z-173ea274/verification.log",
+    "sha256": "19706b38946072ffe934ea0c61a3cb511ab28697aa5276648d1aef9e5f4a21a3"
+  },
+  {
+    "path": "research/durable-requests/linux/debug-20261028T115431Z-173ea274/xmake-build.log",
+    "sha256": "97eecaa221c635fba61652a32e3e54efb8f9bcd4043c4f556f7a9c522868fd7f"
+  },
+  {
+    "path": "research/durable-requests/linux/release-20261028T115809Z-449ce941/autostart.log",
+    "sha256": "99c7da743cea60e74b54bc2d220da3efc71c6b349fbefe185ef05521bca4abac"
+  },
+  {
+    "path": "research/durable-requests/linux/release-20261028T115809Z-449ce941/cli.log",
+    "sha256": "7b7681d7d9034a4919e8b31e4caa85c07e7704b89e2d71679791c284abf1ef81"
+  },
+  {
+    "path": "research/durable-requests/linux/release-20261028T115809Z-449ce941/configure.log",
+    "sha256": "627173a150670622f3cfb71911fdebbe8a3a3fbdde9f2d945e594d47ea64d7c1"
+  },
+  {
+    "path": "research/durable-requests/linux/release-20261028T115809Z-449ce941/contract.log",
+    "sha256": "d0e644671ea370215fa8023f68f754be635f6c118fc294abb81e38e19ab69583"
+  },
+  {
+    "path": "research/durable-requests/linux/release-20261028T115809Z-449ce941/credentials.log",
+    "sha256": "9aefb7e36c8ac4bf9fecfb820eb549d69194f28c3253dc682462d4c6adc15c60"
+  },
+  {
+    "path": "research/durable-requests/linux/release-20261028T115809Z-449ce941/cron.log",
+    "sha256": "6b1830adecbbf7d05fd111ec39cb3169315fc1905d0ec9cef2fdc6dc85d1d358"
+  },
+  {
+    "path": "research/durable-requests/linux/release-20261028T115809Z-449ce941/durable_requests.log",
+    "sha256": "443cbe47ef93810543cb1222324895a7cd897fdb0e34224be3bf19e4f8f562b8"
+  },
+  {
+    "path": "research/durable-requests/linux/release-20261028T115809Z-449ce941/local_models.log",
+    "sha256": "4a2673b88159ace0ee2e7e25d28bb8bf0da7454f5afb0c22119bf462ac7fa0df"
+  },
+  {
+    "path": "research/durable-requests/linux/release-20261028T115809Z-449ce941/mcp.log",
+    "sha256": "58580a7bedd22931bab9eb4341d5e203dd388caca59fd731c560edce9259133d"
+  },
+  {
+    "path": "research/durable-requests/linux/release-20261028T115809Z-449ce941/mcp_http.log",
+    "sha256": "88ee915e2fe0939c26a007d0507f98d5446c3f49ca9766108cdf92d51b224c7b"
+  },
+  {
+    "path": "research/durable-requests/linux/release-20261028T115809Z-449ce941/mcp_oauth.log",
+    "sha256": "3254608f4fe413d5f65dad67953b0d60a1d1058bfcdab31bcec69cfd5f30ff60"
+  },
+  {
+    "path": "research/durable-requests/linux/release-20261028T115809Z-449ce941/native.log",
+    "sha256": "766ab6ea531bff4946984dc8e7181c649735f78ae65beadb440dd6b25c14b0fe"
+  },
+  {
+    "path": "research/durable-requests/linux/release-20261028T115809Z-449ce941/package.log",
+    "sha256": "9eb929715e09dab33093165c3270151a1a39b215b1f2fde18923d4ace385fd8d"
+  },
+  {
+    "path": "research/durable-requests/linux/release-20261028T115809Z-449ce941/plugin_sandbox.log",
+    "sha256": "2129ad9239af105287a0ad0aeffd7503781a58e19188d3ce53907b5fb86fd96e"
+  },
+  {
+    "path": "research/durable-requests/linux/release-20261028T115809Z-449ce941/plugins.log",
+    "sha256": "2bbeaa6fdf1187ba53adb51176014d7be5c3a98083ab9b7b3b0b3b30ecc6975c"
+  },
+  {
+    "path": "research/durable-requests/linux/release-20261028T115809Z-449ce941/provider.log",
+    "sha256": "c335c84590b2b094f491d7a751076d3c70ee2216c8479fcdaba8788ac52abec3"
+  },
+  {
+    "path": "research/durable-requests/linux/release-20261028T115809Z-449ce941/real_build.log",
+    "sha256": "1e5bb9562de913b77202fd9186d8ef4e5ecf050d2ea1ab4a4856142a991f61d5"
+  },
+  {
+    "path": "research/durable-requests/linux/release-20261028T115809Z-449ce941/resume.log",
+    "sha256": "ba824c628e709b57926cc80e87dec04124a6426b1d6e6953177cbd835ffaa60c"
+  },
+  {
+    "path": "research/durable-requests/linux/release-20261028T115809Z-449ce941/sandbox.log",
+    "sha256": "f771c36dfa80a5e8bcaa3435d7579a816faefe232e6191f6d89d3dcdbdc48430"
+  },
+  {
+    "path": "research/durable-requests/linux/release-20261028T115809Z-449ce941/sandbox_resources.log",
+    "sha256": "fea772b2f390c860e7d5800b09bc3e6a511f1e2b2d80c38cc5d619ee00ed2607"
+  },
+  {
+    "path": "research/durable-requests/linux/release-20261028T115809Z-449ce941/scheduler.log",
+    "sha256": "a01533150ee3407a4431f9b207bb754345196dc1d818b9730b29429fafcb56df"
+  },
+  {
+    "path": "research/durable-requests/linux/release-20261028T115809Z-449ce941/schema.log",
+    "sha256": "e217351f6f517f025b84373cd82a17dff64329784f4fd53878990b14b9d5f289"
+  },
+  {
+    "path": "research/durable-requests/linux/release-20261028T115809Z-449ce941/service.log",
+    "sha256": "e9675b138cd75737a40aa72e142ec2cbd38349bd10039034c297d7c3478754ee"
+  },
+  {
+    "path": "research/durable-requests/linux/release-20261028T115809Z-449ce941/streaming.log",
+    "sha256": "441262077e17a7176324ec013d02dd545986a2db1e6800212b33a0a7f8123a3c"
+  },
+  {
+    "path": "research/durable-requests/linux/release-20261028T115809Z-449ce941/supervisor.log",
+    "sha256": "352c88fb76b5d7dfab3f1bef44b065e914c8ee5b630b2c43b5d68f86ff02bba8"
+  },
+  {
+    "path": "research/durable-requests/linux/release-20261028T115809Z-449ce941/verification.json",
+    "sha256": "2ebc3bc944e608ab4e96b63c169ada4cc4fac96becc7a012dd42cd883fe011aa"
+  },
+  {
+    "path": "research/durable-requests/linux/release-20261028T115809Z-449ce941/verification.log",
+    "sha256": "580894871845b16a05fe3440af268d591e5d66ccba33309eb3da13eb7e438fb4"
+  },
+  {
+    "path": "research/durable-requests/linux/release-20261028T115809Z-449ce941/xmake-build.log",
+    "sha256": "47266ffefed488ec74862ebb50c841b374bb5f3201cc8548702f195f56ffce2f"
+  }
+]

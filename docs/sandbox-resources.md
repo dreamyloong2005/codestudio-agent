@@ -56,4 +56,4 @@ Windows 使用当前用户私有 ACL、目录文件 ID、命名 Job 和 AppConta
 - `sandboxes/list`：参数为可选 `after`、`limit`，同步只读查询，可在其他前台操作期间调用。
 - `sandboxes/reclaim`：参数为必填 `id`、可选布尔 `dry_run`，返回异步操作 ID，可用现有操作查询和取消接口跟踪。
 
-接口作用于当前用户控制目录，不局限于服务工作区，也不向模型注册回收工具。无请求 ID 的通知不会触发回收。协议版本保持 2，任务数据库保持 schema 7。完整契约见[任务服务](task-service.md)与[机器协议](../protocol/task-service.schema.json)。
+接口作用于当前用户控制目录，不局限于服务工作区，也不向模型注册回收工具。无请求 ID 的通知不会触发回收。协议版本保持 2，任务数据库保持 schema 8。完整契约见[任务服务](task-service.md)与[机器协议](../protocol/task-service.schema.json)。

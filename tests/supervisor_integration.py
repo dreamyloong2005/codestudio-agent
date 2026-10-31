@@ -460,7 +460,7 @@ class SupervisorTests(unittest.TestCase):
         self.stop(process)
         second = self.assert_terminal_diagnostics(process, "stop_requested", 0)
         self.assertNotEqual(first["id"], second["id"])
-        self.assertEqual(self.sql_rows("PRAGMA user_version"), [(7,)])
+        self.assertEqual(self.sql_rows("PRAGMA user_version"), [(8,)])
 
         before = self.database_snapshot()
         cursor, rows = 0, []
