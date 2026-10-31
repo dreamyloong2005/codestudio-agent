@@ -1,0 +1,10 @@
+{
+  "initial_receipt": "residue-before-initial-bound.json",
+  "usable_baseline": "residue-before.json",
+  "correction": "The first scanner bounded all TMPDIR entries at 4096, so its TMPDIR result was unknown. Before product tests began, the scanner was corrected to inspect at most 131072 immediate names and retain at most 4096 codestudio-* matches. The second receipt observed the full declared range and found no matching TMPDIR entries.",
+  "existing_home_entries": {
+    "codestudio-agent": "Current repository; not a test fixture.",
+    "codestudio-lite": "Preexisting unrelated repository; not a test fixture. No contents read or changed."
+  },
+  "limits": "Snapshots are read-only and finite. Historical ownership and global system residue remain unknown. No unrelated temporary-directory contents were read or deleted."
+}

@@ -1,0 +1,1 @@
+{"cplusplus":202400,"current_zone":"Asia/Shanghai","cxx26":true,"dependencies":{"curl":"libcurl/8.7.1 SecureTransport (LibreSSL/3.3.6) zlib/1.2.12 nghttp2/1.68.1","json":"3.12.0","openssl":"OpenSSL 3.6.5 29 Sep 2026","sqlite":"3.50.4"},"format":"probe:07","libcpp_version":220108,"timezone_dst":true,"timezone_offsets":true,"tzdb_version":"2026c-rearguard"}

@@ -1,0 +1,232 @@
+{
+  "format": 2,
+  "product": "CodeStudio-Agent",
+  "platform": "macosx",
+  "arch": "arm64",
+  "mode": "release",
+  "started_at": "2026-10-31T17:49:55.845435+00:00",
+  "status": "succeeded",
+  "selected_suites": [
+    "delivery",
+    "durable_requests"
+  ],
+  "omitted_suites": [
+    "toolchain",
+    "native",
+    "schema",
+    "provider",
+    "streaming",
+    "contract",
+    "service",
+    "credentials",
+    "cli",
+    "local_models",
+    "mcp",
+    "mcp_http",
+    "mcp_oauth",
+    "plugins",
+    "resume",
+    "scheduler",
+    "supervisor",
+    "cron",
+    "autostart",
+    "package",
+    "macos_release",
+    "verification"
+  ],
+  "unsupported_suites": {
+    "plugin_sandbox": "macOS OS isolation belongs to stage 3",
+    "sandbox": "macOS OS sandbox execution belongs to stage 3; refusal is covered by native/CLI tests",
+    "sandbox_resources": "macOS isolated resource ownership and reclamation belong to stage 3",
+    "real_build": "macOS isolated workspace execution belongs to stage 3"
+  },
+  "build_requested": false,
+  "steps": [
+    {
+      "name": "delivery",
+      "command": [
+        "/Users/taosiyuan/codestudio-agent/build/contract-python/bin/python",
+        "tests/delivery_integration.py",
+        "/Users/taosiyuan/codestudio-agent/build/macosx/arm64/release/codestudio-agent",
+        "--package",
+        "/Users/taosiyuan/codestudio-agent/build/macos-durable-requests/extracted"
+      ],
+      "log": "delivery.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 16.305,
+      "cases": 35,
+      "skipped": 0,
+      "passed": 35
+    },
+    {
+      "name": "durable_requests",
+      "command": [
+        "/Users/taosiyuan/codestudio-agent/build/contract-python/bin/python",
+        "tests/durable_requests_integration.py",
+        "/Users/taosiyuan/codestudio-agent/build/macos-durable-requests/extracted/codestudio-agent",
+        "--process-fixture",
+        "/Users/taosiyuan/codestudio-agent/build/macosx/arm64/release/process-fixture",
+        "--mcp-fixture",
+        "/Users/taosiyuan/codestudio-agent/build/macosx/arm64/release/mcp-fixture"
+      ],
+      "log": "durable_requests.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 4.554,
+      "cases": 27,
+      "skipped": 0,
+      "passed": 27
+    }
+  ],
+  "test_environment": {
+    "temporary_directory": "/private/var/folders/wh/lj7xnlsd4ssdrgpwkw3vnsj40000gn/T"
+  },
+  "source": {
+    "sha256": "6a7cf041e668e31b3c1f134003242fe7e1745f014abb6d615f994fbe73e6304c",
+    "files": 227
+  },
+  "toolchain": {
+    "python": "3.13.14",
+    "requirements": {
+      "format": 2,
+      "python_minimum": "3.11.0",
+      "xmake_minimum": "3.0.5",
+      "jsonschema": "4.23.0",
+      "windows": {
+        "arch": "x64",
+        "toolchain": "clang-cl",
+        "compiler_minimum": "22.0.0",
+        "requirements": [
+          "Visual Studio 2022 C++ build tools and Windows SDK",
+          "LLVM clang-cl 22 or newer"
+        ]
+      },
+      "linux": {
+        "arch": "x86_64",
+        "toolchain": "gcc",
+        "compiler_minimum": "16.0.0",
+        "pkg_config_minimum": {
+          "nlohmann_json": "3.12.0",
+          "sqlite3": "3.50.4",
+          "libcurl": "8.15.0",
+          "openssl": "3.0.0",
+          "libsecret-1": "0.21.0"
+        },
+        "requirements": [
+          "bubblewrap at /usr/bin/bwrap",
+          "tzdata",
+          "cgroup v2 delegation with cpu/memory/pids",
+          "user namespaces and seccomp"
+        ]
+      },
+      "macosx": {
+        "arch": "arm64",
+        "toolchain": "llvm",
+        "compiler_minimum": "22.1.8",
+        "llvm_environment": "CODESTUDIO_LLVM_ROOT",
+        "requirements": [
+          "Native Apple Silicon Mac (arm64)",
+          "Xcode command line tools and macOS SDK",
+          "LLVM 22.1.8 or newer and matching standalone libc++/libc++abi built with timezone support; bundled Apple and LLVM macOS libc++ disable timezones",
+          "Runtime C++26, std::format and IANA timezone/DST probe must pass",
+          "No Linux libsecret, namespace or cgroup dependency"
+        ],
+        "macos_minimum": "15.0",
+        "libcxx_environment": "CODESTUDIO_LIBCXX_ROOT"
+      }
+    },
+    "libcxx_root": "/Users/taosiyuan/codestudio-agent/build/toolchains/libcxx-22.1.8-tzdb",
+    "libcxx_sha256": {
+      "libc++.1.dylib": "37a40e084b7f1d1b68f509cd48cb6baf269e95c4a5109408f2215e5e33521a90",
+      "libc++abi.1.dylib": "e1b798f6ac9514e5b32ee4b7b066d472d060090bd7d87f5c964942ded35453e7",
+      "libc++experimental.a": "581e44feb2571570c90e857f1109097593e3890d5b48ff71590dbd1bd9a9543b"
+    },
+    "macos": "26.5.2",
+    "deployment_target": "15.0",
+    "jsonschema": "4.23.0"
+  },
+  "delivery_package": {
+    "path": "/Users/taosiyuan/codestudio-agent/build/macos-durable-requests/extracted",
+    "manifest_sha256": "97965f838f13ad565b6ba23c35a96809a3f7048776222cbf95b19bf5fa186d3c",
+    "files": {
+      "README.md": "3684e5e0c7cf2073887fbe38fbe7d85e6fe015da58a3dc36bb6294e4de5e60ba",
+      "README.txt": "cf12b1b1c40a6533fe4cfbc7f2dcb954299d9a937777a2efcf963505f7e61550",
+      "build-metadata.json": "ac4ca53b06720c6c2ee1cdf44b1d4fca297baf50b538a477b8ed181c1d90ed09",
+      "codestudio-agent": "0c8f988b4b2143d2662e00ee28eae2319a5d66f7a6f25aa34d488fb5aa0561fc",
+      "docs/architecture.md": "119bcaedd0df672c4e7e1687a0179c38014ddc517bb508757a0336599695384a",
+      "docs/build-proposals.md": "c855fa9e415a4d92c9d3518adf9b6c5fb5f9974caa2ee5841fb0b148edb1dce3",
+      "docs/credentials.md": "568de9e128556c015030b29795f8cb7471562f92c2c0aee02d62197594766a41",
+      "docs/delivery.md": "b59ad4c5c1e73590edc700fec2a93986eca820d91d88299921d7ae55f55b2118",
+      "docs/linux.md": "98d14ea9c67b8553d0b55b6ca28d2875d5be38e561c1f645ba6014abfd12fc77",
+      "docs/local-models.md": "92575c134d7ccd41052daaf150c7108df53df1d29479386d27aa4acd8e9b59a8",
+      "docs/macos-follow-up.md": "27621eaefd338d84d9bf9377e250080dfbc7e0543625b9b874a2d7d589fad3d1",
+      "docs/macos.md": "0c653edca50c758a1453c0667316dbaa4502a03a2772032aa67de407a0631331",
+      "docs/mcp-oauth.md": "34f626ee786aefb6afe247faeeb4f82bc42fca4932070ec14fc5c8f3c60e99e2",
+      "docs/mcp.md": "d6e66a5da95b9fefd8b197b20fc04f89d8f6d08a68dcbf090f83d9205ba6bdd3",
+      "docs/plugin-sandbox.md": "2c632206d31c8ef06876dfc6a484627f994af721de46a51e15494a6014b1c974",
+      "docs/plugins.md": "b27a60821a27435381f88b7fb5231fc6c034fbb258e26eb79fb80992c7dcc841",
+      "docs/resume-contract.md": "441f5f65eeae5beccc2bc47e9bc5817f1ea5639578f29ef7e285fd3ec8d45769",
+      "docs/resume.md": "f0ea5a30615e8118ad7bdc25ac154c8ec20b8c31cafb6c03c1771f4031a8d669",
+      "docs/roadmap.md": "2294bc72e19cf6a8f40135002461b55e412fe39e03d4a33c34efdf915a898c57",
+      "docs/sandbox-resources.md": "1d24d780e9283259bb11e50f93d54c7c005ff322ff580000cf45feef9dbe2a3d",
+      "docs/sandbox.md": "0beda2a9eaabe4953829d4a804fe147bfab0dfbb9d35864fcb2ec7e1173e1bb5",
+      "docs/scheduler.md": "e212012cfab2824e8ed48dfc038eac2110799b38ba7821157dcc3ced36913f4f",
+      "docs/streaming-apis.md": "c4dee17f3710091d10e2fbb916fac03ab4c2e48cc95c22442501e3d44bac162e",
+      "docs/task-service.md": "a007cf5e1aa3fdbdb9a370cc2ec381e23d51779856345fcae76d0e08bafe072a",
+      "docs/validation.md": "e42d2b36faba8a2d3c625bbf37111bfe3c1d5469f48fde3dbbadcfe917dd10ec",
+      "docs/workspace-builds.md": "7eae216a8f709c0ad44072e8813a08149c434bd94aec28748a9cda2b7ec3f96f",
+      "examples/mcp-http.example.json": "93292aba9cb5f02a53151bdac468dfbb711a109b8f278b1ff26bec23a38508da",
+      "examples/mcp-oauth.example.json": "5ebb7a6fb1ac8dc700fac73f86c2cf39c941b7ba398297c98e7d38cb79e38720",
+      "examples/mcp-plugin-sandbox.example.json": "1e254a6dd657e5e6b900b45855cb07b1c16fee8f2dc3ce763ecef1cdd527ed41",
+      "examples/mcp-plugin.example.json": "cbfe8e551208a6ea67ab59fd67c694d58e58d71171332bfd603b77eea19072ad",
+      "examples/mcp.example.json": "1351776bdd19ed98649cab36d0802e47b87c006a29b582f36a1f2c32134628b8",
+      "examples/mcp_echo.py": "8850336896b6724be261363282b99432793cef8d484c8ad491ffe5c9744eaf74",
+      "examples/task_client.py": "4f21ed2257b48a0e4aec8efc7ed832b4450cae84c0154cea7ad394500d741052",
+      "install.ps1": "7cea4047eedfed937554849cc9ed59d3c7b23c01c4ce9c8bf27868ff355b9622",
+      "install.py": "770d453ffb8d7047f79f7850f2327ab7b43d2880d82fa678933cbb2209d3dd35",
+      "install.sh": "8e32bdada2aea55d9152440893ce0019bf042774b4565340d4f00e91b6210ba5",
+      "lib/libc++.1.dylib": "857976a6b026db8a82a9b653b246b6ea4963147386d426a2cb550ff079a1e865",
+      "lib/libc++abi.1.dylib": "a98662a8e64d08a402fd204fed794168ccc8b8ecf4fafb14d36887d99c7cfaea",
+      "licenses/OpenSSL-LICENSE.txt": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a",
+      "licenses/SQLite-PUBLIC-DOMAIN.txt": "7b8578a074f9ddd01b7554b58b4db2793943a1f8cba2caa29f87a636868ec755",
+      "licenses/libcxx-LICENSE.TXT": "539dd7aed86e8a4f12cbdd0e6c50c189c7d74847e4fecc64ce2c6ee3a01da38b",
+      "licenses/libcxxabi-LICENSE.TXT": "e2b35be49f7284a45b7baca8fc7b3ab7440e7902392b2528a457816b5bb2a15c",
+      "licenses/nlohmann-json-Hedley-NOTICE.txt": "eb27f4190f8427f0565ab075b8359782e3f3f8bd2b592124a7cfb1bd476bbd94",
+      "licenses/nlohmann-json-LICENSE.MIT": "c0d068392ea65358b798b8c165103560f06e9e3b38c4ab4e2d8810a7b931af86",
+      "licenses/sources.json": "0c064c48407fd5569dfe2c822c499492356ec4e186f42566ab3d901872475613",
+      "protocol/README.md": "8a9e02c8cac7fcf5c8a4c9430c7228acca30d3aea15d47181253a0bddcf1db6f",
+      "protocol/task-service.schema.json": "8833dd165e592b7fec6b3d7296df440b8297b1535582385b9497a3c313674ba2",
+      "runtime-dependencies.txt": "67d99ac2e3b44842f25d7283882934a72991625ab4214d4aac2e9eceabbf4123",
+      "verification.json": "be82d86c53e1f874154d5acaceb166cf8d6c68f95baa82620068013d07d11579",
+      "verify-delivery.py": "f6bea3004841f972827c99064cc2431501d85c82bd8edad85b382f8084ddec4d",
+      "package.json": "97965f838f13ad565b6ba23c35a96809a3f7048776222cbf95b19bf5fa186d3c",
+      "SHA256SUMS": "5f8fe25390980053b1ba447d40ab4d514ae3c6b9a07a7bfc35227a236bde6196"
+    }
+  },
+  "package_suites": [
+    "delivery",
+    "durable_requests"
+  ],
+  "tested_artifacts": {
+    "codestudio-agent": "df32642346fc4418cb676454ec1d374bcfed33c415858c24a9c7f1d01a18c024",
+    "agent-tests": "b13dd7c7a751dd851fe41ff5480ed1e714ae3efb00fb2187e747926c1aca2f00",
+    "provider-fixture": "45128322b7c30ed029d955e368dab381dfeca668d3385e12844141658c729f16",
+    "process-fixture": "d0ef1c0a2f1bc983cd12afd2593c3739a7aba175f0187a6579e21f054e49d9bd",
+    "line-process-fixture": "d6c458f18bed8ca4a7ed4fa5956b4104a6ada4b7465fb5b0aa9a4bb4b397680e",
+    "mcp-fixture": "f0eb0165f484eaa35f511a75ff021fbebf1345e70b14af7f5741b2dcb1572d95",
+    "sandbox-fixture": "52f45d960fa1e696315a2bf6f3e403e605cb35fc4f9c4d1955916e934e4cd07d",
+    "build-fixture": "b241340e56c7b1092afe5877a9181d4b4bf69c587c10327e624ab7b6ac5dbf9f",
+    "sandbox-resource-fixture": "f7fa4611fde9e5d2afa1b4f9182b12a58528ab2743ba946968b0d18a3a703019",
+    "plugin-sandbox-fixture": "1ea17d98812c1166c32c0994dc1e12451fac64761ce3b78f69410d98ddf30f1b",
+    "libplugin-sandbox-library.dylib": "273d64db8be30ea9c313d63d62278604d235ecbdd2f0e435907ec6dae3b1bc6a",
+    "libplugin-sandbox-dependency.dylib": "2c6196a825e85bb332e98226a06bdae9fccec29bf9b0a659cb929af76f554e8a",
+    "toolchain-probe": "98cd9f80fde16d9f826ab92cd5450b9e5b1f062a9469a1f4ed29328279a01cb7"
+  },
+  "artifact": {
+    "path": "build/macosx/arm64/release/codestudio-agent",
+    "size": 7628560,
+    "sha256": "df32642346fc4418cb676454ec1d374bcfed33c415858c24a9c7f1d01a18c024"
+  },
+  "finished_at": "2026-10-31T17:50:16.787231+00:00"
+}

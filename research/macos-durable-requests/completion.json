@@ -1,0 +1,198 @@
+{
+  "format": 1,
+  "product": "CodeStudio Agent",
+  "recorded_at_utc": "2026-10-31T17:51:18.910548+00:00",
+  "status": "local_followup_complete_external_acceptance_pending",
+  "all_plan_items_accepted": false,
+  "source": {
+    "sha256": "6a7cf041e668e31b3c1f134003242fe7e1745f014abb6d615f994fbe73e6304c",
+    "files": 227
+  },
+  "M0": {
+    "status": "completed_against_pushed_git_snapshot",
+    "receipt": "source-sync.json",
+    "environment": "environment.json",
+    "windows_live_checkout_observed": false,
+    "scope": "Mac synchronized from committed origin/main; no fresh Windows execution or current Windows working tree assertion"
+  },
+  "M1": {
+    "status": "succeeded",
+    "debug": {
+      "receipt": "native/debug-20261031T174514Z-3cadb9c3/verification.json",
+      "receipt_sha256": "5736b35974c34cbc3c3cb0119cb589f5a069431a9df9450f547cdaeb9fb34574",
+      "status": "succeeded",
+      "native_groups": 23,
+      "python_passed": 407,
+      "python_skipped": 11,
+      "selected_suites": [
+        "toolchain",
+        "native",
+        "schema",
+        "provider",
+        "streaming",
+        "contract",
+        "service",
+        "credentials",
+        "cli",
+        "local_models",
+        "mcp",
+        "mcp_http",
+        "mcp_oauth",
+        "plugins",
+        "resume",
+        "durable_requests",
+        "scheduler",
+        "supervisor",
+        "cron",
+        "autostart",
+        "package",
+        "macos_release",
+        "verification"
+      ],
+      "unsupported_suites": {
+        "plugin_sandbox": "macOS OS isolation belongs to stage 3",
+        "sandbox": "macOS OS sandbox execution belongs to stage 3; refusal is covered by native/CLI tests",
+        "sandbox_resources": "macOS isolated resource ownership and reclamation belong to stage 3",
+        "real_build": "macOS isolated workspace execution belongs to stage 3"
+      },
+      "artifact": {
+        "path": "build/macosx/arm64/debug/codestudio-agent",
+        "size": 14689808,
+        "sha256": "c768929ef837bf0313284ffca162c29810479f0eddb276297aec400149a9a1be"
+      }
+    },
+    "release": {
+      "receipt": "native/release-20261031T174734Z-0d7e5aba/verification.json",
+      "receipt_sha256": "be82d86c53e1f874154d5acaceb166cf8d6c68f95baa82620068013d07d11579",
+      "status": "succeeded",
+      "native_groups": 23,
+      "python_passed": 407,
+      "python_skipped": 11,
+      "selected_suites": [
+        "toolchain",
+        "native",
+        "schema",
+        "provider",
+        "streaming",
+        "contract",
+        "service",
+        "credentials",
+        "cli",
+        "local_models",
+        "mcp",
+        "mcp_http",
+        "mcp_oauth",
+        "plugins",
+        "resume",
+        "durable_requests",
+        "scheduler",
+        "supervisor",
+        "cron",
+        "autostart",
+        "package",
+        "macos_release",
+        "verification"
+      ],
+      "unsupported_suites": {
+        "plugin_sandbox": "macOS OS isolation belongs to stage 3",
+        "sandbox": "macOS OS sandbox execution belongs to stage 3; refusal is covered by native/CLI tests",
+        "sandbox_resources": "macOS isolated resource ownership and reclamation belong to stage 3",
+        "real_build": "macOS isolated workspace execution belongs to stage 3"
+      },
+      "artifact": {
+        "path": "build/macosx/arm64/release/codestudio-agent",
+        "size": 7628560,
+        "sha256": "df32642346fc4418cb676454ec1d374bcfed33c415858c24a9c7f1d01a18c024"
+      }
+    }
+  },
+  "M2": {
+    "status": "succeeded",
+    "archive": "/Users/taosiyuan/codestudio-agent/build/macos-durable-requests/package-1/codestudio-agent-macosx-arm64.tar.gz",
+    "archive_sha256": "a4cbd76490e7ff8995b99d52057eacc40d72580385db091ad930b00b0b1bbc25",
+    "reproducible_archive": true,
+    "package_manifest_sha256": "97965f838f13ad565b6ba23c35a96809a3f7048776222cbf95b19bf5fa186d3c",
+    "source_binary_sha256": "df32642346fc4418cb676454ec1d374bcfed33c415858c24a9c7f1d01a18c024",
+    "relocated_binary_sha256": "0c8f988b4b2143d2662e00ee28eae2319a5d66f7a6f25aa34d488fb5aa0561fc",
+    "runtime_records": [
+      {
+        "path": "lib/libc++.1.dylib",
+        "sha256": "857976a6b026db8a82a9b653b246b6ea4963147386d426a2cb550ff079a1e865",
+        "size": 1172528,
+        "source_sha256": "37a40e084b7f1d1b68f509cd48cb6baf269e95c4a5109408f2215e5e33521a90"
+      },
+      {
+        "path": "lib/libc++abi.1.dylib",
+        "sha256": "a98662a8e64d08a402fd204fed794168ccc8b8ecf4fafb14d36887d99c7cfaea",
+        "size": 365808,
+        "source_sha256": "e1b798f6ac9514e5b32ee4b7b066d472d060090bd7d87f5c964942ded35453e7"
+      }
+    ],
+    "delivery": {
+      "receipt": "delivery/release-20261031T174955Z-22bb05b1/verification.json",
+      "receipt_sha256": "7be9766ab7c4e187102f1f35b04b7b145444126efee7e91cbb24eb806ffd2c4e",
+      "status": "succeeded",
+      "native_groups": 0,
+      "python_passed": 62,
+      "python_skipped": 0,
+      "selected_suites": [
+        "delivery",
+        "durable_requests"
+      ],
+      "unsupported_suites": {
+        "plugin_sandbox": "macOS OS isolation belongs to stage 3",
+        "sandbox": "macOS OS sandbox execution belongs to stage 3; refusal is covered by native/CLI tests",
+        "sandbox_resources": "macOS isolated resource ownership and reclamation belong to stage 3",
+        "real_build": "macOS isolated workspace execution belongs to stage 3"
+      },
+      "artifact": {
+        "path": "build/macosx/arm64/release/codestudio-agent",
+        "size": 7628560,
+        "sha256": "df32642346fc4418cb676454ec1d374bcfed33c415858c24a9c7f1d01a18c024"
+      }
+    },
+    "installed_client_receipt": "installed-client/verification.json",
+    "client_checks": [
+      "Shipped example and fresh initialize read without creating a database",
+      "Installed offline demo persisted one schema 8 request and two actions; a new service returned its original completion",
+      "Schema 7 refusal and install/idempotent-upgrade/uninstall preserved old and current synthetic user state"
+    ],
+    "clean_machine_verified": false,
+    "formal_signing_or_notarization": "deferred_by_user"
+  },
+  "M3": {
+    "status": "awaiting_real_login",
+    "runtime_manifest": "login/runtime-manifest.json",
+    "receipt": "/Users/taosiyuan/codestudio-agent/build/macos-durable-login-acceptance/login-acceptance.json",
+    "historical_schema7_probe": "preserved_for_separate_acceptance",
+    "operator_requirement": "Save other work, log out of the GUI user and log back in; never manually bootstrap/start either fixture. Then verify both owned historical and current receipts separately.",
+    "real_login_verified": false
+  },
+  "M4": {
+    "status": "deferred_by_user_no_available_runner",
+    "observed_ci_status": "ci_not_completed_current_head_queued",
+    "receipt": "ci-preflight.json",
+    "native_ci_verified": false,
+    "artifact_bytes_validated": false
+  },
+  "residue": {
+    "before": "residue-before.json",
+    "after": "residue-after.json",
+    "process_candidates_after": 0,
+    "scope": "Read-only snapshots of immediate codestudio-* entries in canonical TMPDIR/home, OAuth lock metadata, current-user CodeStudio LaunchAgent files, scoped test Keychain attributes, and Agent/fixture executable processes.",
+    "historical_or_global_cleanliness": "not_claimed"
+  },
+  "failure_history": [
+    {
+      "receipt": "native/debug-20261031T174223Z-a792c05d/verification.json",
+      "reason": "Two new test assumptions were incorrect: APFS aliases are canonicalized by libc++, and schema7 service construction fails before RPC.",
+      "repair": "Test assertions corrected; production identity checks unchanged; full final native runs use a new source fingerprint."
+    }
+  ],
+  "limits": [
+    "Only macOS 26.5.2 native arm64 executed; macOS 15.0 is the deployment target, not a separately tested host.",
+    "Native OS/plugin/workspace/resource isolation remains disabled by user choice; no Linux VM.",
+    "Developer ID, Apple notarization, independent clean Mac and Intel/Universal remain deferred.",
+    "These shared test/verifier changes were not rerun on Windows/Linux in this Mac session."
+  ]
+}

@@ -202,10 +202,16 @@ class VerificationTests(unittest.TestCase):
         self.assertIn("runtime changed", report["error"])
 
     def test_delivery_package_mutation_invalidates_otherwise_successful_tests(self):
+        self.assert_package_mutation_invalidates_success("delivery")
+
+    def test_packaged_durable_request_mutation_invalidates_otherwise_successful_tests(self):
+        self.assert_package_mutation_invalidates_success("durable_requests")
+
+    def assert_package_mutation_invalidates_success(self, suite):
         binary = self.root / "build" / verification.PLATFORM / verification.ARCH / "release" / ("codestudio-agent" + verification.SUFFIX)
         binary.parent.mkdir(parents=True)
         binary.write_bytes(b"source-build")
-        self.args.suite = ["delivery"]
+        self.args.suite = [suite]
         self.args.package = self.root / "package"
         with patch.object(verification, "ROOT", self.root), \
              patch.object(verification, "source_fingerprint", return_value={"sha256": "a", "files": 1}), \
@@ -218,7 +224,18 @@ class VerificationTests(unittest.TestCase):
         report = json.loads(next(self.root.glob("*/verification.json")).read_text())
         self.assertEqual(report["status"], "failed")
         self.assertEqual(report["delivery_package"]["files"]["agent"], "packaged")
+        self.assertEqual(report["package_suites"], [suite])
         self.assertIn("Delivery package changed", report["error"])
+
+    def test_packaged_durable_requests_use_external_native_fixtures(self):
+        package = self.root / "extracted package"
+        command = verification.commands("release", package)["durable_requests"]
+        native = verification.ROOT / "build" / verification.PLATFORM / verification.ARCH / "release"
+        self.assertEqual(Path(command[2]), package / ("codestudio-agent" + verification.SUFFIX))
+        for option, name in (("--process-fixture", "process-fixture"), ("--mcp-fixture", "mcp-fixture")):
+            self.assertEqual(Path(command[command.index(option) + 1]), native / (name + verification.SUFFIX))
+        self.assertEqual(Path(verification.commands("release", None)["durable_requests"][2]),
+                         native / ("codestudio-agent" + verification.SUFFIX))
 
     def test_runtime_probe_requires_executed_format_and_timezone_evidence(self):
         valid = dict(cxx26=True, cplusplus=202400, format="probe:07", timezone_offsets=True,

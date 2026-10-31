@@ -1,0 +1,5 @@
+{
+  "status": "awaiting_real_login",
+  "receipt": "/Users/taosiyuan/codestudio-agent/build/macos-durable-login-acceptance/login-acceptance.json",
+  "next": "Manually log out of this macOS GUI user and log back in, then run verify with this evidence directory. Do not bootstrap or start the fixtures manually."
+}

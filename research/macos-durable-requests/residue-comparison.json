@@ -1,0 +1,66 @@
+{
+  "captured_at_utc": "2026-10-31T17:51:13.982913+00:00",
+  "status": "matched_expected_pending_login_state",
+  "before": "residue-before.json",
+  "after": "residue-after.json",
+  "scope_equal": true,
+  "fixture_directories": {
+    "added": [],
+    "removed": [],
+    "existing_home_repositories": [
+      "codestudio-agent",
+      "codestudio-lite"
+    ],
+    "existing_repositories_are_not_test_residue": true
+  },
+  "oauth_locks": {
+    "before_count": 0,
+    "after_count": 0,
+    "added": []
+  },
+  "keychain_test_accounts": {
+    "after_count": 0,
+    "added": [],
+    "secret_data_read": false
+  },
+  "processes": {
+    "after_candidates": [],
+    "signals_sent": false
+  },
+  "launch_agents": {
+    "historical_preserved": [
+      {
+        "path": "/Users/taosiyuan/Library/LaunchAgents/com.codestudio.agent.scheduler.7b03932c3a079969d482f1434603ca1c538c0b45b3b354e3ecf9a59fe0f25ea7.plist",
+        "unchanged": true
+      },
+      {
+        "path": "/Users/taosiyuan/Library/LaunchAgents/com.codestudio.agent.scheduler.af31bbf259f8ebc9c0d62c4ecdbacec1cf5c455477cb3709531a29cf1d818702.plist",
+        "unchanged": true
+      }
+    ],
+    "intentional_new_pending_login": [
+      {
+        "path": "/Users/taosiyuan/Library/LaunchAgents/com.codestudio.agent.scheduler.6b1d6a3a33f7d66e6cba7a577c574eaf13974e93de6230d46f4a782b032593e6.plist",
+        "mode": "ordinary",
+        "sha256": "87f7837542a7f6baab849b3093aae075851c25b166fcc8cd4ffa548ea9bcd3fd",
+        "matches_prepared_and_awaiting_login": true
+      },
+      {
+        "path": "/Users/taosiyuan/Library/LaunchAgents/com.codestudio.agent.scheduler.2d524c19c981494ab66cd96ca526756d0d30541cceaf7671fee58a5f5bed8425.plist",
+        "mode": "supervised",
+        "sha256": "ebd20eedb79ee86f443e1bcfd38218b650c365988c996891df8373d1aa9c3309",
+        "matches_prepared_and_awaiting_login": true
+      }
+    ],
+    "removed": [],
+    "expected_new_receipt": "build/macos-durable-login-acceptance/login-acceptance.json",
+    "all_currently_unloaded": true
+  },
+  "runtime_check": "login/post-test-runtime-check.json",
+  "issues": [],
+  "limits": [
+    "Historical/global system cleanup is not claimed.",
+    "Two new schema8 and two old schema7 LaunchAgents and their fixed runtimes are intentionally preserved pending real login.",
+    "User-facing GUI logout/login and acceptance cleanup were not performed by this audit."
+  ]
+}

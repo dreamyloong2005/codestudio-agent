@@ -1,0 +1,83 @@
+{
+  "status": "native_debug_release_succeeded",
+  "host": {
+    "platform": "macosx",
+    "architecture": "arm64"
+  },
+  "toolchain": {
+    "python": "3.13.14",
+    "requirements": {
+      "format": 2,
+      "python_minimum": "3.11.0",
+      "xmake_minimum": "3.0.5",
+      "jsonschema": "4.23.0",
+      "windows": {
+        "arch": "x64",
+        "toolchain": "clang-cl",
+        "compiler_minimum": "22.0.0",
+        "requirements": [
+          "Visual Studio 2022 C++ build tools and Windows SDK",
+          "LLVM clang-cl 22 or newer"
+        ]
+      },
+      "linux": {
+        "arch": "x86_64",
+        "toolchain": "gcc",
+        "compiler_minimum": "16.0.0",
+        "pkg_config_minimum": {
+          "nlohmann_json": "3.12.0",
+          "sqlite3": "3.50.4",
+          "libcurl": "8.15.0",
+          "openssl": "3.0.0",
+          "libsecret-1": "0.21.0"
+        },
+        "requirements": [
+          "bubblewrap at /usr/bin/bwrap",
+          "tzdata",
+          "cgroup v2 delegation with cpu/memory/pids",
+          "user namespaces and seccomp"
+        ]
+      },
+      "macosx": {
+        "arch": "arm64",
+        "toolchain": "llvm",
+        "compiler_minimum": "22.1.8",
+        "llvm_environment": "CODESTUDIO_LLVM_ROOT",
+        "requirements": [
+          "Native Apple Silicon Mac (arm64)",
+          "Xcode command line tools and macOS SDK",
+          "LLVM 22.1.8 or newer and matching standalone libc++/libc++abi built with timezone support; bundled Apple and LLVM macOS libc++ disable timezones",
+          "Runtime C++26, std::format and IANA timezone/DST probe must pass",
+          "No Linux libsecret, namespace or cgroup dependency"
+        ],
+        "macos_minimum": "15.0",
+        "libcxx_environment": "CODESTUDIO_LIBCXX_ROOT"
+      }
+    },
+    "libcxx_root": "/Users/taosiyuan/codestudio-agent/build/toolchains/libcxx-22.1.8-tzdb",
+    "libcxx_sha256": {
+      "libc++.1.dylib": "37a40e084b7f1d1b68f509cd48cb6baf269e95c4a5109408f2215e5e33521a90",
+      "libc++abi.1.dylib": "e1b798f6ac9514e5b32ee4b7b066d472d060090bd7d87f5c964942ded35453e7",
+      "libc++experimental.a": "581e44feb2571570c90e857f1109097593e3890d5b48ff71590dbd1bd9a9543b"
+    },
+    "macos": "26.5.2",
+    "deployment_target": "15.0",
+    "jsonschema": "4.23.0",
+    "xmake": "xmake v3.0.9+HEAD.2b184e178, A cross-platform build utility based on Lua",
+    "compiler": "clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)",
+    "llvm_root": "/Users/taosiyuan/codestudio-agent/build/toolchains/LLVM-22.1.8-macOS-ARM64",
+    "sdk": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk",
+    "sdk_version": "26.5"
+  },
+  "test_environment": {
+    "temporary_directory": "/private/var/folders/wh/lj7xnlsd4ssdrgpwkw3vnsj40000gn/T"
+  },
+  "historical_login_probe_preserved": true,
+  "developer_id_or_notarization_used": false,
+  "native_isolation": "disabled_user_decision",
+  "ci": "no_runner_available_user_confirms_local_verification_first",
+  "native_source": {
+    "sha256": "6a7cf041e668e31b3c1f134003242fe7e1745f014abb6d615f994fbe73e6304c",
+    "files": 227
+  }
+}

@@ -40,9 +40,9 @@ macOS 适配修改了共享的验证、打包和安装逻辑。针对合入后�
 
 ## macOS 当前同步交付计划
 
-最新 schema 8 的 Mac 交付按 [macOS 同步跟进计划 M2](macos-follow-up.md#m2测试包和安装验收) 跟进，依赖对应源码的原生 Debug/Release 回执。需要重新生成携带私有运行库的测试包，实际解包后验收安装、升级、卸载与包级持久请求；旧版包和原生程序摘要不能证明重定位后新包通过。包级专项还需处理独立进程夹具路径，不能假定分发包包含开发测试程序。
+最新 schema 8 的 Mac 交付按 [macOS 同步跟进计划 M2](macos-follow-up.md#m2测试包和安装验收) 跟进，依赖对应源码的原生 Debug/Release 回执。需要重新生成携带私有运行库的测试包，实际解包后验收安装、升级、卸载与包级持久请求；旧版包和原生程序摘要不能证明重定位后新包通过。包级专项通过 `scripts/verify.py --mode release --skip-build --suite delivery --suite durable_requests --package <实际解包目录>` 验证。持久请求入口显式使用本轮原生构建的 `process-fixture` 与 `mcp-fixture`，不要求向包内添加测试程序；回执冻结整包摘要并记录两个夹具所在的构建产物摘要。
 
-真实登录和 CI 分别按计划 M3、M4 留证，正式签名、公证与独立干净机器验收保持暂缓。当前只完成计划编写，未创建新的 Mac 包、登记登录探针或触发 CI。
+真实登录和 CI 分别按计划 M3、M4 留证，正式签名、公证与独立干净机器验收保持暂缓。本轮实际原生、归档、持久请求、登录准备与 CI 状态见[跟进回执](../research/macos-durable-requests/README.md)，未执行的步骤保持待完成。macOS CI 将原生报告限定在当前 run/attempt 目录，拒绝引用历史报告，并从实际归档运行交付与持久请求套件。
 
 ## 创建发布包
 

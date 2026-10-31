@@ -1,0 +1,418 @@
+{
+  "format": 1,
+  "product": "CodeStudio Agent",
+  "status": "succeeded",
+  "started_at": "2026-10-31T17:50:04.451819+00:00",
+  "scope": "Installed macOS development package, shipped example client, durable restart lookup and synthetic state preservation on the current host",
+  "clean_machine_verified": false,
+  "notarization_verified": false,
+  "real_login_verified": false,
+  "host": {
+    "macos": "26.5.2",
+    "architecture": "arm64",
+    "python": "3.13.14"
+  },
+  "source": {
+    "sha256": "6a7cf041e668e31b3c1f134003242fe7e1745f014abb6d615f994fbe73e6304c",
+    "files": 227
+  },
+  "package": {
+    "path": "/Users/taosiyuan/codestudio-agent/build/macos-durable-requests/extracted",
+    "manifest_sha256": "97965f838f13ad565b6ba23c35a96809a3f7048776222cbf95b19bf5fa186d3c",
+    "files": {
+      "README.md": "3684e5e0c7cf2073887fbe38fbe7d85e6fe015da58a3dc36bb6294e4de5e60ba",
+      "README.txt": "cf12b1b1c40a6533fe4cfbc7f2dcb954299d9a937777a2efcf963505f7e61550",
+      "build-metadata.json": "ac4ca53b06720c6c2ee1cdf44b1d4fca297baf50b538a477b8ed181c1d90ed09",
+      "codestudio-agent": "0c8f988b4b2143d2662e00ee28eae2319a5d66f7a6f25aa34d488fb5aa0561fc",
+      "docs/architecture.md": "119bcaedd0df672c4e7e1687a0179c38014ddc517bb508757a0336599695384a",
+      "docs/build-proposals.md": "c855fa9e415a4d92c9d3518adf9b6c5fb5f9974caa2ee5841fb0b148edb1dce3",
+      "docs/credentials.md": "568de9e128556c015030b29795f8cb7471562f92c2c0aee02d62197594766a41",
+      "docs/delivery.md": "b59ad4c5c1e73590edc700fec2a93986eca820d91d88299921d7ae55f55b2118",
+      "docs/linux.md": "98d14ea9c67b8553d0b55b6ca28d2875d5be38e561c1f645ba6014abfd12fc77",
+      "docs/local-models.md": "92575c134d7ccd41052daaf150c7108df53df1d29479386d27aa4acd8e9b59a8",
+      "docs/macos-follow-up.md": "27621eaefd338d84d9bf9377e250080dfbc7e0543625b9b874a2d7d589fad3d1",
+      "docs/macos.md": "0c653edca50c758a1453c0667316dbaa4502a03a2772032aa67de407a0631331",
+      "docs/mcp-oauth.md": "34f626ee786aefb6afe247faeeb4f82bc42fca4932070ec14fc5c8f3c60e99e2",
+      "docs/mcp.md": "d6e66a5da95b9fefd8b197b20fc04f89d8f6d08a68dcbf090f83d9205ba6bdd3",
+      "docs/plugin-sandbox.md": "2c632206d31c8ef06876dfc6a484627f994af721de46a51e15494a6014b1c974",
+      "docs/plugins.md": "b27a60821a27435381f88b7fb5231fc6c034fbb258e26eb79fb80992c7dcc841",
+      "docs/resume-contract.md": "441f5f65eeae5beccc2bc47e9bc5817f1ea5639578f29ef7e285fd3ec8d45769",
+      "docs/resume.md": "f0ea5a30615e8118ad7bdc25ac154c8ec20b8c31cafb6c03c1771f4031a8d669",
+      "docs/roadmap.md": "2294bc72e19cf6a8f40135002461b55e412fe39e03d4a33c34efdf915a898c57",
+      "docs/sandbox-resources.md": "1d24d780e9283259bb11e50f93d54c7c005ff322ff580000cf45feef9dbe2a3d",
+      "docs/sandbox.md": "0beda2a9eaabe4953829d4a804fe147bfab0dfbb9d35864fcb2ec7e1173e1bb5",
+      "docs/scheduler.md": "e212012cfab2824e8ed48dfc038eac2110799b38ba7821157dcc3ced36913f4f",
+      "docs/streaming-apis.md": "c4dee17f3710091d10e2fbb916fac03ab4c2e48cc95c22442501e3d44bac162e",
+      "docs/task-service.md": "a007cf5e1aa3fdbdb9a370cc2ec381e23d51779856345fcae76d0e08bafe072a",
+      "docs/validation.md": "e42d2b36faba8a2d3c625bbf37111bfe3c1d5469f48fde3dbbadcfe917dd10ec",
+      "docs/workspace-builds.md": "7eae216a8f709c0ad44072e8813a08149c434bd94aec28748a9cda2b7ec3f96f",
+      "examples/mcp-http.example.json": "93292aba9cb5f02a53151bdac468dfbb711a109b8f278b1ff26bec23a38508da",
+      "examples/mcp-oauth.example.json": "5ebb7a6fb1ac8dc700fac73f86c2cf39c941b7ba398297c98e7d38cb79e38720",
+      "examples/mcp-plugin-sandbox.example.json": "1e254a6dd657e5e6b900b45855cb07b1c16fee8f2dc3ce763ecef1cdd527ed41",
+      "examples/mcp-plugin.example.json": "cbfe8e551208a6ea67ab59fd67c694d58e58d71171332bfd603b77eea19072ad",
+      "examples/mcp.example.json": "1351776bdd19ed98649cab36d0802e47b87c006a29b582f36a1f2c32134628b8",
+      "examples/mcp_echo.py": "8850336896b6724be261363282b99432793cef8d484c8ad491ffe5c9744eaf74",
+      "examples/task_client.py": "4f21ed2257b48a0e4aec8efc7ed832b4450cae84c0154cea7ad394500d741052",
+      "install.ps1": "7cea4047eedfed937554849cc9ed59d3c7b23c01c4ce9c8bf27868ff355b9622",
+      "install.py": "770d453ffb8d7047f79f7850f2327ab7b43d2880d82fa678933cbb2209d3dd35",
+      "install.sh": "8e32bdada2aea55d9152440893ce0019bf042774b4565340d4f00e91b6210ba5",
+      "lib/libc++.1.dylib": "857976a6b026db8a82a9b653b246b6ea4963147386d426a2cb550ff079a1e865",
+      "lib/libc++abi.1.dylib": "a98662a8e64d08a402fd204fed794168ccc8b8ecf4fafb14d36887d99c7cfaea",
+      "licenses/OpenSSL-LICENSE.txt": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a",
+      "licenses/SQLite-PUBLIC-DOMAIN.txt": "7b8578a074f9ddd01b7554b58b4db2793943a1f8cba2caa29f87a636868ec755",
+      "licenses/libcxx-LICENSE.TXT": "539dd7aed86e8a4f12cbdd0e6c50c189c7d74847e4fecc64ce2c6ee3a01da38b",
+      "licenses/libcxxabi-LICENSE.TXT": "e2b35be49f7284a45b7baca8fc7b3ab7440e7902392b2528a457816b5bb2a15c",
+      "licenses/nlohmann-json-Hedley-NOTICE.txt": "eb27f4190f8427f0565ab075b8359782e3f3f8bd2b592124a7cfb1bd476bbd94",
+      "licenses/nlohmann-json-LICENSE.MIT": "c0d068392ea65358b798b8c165103560f06e9e3b38c4ab4e2d8810a7b931af86",
+      "licenses/sources.json": "0c064c48407fd5569dfe2c822c499492356ec4e186f42566ab3d901872475613",
+      "protocol/README.md": "8a9e02c8cac7fcf5c8a4c9430c7228acca30d3aea15d47181253a0bddcf1db6f",
+      "protocol/task-service.schema.json": "8833dd165e592b7fec6b3d7296df440b8297b1535582385b9497a3c313674ba2",
+      "runtime-dependencies.txt": "67d99ac2e3b44842f25d7283882934a72991625ab4214d4aac2e9eceabbf4123",
+      "verification.json": "be82d86c53e1f874154d5acaceb166cf8d6c68f95baa82620068013d07d11579",
+      "verify-delivery.py": "f6bea3004841f972827c99064cc2431501d85c82bd8edad85b382f8084ddec4d",
+      "package.json": "97965f838f13ad565b6ba23c35a96809a3f7048776222cbf95b19bf5fa186d3c",
+      "SHA256SUMS": "5f8fe25390980053b1ba447d40ab4d514ae3c6b9a07a7bfc35227a236bde6196"
+    }
+  },
+  "source_binary_sha256": "df32642346fc4418cb676454ec1d374bcfed33c415858c24a9c7f1d01a18c024",
+  "shipped_binary_sha256": "0c8f988b4b2143d2662e00ee28eae2319a5d66f7a6f25aa34d488fb5aa0561fc",
+  "native_verification_sha256": "be82d86c53e1f874154d5acaceb166cf8d6c68f95baa82620068013d07d11579",
+  "trusted_installer_sha256": "770d453ffb8d7047f79f7850f2327ab7b43d2880d82fa678933cbb2209d3dd35",
+  "shipped_client_sha256": "4f21ed2257b48a0e4aec8efc7ed832b4450cae84c0154cea7ad394500d741052",
+  "harness_sha256": "b0b6979bb0a7e7a2450c10ce2e91884798d004d632874a3bb8f897408b726df4",
+  "temporary_root": "/private/var/folders/wh/lj7xnlsd4ssdrgpwkw3vnsj40000gn/T/codestudio-macos-durable-delivery-71xpw5p3",
+  "commands": [
+    {
+      "name": "install",
+      "command": [
+        "/Users/taosiyuan/codestudio-agent/build/contract-python/bin/python",
+        "-B",
+        "/Users/taosiyuan/codestudio-agent/scripts/install.py",
+        "install",
+        "--prefix",
+        "/private/var/folders/wh/lj7xnlsd4ssdrgpwkw3vnsj40000gn/T/codestudio-macos-durable-delivery-71xpw5p3/application",
+        "--package",
+        "/Users/taosiyuan/codestudio-agent/build/macos-durable-requests/extracted"
+      ],
+      "returncode": 0,
+      "stdout_sha256": "5dcc52bf90b86e7b50d5f1dbac5f543163800aff57b54b6278525fb58140d8b8",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "installed-doctor",
+      "command": [
+        "/private/var/folders/wh/lj7xnlsd4ssdrgpwkw3vnsj40000gn/T/codestudio-macos-durable-delivery-71xpw5p3/application/codestudio-agent",
+        "doctor"
+      ],
+      "returncode": 0,
+      "stdout_sha256": "14258ebf6ba179c1b0186c27f8e3ec6a17c5c10701acda43932be804220cbd1b",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "shipped-client-readonly",
+      "command": [
+        "/Users/taosiyuan/codestudio-agent/build/contract-python/bin/python",
+        "-B",
+        "/Users/taosiyuan/codestudio-agent/build/macos-durable-requests/extracted/examples/task_client.py",
+        "--agent",
+        "/private/var/folders/wh/lj7xnlsd4ssdrgpwkw3vnsj40000gn/T/codestudio-macos-durable-delivery-71xpw5p3/application/codestudio-agent",
+        "--workspace",
+        "/private/var/folders/wh/lj7xnlsd4ssdrgpwkw3vnsj40000gn/T/codestudio-macos-durable-delivery-71xpw5p3/new-workspace"
+      ],
+      "returncode": 0,
+      "stdout_sha256": "df61550c1bb1d9c1d590c6146daee0549104c964f2ea99ee1035feeb67d44cb8",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "fresh-service-query",
+      "command": [
+        "/private/var/folders/wh/lj7xnlsd4ssdrgpwkw3vnsj40000gn/T/codestudio-macos-durable-delivery-71xpw5p3/application/codestudio-agent",
+        "serve",
+        "--workspace",
+        "/private/var/folders/wh/lj7xnlsd4ssdrgpwkw3vnsj40000gn/T/codestudio-macos-durable-delivery-71xpw5p3/new-workspace"
+      ],
+      "returncode": 0,
+      "stdout_sha256": "f26799124783e147c731b1b2f7aadeb69addd6d5586dc94cdaa9f7e93d28e245",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "shipped-client-demo",
+      "command": [
+        "/Users/taosiyuan/codestudio-agent/build/contract-python/bin/python",
+        "-B",
+        "/Users/taosiyuan/codestudio-agent/build/macos-durable-requests/extracted/examples/task_client.py",
+        "--agent",
+        "/private/var/folders/wh/lj7xnlsd4ssdrgpwkw3vnsj40000gn/T/codestudio-macos-durable-delivery-71xpw5p3/application/codestudio-agent",
+        "--workspace",
+        "/private/var/folders/wh/lj7xnlsd4ssdrgpwkw3vnsj40000gn/T/codestudio-macos-durable-delivery-71xpw5p3/new-workspace",
+        "--demo"
+      ],
+      "returncode": 0,
+      "stdout_sha256": "e68477b5d871c0d2acd90a8c74a21321d21a3d7462fe022dd6b0aebe200d6a6e",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "fresh-service-query",
+      "command": [
+        "/private/var/folders/wh/lj7xnlsd4ssdrgpwkw3vnsj40000gn/T/codestudio-macos-durable-delivery-71xpw5p3/application/codestudio-agent",
+        "serve",
+        "--workspace",
+        "/private/var/folders/wh/lj7xnlsd4ssdrgpwkw3vnsj40000gn/T/codestudio-macos-durable-delivery-71xpw5p3/new-workspace"
+      ],
+      "returncode": 0,
+      "stdout_sha256": "abd34adfa6bea86b7ffdef94108bd1322364006fbd1d9de26f0c030c8f529b75",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "schema7-serve",
+      "command": [
+        "/private/var/folders/wh/lj7xnlsd4ssdrgpwkw3vnsj40000gn/T/codestudio-macos-durable-delivery-71xpw5p3/application/codestudio-agent",
+        "serve",
+        "--workspace",
+        "/private/var/folders/wh/lj7xnlsd4ssdrgpwkw3vnsj40000gn/T/codestudio-macos-durable-delivery-71xpw5p3/legacy-workspace",
+        "--state",
+        "/private/var/folders/wh/lj7xnlsd4ssdrgpwkw3vnsj40000gn/T/codestudio-macos-durable-delivery-71xpw5p3/legacy-workspace/state-schema7.sqlite3"
+      ],
+      "returncode": 2,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "047038264ee952311223044ea94bf6b26314a2dc590c41b4ac15fe1808751b5a"
+    },
+    {
+      "name": "schema7-history",
+      "command": [
+        "/private/var/folders/wh/lj7xnlsd4ssdrgpwkw3vnsj40000gn/T/codestudio-macos-durable-delivery-71xpw5p3/application/codestudio-agent",
+        "history",
+        "--workspace",
+        "/private/var/folders/wh/lj7xnlsd4ssdrgpwkw3vnsj40000gn/T/codestudio-macos-durable-delivery-71xpw5p3/legacy-workspace",
+        "--state",
+        "/private/var/folders/wh/lj7xnlsd4ssdrgpwkw3vnsj40000gn/T/codestudio-macos-durable-delivery-71xpw5p3/legacy-workspace/state-schema7.sqlite3"
+      ],
+      "returncode": 2,
+      "stdout_sha256": "939b63fa09ac3876dd2f5d4942c1a8875359d57f021abfe96b073347f872db55",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "schema7-demo",
+      "command": [
+        "/private/var/folders/wh/lj7xnlsd4ssdrgpwkw3vnsj40000gn/T/codestudio-macos-durable-delivery-71xpw5p3/application/codestudio-agent",
+        "demo",
+        "--workspace",
+        "/private/var/folders/wh/lj7xnlsd4ssdrgpwkw3vnsj40000gn/T/codestudio-macos-durable-delivery-71xpw5p3/legacy-workspace",
+        "--state",
+        "/private/var/folders/wh/lj7xnlsd4ssdrgpwkw3vnsj40000gn/T/codestudio-macos-durable-delivery-71xpw5p3/legacy-workspace/state-schema7.sqlite3"
+      ],
+      "returncode": 2,
+      "stdout_sha256": "939b63fa09ac3876dd2f5d4942c1a8875359d57f021abfe96b073347f872db55",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "upgrade",
+      "command": [
+        "/Users/taosiyuan/codestudio-agent/build/contract-python/bin/python",
+        "-B",
+        "/Users/taosiyuan/codestudio-agent/scripts/install.py",
+        "upgrade",
+        "--prefix",
+        "/private/var/folders/wh/lj7xnlsd4ssdrgpwkw3vnsj40000gn/T/codestudio-macos-durable-delivery-71xpw5p3/application",
+        "--package",
+        "/Users/taosiyuan/codestudio-agent/build/macos-durable-requests/extracted"
+      ],
+      "returncode": 0,
+      "stdout_sha256": "f4d87b2d9dabf1d212d02b3929d307c203ca5a83b3bf9bcd31c21ccd290f3b33",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "uninstall",
+      "command": [
+        "/Users/taosiyuan/codestudio-agent/build/contract-python/bin/python",
+        "-B",
+        "/Users/taosiyuan/codestudio-agent/scripts/install.py",
+        "uninstall",
+        "--prefix",
+        "/private/var/folders/wh/lj7xnlsd4ssdrgpwkw3vnsj40000gn/T/codestudio-macos-durable-delivery-71xpw5p3/application"
+      ],
+      "returncode": 0,
+      "stdout_sha256": "73a4545335656417d23a9e9a584d6313894dc2230ab546e19ac664ef88a1033d",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "checks": [
+    "Shipped example and fresh initialize read without creating a database",
+    "Installed offline demo persisted one schema 8 request and two actions; a new service returned its original completion",
+    "Schema 7 refusal and install/idempotent-upgrade/uninstall preserved old and current synthetic user state"
+  ],
+  "preservation": [
+    {
+      "stage": "before_install",
+      "schema7_database": "58a5f89fbd62c87f292bfd6e3f779751c574eb1dfc109fd3f3223a78bd53ace7",
+      "user_file": "fea5cafe83d95ce2553841a517858aaa0d313ddcfaaace9f7060e52f5e4ce3d4"
+    },
+    {
+      "stage": "after_install",
+      "schema7_database": "58a5f89fbd62c87f292bfd6e3f779751c574eb1dfc109fd3f3223a78bd53ace7",
+      "user_file": "fea5cafe83d95ce2553841a517858aaa0d313ddcfaaace9f7060e52f5e4ce3d4"
+    },
+    {
+      "stage": "after_schema7_serve_refusal",
+      "schema7_database": "58a5f89fbd62c87f292bfd6e3f779751c574eb1dfc109fd3f3223a78bd53ace7",
+      "user_file": "fea5cafe83d95ce2553841a517858aaa0d313ddcfaaace9f7060e52f5e4ce3d4"
+    },
+    {
+      "stage": "after_schema7_history_refusal",
+      "schema7_database": "58a5f89fbd62c87f292bfd6e3f779751c574eb1dfc109fd3f3223a78bd53ace7",
+      "user_file": "fea5cafe83d95ce2553841a517858aaa0d313ddcfaaace9f7060e52f5e4ce3d4"
+    },
+    {
+      "stage": "after_schema7_demo_refusal",
+      "schema7_database": "58a5f89fbd62c87f292bfd6e3f779751c574eb1dfc109fd3f3223a78bd53ace7",
+      "user_file": "fea5cafe83d95ce2553841a517858aaa0d313ddcfaaace9f7060e52f5e4ce3d4"
+    },
+    {
+      "stage": "after_same_package_upgrade",
+      "schema7_database": "58a5f89fbd62c87f292bfd6e3f779751c574eb1dfc109fd3f3223a78bd53ace7",
+      "user_file": "fea5cafe83d95ce2553841a517858aaa0d313ddcfaaace9f7060e52f5e4ce3d4"
+    },
+    {
+      "stage": "after_uninstall",
+      "schema7_database": "58a5f89fbd62c87f292bfd6e3f779751c574eb1dfc109fd3f3223a78bd53ace7",
+      "user_file": "fea5cafe83d95ce2553841a517858aaa0d313ddcfaaace9f7060e52f5e4ce3d4"
+    }
+  ],
+  "cleanup": "owned_installation_uninstalled_then_owned_synthetic_fixture_root_removed",
+  "installed_binary_sha256": "0c8f988b4b2143d2662e00ee28eae2319a5d66f7a6f25aa34d488fb5aa0561fc",
+  "doctor": {
+    "approval_continuation": true,
+    "automatic_resume": true,
+    "background_scheduler": true,
+    "build_manifest_versions": [
+      2
+    ],
+    "build_proposals": true,
+    "build_system": "XMake",
+    "checkpoint_resume": true,
+    "compiler": "Clang 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)",
+    "cplusplus": 202400,
+    "credentials": {
+      "references": [
+        "env",
+        "system"
+      ],
+      "resolution": "per-operation",
+      "runtime_probe": "not-run",
+      "system_backend": "macos-keychain"
+    },
+    "cron": true,
+    "local_model_discovery": true,
+    "login_autostart": true,
+    "mcp_oauth": {
+      "available": true,
+      "client_registration": "explicit",
+      "grant": "authorization_code",
+      "pkce": "S256",
+      "refresh": "before-operation",
+      "token_store": "system"
+    },
+    "mcp_transports": [
+      "stdio",
+      "streamable-http"
+    ],
+    "os_sandbox": false,
+    "plugin_distribution": true,
+    "plugin_locks": true,
+    "plugin_sandbox": {
+      "available": false,
+      "runtime_probe": "not-run"
+    },
+    "product": "CodeStudio-Agent",
+    "provider_apis": [
+      "chat-completions",
+      "responses",
+      "messages"
+    ],
+    "sandbox_backends": [],
+    "sandbox_default": "none",
+    "sandbox_resources": {
+      "available": false,
+      "reclaim": "explicit-id",
+      "runtime_probe": "not-run"
+    },
+    "sandbox_runtime_probe": "not-run",
+    "sandbox_scope": "process-and-mcp-children",
+    "sandbox_support": "compiled-backends",
+    "state_schema": 8,
+    "streaming": true,
+    "supervised_autostart": true,
+    "supervisor_diagnostics": true,
+    "task_service": {
+      "durable_requests": true,
+      "event_replay": true,
+      "protocol_version": 2,
+      "transport": "stdio"
+    },
+    "version": "0.1.0",
+    "worker_supervision": true,
+    "workspace_build": {
+      "available": false,
+      "backend": null,
+      "runtime_probe": "not-run"
+    }
+  },
+  "readonly_initialize": {
+    "capabilities": {
+      "approval_continuation": true,
+      "automatic_resume": true,
+      "background_scheduler": true,
+      "build_proposals": true,
+      "cron": true,
+      "durable_requests": true,
+      "event_replay": true,
+      "login_autostart": true,
+      "mcp_oauth": true,
+      "mcp_streamable_http": true,
+      "operation_lookup": true,
+      "plugin_distribution": true,
+      "plugin_locks": true,
+      "plugin_sandbox": false,
+      "sandbox_resources": false,
+      "structured_errors": true,
+      "supervised_autostart": true,
+      "supervisor_diagnostics": true,
+      "task_operations": true,
+      "text_deltas": true,
+      "worker_supervision": true
+    },
+    "database_id": null,
+    "limits": {
+      "active_operations": 1,
+      "durable_requests": 10000,
+      "input_bytes": 1048576,
+      "operation_history": 64,
+      "operation_result_bytes": 262144,
+      "output_bytes": 4194304,
+      "page_items": 100
+    },
+    "product": "CodeStudio-Agent",
+    "protocol_version": 2,
+    "session_id": "ca9a797df1772362beed7fd1a5fb0b1e",
+    "state_database": "/private/var/folders/wh/lj7xnlsd4ssdrgpwkw3vnsj40000gn/T/codestudio-macos-durable-delivery-71xpw5p3/new-workspace/.codestudio/state.sqlite3",
+    "version": "0.1.0",
+    "workspace": "/private/var/folders/wh/lj7xnlsd4ssdrgpwkw3vnsj40000gn/T/codestudio-macos-durable-delivery-71xpw5p3/new-workspace"
+  },
+  "restart_receipt": {
+    "database_id": "764508822aa4fa2ef62f0aa68917cf56",
+    "request_key": "demo:8c9419d22ef8499f873c59856c9c16f6",
+    "operation_id": "7dda6d9e1c5b493f9cb2ed0ab1956b7f",
+    "session_id": "77cfaccc39f4ab36dbfe0f6c950f0479",
+    "method": "tasks/start",
+    "state": "finished",
+    "task_id": "a47bd5f61e26a2a2db5402fd3a3a90a9",
+    "completion_sha256": "71d99bb841d9fbd84551db75f149cb701348573d7502b898521381db5d484706"
+  },
+  "upgrade_scope": "Same-package idempotence only; distinct-package upgrade is covered by the separate delivery suite",
+  "current_state_preserved_sha256": {
+    "database": "113c17e17f17fff30a12ed29cff93229de03032502bcf3348c6ec9a98c10fd8c",
+    "demo_file": "c775ced5e9657246384da7bf986af997d030b865e5a89cc6d19ea01b2b6a4f9f"
+  },
+  "package_unchanged": true,
+  "finished_at": "2026-10-31T17:50:06.558763+00:00"
+}

@@ -1,0 +1,49 @@
+{
+  "format": 2,
+  "product": "CodeStudio-Agent",
+  "status": "packaged",
+  "platform": "macosx",
+  "arch": "arm64",
+  "package": "/Users/taosiyuan/codestudio-agent/build/macos-durable-requests/package-1/codestudio-agent-macosx-arm64",
+  "archive": "/Users/taosiyuan/codestudio-agent/build/macos-durable-requests/package-1/codestudio-agent-macosx-arm64.tar.gz",
+  "sha256": "a4cbd76490e7ff8995b99d52057eacc40d72580385db091ad930b00b0b1bbc25",
+  "bytes": 4066972,
+  "verification": {
+    "state": "supplied",
+    "sha256": "be82d86c53e1f874154d5acaceb166cf8d6c68f95baa82620068013d07d11579",
+    "selected_suites": [
+      "toolchain",
+      "native",
+      "schema",
+      "provider",
+      "streaming",
+      "contract",
+      "service",
+      "credentials",
+      "cli",
+      "local_models",
+      "mcp",
+      "mcp_http",
+      "mcp_oauth",
+      "plugins",
+      "resume",
+      "durable_requests",
+      "scheduler",
+      "supervisor",
+      "cron",
+      "autostart",
+      "package",
+      "macos_release",
+      "verification"
+    ],
+    "omitted_suites": [
+      "delivery"
+    ],
+    "unsupported_suites": {
+      "plugin_sandbox": "macOS OS isolation belongs to stage 3",
+      "sandbox": "macOS OS sandbox execution belongs to stage 3; refusal is covered by native/CLI tests",
+      "sandbox_resources": "macOS isolated resource ownership and reclamation belong to stage 3",
+      "real_build": "macOS isolated workspace execution belongs to stage 3"
+    }
+  }
+}

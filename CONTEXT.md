@@ -18,7 +18,7 @@ CodeStudio Agent is a headless agent runtime and harness. It connects model reas
 
 ## Current follow-up plan
 
-The [macOS follow-up plan](docs/macos-follow-up.md) tracks source synchronization, schema-8 native Debug/Release verification, package/install acceptance, fixed-runtime real-login acceptance and an actual ARM64 CI run. These Mac actions are pending; the plan does not claim or authorize publication. Preserve existing login fixtures and historical evidence. UI remains in CodeStudio Next, local-model development is paused, and native isolation and formal distribution remain deferred.
+The [macOS follow-up plan](docs/macos-follow-up.md) tracks source synchronization, schema-8 native Debug/Release verification, package/install acceptance, fixed-runtime real-login acceptance and an actual ARM64 CI run. Execution evidence and per-item status are recorded in [the macOS follow-up receipts](research/macos-durable-requests/README.md). The plan and tooling do not themselves establish test, real-login or CI success, or authorize formal publication. Preserve existing login fixtures and historical evidence. UI remains in CodeStudio Next, local-model development is paused, and native isolation and formal distribution remain deferred.
 
 ## Platform status
 

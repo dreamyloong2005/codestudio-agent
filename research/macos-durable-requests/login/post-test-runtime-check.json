@@ -1,0 +1,43 @@
+{
+  "captured_at_utc": "2026-10-31T17:51:13.982560+00:00",
+  "scope": "Read-only recheck after all native and package tests; no login verification or cleanup performed.",
+  "session": {
+    "asid": 100024,
+    "boot_uuid": "3e5f398d-0ba4-4613-953c-22914fc3a110"
+  },
+  "matches_old_baseline_session": true,
+  "matches_new_baseline_session": true,
+  "historical_program": {
+    "path": "/Users/taosiyuan/codestudio-agent/build/macos-stage2-login-runtime/codestudio-agent",
+    "sha256": "d8c3a1b2efeb0f27f59eb530d7e625ab9b3484ba7a487347f3e30e47599972e2",
+    "expected_sha256": "d8c3a1b2efeb0f27f59eb530d7e625ab9b3484ba7a487347f3e30e47599972e2",
+    "matches": true
+  },
+  "historical_runtime": [
+    {
+      "path": "/Users/taosiyuan/codestudio-agent/build/toolchains/libcxx-22.1.8-tzdb/lib/libc++.1.dylib",
+      "sha256": "37a40e084b7f1d1b68f509cd48cb6baf269e95c4a5109408f2215e5e33521a90",
+      "expected_sha256": "37a40e084b7f1d1b68f509cd48cb6baf269e95c4a5109408f2215e5e33521a90",
+      "matches": true
+    },
+    {
+      "path": "/Users/taosiyuan/codestudio-agent/build/toolchains/libcxx-22.1.8-tzdb/lib/libc++abi.1.dylib",
+      "sha256": "e1b798f6ac9514e5b32ee4b7b066d472d060090bd7d87f5c964942ded35453e7",
+      "expected_sha256": "e1b798f6ac9514e5b32ee4b7b066d472d060090bd7d87f5c964942ded35453e7",
+      "matches": true
+    }
+  ],
+  "new_frozen_package": {
+    "path": "/Users/taosiyuan/codestudio-agent/build/macos-durable-requests/extracted",
+    "manifest_receipt": "runtime-manifest.json",
+    "files_checked": 52,
+    "mismatched_or_missing_files": [],
+    "extra_files": [],
+    "program_sha256": "0c8f988b4b2143d2662e00ee28eae2319a5d66f7a6f25aa34d488fb5aa0561fc",
+    "runtime_sha256": {
+      "lib/libc++.1.dylib": "857976a6b026db8a82a9b653b246b6ea4963147386d426a2cb550ff079a1e865",
+      "lib/libc++abi.1.dylib": "a98662a8e64d08a402fd204fed794168ccc8b8ecf4fafb14d36887d99c7cfaea"
+    },
+    "matches": true
+  }
+}

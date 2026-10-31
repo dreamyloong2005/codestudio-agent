@@ -1,6 +1,6 @@
 # macOS 同步跟进计划：持久请求与交付验收
 
-更新日期：2026-11-01。目标是在 Apple Silicon Mac 上验证最新 schema 8 运行时，并取得对应测试包、真实登录与 CI 的独立证据。本文件是执行计划，以下工作尚未开始；编写计划不代表已在 Mac 上构建、登记自启或发布。
+更新日期：2026-11-01。目标是在 Apple Silicon Mac 上验证最新 schema 8 运行时，并取得对应测试包、真实登录与 CI 的独立证据。本轮执行记录统一见[跟进回执](../research/macos-durable-requests/README.md)及其 M0–M4 状态表。本文固定执行范围和复现步骤，实际通过、排队与待人工操作分别由机器回执记录；计划和入口实现本身不代表验收通过。
 
 ## 基线与范围
 
@@ -14,24 +14,24 @@
 
 | 编号 | 优先级 | 工作 | 前置条件 | 负责执行的角色 | 状态 |
 |---|---|---|---|---|---|
-| M0 | P0 | 同步完整源码、固定工具链与记录基线 | Windows 当前工作区和 Mac checkout 可读取 | 源码维护者、Mac 执行者 | 待执行 |
-| M1 | P0 | schema 8 原生 Debug/Release 回归 | M0 源码摘要一致、Mac 工具链可用 | Mac 执行者 | 待执行 |
-| M2 | P1 | 新测试包及实际归档安装验收 | M1 两配置通过，精确 Release 回执可用 | Mac 执行者 | 待执行 |
-| M3 | P1 | 普通/监督模式真实登录自启验收 | M1 通过，固定可运行程序及运行库，GUI 测试会话可用 | Mac 执行者；操作者完成真实注销/登录 | 待执行 |
-| M4 | P2 | 运行现有 ARM64 CI 并归档结果 | M0 对应源码已成为可检出的提交，runner 环境就绪 | 仓库维护者、runner 管理者 | 待执行 |
+| M0 | P0 | 同步完整源码、固定工具链与记录基线 | 已推送 Git 快照、Mac checkout 与工具链可读取 | 源码维护者、Mac 执行者 | 已快进同步 `6e77896`；未直接观察 Windows 当前会话，差异与环境见本轮回执 |
+| M1 | P0 | schema 8 原生 Debug/Release 回归 | M0 源码摘要一致、Mac 工具链可用 | Mac 执行者 | 本轮原生与包级执行结果见跟进回执 |
+| M2 | P1 | 新测试包及实际归档安装验收 | M1 两配置通过，精确 Release 回执可用 | Mac 执行者 | 本轮原生与包级执行结果见跟进回执 |
+| M3 | P1 | 普通/监督模式真实登录自启验收 | M1 通过，固定可运行程序及运行库，GUI 测试会话可用 | Mac 执行者；操作者完成真实注销/登录 | 历史探针未经历新会话；本轮固定运行时与等待/验收状态见跟进回执 |
+| M4 | P2 | 运行现有 ARM64 CI 并归档结果 | M0 对应源码已成为可检出的提交，runner 环境就绪 | 仓库维护者、runner 管理者 | 已观察真实 push 作业排队、无 runner 分配；最终提交状态见 CI 回执 |
 
 主线为 M0 → M1 → M2。M3 可在 M1 后与打包工作并行，前提是使用独立固定的运行目录；若选择 M2 解包后的程序，则等待 M2 通过。M4 的环境准备可提前进行，实际作业必须绑定同一提交及源码摘要。各项分别记录完成状态，CI、安装或原生测试通过不代替真实登录结果。
 
 ## M0：源码和环境同步
 
-- [ ] 记录 Windows 与 Mac 的分支、HEAD、未提交变更和同步方式。计划建立时本轮改动尚未提交、推送，单独拉取远端不能取得完整实现；执行前重新检查 Git 状态。
+- [x] Mac 已通过 `git pull --ff-only origin main` 同步完整已提交快照 `6e77896`，起始工作区干净。Windows 当前会话不可直接读取，远端 Git 对象与历史 Windows 回执分别记录，不能冒充新的双端实测。
 - [ ] 同步完整构建输入，包括新增源码、测试、协议、脚本与文档；不覆盖 Mac 的并行修改，不复制 Windows 的 `build/`、`.xmake/`、数据库、凭据或自启状态。提交/推送另按明确指令执行，文档计划本身不触发发布。
 - [ ] 在 M1 冻结前准备好 M2 所需的包级持久请求验收入口及独立夹具路径。若到 M2 才修改测试或夹具，重新冻结源码并生成匹配的 M1 回执后再打包，不引用旧源码报告。
-- [ ] 使用 [verify.py](../scripts/verify.py) 的 `source_fingerprint()` 在两端计算相同规则的摘要；保存文件数、SHA256、HEAD 与差异清单。文档也是指纹输入，不能沿用旧摘要冒充本次快照。
+- [ ] 使用 [verify.py](../scripts/verify.py) 的 `source_fingerprint()` 核对远端提交对象与 Mac 构建输入，保存文件数、SHA256、HEAD 与本轮差异清单。若取得 Windows 当前 checkout，再独立计算其摘要；Git 对象比较不证明当前 Windows 工作区状态。文档也是指纹输入，不能沿用旧摘要冒充本次快照。
 - [ ] 记录 macOS/SDK、CPU 架构、LLVM、专用 libc++、XMake、Python 与依赖版本。沿用 [macOS 工具链步骤](macos.md#原生构建与验证命令)，核对时区与 `std::format` 运行探针。
 - [ ] 在同一扫描范围记录本轮起始进程、自有测试目录、Keychain 测试条目和 LaunchAgent 登记。先检查历史登录探针状态，保留 `build/macos-stage2-login-runtime/` 的固定程序和原证据，不覆盖它们。
 
-完成标准：两端构建输入摘要一致；Mac 工具链与测试用户环境可用；本轮基线和历史探针归属明确。源码未改变前才能进入 M1。
+完成标准：已推送来源快照与 Mac 同步输入一致，任何不可观察的 Windows 当前状态单列；Mac 工具链与测试用户环境可用；本轮基线和历史探针归属明确。源码未改变前才能进入 M1。
 
 ## M1：原生回归
 
@@ -53,7 +53,7 @@ bash scripts/verify-macos.sh all --report-dir research/macos-durable-requests/na
 - [ ] 复核 Keychain/OAuth、MCP、后台监督、cron 和权限绑定；使用合成服务，普通凭据测试使用随机自有条目并清理，锁定场景使用独立临时 Keychain，不改变用户默认库设置或搜索列表。
 - [ ] 用实际 `doctor` 和服务 `initialize` 检查 schema 8、`durable_requests` 声明及禁用隔离能力；记录失败与跳过，不将不支持记为成功。
 
-完成标准：两种配置全部适用套件通过，原生测试组及持久请求用例数量与该源码版本相符（计划基线为 23 组、23 个专项用例），每份回执包含实际源码、二进制摘要与工具链。数量不是替代断言和原始日志的验收依据。
+完成标准：两种配置全部适用套件通过，原生测试组及持久请求用例数量与该源码版本相符（计划基线为 23 组、23 个专项用例；本轮新增 4 个路径、锁与旧库用例后专项为 27 项），每份回执包含实际源码、二进制摘要与工具链。数量不是替代断言和原始日志的验收依据。
 
 ## M2：测试包和安装验收
 
@@ -67,14 +67,14 @@ package_output="$PWD/build/packages/macos-durable-requests"
 package_extract=$(mktemp -d "$PWD/build/macos-durable-delivery.XXXXXX")
 tar -xzf "$package_output/codestudio-agent-macosx-arm64.tar.gz" -C "$package_extract"
 "$CODESTUDIO_CONTRACT_PYTHON" scripts/verify.py --mode release --skip-build \
-  --suite delivery --package "$package_extract" \
+  --suite delivery --suite durable_requests --package "$package_extract" \
   --report-dir research/macos-durable-requests/delivery
 ```
 
 - [ ] 核对包内私有 libc++/libc++abi、许可证、相对依赖路径、arm64 与部署目标，确认无开发机绝对运行库依赖。
 - [ ] 保存原构建、重定位/ad-hoc 签名后程序、运行库及 tar.gz 的分别摘要；验证两次相同输入打包的归档一致性，不要求原程序与重定位程序字节相同。
 - [ ] 从实际归档解包后验证安装、实际运行、升级、卸载及数据保留。旧状态库拒绝运行与安装程序保留旧数据应分别检查。
-- [ ] 补齐包级持久请求验收，覆盖启动/续跑去重、服务重启查询与旧库拒绝，保存包摘要与专项结果的对应关系。若复用 `tests/durable_requests_integration.py`，先让测试入口显式接收独立构建的进程夹具路径；现有夹具默认位于被测程序旁，分发包并不携带它，不能直接把包内程序代入便宣称全套通过。不得为测试修改已经记录摘要的包载荷。
+- [ ] 补齐包级持久请求验收，覆盖启动/续跑去重、服务重启查询与旧库拒绝，保存包摘要与专项结果的对应关系。若复用 `tests/durable_requests_integration.py`，本轮入口已增加 `--process-fixture` 和 `--mcp-fixture`；`verify.py --suite durable_requests --package` 自动使用所选原生构建的两个夹具，并对测试前后整包和构建产物做摘要检查。默认仍使用程序旁的开发夹具，分发包不携带它们。不得为测试修改已经记录摘要的包载荷。
 - [ ] 使用[客户端示例](../examples/task_client.py)验证只读连接、离线任务及持久回执。检查测试后的自有文件、进程及凭据清理情况。
 
 完成标准：新源码对应的测试包、归档安装流程和解包后持久请求测试全部通过，数据保留与旧库拒绝符合契约。本机临时安装不称为独立干净 Mac 验收；ad-hoc 包不称为正式签名或公证发布。

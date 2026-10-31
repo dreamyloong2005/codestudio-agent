@@ -26,6 +26,12 @@
 
 本轮验证覆盖丢失接受响应、并发重复提交、服务重启、MCP 发现与工具派发后崩溃、初始检查点和续跑关联原子性、最终回执写入失败、数据库替换和授权冲突。当前源码的实际平台/配置、源码摘要与测试结果以 [持久请求验证记录](../research/durable-requests/README.md) 为准；之前的包和 macOS 原生回执仍属于各自历史源码，不能作为 schema 8 的验收结果。本轮不包含新的安装归档、真实模型、真实登录、正式签名或发布。
 
+## macOS schema 8 跟进验证
+
+本轮跟进使用独立的[macOS 回执](../research/macos-durable-requests/README.md)，分别记录原生 Debug/Release、实际归档交付、包级持久请求、客户端示例、固定运行时登录准备与 CI。新增专项检查 Darwin `/var` 规范路径、APFS 大小写/Unicode 别名授权绑定、POSIX 准入锁崩溃释放和旧 schema 7 拒绝且原数据库不变。包级测试通过显式外部夹具运行，测试前后包与构建摘要必须一致。
+
+真实 GUI 注销/登录需要操作者执行；排队的 CI 未分配 runner、未产生步骤或产物时不能算通过。原生隔离、Developer ID、公证及独立干净 Mac 继续暂缓。
+
 ## macOS 适配后的 Windows/Linux 回归
 
 本轮针对合入 macOS 适配后的共享源码，在 Windows x64 与 Arch Linux x86-64（WSL2）分别进行 Debug/Release 回归，并验证新包的安装、升级、卸载和数据保留。重点覆盖受保护路径、隔离构建、插件、资源回收及后台调度；各配置的源码/产物摘要、通过与跳过情况、实际交付和残留检查以 [本轮验证回执](../research/cross-platform-regression/README.md) 为准。

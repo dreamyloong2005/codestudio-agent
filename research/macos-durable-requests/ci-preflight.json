@@ -1,0 +1,179 @@
+{
+  "format": 1,
+  "product": "CodeStudio Agent",
+  "recorded_at_utc": "2026-10-31T17:41:07.628963+00:00",
+  "scope": "M4 read-only preflight before new native regression, changes, commit and push",
+  "status": "ci_not_completed_current_head_queued",
+  "source_head": "6e778966516ba2787a093206d9362d730d5bde6e",
+  "workflow_sha256": "1797a2f8a978790ed3a75f75a6f44bdacf548a0498479bf875f5bb59d5411408",
+  "workflow_triggers": [
+    "push to main",
+    "workflow_dispatch"
+  ],
+  "required_macos_labels": [
+    "self-hosted",
+    "macOS",
+    "ARM64",
+    "codestudio-agent"
+  ],
+  "tools": {
+    "gh_executable": null,
+    "gh_standard_install_paths_found": [],
+    "gh_config_present": false,
+    "api_auth_env_present": {
+      "GH_TOKEN": false,
+      "GITHUB_TOKEN": false,
+      "GH_ENTERPRISE_TOKEN": false,
+      "GITHUB_ENTERPRISE_TOKEN": false
+    },
+    "api_access": "Unauthenticated public GitHub REST; no token contents read"
+  },
+  "observations": {
+    "current_run_url": "https://github.com/dreamyloong2005/codestudio-agent/actions/runs/41225022604",
+    "current_macos_job_url": "https://github.com/dreamyloong2005/codestudio-agent/actions/runs/41225022604/job/124607260668",
+    "current_jobs": "All three jobs queued, no runner assigned and no steps executed in this snapshot",
+    "runner_inventory": "unknown: API requires authenticated repository administration access",
+    "actions_permissions": "unknown: API requires authentication",
+    "artifact_count": 0,
+    "workflow_dispatch_performed": false,
+    "runner_configuration_changed": false,
+    "git_changed": false
+  },
+  "next_step": "The final authorized push to main automatically creates an Actions run for that commit. Read its exact head_sha, macos job and artifacts via public REST. If it remains queued with runner_id 0, record queued/not verified; a prepared online self-hosted ARM64 runner is required. Do not infer absent/offline runners solely from the 401 inventory response.",
+  "responses": [
+    {
+      "url": "https://api.github.com/repos/dreamyloong2005/codestudio-agent/actions/workflows/native.yml",
+      "http_status": 200,
+      "data": {
+        "id": 396141890,
+        "node_id": "W_kwDOVW7z6c4XnKVC",
+        "name": "Native verification and packages",
+        "path": ".github/workflows/native.yml",
+        "state": "active",
+        "created_at": "2026-10-25T16:02:30.000Z",
+        "updated_at": "2026-10-25T16:02:30.000Z",
+        "url": "https://api.github.com/repos/dreamyloong2005/codestudio-agent/actions/workflows/396141890",
+        "html_url": "https://github.com/dreamyloong2005/codestudio-agent/blob/main/.github/workflows/native.yml",
+        "badge_url": "https://github.com/dreamyloong2005/codestudio-agent/workflows/Native%20verification%20and%20packages/badge.svg"
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/dreamyloong2005/codestudio-agent/actions/runs?head_sha=6e778966516ba2787a093206d9362d730d5bde6e&per_page=20",
+      "http_status": 200,
+      "data": {
+        "total_count": 1,
+        "workflow_runs": [
+          {
+            "id": 41225022604,
+            "name": "Native verification and packages",
+            "event": "push",
+            "status": "queued",
+            "conclusion": null,
+            "workflow_id": 396141890,
+            "head_branch": "main",
+            "head_sha": "6e778966516ba2787a093206d9362d730d5bde6e",
+            "html_url": "https://github.com/dreamyloong2005/codestudio-agent/actions/runs/41225022604",
+            "created_at": "2026-10-31T17:32:28Z",
+            "updated_at": "2026-10-31T17:32:28Z",
+            "run_attempt": 1
+          }
+        ]
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/dreamyloong2005/codestudio-agent/actions/runs/41225022604/jobs?per_page=100",
+      "http_status": 200,
+      "data": {
+        "total_count": 3,
+        "jobs": [
+          {
+            "id": 124607260542,
+            "name": "linux",
+            "status": "queued",
+            "conclusion": null,
+            "started_at": "2026-10-31T17:32:29Z",
+            "completed_at": null,
+            "runner_id": 0,
+            "runner_name": "",
+            "runner_group_id": 0,
+            "runner_group_name": "",
+            "labels": [
+              "self-hosted",
+              "Linux",
+              "X64",
+              "codestudio-agent"
+            ],
+            "html_url": "https://github.com/dreamyloong2005/codestudio-agent/actions/runs/41225022604/job/124607260542",
+            "steps": []
+          },
+          {
+            "id": 124607260668,
+            "name": "macos",
+            "status": "queued",
+            "conclusion": null,
+            "started_at": "2026-10-31T17:32:29Z",
+            "completed_at": null,
+            "runner_id": 0,
+            "runner_name": "",
+            "runner_group_id": 0,
+            "runner_group_name": "",
+            "labels": [
+              "self-hosted",
+              "macOS",
+              "ARM64",
+              "codestudio-agent"
+            ],
+            "html_url": "https://github.com/dreamyloong2005/codestudio-agent/actions/runs/41225022604/job/124607260668",
+            "steps": []
+          },
+          {
+            "id": 124607260840,
+            "name": "windows",
+            "status": "queued",
+            "conclusion": null,
+            "started_at": "2026-10-31T17:32:29Z",
+            "completed_at": null,
+            "runner_id": 0,
+            "runner_name": "",
+            "runner_group_id": 0,
+            "runner_group_name": "",
+            "labels": [
+              "self-hosted",
+              "Windows",
+              "X64",
+              "codestudio-agent"
+            ],
+            "html_url": "https://github.com/dreamyloong2005/codestudio-agent/actions/runs/41225022604/job/124607260840",
+            "steps": []
+          }
+        ]
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/dreamyloong2005/codestudio-agent/actions/runs/41225022604/artifacts?per_page=100",
+      "http_status": 200,
+      "data": {
+        "total_count": 0,
+        "artifacts": []
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/dreamyloong2005/codestudio-agent/actions/runners?per_page=100",
+      "http_status": 401,
+      "data": {
+        "message": "Requires authentication",
+        "documentation_url": "https://docs.github.com/rest",
+        "status": "401"
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/dreamyloong2005/codestudio-agent/actions/permissions",
+      "http_status": 401,
+      "data": {
+        "message": "Requires authentication",
+        "documentation_url": "https://docs.github.com/rest",
+        "status": "401"
+      }
+    }
+  ]
+}

@@ -226,6 +226,11 @@ def commands(mode, package):
     for name in COMMON:
         if name not in result:
             result[name] = [sys.executable, f"tests/{name}_integration.py", agent]
+    if package is not None:
+        result["durable_requests"] = [sys.executable, "tests/durable_requests_integration.py",
+                                      str(package / ("codestudio-agent" + SUFFIX)),
+                                      "--process-fixture", str(binary / ("process-fixture" + SUFFIX)),
+                                      "--mcp-fixture", str(binary / ("mcp-fixture" + SUFFIX))]
     if PLATFORM == "windows":
         result["spawn_lifetime"] = [sys.executable, "tests/windows_spawn_lifetime.py", agent]
         for name in ("build", "build_proposals"):
@@ -338,6 +343,7 @@ def verify(args, mode):
         raise RuntimeError("Invalid, repeated or non-native suite name; use --list")
     if "delivery" in selected and not args.package:
         raise RuntimeError("Delivery verification requires --package pointing to an extracted native package")
+    package_suites = [name for name in selected if name in ("delivery", "durable_requests") and args.package]
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ") + "-" + uuid.uuid4().hex[:8]
     directory = args.report_dir.resolve() / f"{mode}-{stamp}"
     directory.mkdir(parents=True, exist_ok=False)
@@ -359,8 +365,9 @@ def verify(args, mode):
         if args.preflight_only:
             report["status"] = "preflight"
             return 0
-        if "delivery" in selected:
+        if package_suites:
             report["delivery_package"] = delivery_fingerprint(args.package)
+            report["package_suites"] = package_suites
         schedule = []
         if not args.skip_build:
             schedule += [("configure", configure_command(mode, env)),
@@ -380,7 +387,7 @@ def verify(args, mode):
                               "sha256": digest(binary)}
         if artifact_fingerprint(mode) != tested:
             raise RuntimeError("Built executables changed while tests were running")
-        if "delivery" in selected and delivery_fingerprint(args.package) != report["delivery_package"]:
+        if package_suites and delivery_fingerprint(args.package) != report["delivery_package"]:
             raise RuntimeError("Delivery package changed while tests were running")
         if "libcxx_sha256" in report["toolchain"] and runtime_fingerprint(env) != report["toolchain"]["libcxx_sha256"]:
             raise RuntimeError("C++ runtime changed while tests were running")
@@ -405,7 +412,7 @@ def main():
     parser.add_argument("--skip-build", action="store_true")
     parser.add_argument("--preflight-only", action="store_true")
     parser.add_argument("--list", action="store_true", help="Read-only native suite inventory")
-    parser.add_argument("--package", type=Path)
+    parser.add_argument("--package", type=Path, help="Extracted package for delivery and durable_requests suites; fixtures still use the selected native build")
     parser.add_argument("--report-dir", type=Path, default=ROOT / "build/verification" / PLATFORM)
     parser.add_argument("--jobs", type=int, default=6)
     parser.add_argument("--timeout", type=int, default=900, help="Per-step wall-clock deadline in seconds")

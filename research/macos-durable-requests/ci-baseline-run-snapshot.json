@@ -1,0 +1,103 @@
+{
+  "format": 1,
+  "product": "CodeStudio Agent",
+  "head_sha": "6e778966516ba2787a093206d9362d730d5bde6e",
+  "captured_at_utc": "2026-10-31T17:43:16.788206+00:00",
+  "scope": "Public GitHub Actions metadata for the exact requested commit",
+  "workflow": ".github/workflows/native.yml",
+  "api_access": "unauthenticated_public_read_only",
+  "status": "remote_runs_observed_not_artifact_verified",
+  "native_ci_verified": false,
+  "artifact_bytes_downloaded_or_validated": false,
+  "runs": [
+    {
+      "id": 41225022604,
+      "name": "Native verification and packages",
+      "path": ".github/workflows/native.yml",
+      "event": "push",
+      "status": "queued",
+      "conclusion": null,
+      "workflow_id": 396141890,
+      "head_branch": "main",
+      "head_sha": "6e778966516ba2787a093206d9362d730d5bde6e",
+      "html_url": "https://github.com/dreamyloong2005/codestudio-agent/actions/runs/41225022604",
+      "created_at": "2026-10-31T17:32:28Z",
+      "updated_at": "2026-10-31T17:32:28Z",
+      "run_attempt": 1,
+      "jobs": {
+        "url": "https://api.github.com/repos/dreamyloong2005/codestudio-agent/actions/runs/41225022604/jobs?per_page=100",
+        "http_status": 200,
+        "total_count": 3,
+        "jobs": [
+          {
+            "id": 124607260542,
+            "name": "linux",
+            "status": "queued",
+            "conclusion": null,
+            "head_sha": "6e778966516ba2787a093206d9362d730d5bde6e",
+            "started_at": "2026-10-31T17:32:29Z",
+            "completed_at": null,
+            "runner_id": 0,
+            "runner_name": "",
+            "labels": [
+              "self-hosted",
+              "Linux",
+              "X64",
+              "codestudio-agent"
+            ],
+            "html_url": "https://github.com/dreamyloong2005/codestudio-agent/actions/runs/41225022604/job/124607260542",
+            "steps": []
+          },
+          {
+            "id": 124607260668,
+            "name": "macos",
+            "status": "queued",
+            "conclusion": null,
+            "head_sha": "6e778966516ba2787a093206d9362d730d5bde6e",
+            "started_at": "2026-10-31T17:32:29Z",
+            "completed_at": null,
+            "runner_id": 0,
+            "runner_name": "",
+            "labels": [
+              "self-hosted",
+              "macOS",
+              "ARM64",
+              "codestudio-agent"
+            ],
+            "html_url": "https://github.com/dreamyloong2005/codestudio-agent/actions/runs/41225022604/job/124607260668",
+            "steps": []
+          },
+          {
+            "id": 124607260840,
+            "name": "windows",
+            "status": "queued",
+            "conclusion": null,
+            "head_sha": "6e778966516ba2787a093206d9362d730d5bde6e",
+            "started_at": "2026-10-31T17:32:29Z",
+            "completed_at": null,
+            "runner_id": 0,
+            "runner_name": "",
+            "labels": [
+              "self-hosted",
+              "Windows",
+              "X64",
+              "codestudio-agent"
+            ],
+            "html_url": "https://github.com/dreamyloong2005/codestudio-agent/actions/runs/41225022604/job/124607260840",
+            "steps": []
+          }
+        ]
+      },
+      "artifacts": {
+        "url": "https://api.github.com/repos/dreamyloong2005/codestudio-agent/actions/runs/41225022604/artifacts?per_page=100",
+        "http_status": 200,
+        "total_count": 0,
+        "artifacts": []
+      }
+    }
+  ],
+  "query": {
+    "url": "https://api.github.com/repos/dreamyloong2005/codestudio-agent/actions/runs?head_sha=6e778966516ba2787a093206d9362d730d5bde6e&per_page=100",
+    "http_status": 200
+  }
+}

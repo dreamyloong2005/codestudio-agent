@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "status": "awaiting_real_login",
+  "uid": 501,
+  "prepared_at": 1793469029.233539,
+  "baseline_session": {
+    "asid": 100024,
+    "boot_uuid": "3e5f398d-0ba4-4613-953c-22914fc3a110"
+  },
+  "executable": "/Users/taosiyuan/codestudio-agent/build/macos-durable-requests/extracted/codestudio-agent",
+  "executable_sha256": "0c8f988b4b2143d2662e00ee28eae2319a5d66f7a6f25aa34d488fb5aa0561fc",
+  "fixtures": [
+    {
+      "mode": "ordinary",
+      "workspace": "/Users/taosiyuan/codestudio-agent/build/macos-durable-login-acceptance/ordinary workspace \u5de5\u4f5c\u533a",
+      "database": "/Users/taosiyuan/codestudio-agent/build/macos-durable-login-acceptance/ordinary workspace \u5de5\u4f5c\u533a/state.sqlite3",
+      "label": "com.codestudio.agent.scheduler.6b1d6a3a33f7d66e6cba7a577c574eaf13974e93de6230d46f4a782b032593e6",
+      "plist_path": "/Users/taosiyuan/Library/LaunchAgents/com.codestudio.agent.scheduler.6b1d6a3a33f7d66e6cba7a577c574eaf13974e93de6230d46f4a782b032593e6.plist",
+      "plist_sha256": "87f7837542a7f6baab849b3093aae075851c25b166fcc8cd4ffa548ea9bcd3fd"
+    },
+    {
+      "mode": "supervised",
+      "workspace": "/Users/taosiyuan/codestudio-agent/build/macos-durable-login-acceptance/supervised workspace \u5de5\u4f5c\u533a",
+      "database": "/Users/taosiyuan/codestudio-agent/build/macos-durable-login-acceptance/supervised workspace \u5de5\u4f5c\u533a/state.sqlite3",
+      "label": "com.codestudio.agent.scheduler.2d524c19c981494ab66cd96ca526756d0d30541cceaf7671fee58a5f5bed8425",
+      "plist_path": "/Users/taosiyuan/Library/LaunchAgents/com.codestudio.agent.scheduler.2d524c19c981494ab66cd96ca526756d0d30541cceaf7671fee58a5f5bed8425.plist",
+      "plist_sha256": "ebd20eedb79ee86f443e1bcfd38218b650c365988c996891df8373d1aa9c3309"
+    }
+  ]
+}

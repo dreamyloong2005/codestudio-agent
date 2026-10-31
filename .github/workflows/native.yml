@@ -105,15 +105,16 @@ jobs:
           python3 -m venv build/contract-python
           build/contract-python/bin/python -m pip install -r tests/requirements.txt
       - name: Verify both configurations
-        run: build/contract-python/bin/python scripts/verify.py --mode all
+        run: build/contract-python/bin/python scripts/verify.py --mode all --report-dir "build/verification/macosx/${{ github.run_id }}-${{ github.run_attempt }}-native"
       - name: Package and verify macOS installation
         run: |
-          receipt=$(find build/verification/macosx -path '*/release-*/verification.json' -print | sort | tail -n 1)
-          test -n "$receipt"
+          set -- build/verification/macosx/${{ github.run_id }}-${{ github.run_attempt }}-native/release-*/verification.json
+          test "$#" -eq 1 && test -f "$1"
+          receipt="$1"
           build/contract-python/bin/python scripts/package.py --mode release --verification "$receipt"
           extracted=$(mktemp -d "$PWD/build/macos-delivery.XXXXXX")
           tar -xzf build/packages/macosx-arm64/codestudio-agent-macosx-arm64.tar.gz -C "$extracted"
-          build/contract-python/bin/python scripts/verify.py --mode release --skip-build --suite delivery --package "$extracted"
+          build/contract-python/bin/python scripts/verify.py --mode release --skip-build --suite delivery --suite durable_requests --package "$extracted" --report-dir "build/verification/macosx/${{ github.run_id }}-${{ github.run_attempt }}-delivery"
       - uses: actions/upload-artifact@v4
         if: always()
         with:

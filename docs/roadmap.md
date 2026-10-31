@@ -83,3 +83,5 @@ Windows 首版使用 `--sandbox appcontainer` 选择 LPAC；默认 `none` 仍以
 当前 [本地任务服务](task-service.md) 已提供 stdio JSON-RPC、查询分页、事件重放、流式文本、启动/续跑/取消、持久队列、cron、worker、监督诊断和平台自启控制，并共用 CLI 执行入口。CodeStudio Next 作为独立客户端接入，Agent 继续负责执行侧的授权校验和恢复约束。[机器可读协议](../protocol/task-service.schema.json)、结构化错误、有界会话回执和持久请求查询明确了断连后的处理规则；JSON-RPC 请求 ID 不是请求键，临时文本不能断线重放。当前机器契约包含 47 个方法，持久请求去重仅覆盖 tasks/start 与 tasks/resume。[凭据管理](credentials.md) 已提供环境/系统引用、当前用户系统存储、CLI 管理及操作边界轮换；本轮未增加凭据管理 RPC。Streamable HTTP MCP 已提供独立 Bearer 引用和有界 GET 响应恢复，服务通过 `mcp_streamable_http` 声明能力。统一验证入口、Windows/Linux CI 定义及用户级安装交付工具已提供；macOS 阶段 1 已扩展原生验证与 CI 定义，实际通过范围以回执为准，后续阶段逐步覆盖系统集成、隔离和正式交付。各平台仍需按实际 runner 日志及独立干净机器上的真实登录结果验收。OAuth 登录与插件包通过异步操作接入，定义见 [OAuth](mcp-oauth.md)、[插件分发](plugins.md)；这些操作未获得持久请求去重，托管市场、发布者签名和动态客户端注册后续设计。
 
 本地模型分成两层：当前通过本地 HTTP 服务推理；后续管理服务、模型资源与配置。嵌入 llama.cpp 是可选方向，尚未决定；不会因为核心使用 C++ 就默认绑定某个推理引擎。
+
+本轮 macOS schema 8 跟进的 M0–M4 实际状态、包级持久请求与未完成前置条件统一记录在[跟进回执](../research/macos-durable-requests/README.md)。历史平台测试、真实登录和实际 CI 作业分别计入各自范围。

@@ -1,28 +1,44 @@
 """Real stdio/SQLite crash and retry tests for durable task requests.
 
 Usage: python tests/durable_requests_integration.py <agent-executable>
+       [--process-fixture <path>] [--mcp-fixture <path>] [unittest options]
+Explicit fixture paths allow testing an unmodified extracted/installed package.
 Only disposable workspaces, synthetic loopback HTTP and owned fixture processes
 are used. There is no real model, OAuth account or permanent registration.
 """
+import argparse
 import json
 import os
 import pathlib
 import sqlite3
+import subprocess
 import sys
+import unicodedata
 import unittest
 from contextlib import closing
 
 from contract_schema import Contract
 from jsonschema import ValidationError
 
-if len(sys.argv) < 2:
-    raise SystemExit("Usage: durable_requests_integration.py <agent-executable>")
-_arguments = sys.argv[:]
-sys.argv[:] = _arguments[:2]
+_parser = argparse.ArgumentParser(description=__doc__, add_help=False)
+_parser.add_argument("agent", type=pathlib.Path)
+_parser.add_argument("--process-fixture", type=pathlib.Path)
+_parser.add_argument("--mcp-fixture", type=pathlib.Path)
+_arguments, _unittest_arguments = _parser.parse_known_args()
+_agent = _arguments.agent.resolve()
+_suffix = ".exe" if os.name == "nt" else ""
+PROCESS_FIXTURE = (_arguments.process_fixture or _agent.parent / ("process-fixture" + _suffix)).resolve()
+MCP_FIXTURE = (_arguments.mcp_fixture or _agent.parent / ("mcp-fixture" + _suffix)).resolve()
+for _label, _path in (("Agent", _agent), ("process fixture", PROCESS_FIXTURE), ("MCP fixture", MCP_FIXTURE)):
+    if not _path.is_file() or not os.access(_path, os.X_OK):
+        _parser.error(f"{_label} must name an existing executable: {_path}")
+_program = sys.argv[0]
+sys.argv[:] = [_program, str(_agent)]
 try:
     import service_integration as fixture
 finally:
-    sys.argv[:] = [_arguments[0], *_arguments[2:]]
+    sys.argv[:] = [_program, *_unittest_arguments]
+fixture.PROCESS = PROCESS_FIXTURE
 
 
 class DurableClient(fixture.Client):
@@ -278,9 +294,8 @@ class DurableRequestTests(unittest.TestCase):
     def test_crash_during_mcp_discovery_keeps_admission_without_retrying_preflight(self):
         marker = self.workspace / "mcp-started.txt"
         manifest = self.workspace / "mcp.json"
-        executable = fixture.EXE.parent / ("mcp-fixture.exe" if os.name == "nt" else "mcp-fixture")
         manifest.write_text(json.dumps({"version": 2, "servers": [{"id": "echo",
-            "command": str(executable), "args": ["hang-initialize", str(marker)],
+            "command": str(MCP_FIXTURE), "args": ["hang-initialize", str(marker)],
             "tools": ["echo"], "timeout_ms": 30000}]}), encoding="utf-8")
         client = self.client()
         database_id = self.bootstrap(client)
@@ -405,6 +420,135 @@ class DurableRequestTests(unittest.TestCase):
         self.assert_kind(self.receipt(other_client, database_id, "workspace-bound", error=True), "request_conflict")
         self.assertEqual(self.sql("SELECT count(*) FROM tasks"), [(1,)])
         self.assertFalse((other_workspace / "CODESTUDIO_DEMO.txt").exists())
+
+    @unittest.skipUnless(sys.platform == "darwin", "Darwin temporary-directory alias")
+    def test_darwin_var_alias_canonicalizes_to_the_same_durable_request(self):
+        canonical = self.workspace.resolve()
+        if not str(canonical).startswith("/private/var/"):
+            self.skipTest("The test temporary directory is not under /private/var")
+        alias = pathlib.Path(str(canonical).removeprefix("/private"))
+        self.assertTrue(alias.samefile(canonical))
+        first = self.client(workspace=canonical)
+        database_id = self.bootstrap(first)
+        params = self.keyed(database_id, "var-alias", mode="demo", options={})
+        _, _, receipt = self.completed(first, params)
+        target = canonical / "CODESTUDIO_DEMO.txt"
+        target.write_text("keep original request effects", encoding="utf-8")
+        first.close()
+        second = self.client(initialize=False, workspace=alias)
+        initialized = second.initialize()
+        self.assertEqual(initialized["workspace"], str(canonical))
+        self.assertEqual(initialized["state_database"], str(self.database.resolve()))
+        self.assertEqual(initialized["database_id"], database_id)
+        self.assertEqual(self.receipt(second, database_id, "var-alias"), receipt)
+        self.assertEqual(self.accepted(second, params, replayed=True)["durable_request"], receipt)
+        self.assertEqual(target.read_text(encoding="utf-8"), "keep original request effects")
+        self.assertEqual(self.sql("SELECT count(*) FROM tasks"), [(1,)])
+
+    @unittest.skipUnless(sys.platform == "darwin", "Darwin filesystem aliases and flock")
+    def test_darwin_case_and_unicode_aliases_preserve_binding_and_share_active_lock(self):
+        # The runtime's std::filesystem::canonical resolves APFS spelling aliases
+        # to the same workspace. A repeated key must reuse the original receipt,
+        # while a different key still contends for the same kernel-held locks.
+        self.workspace = self.workspace.resolve() / "Workspacé"
+        self.workspace.mkdir()
+        self.database = self.workspace / ".codestudio" / "state.sqlite3"
+        variants = (self.workspace.with_name("wORKSPACÉ"),
+                    self.workspace.with_name(unicodedata.normalize("NFD", self.workspace.name)))
+        aliases = [path for path in variants if path.exists() and path.samefile(self.workspace)]
+        if len(aliases) != len(variants):
+            self.skipTest("The test volume does not expose both case and Unicode aliases")
+        release = self.gate()
+        self.responses({"body": fixture.final(), "before_headers": release})
+        owner = self.client()
+        database_id = self.bootstrap(owner)
+        params = self.keyed(database_id, "original-spelling", mode="run", options=self.options())
+        accepted = self.accepted(owner, params)
+        self.wait_for(lambda: len(self.requests()) == 1)
+        original = self.receipt(owner, database_id, params["request_key"])
+        peers = []
+        for index, alias in enumerate(aliases):
+            with self.subTest(alias=alias.name):
+                peer = self.client(initialize=False, workspace=alias)
+                peers.append(peer)
+                initialized = peer.initialize()
+                self.assertEqual(initialized["database_id"], database_id)
+                self.assertEqual(initialized["workspace"], str(self.workspace))
+                self.assertEqual(initialized["state_database"], str(self.database))
+                self.assertEqual(self.receipt(peer, database_id, params["request_key"]), original)
+                repeated = self.accepted(peer, params, replayed=True)
+                self.assertEqual(repeated["operation_id"], accepted["operation_id"])
+                self.assertEqual(repeated["durable_request"], original)
+                other = {**params, "request_key": f"alias-new-{index}"}
+                self.assert_kind(peer.rpc("tasks/start", other, error=True), "busy")
+                self.assert_kind(self.receipt(peer, database_id, other["request_key"], error=True), "request_not_found")
+        release.set()
+        self.assertEqual(owner.finished(accepted["operation_id"])["exit_code"], 0)
+        finished = self.receipt(owner, database_id, params["request_key"])
+        for peer in peers:
+            self.assertEqual(self.accepted(peer, params, replayed=True)["durable_request"], finished)
+        self.assertEqual(self.sql("SELECT count(*) FROM durable_requests"), [(1,)])
+        self.assertEqual(self.sql("SELECT count(*) FROM tasks"), [(1,)])
+        self.assertEqual(len(self.requests()), 1)
+
+    @unittest.skipIf(os.name == "nt", "POSIX flock lifetime")
+    def test_posix_admission_locks_release_after_service_crash_without_replaying_request(self):
+        import fcntl
+        release = self.gate()
+        self.responses({"body": fixture.final(), "before_headers": release})
+        owner = self.client()
+        database_id = self.bootstrap(owner)
+        params = self.keyed(database_id, "crashed-owner", mode="run", options=self.options())
+        accepted = self.accepted(owner, params)
+        self.wait_for(lambda: len(self.requests()) == 1)
+        locks = (self.workspace / ".codestudio/workspace.run.lock",
+                 pathlib.Path(str(self.database) + ".run.lock"))
+        for path in locks:
+            with path.open("rb") as stream, self.assertRaises(BlockingIOError):
+                fcntl.flock(stream, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        owner.process.kill()
+        owner.wait_exit()
+        release.set()
+        for path in locks:
+            with path.open("rb") as stream:
+                fcntl.flock(stream, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                fcntl.flock(stream, fcntl.LOCK_UN)
+        replacement = self.client()
+        repeated = self.accepted(replacement, params, replayed=True)
+        self.assertEqual(repeated["operation_id"], accepted["operation_id"])
+        self.assertEqual(repeated["durable_request"]["state"], "incomplete")
+        self.assertEqual(len(self.requests()), 1)
+        self.assertEqual(self.sql("SELECT count(*) FROM tasks"), [(1,)])
+
+    def test_schema7_refused_by_service_without_changing_the_old_database(self):
+        self.database.parent.mkdir()
+        with closing(sqlite3.connect(self.database)) as database:
+            database.execute("CREATE TABLE preserved(value TEXT)")
+            database.execute("INSERT INTO preserved VALUES('keep the old state')")
+            database.execute("PRAGMA user_version=7")
+            database.commit()
+        original = self.database.read_bytes()
+        # StateReader rejects the old format during service construction, before
+        # reading any RPC. Verify fail-fast rather than expecting RPC errors from
+        # a process which has already exited; each CLI check gets its own process.
+        for command in ("serve", "history", "demo"):
+            with self.subTest(command=command):
+                result = subprocess.run([str(fixture.EXE), command, "--workspace", str(self.workspace)],
+                    env=self.env, stdin=subprocess.DEVNULL, capture_output=True, timeout=8)
+                self.assertEqual(result.returncode, 2)
+                if command == "serve":
+                    self.assertEqual(result.stdout, b"")
+                self.assertIn(b"Unsupported state schema", result.stdout + result.stderr)
+                self.assertEqual(self.database.read_bytes(), original)
+        self.assertEqual(self.database.read_bytes(), original)
+        with closing(sqlite3.connect(self.database)) as database:
+            self.assertEqual(database.execute("PRAGMA user_version").fetchone(), (7,))
+            self.assertEqual(database.execute("SELECT * FROM preserved").fetchall(), [("keep the old state",)])
+            self.assertEqual(database.execute("PRAGMA journal_mode").fetchone(), ("delete",))
+        self.assertFalse(pathlib.Path(str(self.database) + "-wal").exists())
+        self.assertFalse(pathlib.Path(str(self.database) + "-shm").exists())
+        self.assertFalse((self.workspace / "CODESTUDIO_DEMO.txt").exists())
+        self.assertEqual(self.requests(), [])
 
     def test_preflight_failure_is_durable_and_cannot_be_repurposed_with_new_grants(self):
         client = self.client()

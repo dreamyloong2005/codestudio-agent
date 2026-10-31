@@ -1,0 +1,127 @@
+{
+  "captured_at_utc": "2026-10-31T17:50:51.508943+00:00",
+  "scope_version": 1,
+  "scope": "Read-only snapshots of immediate codestudio-* entries in canonical TMPDIR/home, OAuth lock metadata, current-user CodeStudio LaunchAgent files, scoped test Keychain attributes, and Agent/fixture executable processes.",
+  "fixture_directories": {
+    "/Users/taosiyuan": {
+      "status": "observed",
+      "entries": [
+        {
+          "path": "/Users/taosiyuan/codestudio-agent",
+          "uid": 501,
+          "mode": "0o755",
+          "device": 16777233,
+          "inode": 9264296,
+          "size": 704,
+          "kind": "directory",
+          "classification": "repository_not_test_fixture"
+        },
+        {
+          "path": "/Users/taosiyuan/codestudio-lite",
+          "uid": 501,
+          "mode": "0o755",
+          "device": 16777233,
+          "inode": 1490692,
+          "size": 1056,
+          "kind": "directory",
+          "classification": "preexisting_unrelated_repository_not_test_fixture"
+        }
+      ]
+    },
+    "/private/var/folders/wh/lj7xnlsd4ssdrgpwkw3vnsj40000gn/T": {
+      "status": "observed",
+      "entries": []
+    }
+  },
+  "oauth_locks": {
+    "path": "/private/var/folders/wh/lj7xnlsd4ssdrgpwkw3vnsj40000gn/T/org.codestudio.Agent.oauth-locks",
+    "status": "observed",
+    "entries": [],
+    "ownership": "Directory may include historical or non-test lock names; no ownership or deletion inferred from naming alone.",
+    "contents_read": false
+  },
+  "launch_agents": {
+    "status": "observed",
+    "entries": [
+      {
+        "path": "/Users/taosiyuan/Library/LaunchAgents/com.codestudio.agent.scheduler.2d524c19c981494ab66cd96ca526756d0d30541cceaf7671fee58a5f5bed8425.plist",
+        "uid": 501,
+        "mode": "0o600",
+        "device": 16777233,
+        "inode": 9721934,
+        "size": 1455,
+        "kind": "file",
+        "sha256": "ebd20eedb79ee86f443e1bcfd38218b650c365988c996891df8373d1aa9c3309",
+        "label": "com.codestudio.agent.scheduler.2d524c19c981494ab66cd96ca526756d0d30541cceaf7671fee58a5f5bed8425",
+        "launchctl_returncode": 113,
+        "loaded": false
+      },
+      {
+        "path": "/Users/taosiyuan/Library/LaunchAgents/com.codestudio.agent.scheduler.6b1d6a3a33f7d66e6cba7a577c574eaf13974e93de6230d46f4a782b032593e6.plist",
+        "uid": 501,
+        "mode": "0o600",
+        "device": 16777233,
+        "inode": 9721931,
+        "size": 1319,
+        "kind": "file",
+        "sha256": "87f7837542a7f6baab849b3093aae075851c25b166fcc8cd4ffa548ea9bcd3fd",
+        "label": "com.codestudio.agent.scheduler.6b1d6a3a33f7d66e6cba7a577c574eaf13974e93de6230d46f4a782b032593e6",
+        "launchctl_returncode": 113,
+        "loaded": false
+      },
+      {
+        "path": "/Users/taosiyuan/Library/LaunchAgents/com.codestudio.agent.scheduler.7b03932c3a079969d482f1434603ca1c538c0b45b3b354e3ecf9a59fe0f25ea7.plist",
+        "uid": 501,
+        "mode": "0o600",
+        "device": 16777233,
+        "inode": 9419493,
+        "size": 1425,
+        "kind": "file",
+        "sha256": "e32fd0eeba6b4252ac568a11a079758eb7937c719213fdfc966e71fde1f8c4e5",
+        "label": "com.codestudio.agent.scheduler.7b03932c3a079969d482f1434603ca1c538c0b45b3b354e3ecf9a59fe0f25ea7",
+        "launchctl_returncode": 113,
+        "loaded": false
+      },
+      {
+        "path": "/Users/taosiyuan/Library/LaunchAgents/com.codestudio.agent.scheduler.af31bbf259f8ebc9c0d62c4ecdbacec1cf5c455477cb3709531a29cf1d818702.plist",
+        "uid": 501,
+        "mode": "0o600",
+        "device": 16777233,
+        "inode": 9419490,
+        "size": 1289,
+        "kind": "file",
+        "sha256": "28a4c49c4ef4d8eda54c87c9fb5144ac8009aa1adf9a7dfb12e12e3653d77303",
+        "label": "com.codestudio.agent.scheduler.af31bbf259f8ebc9c0d62c4ecdbacec1cf5c455477cb3709531a29cf1d818702",
+        "launchctl_returncode": 113,
+        "loaded": false
+      }
+    ]
+  },
+  "processes": {
+    "returncode": 0,
+    "candidates": [],
+    "arguments_read": false
+  },
+  "keychain": {
+    "scope": "Only generic-password attributes for the two exact CodeStudio services; only test-credential-* accounts emitted.",
+    "secret_data_requested": false,
+    "default_keychain_or_search_list_changed": false,
+    "interaction": "kSecUseAuthenticationUIFail",
+    "services": [
+      {
+        "test_accounts": [],
+        "inventory_complete": true,
+        "service": "org.codestudio.Agent.credentials",
+        "osstatus": -25300
+      },
+      {
+        "test_accounts": [],
+        "inventory_complete": true,
+        "service": "org.codestudio.Agent.oauth",
+        "osstatus": -25300
+      }
+    ]
+  },
+  "history": "Historical ownership and total system residue are unknown; only comparison with this run's before snapshot may establish additions.",
+  "mutations": "No deletes, signals, launchctl mutations, Keychain writes, search-list/default changes, or authentication prompts."
+}
