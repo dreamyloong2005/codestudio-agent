@@ -1,7 +1,7 @@
 {
   "format": 1,
   "product": "CodeStudio Agent",
-  "recorded_at_utc": "2026-10-31T17:52:29.652590+00:00",
+  "recorded_at_utc": "2026-11-02T07:11:17.620562+00:00",
   "status": "local_followup_complete_external_acceptance_pending",
   "all_plan_items_accepted": false,
   "source": {
@@ -161,12 +161,48 @@
     "formal_signing_or_notarization": "deferred_by_user"
   },
   "M3": {
-    "status": "awaiting_real_login",
+    "status": "passed",
     "runtime_manifest": "login/runtime-manifest.json",
-    "receipt": "/Users/taosiyuan/codestudio-agent/build/macos-durable-login-acceptance/login-acceptance.json",
-    "historical_schema7_probe": "preserved_for_separate_acceptance",
-    "operator_requirement": "Save other work, log out of the GUI user and log back in; never manually bootstrap/start either fixture. Then verify both owned historical and current receipts separately.",
-    "real_login_verified": false
+    "receipt": "login/accepted.json",
+    "receipt_sha256": "3ff60f29a5505881fd8c2402ab961fba9d062df2f2df97c17220872787fc94a6",
+    "acceptance_check": "login/post-login-check.json",
+    "verified_session": {
+      "asid": 100028,
+      "boot_uuid": "7a136c41-d9a5-436a-ba3a-f96959f96cc9"
+    },
+    "real_login_verified": true,
+    "runtime_files_verified": 52,
+    "historical_schema7_probe": {
+      "status": "passed",
+      "receipt": "login/historical-schema7-accepted.json",
+      "receipt_sha256": "e31bad04ff00e43926881b12e87c301fc549f5c0b431b245881811154161f29c",
+      "counts_as_schema8_acceptance": false
+    },
+    "post_login_credentials": {
+      "status": "succeeded",
+      "receipt": "login/post-login-native/release-20261102T070848Z-c29c2937/verification.json",
+      "receipt_sha256": "48419a5f679f05ea9ece27167d6a55bc5e0ea6cce1ab3a76bd58dce4234a9e57",
+      "scope": "native_release",
+      "python_passed": 41,
+      "python_skipped": 3,
+      "suites": [
+        {
+          "name": "credentials",
+          "status": "succeeded",
+          "cases": 18,
+          "passed": 15,
+          "skipped": 3
+        },
+        {
+          "name": "mcp_oauth",
+          "status": "succeeded",
+          "cases": 26,
+          "passed": 26,
+          "skipped": 0
+        }
+      ]
+    },
+    "residue_comparison": "login/residue-comparison.json"
   },
   "M4": {
     "status": "deferred_by_user_no_available_runner",
@@ -186,8 +222,8 @@
     "artifact_bytes_validated": false
   },
   "residue": {
-    "before": "residue-before.json",
-    "after": "residue-after.json",
+    "before": "login/residue-before-credentials.json",
+    "after": "residue-after-login.json",
     "process_candidates_after": 0,
     "scope": "Read-only snapshots of immediate codestudio-* entries in canonical TMPDIR/home, OAuth lock metadata, current-user CodeStudio LaunchAgent files, scoped test Keychain attributes, and Agent/fixture executable processes.",
     "historical_or_global_cleanliness": "not_claimed"

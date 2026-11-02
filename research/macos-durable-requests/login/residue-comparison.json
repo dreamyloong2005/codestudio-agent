@@ -1,0 +1,63 @@
+{
+  "captured_at_utc": "2026-11-02T07:10:03.869565+00:00",
+  "status": "passed",
+  "before": "login/residue-before-credentials.json",
+  "after": "residue-after-login.json",
+  "pre_login": "residue-after.json",
+  "scope_equal": true,
+  "added_fixture_directories": [],
+  "keychain_test_accounts": 0,
+  "oauth_lock_files": 0,
+  "oauth_lock_directory": {
+    "before": "absent",
+    "after": "observed",
+    "empty": true,
+    "note": "OAuth creates its shared lock directory; no lock files remain. The empty directory is retained."
+  },
+  "agent_or_fixture_processes": 0,
+  "owned_launch_agent_files_removed": [
+    "/Users/taosiyuan/Library/LaunchAgents/com.codestudio.agent.scheduler.2d524c19c981494ab66cd96ca526756d0d30541cceaf7671fee58a5f5bed8425.plist",
+    "/Users/taosiyuan/Library/LaunchAgents/com.codestudio.agent.scheduler.6b1d6a3a33f7d66e6cba7a577c574eaf13974e93de6230d46f4a782b032593e6.plist",
+    "/Users/taosiyuan/Library/LaunchAgents/com.codestudio.agent.scheduler.7b03932c3a079969d482f1434603ca1c538c0b45b3b354e3ecf9a59fe0f25ea7.plist",
+    "/Users/taosiyuan/Library/LaunchAgents/com.codestudio.agent.scheduler.af31bbf259f8ebc9c0d62c4ecdbacec1cf5c455477cb3709531a29cf1d818702.plist"
+  ],
+  "loaded_inactive_jobs": [
+    {
+      "label": "com.codestudio.agent.scheduler.6b1d6a3a33f7d66e6cba7a577c574eaf13974e93de6230d46f4a782b032593e6",
+      "mode": "ordinary",
+      "plist_absent": true,
+      "state": "not running",
+      "runs": 1,
+      "schema_version": 8
+    },
+    {
+      "label": "com.codestudio.agent.scheduler.2d524c19c981494ab66cd96ca526756d0d30541cceaf7671fee58a5f5bed8425",
+      "mode": "supervised",
+      "plist_absent": true,
+      "state": "not running",
+      "runs": 1,
+      "schema_version": 8
+    },
+    {
+      "label": "com.codestudio.agent.scheduler.af31bbf259f8ebc9c0d62c4ecdbacec1cf5c455477cb3709531a29cf1d818702",
+      "mode": "ordinary",
+      "plist_absent": true,
+      "state": "not running",
+      "runs": 1,
+      "schema_version": 7
+    },
+    {
+      "label": "com.codestudio.agent.scheduler.7b03932c3a079969d482f1434603ca1c538c0b45b3b354e3ecf9a59fe0f25ea7",
+      "mode": "supervised",
+      "plist_absent": true,
+      "state": "not running",
+      "runs": 1,
+      "schema_version": 7
+    }
+  ],
+  "limits": [
+    "Only the declared inventory scope was checked; global/historical cleanliness is not claimed.",
+    "Inactive launchd records remain in this session with one run; owned plist registrations are removed.",
+    "Synthetic workspace databases and fixed runtimes remain as acceptance evidence."
+  ]
+}

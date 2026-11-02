@@ -1,0 +1,163 @@
+{
+  "format": 2,
+  "product": "CodeStudio-Agent",
+  "platform": "macosx",
+  "arch": "arm64",
+  "mode": "release",
+  "started_at": "2026-11-02T07:08:48.771651+00:00",
+  "status": "succeeded",
+  "selected_suites": [
+    "credentials",
+    "mcp_oauth"
+  ],
+  "omitted_suites": [
+    "toolchain",
+    "native",
+    "schema",
+    "provider",
+    "streaming",
+    "contract",
+    "service",
+    "cli",
+    "local_models",
+    "mcp",
+    "mcp_http",
+    "plugins",
+    "resume",
+    "durable_requests",
+    "scheduler",
+    "supervisor",
+    "cron",
+    "autostart",
+    "package",
+    "macos_release",
+    "verification",
+    "delivery"
+  ],
+  "unsupported_suites": {
+    "plugin_sandbox": "macOS OS isolation belongs to stage 3",
+    "sandbox": "macOS OS sandbox execution belongs to stage 3; refusal is covered by native/CLI tests",
+    "sandbox_resources": "macOS isolated resource ownership and reclamation belong to stage 3",
+    "real_build": "macOS isolated workspace execution belongs to stage 3"
+  },
+  "build_requested": false,
+  "steps": [
+    {
+      "name": "credentials",
+      "command": [
+        "/Users/taosiyuan/codestudio-agent/build/contract-python/bin/python",
+        "tests/credentials_integration.py",
+        "/Users/taosiyuan/codestudio-agent/build/macosx/arm64/release/codestudio-agent"
+      ],
+      "log": "credentials.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 7.285,
+      "cases": 18,
+      "skipped": 3,
+      "passed": 15
+    },
+    {
+      "name": "mcp_oauth",
+      "command": [
+        "/Users/taosiyuan/codestudio-agent/build/contract-python/bin/python",
+        "tests/mcp_oauth_integration.py",
+        "/Users/taosiyuan/codestudio-agent/build/macosx/arm64/release/codestudio-agent"
+      ],
+      "log": "mcp_oauth.log",
+      "status": "succeeded",
+      "returncode": 0,
+      "seconds": 5.213,
+      "cases": 26,
+      "skipped": 0,
+      "passed": 26
+    }
+  ],
+  "test_environment": {
+    "temporary_directory": "/private/var/folders/wh/lj7xnlsd4ssdrgpwkw3vnsj40000gn/T"
+  },
+  "source": {
+    "sha256": "6a7cf041e668e31b3c1f134003242fe7e1745f014abb6d615f994fbe73e6304c",
+    "files": 227
+  },
+  "toolchain": {
+    "python": "3.13.14",
+    "requirements": {
+      "format": 2,
+      "python_minimum": "3.11.0",
+      "xmake_minimum": "3.0.5",
+      "jsonschema": "4.23.0",
+      "windows": {
+        "arch": "x64",
+        "toolchain": "clang-cl",
+        "compiler_minimum": "22.0.0",
+        "requirements": [
+          "Visual Studio 2022 C++ build tools and Windows SDK",
+          "LLVM clang-cl 22 or newer"
+        ]
+      },
+      "linux": {
+        "arch": "x86_64",
+        "toolchain": "gcc",
+        "compiler_minimum": "16.0.0",
+        "pkg_config_minimum": {
+          "nlohmann_json": "3.12.0",
+          "sqlite3": "3.50.4",
+          "libcurl": "8.15.0",
+          "openssl": "3.0.0",
+          "libsecret-1": "0.21.0"
+        },
+        "requirements": [
+          "bubblewrap at /usr/bin/bwrap",
+          "tzdata",
+          "cgroup v2 delegation with cpu/memory/pids",
+          "user namespaces and seccomp"
+        ]
+      },
+      "macosx": {
+        "arch": "arm64",
+        "toolchain": "llvm",
+        "compiler_minimum": "22.1.8",
+        "llvm_environment": "CODESTUDIO_LLVM_ROOT",
+        "requirements": [
+          "Native Apple Silicon Mac (arm64)",
+          "Xcode command line tools and macOS SDK",
+          "LLVM 22.1.8 or newer and matching standalone libc++/libc++abi built with timezone support; bundled Apple and LLVM macOS libc++ disable timezones",
+          "Runtime C++26, std::format and IANA timezone/DST probe must pass",
+          "No Linux libsecret, namespace or cgroup dependency"
+        ],
+        "macos_minimum": "15.0",
+        "libcxx_environment": "CODESTUDIO_LIBCXX_ROOT"
+      }
+    },
+    "libcxx_root": "/Users/taosiyuan/codestudio-agent/build/toolchains/libcxx-22.1.8-tzdb",
+    "libcxx_sha256": {
+      "libc++.1.dylib": "37a40e084b7f1d1b68f509cd48cb6baf269e95c4a5109408f2215e5e33521a90",
+      "libc++abi.1.dylib": "e1b798f6ac9514e5b32ee4b7b066d472d060090bd7d87f5c964942ded35453e7",
+      "libc++experimental.a": "581e44feb2571570c90e857f1109097593e3890d5b48ff71590dbd1bd9a9543b"
+    },
+    "macos": "26.5.2",
+    "deployment_target": "15.0"
+  },
+  "tested_artifacts": {
+    "codestudio-agent": "df32642346fc4418cb676454ec1d374bcfed33c415858c24a9c7f1d01a18c024",
+    "agent-tests": "b13dd7c7a751dd851fe41ff5480ed1e714ae3efb00fb2187e747926c1aca2f00",
+    "provider-fixture": "45128322b7c30ed029d955e368dab381dfeca668d3385e12844141658c729f16",
+    "process-fixture": "d0ef1c0a2f1bc983cd12afd2593c3739a7aba175f0187a6579e21f054e49d9bd",
+    "line-process-fixture": "d6c458f18bed8ca4a7ed4fa5956b4104a6ada4b7465fb5b0aa9a4bb4b397680e",
+    "mcp-fixture": "f0eb0165f484eaa35f511a75ff021fbebf1345e70b14af7f5741b2dcb1572d95",
+    "sandbox-fixture": "52f45d960fa1e696315a2bf6f3e403e605cb35fc4f9c4d1955916e934e4cd07d",
+    "build-fixture": "b241340e56c7b1092afe5877a9181d4b4bf69c587c10327e624ab7b6ac5dbf9f",
+    "sandbox-resource-fixture": "f7fa4611fde9e5d2afa1b4f9182b12a58528ab2743ba946968b0d18a3a703019",
+    "plugin-sandbox-fixture": "1ea17d98812c1166c32c0994dc1e12451fac64761ce3b78f69410d98ddf30f1b",
+    "libplugin-sandbox-library.dylib": "273d64db8be30ea9c313d63d62278604d235ecbdd2f0e435907ec6dae3b1bc6a",
+    "libplugin-sandbox-dependency.dylib": "2c6196a825e85bb332e98226a06bdae9fccec29bf9b0a659cb929af76f554e8a",
+    "toolchain-probe": "98cd9f80fde16d9f826ab92cd5450b9e5b1f062a9469a1f4ed29328279a01cb7"
+  },
+  "artifact": {
+    "path": "build/macosx/arm64/release/codestudio-agent",
+    "size": 7628560,
+    "sha256": "df32642346fc4418cb676454ec1d374bcfed33c415858c24a9c7f1d01a18c024"
+  },
+  "finished_at": "2026-11-02T07:09:01.351927+00:00"
+}

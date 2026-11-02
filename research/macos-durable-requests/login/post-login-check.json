@@ -1,0 +1,45 @@
+{
+  "captured_at_utc": "2026-11-02T07:10:03.921989+00:00",
+  "status": "passed",
+  "source": {
+    "sha256": "6a7cf041e668e31b3c1f134003242fe7e1745f014abb6d615f994fbe73e6304c",
+    "files": 227
+  },
+  "head_before_evidence_commit": "a2b9306cc187bcf340206362765e775d497ae360",
+  "operator_confirmation": "已重新登录",
+  "operator_flow": "User stated they would log out and log back in, then confirmed completion in this chat. No manual bootstrap or fixture start was performed by the agent.",
+  "current_session": {
+    "asid": 100028,
+    "boot_uuid": "7a136c41-d9a5-436a-ba3a-f96959f96cc9"
+  },
+  "session_changed": true,
+  "boot_session_also_changed": true,
+  "schema8_receipt": "login/accepted.json",
+  "historical_schema7_receipt": "login/historical-schema7-accepted.json",
+  "credentials_receipt": "login/post-login-native/release-20261102T070848Z-c29c2937/verification.json",
+  "credentials_scope": "Existing native Release artifact, synthetic Keychain records and loopback OAuth; includes detached worker credential rotation after launcher exit. Not a claim of package-level credentials verification.",
+  "residue_comparison": "login/residue-comparison.json",
+  "runtime_manifest": "login/runtime-manifest.json",
+  "runtime_files_verified": 52,
+  "historical_runtime_verified": true,
+  "historical_files": [
+    {
+      "path": "/Users/taosiyuan/codestudio-agent/build/macos-stage2-login-runtime/codestudio-agent",
+      "sha256": "d8c3a1b2efeb0f27f59eb530d7e625ab9b3484ba7a487347f3e30e47599972e2"
+    },
+    {
+      "path": "/Users/taosiyuan/codestudio-agent/build/toolchains/libcxx-22.1.8-tzdb/lib/libc++.1.dylib",
+      "sha256": "37a40e084b7f1d1b68f509cd48cb6baf269e95c4a5109408f2215e5e33521a90"
+    },
+    {
+      "path": "/Users/taosiyuan/codestudio-agent/build/toolchains/libcxx-22.1.8-tzdb/lib/libc++abi.1.dylib",
+      "sha256": "e1b798f6ac9514e5b32ee4b7b066d472d060090bd7d87f5c964942ded35453e7"
+    }
+  ],
+  "preserved": [
+    "Frozen schema 8 package",
+    "Historical schema 7 runtime and private libraries",
+    "Separate synthetic login workspaces and receipt history"
+  ],
+  "ci": "Deferred by user; previous pending snapshot retained without polling."
+}

@@ -1,0 +1,112 @@
+{
+  "schema": 1,
+  "status": "passed",
+  "uid": 501,
+  "prepared_at": 1793153008.134235,
+  "baseline_session": {
+    "asid": 100024,
+    "boot_uuid": "3e5f398d-0ba4-4613-953c-22914fc3a110"
+  },
+  "executable": "/Users/taosiyuan/codestudio-agent/build/macos-stage2-login-runtime/codestudio-agent",
+  "executable_sha256": "d8c3a1b2efeb0f27f59eb530d7e625ab9b3484ba7a487347f3e30e47599972e2",
+  "fixtures": [
+    {
+      "mode": "ordinary",
+      "workspace": "/Users/taosiyuan/codestudio-agent/build/macos-login-acceptance/ordinary workspace 工作区",
+      "database": "/Users/taosiyuan/codestudio-agent/build/macos-login-acceptance/ordinary workspace 工作区/state.sqlite3",
+      "label": "com.codestudio.agent.scheduler.af31bbf259f8ebc9c0d62c4ecdbacec1cf5c455477cb3709531a29cf1d818702",
+      "plist_path": "/Users/taosiyuan/Library/LaunchAgents/com.codestudio.agent.scheduler.af31bbf259f8ebc9c0d62c4ecdbacec1cf5c455477cb3709531a29cf1d818702.plist",
+      "plist_sha256": "28a4c49c4ef4d8eda54c87c9fb5144ac8009aa1adf9a7dfb12e12e3653d77303"
+    },
+    {
+      "mode": "supervised",
+      "workspace": "/Users/taosiyuan/codestudio-agent/build/macos-login-acceptance/supervised workspace 工作区",
+      "database": "/Users/taosiyuan/codestudio-agent/build/macos-login-acceptance/supervised workspace 工作区/state.sqlite3",
+      "label": "com.codestudio.agent.scheduler.7b03932c3a079969d482f1434603ca1c538c0b45b3b354e3ecf9a59fe0f25ea7",
+      "plist_path": "/Users/taosiyuan/Library/LaunchAgents/com.codestudio.agent.scheduler.7b03932c3a079969d482f1434603ca1c538c0b45b3b354e3ecf9a59fe0f25ea7.plist",
+      "plist_sha256": "e32fd0eeba6b4252ac568a11a079758eb7937c719213fdfc966e71fde1f8c4e5"
+    }
+  ],
+  "verified_at": 1793603292.455465,
+  "verified_session": {
+    "asid": 100028,
+    "boot_uuid": "7a136c41-d9a5-436a-ba3a-f96959f96cc9"
+  },
+  "evidence": [
+    {
+      "mode": "ordinary",
+      "label": "com.codestudio.agent.scheduler.af31bbf259f8ebc9c0d62c4ecdbacec1cf5c455477cb3709531a29cf1d818702",
+      "launchd_pid": 1275,
+      "worker": {
+        "generation": 1,
+        "heartbeat_at_ms": 1793603291970,
+        "owner": "a53a6e72d850b17fa427b316a8cacbd3",
+        "pid": 1275,
+        "started_at_ms": 1793600252948,
+        "state": "running",
+        "stop_epoch": 0,
+        "supervisor": {
+          "observation": {
+            "observed_at_ms": 1793603292431,
+            "state": "not_checked"
+          },
+          "record": null,
+          "worker_matches": false
+        }
+      },
+      "launchd_runs": 1,
+      "plist_sha256": "28a4c49c4ef4d8eda54c87c9fb5144ac8009aa1adf9a7dfb12e12e3653d77303",
+      "disable_preserved_worker": true,
+      "stopped": true,
+      "launchd_restarted": false
+    },
+    {
+      "mode": "supervised",
+      "label": "com.codestudio.agent.scheduler.7b03932c3a079969d482f1434603ca1c538c0b45b3b354e3ecf9a59fe0f25ea7",
+      "launchd_pid": 1283,
+      "worker": {
+        "generation": 1,
+        "heartbeat_at_ms": 1793603291975,
+        "owner": "4262ed24a80491d7f79d04d935609c00",
+        "pid": 1364,
+        "started_at_ms": 1793600252966,
+        "state": "running",
+        "stop_epoch": 0,
+        "supervisor": {
+          "observation": {
+            "observed_at_ms": 1793603292453,
+            "state": "matching_process"
+          },
+          "record": {
+            "exit_reason": "",
+            "finished_at_ms": 0,
+            "generation": 1,
+            "heartbeat_at_ms": 1793603291684,
+            "id": "f8e3902cf847187bb5d820cae8d544d1",
+            "last_exit_code": null,
+            "max_restarts": 2,
+            "next_restart_at_ms": 0,
+            "owner": "4262ed24a80491d7f79d04d935609c00",
+            "phase": "running",
+            "pid": 1283,
+            "poll_ms": 25,
+            "process_identity": "darwin:7a136c41-d9a5-436a-ba3a-f96959f96cc9:1793600250824993",
+            "restart_delay_ms": 250,
+            "restarts": 0,
+            "started_at_ms": 1793600252948,
+            "stop_epoch": 0,
+            "updated_at_ms": 1793603291684,
+            "worker_pid": 1364,
+            "workspace": "/Users/taosiyuan/codestudio-agent/build/macos-login-acceptance/supervised workspace 工作区"
+          },
+          "worker_matches": true
+        }
+      },
+      "launchd_runs": 1,
+      "plist_sha256": "e32fd0eeba6b4252ac568a11a079758eb7937c719213fdfc966e71fde1f8c4e5",
+      "disable_preserved_worker": true,
+      "stopped": true,
+      "launchd_restarted": false
+    }
+  ]
+}
